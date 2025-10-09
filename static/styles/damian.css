@@ -4,9 +4,8 @@
     --character-accent-gold: #d4af37;
     --character-accent-silver: #c0c0c0;
     --character-accent-dark-green: #0d2818;
-    
     background: linear-gradient(135deg, #0a0a0a 0%, #1a4d2e 100%);
-    position: relative;
+    position: relative
 }
 
 /* Marble texture background */
@@ -21,22 +20,20 @@
         url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><defs><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4"/><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="400" height="400" filter="url(%23noise)" opacity="0.05"/></svg>');
     opacity: 0.3;
     pointer-events: none;
-    z-index: 0;
+    z-index: 0
 }
-
 .profile-page[data-character="damian-wayne"] .profile-container {
     position: relative;
-    z-index: 1;
+    z-index: 1
 }
 
 /* Custom Cursor - Shuriken */
 .profile-page[data-character="damian-wayne"] * {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23d4af37" d="M12 2l2 8l8 2l-8 2l-2 8l-2-8l-8-2l8-2z"/></svg>') 12 12, auto;
+    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23d4af37" d="M12 2l2 8l8 2l-8 2l-2 8l-2-8l-8-2l8-2z"/></svg>') 12 12, auto
 }
-
 .profile-page[data-character="damian-wayne"] a,
 .profile-page[data-character="damian-wayne"] button {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23d4af37" d="M12 2l3 7l7 3l-7 3l-3 7l-3-7l-7-3l7-3z"/></svg>') 12 12, pointer;
+    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23d4af37" d="M12 2l3 7l7 3l-7 3l-3 7l-3-7l-7-3l7-3z"/></svg>') 12 12, pointer
 }
 
 /* Profile Image Container - Crown effect */
@@ -45,9 +42,8 @@
     box-shadow: 
         0 0 30px rgba(212, 175, 55, 0.3),
         inset 0 0 20px rgba(212, 175, 55, 0.1);
-    position: relative;
+    position: relative
 }
-
 .profile-page[data-character="damian-wayne"] .profile-image-container::before {
     content: '♔';
     position: absolute;
@@ -57,28 +53,25 @@
     font-size: 2rem;
     color: var(--character-accent-gold);
     text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
-    z-index: 10;
+    z-index: 10
 }
 
 /* Navigation Tabs - Sword accent */
 .profile-page[data-character="damian-wayne"] .nav-tab {
     border-left: 3px solid transparent;
-    transition: all var(--transition-medium);
+    transition: all var(--transition-medium)
 }
-
 .profile-page[data-character="damian-wayne"] .nav-tab::before {
-    background: linear-gradient(135deg, var(--character-accent-gold), var(--character-accent-silver));
+    background: linear-gradient(135deg, var(--character-accent-gold), var(--character-accent-silver))
 }
-
 .profile-page[data-character="damian-wayne"] .nav-tab:hover {
     background: rgba(26, 77, 46, 0.3);
-    border-left-color: var(--character-accent-gold);
+    border-left-color: var(--character-accent-gold)
 }
-
 .profile-page[data-character="damian-wayne"] .nav-tab.active {
     background: linear-gradient(90deg, rgba(26, 77, 46, 0.5), transparent);
     border-left-color: var(--character-accent-gold);
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2)
 }
 
 /* Bio Items - Old money aesthetic */
@@ -86,9 +79,8 @@
     background: linear-gradient(135deg, rgba(26, 77, 46, 0.2), rgba(10, 10, 10, 0.8));
     border: 1px solid var(--character-accent-silver);
     position: relative;
-    overflow: hidden;
+    overflow: hidden
 }
-
 .profile-page[data-character="damian-wayne"] .bio-item::before {
     content: '';
     position: absolute;
@@ -96,21 +88,18 @@
     left: 0;
     width: 100%;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--character-accent-gold), transparent);
+    background: linear-gradient(90deg, transparent, var(--character-accent-gold), transparent)
 }
-
 .profile-page[data-character="damian-wayne"] .bio-item:hover {
     border-color: var(--character-accent-gold);
-    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2)
 }
-
 .profile-page[data-character="damian-wayne"] .bio-label {
-    color: var(--character-accent-silver);
+    color: var(--character-accent-silver)
 }
-
 .profile-page[data-character="damian-wayne"] .bio-value {
     color: var(--character-accent-gold);
-    font-weight: 600;
+    font-weight: 600
 }
 
 /* Section Headers - Royal styling */
@@ -118,11 +107,10 @@
     color: var(--character-accent-gold);
     border-bottom: 2px solid var(--character-accent-silver);
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 2px
 }
-
 .profile-page[data-character="damian-wayne"] .section-header::after {
-    background: linear-gradient(90deg, var(--character-accent-gold), var(--character-accent-silver));
+    background: linear-gradient(90deg, var(--character-accent-gold), var(--character-accent-silver))
 }
 
 /* Timeline - Sword line */
@@ -132,105 +120,93 @@
         var(--character-accent-silver),
         var(--character-accent-gold)
     );
-    width: 3px;
+    width: 3px
 }
-
 .profile-page[data-character="damian-wayne"] .timeline-event::before {
     border-color: var(--character-accent-gold);
     background: var(--character-secondary);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5)
 }
-
 .profile-page[data-character="damian-wayne"] .event-card {
     background: linear-gradient(135deg, rgba(26, 77, 46, 0.3), rgba(10, 10, 10, 0.9));
-    border: 1px solid var(--character-accent-silver);
+    border: 1px solid var(--character-accent-silver)
 }
-
 .profile-page[data-character="damian-wayne"] .event-card::before {
-    background: linear-gradient(180deg, var(--character-accent-gold), var(--character-accent-silver));
+    background: linear-gradient(180deg, var(--character-accent-gold), var(--character-accent-silver))
 }
-
 .profile-page[data-character="damian-wayne"] .event-card:hover {
     border-color: var(--character-accent-gold);
-    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3)
 }
 
 /* Relationship Cards */
 .profile-page[data-character="damian-wayne"] .relationship-card {
     background: linear-gradient(90deg, rgba(26, 77, 46, 0.2), rgba(10, 10, 10, 0.8));
-    border: 1px solid var(--character-accent-silver);
+    border: 1px solid var(--character-accent-silver)
 }
-
 .profile-page[data-character="damian-wayne"] .relationship-card:hover {
     border-color: var(--character-accent-gold);
-    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2)
 }
-
 .profile-page[data-character="damian-wayne"] .relationship-avatar {
     border: 2px solid var(--character-accent-gold);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3)
 }
 
 /* Gallery Items */
 .profile-page[data-character="damian-wayne"] .gallery-item {
     border: 2px solid transparent;
-    transition: all var(--transition-medium);
+    transition: all var(--transition-medium)
 }
-
 .profile-page[data-character="damian-wayne"] .gallery-item:hover {
     border-color: var(--character-accent-gold);
-    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.4)
 }
 
 /* Buttons */
 .profile-page[data-character="damian-wayne"] .btn-primary {
     background: linear-gradient(135deg, var(--character-primary), var(--character-accent-dark-green));
     border: 1px solid var(--character-accent-gold);
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3)
 }
-
 .profile-page[data-character="damian-wayne"] .btn-primary:hover {
     box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5);
-    transform: translateY(-3px);
+    transform: translateY(-3px)
 }
 
-/* Scrollbar - Gold and silver */
+/* Scrollbar */
 .profile-page[data-character="damian-wayne"] ::-webkit-scrollbar-thumb {
     background: linear-gradient(180deg, var(--character-accent-gold), var(--character-accent-silver));
-    border: 2px solid var(--character-secondary);
+    border: 2px solid var(--character-secondary)
 }
-
 .profile-page[data-character="damian-wayne"] ::-webkit-scrollbar-thumb:hover {
-    background: var(--character-accent-gold);
+    background: var(--character-accent-gold)
 }
 
 /* Modal styling */
 .profile-page[data-character="damian-wayne"] .modal-content {
     background: linear-gradient(135deg, rgba(26, 77, 46, 0.95), rgba(10, 10, 10, 0.98));
     border: 2px solid var(--character-accent-gold);
-    box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3)
 }
-
 .profile-page[data-character="damian-wayne"] .modal-close {
     color: var(--character-accent-gold);
-    border: 1px solid var(--character-accent-silver);
+    border: 1px solid var(--character-accent-silver)
 }
-
 .profile-page[data-character="damian-wayne"] .modal-close:hover {
     background: rgba(26, 77, 46, 0.3);
-    border-color: var(--character-accent-gold);
+    border-color: var(--character-accent-gold)
 }
 
 /* Back button */
 .profile-page[data-character="damian-wayne"] .back-btn {
     background: linear-gradient(135deg, rgba(26, 77, 46, 0.8), rgba(10, 10, 10, 0.9));
     border: 1px solid var(--character-accent-silver);
-    color: var(--character-accent-gold);
+    color: var(--character-accent-gold)
 }
-
 .profile-page[data-character="damian-wayne"] .back-btn:hover {
     border-color: var(--character-accent-gold);
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3)
 }
 
 /* Decorative sword elements */
@@ -243,9 +219,8 @@
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--character-accent-gold));
     transform: rotate(45deg);
-    opacity: 0.5;
+    opacity: 0.5
 }
-
 .profile-page[data-character="damian-wayne"] .profile-content::after {
     content: '';
     position: absolute;
@@ -255,7 +230,7 @@
     height: 2px;
     background: linear-gradient(90deg, var(--character-accent-silver), transparent);
     transform: rotate(45deg);
-    opacity: 0.5;
+    opacity: 0.5
 }
 
 /* Mobile adjustments */
@@ -263,16 +238,14 @@
     .profile-page[data-character="damian-wayne"] .speech-bubble {
         background: linear-gradient(135deg, #f0f0f0, #ffffff);
         border-color: var(--character-accent-gold);
-        box-shadow: 4px 4px 0 rgba(212, 175, 55, 0.3);
+        box-shadow: 4px 4px 0 rgba(212, 175, 55, 0.3)
     }
-    
     .profile-page[data-character="damian-wayne"] .mobile-profile-image {
         border: 4px solid var(--character-accent-gold);
-        box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+        box-shadow: 0 0 30px rgba(212, 175, 55, 0.4)
     }
-    
     .profile-page[data-character="damian-wayne"] .mobile-nav-tab.active {
         background: var(--character-accent-gold);
-        color: var(--character-secondary);
+        color: var(--character-secondary)
     }
 }
