@@ -9,10 +9,8 @@ from datetime import datetime
 import json
 from database import db
 
-load_dotenv()
-
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SESSION_SECRET', 'dev-secret-key-change-in-production')
+app.config['SECRET_KEY'] = os.getenv('SESSION_SECRET', 'dev-secret-key')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max upload
 
 # Flask-Login setup
