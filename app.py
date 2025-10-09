@@ -3,7 +3,6 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 import os
-from dotenv import load_dotenv
 import markdown as md
 from datetime import datetime
 import json
