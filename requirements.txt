@@ -1,0 +1,9 @@
+Flask==3.0.0
+Flask-Login==0.6.3
+python-dotenv==1.0.0
+markdown==3.5.1
+Pillow==10.1.0
+supabase==2.9.0
+postgrest==0.16.11
+gotrue==2.8.1
+werkzeug==3.0.1

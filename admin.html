@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - DC Timeline</title>
+    <link rel="stylesheet" href="/static/styles/global.css">
+    <link rel="stylesheet" href="/static/styles/admin.css">
+</head>
+<body class="admin-page">
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-container">
+        <div class="login-card">
+            <h1>Admin Access</h1>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+            <p id="login-error" class="error-message"></p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard-container" style="display: none;">
+        <header class="dashboard-header">
+            <h1>DC Timeline - Admin Dashboard</h1>
+            <button id="logout-btn" class="btn-secondary">Logout</button>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Sidebar Navigation -->
+            <aside class="dashboard-sidebar">
+                <nav>
+                    <button class="sidebar-btn active" data-section="pending">
+                        Pending Edits <span id="pending-count" class="badge">0</span>
+                    </button>
+                    <button class="sidebar-btn" data-section="characters">Characters</button>
+                    <button class="sidebar-btn" data-section="timeline">Timeline Events</button>
+                    <button class="sidebar-btn" data-section="relationships">Relationships</button>
+                    <button class="sidebar-btn" data-section="gallery">Gallery</button>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="dashboard-main">
+                <!-- Pending Edits Section -->
+                <section id="pending-section" class="admin-section active">
+                    <h2>Pending Edits for Approval</h2>
+                    <div id="pending-list" class="pending-list">
+                        <!-- Loaded via JS -->
+                    </div>
+                </section>
+
+                <!-- Characters Section -->
+                <section id="characters-section" class="admin-section">
+                    <div class="section-header">
+                        <h2>Manage Characters</h2>
+                        <button class="btn-primary" onclick="openCharacterForm()">+ New Character</button>
+                    </div>
+                    <div id="characters-list" class="admin-list">
+                        <!-- Loaded via JS -->
+                    </div>
+                </section>
+
+                <!-- Timeline Events Section -->
+                <section id="timeline-section" class="admin-section">
+                    <div class="section-header">
+                        <h2>Timeline Events</h2>
+                        <button class="btn-primary" onclick="openEventForm()">+ New Event</button>
+                    </div>
+                    <div id="events-list" class="admin-list">
+                        <!-- Loaded via JS -->
+                    </div>
+                </section>
+
+                <!-- Relationships Section -->
+                <section id="relationships-section" class="admin-section">
+                    <h2>Manage Relationships</h2>
+                    <div id="relationships-admin-list">
+                        <!-- Loaded via JS -->
+                    </div>
+                </section>
+
+                <!-- Gallery Section -->
+                <section id="gallery-section" class="admin-section">
+                    <div class="section-header">
+                        <h2>Gallery Manager</h2>
+                        <button class="btn-primary" onclick="openUploadForm()">+ Upload Images</button>
+                    </div>
+                    <div id="gallery-admin-list">
+                        <!-- Loaded via JS -->
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Character Form Modal -->
+    <div id="character-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content wide">
+            <button class="modal-close">×</button>
+            <h2 id="character-form-title">Add New Character</h2>
+            <form id="character-form" class="admin-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nickname</label>
+                        <input type="text" name="nickname">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="full_name">
+                    </div>
+                    <div class="form-group">
+                        <label>Birthday</label>
+                        <input type="date" name="birthday">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Family *</label>
+                        <select name="family" required>
+                            <option value="batfam">Batfam</option>
+                            <option value="supers">Supers</option>
+                            <option value="speedsters">Speedsters</option>
+                            <option value="lanterns">Lanterns</option>
+                            <option value="amazons">Amazons</option>
+                            <option value="titans">Titans</option>
+                            <option value="outlaws">Outlaws</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Profile Image</label>
+                        <input type="file" name="profile_image" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Quote</label>
+                    <textarea name="quote" rows="2"></textarea>
+                </div>
+
+                <div class="form-section">
+                    <h3>Theme Colors</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Primary Color</label>
+                            <input type="color" name="color_primary">
+                        </div>
+                        <div class="form-group">
+                            <label>Secondary Color</label>
+                            <input type="color" name="color_secondary">
+                        </div>
+                        <div class="form-group">
+                            <label>Accent Color</label>
+                            <input type="color" name="color_accent">
+                        </div>
+                        <div class="form-group">
+                            <label>Background Color</label>
+                            <input type="color" name="color_bg">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeCharacterForm()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Character</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Event Form Modal -->
+    <div id="event-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content wide">
+            <button class="modal-close">×</button>
+            <h2 id="event-form-title">Add Timeline Event</h2>
+            <form id="event-form" class="admin-form">
+                <div class="form-group">
+                    <label>Title *</label>
+                    <input type="text" name="title" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Event Date *</label>
+                        <input type="date" name="event_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Era *</label>
+                        <select name="era" required>
+                            <option value="pre-52">Pre-New 52</option>
+                            <option value="new-52">New 52</option>
+                            <option value="rebirth">Rebirth</option>
+                            <option value="infinite-frontier">Infinite Frontier</option>
+                            <option value="elseworlds">Elseworlds</option>
+                            <option value="post-crisis">Post-Crisis</option>
+                            <option value="future-state">Future State</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Summary *</label>
+                    <textarea name="summary" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Description (Markdown supported)</label>
+                    <textarea name="full_description" rows="8" class="markdown-editor"></textarea>
+                    <small>Supports Markdown: **bold**, *italic*, [links](url), etc.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Connected Characters *</label>
+                    <div id="character-select" class="multi-select">
+                        <!-- Populated via JS -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Event Images</label>
+                    <input type="file" name="event_images" accept="image/*" multiple>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeEventForm()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Image Upload Modal -->
+    <div id="upload-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">×</button>
+            <h2>Upload Images</h2>
+            <form id="upload-form" class="admin-form">
+                <div class="form-group">
+                    <label>Character *</label>
+                    <select name="character_id" required>
+                        <!-- Populated via JS -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Link to Event (Optional)</label>
+                    <select name="event_id">
+                        <option value="">None</option>
+                        <!-- Populated via JS -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Images *</label>
+                    <input type="file" name="images" accept="image/*" multiple required>
+                    <div id="image-preview" class="image-preview-grid"></div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeUploadForm()">Cancel</button>
+                    <button type="submit" class="btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/admin.js"></script>
+    <script src="/static/js/markdown.js"></script>
+</body>
+</html>

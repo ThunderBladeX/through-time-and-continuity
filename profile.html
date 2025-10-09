@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Character Profile - DC Timeline</title>
+    <link rel="stylesheet" href="/static/styles/global.css">
+    <link rel="stylesheet" href="/static/styles/profile.css">
+    <link rel="stylesheet" href="/static/styles/profile-mobile.css">
+    <link rel="stylesheet" href="/static/styles/eras.css">
+    <!-- Character-specific theme loaded dynamically -->
+    <link id="character-theme" rel="stylesheet" href="">
+</head>
+<body class="profile-page" data-character-id="">
+    <!-- Back Navigation -->
+    <a href="/characters.html" class="back-btn">← Back to Characters</a>
+
+    <!-- Desktop: Two Column Layout -->
+    <div class="profile-container desktop-view">
+        <!-- Left Sidebar -->
+        <aside class="profile-sidebar">
+            <div class="profile-image-container">
+                <img id="profile-image" src="" alt="" class="profile-image">
+                <div class="profile-name-overlay">
+                    <h1 id="character-name"></h1>
+                </div>
+            </div>
+            
+            <nav class="profile-nav">
+                <button class="nav-tab active" data-tab="overview">Overview</button>
+                <button class="nav-tab" data-tab="timeline">Timeline</button>
+                <button class="nav-tab" data-tab="relationships">Relationships</button>
+                <button class="nav-tab" data-tab="gallery">Gallery</button>
+            </nav>
+        </aside>
+
+        <!-- Right Content Area -->
+        <main class="profile-content">
+            <!-- Overview Tab -->
+            <div id="overview-tab" class="tab-content active">
+                <div class="bio-section">
+                    <h2 class="section-header">Identity</h2>
+                    <div id="bio-identity" class="bio-grid">
+                        <!-- Loaded via JS -->
+                    </div>
+                </div>
+                
+                <div id="additional-bio-sections">
+                    <!-- Additional sections loaded via JS -->
+                </div>
+            </div>
+
+            <!-- Timeline Tab -->
+            <div id="timeline-tab" class="tab-content">
+                <div class="timeline-container">
+                    <div id="timeline-list">
+                        <!-- Timeline events loaded via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Relationships Tab -->
+            <div id="relationships-tab" class="tab-content">
+                <div id="relationships-list" class="relationships-grid">
+                    <!-- Relationships loaded via JS -->
+                </div>
+            </div>
+
+            <!-- Gallery Tab -->
+            <div id="gallery-tab" class="tab-content">
+                <div id="gallery-masonry" class="masonry-grid">
+                    <!-- Images loaded via JS with lazy loading -->
+                </div>
+                <div class="gallery-loader">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile: Stacked Layout -->
+    <div class="profile-container mobile-view">
+        <div class="mobile-header">
+            <img id="mobile-profile-image" src="" alt="" class="mobile-profile-image">
+            <div class="speech-bubble">
+                <p id="character-quote"></p>
+            </div>
+            <h1 id="mobile-character-name"></h1>
+        </div>
+
+        <nav class="mobile-nav">
+            <button class="mobile-nav-tab active" data-tab="overview">Overview</button>
+            <button class="mobile-nav-tab" data-tab="timeline">Timeline</button>
+            <button class="mobile-nav-tab" data-tab="relationships">Relationships</button>
+            <button class="mobile-nav-tab" data-tab="gallery">Gallery</button>
+        </nav>
+
+        <div class="mobile-content">
+            <!-- Same tab content structure as desktop -->
+            <div id="mobile-overview" class="mobile-tab-content active"></div>
+            <div id="mobile-timeline" class="mobile-tab-content"></div>
+            <div id="mobile-relationships" class="mobile-tab-content"></div>
+            <div id="mobile-gallery" class="mobile-tab-content">
+                <div class="gallery-pagination">
+                    <button id="prev-page" class="page-btn">← Previous</button>
+                    <span id="page-info"></span>
+                    <button id="next-page" class="page-btn">Next →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timeline Event Modal -->
+    <div id="event-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">×</button>
+            <div class="modal-header">
+                <span id="modal-era-badge" class="era-badge"></span>
+                <h2 id="modal-event-title"></h2>
+                <p id="modal-event-date" class="event-date"></p>
+            </div>
+            <div class="modal-body">
+                <div id="modal-event-images" class="event-images"></div>
+                <div id="modal-event-description" class="event-description"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Era Tooltip -->
+    <div id="era-tooltip" class="tooltip"></div>
+
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/profile.js"></script>
+    <script src="/static/js/gallery.js"></script>
+    <script src="/static/js/markdown.js"></script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+import os
+from dotenv import load_dotenv
+import httpx
+
+load_dotenv()
+
+# Supabase configuration
+SUPABASE_URL = os.getenv('SUPABASE_URL')
+SUPABASE_KEY = os.getenv('SUPABASE_KEY')
+
+if not SUPABASE_URL or not SUPABASE_KEY:
+    print("Warning: SUPABASE_URL and SUPABASE_KEY not set. Database features will be limited.")
+    SUPABASE_URL = ""
+    SUPABASE_KEY = ""
+
+# Simple HTTP client for Supabase REST API
+class SupabaseClient:
+    def __init__(self, url, key):
+        self.url = url.rstrip('/')
+        self.key = key
+        self.headers = {
+            'apikey': key,
+            'Authorization': f'Bearer {key}',
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+        }
+    
+    def query(self, table, method='GET', params=None, data=None, select='*'):
+        """Make a request to Supabase REST API"""
+        if not self.url or not self.key:
+            return []
+        
+        url = f"{self.url}/rest/v1/{table}"
+        
+        # Add select parameter for GET requests
+        if method == 'GET':
+            if params is None:
+                params = {}
+            params['select'] = select
+        
+        try:
+            with httpx.Client() as client:
+                if method == 'GET':
+                    response = client.get(url, headers=self.headers, params=params)
+                elif method == 'POST':
+                    response = client.post(url, headers=self.headers, json=data, params={'select': select} if select else None)
+                elif method == 'PATCH':
+                    response = client.patch(url, headers=self.headers, json=data, params=params)
+                elif method == 'DELETE':
+                    response = client.delete(url, headers=self.headers, params=params)
+                
+                # Accept both 200/201 for success and 204 for successful mutations
+                if response.status_code in [200, 201, 204]:
+                    # Return empty list for 204 No Content
+                    if response.status_code == 204:
+                        return []
+                    try:
+                        return response.json()
+                    except:
+                        return []
+                else:
+                    print(f"Database error: {response.status_code} - {response.text}")
+                    return []
+        except Exception as e:
+            print(f"Database query error: {e}")
+            return []
+
+# Initialize client
+supabase = SupabaseClient(SUPABASE_URL, SUPABASE_KEY)
+
+# Database helper functions
+class Database:
+    @staticmethod
+    def get_all_characters(family=None):
+        """Get all characters, optionally filtered by family"""
+        params = {'order': 'full_name'}
+        if family and family != 'all':
+            params['family'] = f'eq.{family}'
+        
+        return supabase.query('characters', params=params, select='*')
+    
+    @staticmethod
+    def get_character_by_id(character_id):
+        """Get a single character by ID"""
+        params = {'id': f'eq.{character_id}'}
+        result = supabase.query('characters', params=params, select='*')
+        return result[0] if result else None
+    
+    @staticmethod
+    def get_character_timeline(character_id):
+        """Get all timeline events for a character"""
+        # First get event IDs
+        params = {'character_id': f'eq.{character_id}'}
+        event_chars = supabase.query('event_characters', params=params, select='event_id')
+        
+        if not event_chars:
+            return []
+        
+        event_ids = [str(ec['event_id']) for ec in event_chars]
+        if not event_ids:
+            return []
+        
+        # Get events
+        params = {'id': f'in.({",".join(event_ids)})', 'order': 'event_date'}
+        events = supabase.query('events', params=params, select='*')
+        return events
+    
+    @staticmethod
+    def get_character_relationships(character_id):
+        """Get all relationships for a character"""
+        params = {'character_id': f'eq.{character_id}'}
+        relationships = supabase.query('relationships', params=params, select='*')
+        
+        # For each relationship, fetch the related character
+        for rel in relationships:
+            rel_char = Database.get_character_by_id(rel['related_character_id'])
+            rel['related_character'] = rel_char if rel_char else {}
+        
+        return relationships
+    
+    @staticmethod
+    def get_character_gallery(character_id):
+        """Get all gallery images for a character"""
+        params = {'character_id': f'eq.{character_id}', 'order': 'created_at.desc'}
+        return supabase.query('gallery_images', params=params, select='*')
+    
+    @staticmethod
+    def get_recent_events(limit=6):
+        """Get recent timeline events"""
+        params = {'order': 'event_date.desc', 'limit': limit}
+        events = supabase.query('events', params=params, select='*')
+        
+        # Get characters for each event
+        for event in events:
+            params = {'event_id': f'eq.{event["id"]}'}
+            event_chars = supabase.query('event_characters', params=params, select='character_id')
+            event['event_characters'] = []
+            
+            for ec in event_chars:
+                char = Database.get_character_by_id(ec['character_id'])
+                if char:
+                    event['event_characters'].append({
+                        'character_id': ec['character_id'],
+                        'characters': char
+                    })
+        
+        return events
+    
+    @staticmethod
+    def get_event_by_id(event_id):
+        """Get a single event by ID"""
+        params = {'id': f'eq.{event_id}'}
+        result = supabase.query('events', params=params, select='*')
+        
+        if not result:
+            return None
+        
+        event = result[0]
+        
+        # Get characters for this event
+        params = {'event_id': f'eq.{event_id}'}
+        event_chars = supabase.query('event_characters', params=params, select='character_id')
+        event['event_characters'] = []
+        
+        for ec in event_chars:
+            char = Database.get_character_by_id(ec['character_id'])
+            if char:
+                event['event_characters'].append({
+                    'character_id': ec['character_id'],
+                    'characters': char
+                })
+        
+        # Get images
+        params = {'event_id': f'eq.{event_id}'}
+        images = supabase.query('event_images', params=params, select='image_url')
+        event['images'] = [img['image_url'] for img in images] if images else []
+        
+        return event
+    
+    @staticmethod
+    def create_character(data):
+        """Create a new character"""
+        result = supabase.query('characters', method='POST', data=data, select='*')
+        return result[0] if result else None
+    
+    @staticmethod
+    def update_character(character_id, data):
+        """Update a character"""
+        params = {'id': f'eq.{character_id}'}
+        result = supabase.query('characters', method='PATCH', params=params, data=data)
+        return result[0] if result else None
+    
+    @staticmethod
+    def delete_character(character_id):
+        """Delete a character"""
+        params = {'id': f'eq.{character_id}'}
+        supabase.query('characters', method='DELETE', params=params)
+        return True
+    
+    @staticmethod
+    def create_event(data):
+        """Create a new timeline event"""
+        result = supabase.query('events', method='POST', data=data, select='*')
+        return result[0] if result else None
+    
+    @staticmethod
+    def link_event_to_characters(event_id, character_ids):
+        """Link an event to multiple characters"""
+        links = [{'event_id': event_id, 'character_id': char_id} for char_id in character_ids]
+        result = supabase.query('event_characters', method='POST', data=links, select='*')
+        return result
+    
+    @staticmethod
+    def create_relationship(data):
+        """Create a new relationship"""
+        result = supabase.query('relationships', method='POST', data=data, select='*')
+        return result[0] if result else None
+    
+    @staticmethod
+    def create_gallery_image(data):
+        """Create a gallery image entry"""
+        result = supabase.query('gallery_images', method='POST', data=data, select='*')
+        return result[0] if result else None
+    
+    @staticmethod
+    def get_pending_edits():
+        """Get all pending edits"""
+        params = {'status': 'eq.pending', 'order': 'created_at.desc'}
+        return supabase.query('pending_edits', params=params, select='*')
+    
+    @staticmethod
+    def approve_edit(edit_id):
+        """Approve a pending edit"""
+        params = {'id': f'eq.{edit_id}'}
+        data = {'status': 'approved'}
+        result = supabase.query('pending_edits', method='PATCH', params=params, data=data)
+        return result[0] if result else None
+    
+    @staticmethod
+    def deny_edit(edit_id):
+        """Deny a pending edit"""
+        params = {'id': f'eq.{edit_id}'}
+        data = {'status': 'denied'}
+        result = supabase.query('pending_edits', method='PATCH', params=params, data=data)
+        return result[0] if result else None
+
+db = Database()

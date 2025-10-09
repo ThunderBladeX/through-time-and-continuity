@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Characters - DC Timeline</title>
+    <link rel="stylesheet" href="/static/styles/global.css">
+    <link rel="stylesheet" href="/static/styles/characters.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <h1 class="site-title">DC Timeline</h1>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/characters" class="active">Characters</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="characters-page">
+        <div class="container">
+            <h1 class="page-title">Character Archive</h1>
+            
+            <!-- Family Filters -->
+            <div class="filter-bar">
+                <button class="filter-btn active" data-family="all">All</button>
+                <button class="filter-btn" data-family="batfam">Batfam</button>
+                <button class="filter-btn" data-family="supers">Supers</button>
+                <button class="filter-btn" data-family="speedsters">Speedsters</button>
+                <button class="filter-btn" data-family="lanterns">Lanterns</button>
+                <button class="filter-btn" data-family="amazons">Amazons</button>
+                <button class="filter-btn" data-family="titans">Titans</button>
+                <button class="filter-btn" data-family="outlaws">Outlaws</button>
+                <button class="filter-btn" data-family="other">Other</button>
+            </div>
+
+            <!-- Character Grid -->
+            <div id="character-grid" class="character-grid">
+                <!-- Cards loaded via JS -->
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Loading characters...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/characters.js"></script>
+</body>
+</html>
