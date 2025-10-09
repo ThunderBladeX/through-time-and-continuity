@@ -158,6 +158,8 @@ def api_login():
     # Simple authentication - will be enhanced with database
     admin_username = os.getenv('ADMIN_USERNAME', 'admin')
     admin_password = os.getenv('ADMIN_PASSWORD', 'admin123')
+
+    print("DEBUG LOGIN:", username, password, "ENV:", admin_username, admin_password)
     
     if username == admin_username and password == admin_password:
         user = User(1)
