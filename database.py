@@ -2,8 +2,6 @@ import os
 from dotenv import load_dotenv
 import httpx
 
-load_dotenv()
-
 # Supabase configuration
 SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_KEY')
