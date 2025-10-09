@@ -1,0 +1,339 @@
+/* Era Badge Base Styles */
+.era-badge {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Pre-New 52: Smoke, worn newspaper, yellow tint */
+.era-badge[data-era="pre-52"],
+.event-card[data-era="pre-52"]::before {
+    background: linear-gradient(135deg, #8b7355, #6b5644);
+    box-shadow: 0 2px 8px rgba(139, 115, 85, 0.3);
+}
+
+.event-card[data-era="pre-52"] {
+    border-color: #8b7355;
+    background: linear-gradient(to bottom, rgba(139, 115, 85, 0.05), transparent);
+    position: relative;
+}
+
+.event-card[data-era="pre-52"]::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(139, 115, 85, 0.03) 2px,
+            rgba(139, 115, 85, 0.03) 4px
+        );
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* New 52: Static, blueprint, 3D depth, brutalism with red */
+.era-badge[data-era="new-52"],
+.event-card[data-era="new-52"]::before {
+    background: linear-gradient(135deg, #dc2626, #991b1b);
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+}
+
+.event-card[data-era="new-52"] {
+    border-color: #dc2626;
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(220, 38, 38, 0.02) 10px,
+            rgba(220, 38, 38, 0.02) 20px
+        );
+    box-shadow: 
+        2px 2px 0 rgba(220, 38, 38, 0.1),
+        4px 4px 0 rgba(220, 38, 38, 0.05);
+}
+
+.event-card[data-era="new-52"]::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle, rgba(220, 38, 38, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+    animation: staticNoise 0.5s steps(4) infinite;
+}
+
+@keyframes staticNoise {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.2; }
+}
+
+/* Rebirth: Dawn, glass, constellation, halo effect */
+.era-badge[data-era="rebirth"],
+.event-card[data-era="rebirth"]::before {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}
+
+.event-card[data-era="rebirth"] {
+    border-color: #3b82f6;
+    background: 
+        radial-gradient(circle at top left, rgba(59, 130, 246, 0.08), transparent 50%),
+        radial-gradient(circle at bottom right, rgba(29, 78, 216, 0.05), transparent 50%);
+}
+
+.event-card[data-era="rebirth"]::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle, rgba(255, 255, 255, 0.4) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+    background-size: 50px 50px, 80px 80px;
+    background-position: 0 0, 25px 25px;
+    pointer-events: none;
+    opacity: 0.3;
+}
+
+.event-card[data-era="rebirth"]:hover::after {
+    opacity: 0.5;
+    animation: constellation 20s linear infinite;
+}
+
+@keyframes constellation {
+    from { transform: translate(0, 0); }
+    to { transform: translate(50px, 50px); }
+}
+
+.event-card[data-era="rebirth"]:hover {
+    box-shadow: 
+        var(--shadow-lg),
+        0 0 30px rgba(59, 130, 246, 0.3);
+}
+
+/* Infinite Frontier: Planetary rings, comet trails */
+.era-badge[data-era="infinite-frontier"],
+.event-card[data-era="infinite-frontier"]::before {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+}
+
+.event-card[data-era="infinite-frontier"] {
+    border-color: #8b5cf6;
+    background: 
+        conic-gradient(from 45deg at 50% 50%, 
+            transparent 0deg, 
+            rgba(139, 92, 246, 0.1) 90deg, 
+            transparent 180deg,
+            rgba(109, 40, 217, 0.1) 270deg,
+            transparent 360deg
+        );
+}
+
+.event-card[data-era="infinite-frontier"]::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        linear-gradient(90deg, transparent 0%, rgba(139, 92, 246, 0.2) 50%, transparent 100%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--transition-slow);
+}
+
+.event-card[data-era="infinite-frontier"]:hover::after {
+    opacity: 1;
+    animation: cometTrail 2s ease-out;
+}
+
+@keyframes cometTrail {
+    from {
+        transform: translateX(-100%) rotate(-45deg);
+    }
+    to {
+        transform: translateX(100%) rotate(-45deg);
+    }
+}
+
+/* Elseworlds: Notebook, collage, smudged paint */
+.era-badge[data-era="elseworlds"],
+.event-card[data-era="elseworlds"]::before {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.event-card[data-era="elseworlds"] {
+    border-color: #f59e0b;
+    background: 
+        linear-gradient(to bottom, 
+            rgba(245, 158, 11, 0.03),
+            rgba(217, 119, 6, 0.03)
+        );
+    position: relative;
+}
+
+.event-card[data-era="elseworlds"]::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 25px,
+            rgba(245, 158, 11, 0.1) 25px,
+            rgba(245, 158, 11, 0.1) 26px
+        );
+    pointer-events: none;
+}
+
+.event-card[data-era="elseworlds"]:hover {
+    transform: translateX(8px) rotate(0.5deg);
+}
+
+/* Post-Crisis: Charcoal, steel, rust, burn marks */
+.era-badge[data-era="post-crisis"],
+.event-card[data-era="post-crisis"]::before {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    box-shadow: 0 2px 8px rgba(107, 114, 128, 0.4);
+}
+
+.event-card[data-era="post-crisis"] {
+    border-color: #6b7280;
+    background: 
+        linear-gradient(135deg, 
+            rgba(107, 114, 128, 0.05) 0%,
+            transparent 50%,
+            rgba(139, 69, 19, 0.05) 100%
+        );
+}
+
+.event-card[data-era="post-crisis"]::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(ellipse at 20% 30%, rgba(139, 69, 19, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(75, 85, 99, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* Future State: Cyberpunk, pixel art, neon */
+.era-badge[data-era="future-state"],
+.event-card[data-era="future-state"]::before {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+    box-shadow: 0 2px 8px rgba(6, 182, 212, 0.5);
+}
+
+.event-card[data-era="future-state"] {
+    border-color: #06b6d4;
+    background: 
+        linear-gradient(135deg, 
+            rgba(6, 182, 212, 0.08) 0%,
+            transparent 50%,
+            rgba(236, 72, 153, 0.05) 100%
+        );
+    box-shadow: 
+        inset 0 0 20px rgba(6, 182, 212, 0.1);
+}
+
+.event-card[data-era="future-state"]::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(6, 182, 212, 0.1) 2px,
+            rgba(6, 182, 212, 0.1) 4px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 2px,
+            rgba(6, 182, 212, 0.1) 2px,
+            rgba(6, 182, 212, 0.1) 4px
+        );
+    background-size: 4px 4px;
+    pointer-events: none;
+    animation: pixelScan 4s linear infinite;
+}
+
+@keyframes pixelScan {
+    0% { opacity: 0.2; }
+    50% { opacity: 0.4; }
+    100% { opacity: 0.2; }
+}
+
+.event-card[data-era="future-state"]:hover {
+    box-shadow: 
+        var(--shadow-lg),
+        0 0 30px rgba(6, 182, 212, 0.4),
+        inset 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+/* Activity Feed Era Badges */
+.activity-era-badge[data-era="pre-52"] {
+    background: linear-gradient(135deg, #8b7355, #6b5644);
+}
+
+.activity-era-badge[data-era="new-52"] {
+    background: linear-gradient(135deg, #dc2626, #991b1b);
+}
+
+.activity-era-badge[data-era="rebirth"] {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.activity-era-badge[data-era="infinite-frontier"] {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+}
+
+.activity-era-badge[data-era="elseworlds"] {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.activity-era-badge[data-era="post-crisis"] {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+}
+
+.activity-era-badge[data-era="future-state"] {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+/* Reduce animations on mobile */
+@media (max-width: 768px) {
+    .event-card[data-era]::after {
+        animation: none !important;
+    }
+    
+    .event-card:hover {
+        transform: none !important;
+    }
+}
