@@ -15,7 +15,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max upload
 # Flask-Login setup
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = None  # We handle login differently
+login_manager.login_view = None
 
 # Simple user class for admin authentication
 class User(UserMixin):
@@ -158,8 +158,6 @@ def api_login():
     # Simple authentication - will be enhanced with database
     admin_username = os.getenv('ADMIN_USERNAME', 'admin')
     admin_password = os.getenv('ADMIN_PASSWORD', 'admin123')
-
-    print(f"DEBUG LOGIN: username={username}, password={password}, ADMIN_USERNAME={admin_username}, ADMIN_PASSWORD={admin_password}")
     
     if username == admin_username and password == admin_password:
         user = User(1)
@@ -189,4 +187,4 @@ def api_create_event():
     return jsonify(event)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
