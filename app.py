@@ -155,81 +155,111 @@ def api_logout():
     logout_user()
     return jsonify({'success': True})
 
+@app.route('/api/admin/pending-edits', methods=['GET'])
+@login_required
+def api_get_pending_edits():
+    return jsonify(db.get_pending_edits())
+
+@app.route('/api/admin/pending-edits/<int:edit_id>', methods=['PATCH'])
+@login_required
+def api_update_pending_edit(edit_id):
+    action = request.json.get('action')
+    if action == 'approve':
+        edit = db.approve_edit(edit_id)
+        return jsonify(edit) if edit else (jsonify({'error': 'Failed to approve edit'}), 400)
+    elif action == 'deny':
+        edit = db.deny_edit(edit_id)
+        return jsonify(edit) if edit else (jsonify({'error': 'Failed to deny edit'}), 400)
+    return jsonify({'error': 'Invalid action'}), 400
+
+@app.route('/api/admin/relationships', methods=['GET'])
+@login_required
+def api_get_all_relationships():
+    return jsonify(db.get_all_relationships())
+
+@app.route('/api/admin/gallery', methods=['GET'])
+@login_required
+def api_get_all_gallery_images():
+    return jsonify(db.get_all_gallery_images())
+
 @app.route('/api/admin/characters', methods=['POST'])
 @login_required
 def api_create_character():
-    # File uploads come as form data, not JSON.
     data = request.form.to_dict()
-    
-    # 1. Handle the profile image upload
     if 'profile_image' in request.files:
         file = request.files['profile_image']
         if file and file.filename:
             filename = secure_filename(file.filename)
             unique_filename = f"profiles/{int(datetime.now().timestamp())}_{filename}"
             content_type = file.mimetype or mimetypes.guess_type(filename)[0] or 'application/octet-stream'
-
             bucket_name = 'character-images' 
             file_body = file.read()
-            
             public_url = db.supabase.upload_file(bucket_name, unique_filename, file_body, content_type)
-            
             if public_url:
                 data['profile_image'] = public_url
             else:
                 return jsonify({'error': 'Failed to upload image to storage'}), 500
-
-    # 2. Save the character data (with the new image URL) to the database
     character = db.create_character(data)
-    if character:
-        return jsonify(character), 201
-    else:
-        return jsonify({'error': 'Failed to create character in database'}), 500
+    return jsonify(character), 201 if character else (jsonify({'error': 'Failed to create character'}), 500)
+
+@app.route('/api/admin/characters/<int:character_id>', methods=['POST'])
+@login_required
+def api_update_character(character_id):
+    data = request.form.to_dict()
+    if 'profile_image' in request.files:
+        file = request.files['profile_image']
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            unique_filename = f"profiles/{int(datetime.now().timestamp())}_{filename}"
+            content_type = file.mimetype or mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+            bucket_name = 'character-images'
+            file_body = file.read()
+            public_url = db.supabase.upload_file(bucket_name, unique_filename, file_body, content_type)
+            if public_url:
+                data['profile_image'] = public_url
+            else:
+                return jsonify({'error': 'Failed to upload image'}), 500
+    character = db.update_character(character_id, data)
+    return jsonify(character), 200 if character else (jsonify({'error': 'Failed to update character'}), 500)
+
+@app.route('/api/admin/characters/<int:character_id>', methods=['DELETE'])
+@login_required
+def api_delete_character(character_id):
+    return jsonify({'success': True}) if db.delete_character(character_id) else (jsonify({'error': 'Failed to delete'}), 500)
 
 @app.route('/api/admin/events', methods=['POST'])
 @login_required
 def api_create_event():
-    # Because of files, the request is multipart/form-data
     data = request.form.to_dict()
-    
-    # 1. Create the event first to get its ID
-    # The character_ids will be a comma-separated string from FormData
     character_ids_str = data.pop('character_ids', '')
-    
     event = db.create_event(data)
     if not event:
         return jsonify({'error': 'Failed to create event'}), 500
-
     event_id = event['id']
-    
-    # 2. Link characters to the event
     if character_ids_str:
         character_ids = [int(id) for id in character_ids_str.split(',') if id.isdigit()]
         if character_ids:
             db.link_event_to_characters(event_id, character_ids)
-    
-    # 3. Handle multiple event image uploads
     images = request.files.getlist('event_images')
     image_urls = []
     bucket_name = 'event-images'
-
     for file in images:
         if file and file.filename:
             filename = secure_filename(file.filename)
             unique_filename = f"{event_id}/{int(datetime.now().timestamp())}_{filename}"
             content_type = file.mimetype or mimetypes.guess_type(filename)[0] or 'application/octet-stream'
-            
             file_body = file.read()
             public_url = db.supabase.upload_file(bucket_name, unique_filename, file_body, content_type)
             if public_url:
                 image_urls.append({'event_id': event_id, 'image_url': public_url})
-
-    # 4. Save image URLs to the event_images table
     if image_urls:
         db.create_event_images(image_urls)
-
     return jsonify(event), 201
 
+@app.route('/api/admin/events/<int:event_id>', methods=['DELETE'])
+@login_required
+def api_delete_event(event_id):
+    return jsonify({'success': True}) if db.delete_event(event_id) else (jsonify({'error': 'Failed to delete event'}), 500)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
