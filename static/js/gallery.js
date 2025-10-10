@@ -60,17 +60,21 @@ async function loadMoreImages(characterId) {
     if (loader) loader.classList.add('active');
     
     try {
-        const data = await fetchAPI(`/gallery/character/${characterId}?page=${galleryPage}&limit=${IMAGES_PER_PAGE}`);
-        const newImages = data.images || [];
+        // Use correct API endpoint - backend returns formatted array
+        const newImages = await fetchAPI(`/characters/${characterId}/gallery?page=${galleryPage}&limit=${IMAGES_PER_PAGE}`);
         
-        if (newImages.length < IMAGES_PER_PAGE) {
+        if (!newImages || newImages.length < IMAGES_PER_PAGE) {
             galleryHasMore = false;
         }
         
-        if (newImages.length > 0) {
+        if (newImages && newImages.length > 0) {
             galleryImages = [...galleryImages, ...newImages];
             renderDesktopImages(newImages);
             galleryPage++;
+        } else if (galleryPage === 1) {
+            // First page and no images
+            const grid = document.getElementById('gallery-masonry');
+            if (grid) grid.innerHTML = '<p class="empty-state">No gallery images yet.</p>';
         }
         
     } catch (error) {
@@ -90,22 +94,29 @@ function renderDesktopImages(images) {
     images.forEach(image => {
         const item = document.createElement('div');
         item.className = 'gallery-item';
-        item.dataset.imageId = image.id;
+        // Backend returns {url, alt} format
+        const imageUrl = image.url || image.image_url || '';
+        const imageAlt = image.alt || image.alt_text || image.caption || '';
         
-        const img = document.createElement('img');
-        img.dataset.src = image.image_url;
-        img.alt = image.caption || '';
-        img.className = 'lazy';
-        
-        // Add click handler for lightbox
-        item.addEventListener('click', () => openLightbox(image.id));
-        
-        item.appendChild(img);
-        masonryGrid.appendChild(item);
+        if (imageUrl) {
+            const img = document.createElement('img');
+            img.dataset.src = imageUrl;
+            img.alt = imageAlt;
+            img.className = 'lazy';
+            img.onerror = function() { this.parentElement.style.display = 'none'; };
+            
+            // Add click handler for lightbox
+            item.addEventListener('click', () => openLightbox(imageUrl, imageAlt));
+            
+            item.appendChild(img);
+            masonryGrid.appendChild(item);
+        }
     });
     
     // Initialize lazy loading for new images
-    setupLazyLoading();
+    if (typeof setupLazyLoading === 'function') {
+        setupLazyLoading();
+    }
 }
 
 // Setup infinite scroll
@@ -133,23 +144,27 @@ async function loadGalleryPage(characterId, page) {
     stackContainer.innerHTML = '<div class="loading-state"><div class="spinner"></div></div>';
     
     try {
-        const data = await fetchAPI(`/gallery/character/${characterId}?page=${page}&limit=10`);
-        const images = data.images || [];
+        // Use correct API endpoint
+        const images = await fetchAPI(`/characters/${characterId}/gallery?page=${page}&limit=10`);
         
-        galleryImages = images;
+        galleryImages = images || [];
         galleryPage = page;
-        galleryHasMore = images.length === 10;
+        galleryHasMore = images && images.length === 10;
         
-        if (images.length === 0) {
+        if (!images || images.length === 0) {
             stackContainer.innerHTML = '<p class="empty-state">No images yet.</p>';
             return;
         }
         
-        stackContainer.innerHTML = images.map(image => `
-            <div class="mobile-gallery-item" data-image-id="${image.id}" onclick="openLightbox('${image.id}')">
-                <img src="${image.image_url}" alt="${image.caption || ''}" loading="lazy">
-            </div>
-        `).join('');
+        stackContainer.innerHTML = images.map((image, index) => {
+            const imageUrl = image.url || image.image_url || '';
+            const imageAlt = image.alt || image.alt_text || image.caption || '';
+            return `
+                <div class="mobile-gallery-item" onclick="openLightbox('${imageUrl}', '${imageAlt}')">
+                    <img src="${imageUrl}" alt="${imageAlt}" loading="lazy" onerror="this.parentElement.style.display='none'">
+                </div>
+            `;
+        }).join('');
         
         updatePaginationInfo(page, galleryHasMore);
         
@@ -203,9 +218,8 @@ function updatePaginationInfo(page, hasMore) {
 }
 
 // Open lightbox for full image view
-function openLightbox(imageId) {
-    const image = galleryImages.find(img => img.id === imageId);
-    if (!image) return;
+function openLightbox(imageUrl, imageAlt) {
+    if (!imageUrl) return;
     
     // Create lightbox modal
     const lightbox = document.createElement('div');
@@ -214,12 +228,8 @@ function openLightbox(imageId) {
         <div class="lightbox-overlay"></div>
         <div class="lightbox-content">
             <button class="lightbox-close">×</button>
-            <img src="${image.image_url}" alt="${image.caption || ''}">
-            ${image.caption ? `<p class="lightbox-caption">${image.caption}</p>` : ''}
-            <div class="lightbox-nav">
-                <button class="lightbox-prev">← Previous</button>
-                <button class="lightbox-next">Next →</button>
-            </div>
+            <img src="${imageUrl}" alt="${imageAlt || ''}" onerror="this.src='/static/images/default-avatar.jpg'">
+            ${imageAlt ? `<p class="lightbox-caption">${imageAlt}</p>` : ''}
         </div>
     `;
     
@@ -230,48 +240,13 @@ function openLightbox(imageId) {
     lightbox.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
     lightbox.querySelector('.lightbox-overlay').addEventListener('click', closeLightbox);
     
-    // Setup navigation
-    const currentIndex = galleryImages.findIndex(img => img.id === imageId);
-    
-    lightbox.querySelector('.lightbox-prev').addEventListener('click', () => {
-        const prevIndex = currentIndex - 1;
-        if (prevIndex >= 0) {
-            closeLightbox();
-            openLightbox(galleryImages[prevIndex].id);
-        }
-    });
-    
-    lightbox.querySelector('.lightbox-next').addEventListener('click', () => {
-        const nextIndex = currentIndex + 1;
-        if (nextIndex < galleryImages.length) {
-            closeLightbox();
-            openLightbox(galleryImages[nextIndex].id);
-        }
-    });
-    
     // Keyboard navigation
     const handleKeypress = (e) => {
         if (e.key === 'Escape') closeLightbox();
-        if (e.key === 'ArrowLeft' && currentIndex > 0) {
-            closeLightbox();
-            openLightbox(galleryImages[currentIndex - 1].id);
-        }
-        if (e.key === 'ArrowRight' && currentIndex < galleryImages.length - 1) {
-            closeLightbox();
-            openLightbox(galleryImages[currentIndex + 1].id);
-        }
     };
     
     document.addEventListener('keydown', handleKeypress);
     lightbox.dataset.keypressHandler = 'true';
-    
-    // Disable nav buttons at boundaries
-    if (currentIndex === 0) {
-        lightbox.querySelector('.lightbox-prev').disabled = true;
-    }
-    if (currentIndex === galleryImages.length - 1) {
-        lightbox.querySelector('.lightbox-next').disabled = true;
-    }
 }
 
 // Close lightbox
