@@ -678,6 +678,7 @@
 }
 
 @media (max-width: 768px) {
+    /* Remove animations and shadows for performance */
     * {
         animation: none !important;
         transition: none !important;
@@ -700,36 +701,41 @@
     
     .dashboard-header {
         position: relative;
-        padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm);
-        height: auto;
+        padding: var(--spacing-md);
     }
-    
-    .dashboard-header h1{font-size:0.65rem}
-    .btn-secondary{font-size:0.75rem}
     
     .dashboard-content {
         grid-template-columns: 1fr;
-        min-height: calc(100vh - 70px);
     }
     
     .dashboard-sidebar {
-        position: sticky;
-        top: 70px;
+        position: relative;
+        top: 0;
         height: auto;
         border-right: none;
         border-bottom: 1px solid var(--border);
-        padding: var(--spacing-sm) var(--spacing-md);
-        background: var(--bg-primary);
-        z-index: 90;
+        padding: var(--spacing-md) 0;
     }
     
     .dashboard-sidebar nav {
         flex-direction: row;
         overflow-x: auto;
         gap: var(--spacing-sm);
-        padding-bottom: 0;
+        padding: 0 var(--spacing-md) var(--spacing-sm);
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
+        position: relative;
+    }
+    
+    .dashboard-sidebar nav::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: var(--spacing-sm);
+        width: 40px;
+        background: linear-gradient(to left, var(--bg-secondary), transparent);
+        pointer-events: none;
     }
     
     .dashboard-sidebar nav::-webkit-scrollbar {
@@ -738,17 +744,17 @@
     
     .sidebar-btn {
         white-space: nowrap;
-        padding: 0.625rem 1rem;
-        font-size: 0.9rem;
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
         flex-shrink: 0;
         min-width: fit-content;
-        border-radius: 20px;
-        font-weight: 500;
+        border: 1px solid transparent;
     }
     
     .sidebar-btn.active {
         background: var(--accent);
         color: white;
+        border-color: var(--accent);
     }
     
     .sidebar-btn::before {
@@ -759,14 +765,10 @@
         transform: none;
     }
     
-    .badge {
-        padding:none;
-        font-size:0.7rem
-    }
-    
     .dashboard-main {
         padding: var(--spacing-md);
         background: var(--bg-primary);
+        min-height: auto;
     }
     
     .section-header {
@@ -774,16 +776,16 @@
         align-items: flex-start;
         gap: var(--spacing-md);
         margin-bottom: var(--spacing-lg);
-        padding-bottom: var(--spacing-sm);
+        padding-bottom: var(--spacing-md);
     }
     
     .section-header h2 {
-        font-size: 1.4rem;
-        padding-left: 0;
+        font-size: 1.25rem;
+        padding-left: var(--spacing-sm);
     }
     
     .section-header h2::before {
-        display: none;
+        height: 60%;
     }
     
     .form-row {
@@ -815,7 +817,11 @@
         display: none;
     }
     
-    .btn-icon,.btn-icon:hover,.badge{
+    .btn-icon {
+        box-shadow: none;
+    }
+    
+    .btn-icon:hover {
         box-shadow: none;
     }
     
