@@ -76,7 +76,6 @@ def api_character_detail(character_id):
 @app.route('/api/characters/<int:character_id>/timeline')
 def api_character_timeline(character_id):
     events = db.get_character_timeline(character_id)
-    # Add era display names
     for event in events:
         event['era_display'] = ERA_NAMES.get(event.get('era', ''), event.get('era', ''))
     return jsonify(events)
@@ -84,7 +83,6 @@ def api_character_timeline(character_id):
 @app.route('/api/characters/<int:character_id>/relationships')
 def api_character_relationships(character_id):
     relationships = db.get_character_relationships(character_id)
-    # Format relationships for frontend
     formatted = []
     for rel in relationships:
         related = rel.get('related_character', {})
@@ -101,7 +99,6 @@ def api_character_relationships(character_id):
 @app.route('/api/characters/<int:character_id>/gallery')
 def api_character_gallery(character_id):
     images = db.get_character_gallery(character_id)
-    # Format for frontend
     formatted = [{'url': img['image_url'], 'alt': img.get('alt_text', '')} for img in images]
     return jsonify(formatted)
 
@@ -109,14 +106,10 @@ def api_character_gallery(character_id):
 def api_events():
     limit = int(request.args.get('limit', 6))
     events = db.get_recent_events(limit)
-    
-    # Format for frontend
     formatted = []
     for event in events:
-        # Get first character for display
         event_chars = event.get('event_characters', [])
         first_char = event_chars[0]['characters'] if event_chars else {}
-        
         formatted.append({
             'id': event['id'],
             'title': event['title'],
@@ -129,7 +122,6 @@ def api_events():
             'character_image': first_char.get('profile_image', '/static/images/default-avatar.jpg'),
             'characters': [ec['characters']['full_name'] for ec in event_chars if 'characters' in ec]
         })
-    
     return jsonify(formatted)
 
 @app.route('/api/events/<int:event_id>')
@@ -137,14 +129,9 @@ def api_event_detail(event_id):
     event = db.get_event_by_id(event_id)
     if not event:
         return jsonify({'error': 'Event not found'}), 404
-    
-    # Add era display name
     event['era_display'] = ERA_NAMES.get(event.get('era', ''), event.get('era', ''))
-    
-    # Convert markdown to HTML if present
     if event.get('full_description'):
         event['full_description'] = md.markdown(event['full_description'])
-    
     return jsonify(event)
 
 @app.route('/api/login', methods=['POST'])
@@ -152,19 +139,14 @@ def api_login():
     data = request.get_json()
     if not data:
         return jsonify({'success': False, 'error': 'No data provided'}), 400
-        
     username = data.get('username')
     password = data.get('password')
-    
-    # Simple authentication - will be enhanced with database
     admin_username = os.getenv('ADMIN_USERNAME', 'admin')
     admin_password = os.getenv('ADMIN_PASSWORD', 'admin123')
-    
     if username == admin_username and password == admin_password:
         user = User(1)
         login_user(user)
         return jsonify({'success': True})
-    
     return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
 
 @app.route('/api/logout', methods=['POST'])
@@ -176,44 +158,78 @@ def api_logout():
 @app.route('/api/admin/characters', methods=['POST'])
 @login_required
 def api_create_character():
+    # File uploads come as form data, not JSON.
     data = request.form.to_dict()
     
-    # 1. Handle the file upload
+    # 1. Handle the profile image upload
     if 'profile_image' in request.files:
         file = request.files['profile_image']
-        
-        # Check if a file was actually uploaded
-        if file and file.filename != '':
+        if file and file.filename:
             filename = secure_filename(file.filename)
-            # Create a unique filename to avoid overwrites
-            unique_filename = f"profile_{int(datetime.now().timestamp())}_{filename}"
+            unique_filename = f"profiles/{int(datetime.now().timestamp())}_{filename}"
+            content_type = file.mimetype or mimetypes.guess_type(filename)[0] or 'application/octet-stream'
 
-            content_type = file.mimetype or mimetypes.guess_type(filename)[0]
             bucket_name = 'character-images' 
-            
-            # Read file content
             file_body = file.read()
             
-            # Upload to Supabase Storage
             public_url = db.supabase.upload_file(bucket_name, unique_filename, file_body, content_type)
+            
             if public_url:
                 data['profile_image'] = public_url
             else:
-                return jsonify({'error': 'Failed to upload image'}), 500
+                return jsonify({'error': 'Failed to upload image to storage'}), 500
 
     # 2. Save the character data (with the new image URL) to the database
     character = db.create_character(data)
     if character:
         return jsonify(character), 201
     else:
-        return jsonify({'error': 'Failed to create character'}), 500
+        return jsonify({'error': 'Failed to create character in database'}), 500
 
 @app.route('/api/admin/events', methods=['POST'])
 @login_required
 def api_create_event():
-    data = request.get_json()
+    # Because of files, the request is multipart/form-data
+    data = request.form.to_dict()
+    
+    # 1. Create the event first to get its ID
+    # The character_ids will be a comma-separated string from FormData
+    character_ids_str = data.pop('character_ids', '')
+    
     event = db.create_event(data)
-    return jsonify(event)
+    if not event:
+        return jsonify({'error': 'Failed to create event'}), 500
+
+    event_id = event['id']
+    
+    # 2. Link characters to the event
+    if character_ids_str:
+        character_ids = [int(id) for id in character_ids_str.split(',') if id.isdigit()]
+        if character_ids:
+            db.link_event_to_characters(event_id, character_ids)
+    
+    # 3. Handle multiple event image uploads
+    images = request.files.getlist('event_images')
+    image_urls = []
+    bucket_name = 'event-images'
+
+    for file in images:
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            unique_filename = f"{event_id}/{int(datetime.now().timestamp())}_{filename}"
+            content_type = file.mimetype or mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+            
+            file_body = file.read()
+            public_url = db.supabase.upload_file(bucket_name, unique_filename, file_body, content_type)
+            if public_url:
+                image_urls.append({'event_id': event_id, 'image_url': public_url})
+
+    # 4. Save image URLs to the event_images table
+    if image_urls:
+        db.create_event_images(image_urls)
+
+    return jsonify(event), 201
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
