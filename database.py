@@ -1,5 +1,6 @@
 import os
 import httpx
+import mimetypes
 
 # Supabase configuration
 SUPABASE_URL = os.getenv('SUPABASE_URL')
@@ -17,9 +18,7 @@ class SupabaseClient:
         self.key = key
         self.headers = {
             'apikey': key,
-            'Authorization': f'Bearer {key}',
-            'Content-Type': 'application/json',
-            'Prefer': 'return=representation'
+            'Authorization': f'Bearer {key}'
         }
     
     def query(self, table, method='GET', params=None, data=None, select='*'):
@@ -61,6 +60,36 @@ class SupabaseClient:
         except Exception as e:
             print(f"Database query error: {e}")
             return []
+
+    def upload_file(self, bucket_name, destination_path, file_body, content_type):
+        """Upload a file to Supabase Storage"""
+        if not self.url or not self.key:
+            return None
+
+        storage_url = f"{self.url}/storage/v1/object/{bucket_name}/{destination_path}"
+        
+        upload_headers = self.headers.copy()
+        upload_headers['Content-Type'] = content_type
+
+        try:
+            with httpx.Client() as client:
+                response = client.post(storage_url, headers=upload_headers, content=file_body)
+                
+                if response.status_code == 200:
+                    # File uploaded successfully, now get the public URL
+                    return self.get_public_url(bucket_name, destination_path)
+                else:
+                    print(f"Storage error: {response.status_code} - {response.text}")
+                    return None
+        except Exception as e:
+            print(f"File upload error: {e}")
+            return None
+
+    def get_public_url(self, bucket_name, path):
+        """Gets the public URL for a file in storage."""
+        if not self.url:
+            return None
+        return f"{self.url}/storage/v1/object/public/{bucket_name}/{path}"
 
 # Initialize client
 supabase = SupabaseClient(SUPABASE_URL, SUPABASE_KEY)
