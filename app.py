@@ -7,6 +7,7 @@ import markdown as md
 from datetime import datetime
 import json
 from database import db
+import mimetypes
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SESSION_SECRET', 'dev-secret-key')
@@ -175,9 +176,37 @@ def api_logout():
 @app.route('/api/admin/characters', methods=['POST'])
 @login_required
 def api_create_character():
-    data = request.get_json()
+    data = request.form.to_dict()
+    
+    # 1. Handle the file upload
+    if 'profile_image' in request.files:
+        file = request.files['profile_image']
+        
+        # Check if a file was actually uploaded
+        if file and file.filename != '':
+            filename = secure_filename(file.filename)
+            # Create a unique filename to avoid overwrites
+            unique_filename = f"profile_{int(datetime.now().timestamp())}_{filename}"
+
+            content_type = file.mimetype or mimetypes.guess_type(filename)[0]
+            bucket_name = 'character-images' 
+            
+            # Read file content
+            file_body = file.read()
+            
+            # Upload to Supabase Storage
+            public_url = db.supabase.upload_file(bucket_name, unique_filename, file_body, content_type)
+            if public_url:
+                data['profile_image'] = public_url
+            else:
+                return jsonify({'error': 'Failed to upload image'}), 500
+
+    # 2. Save the character data (with the new image URL) to the database
     character = db.create_character(data)
-    return jsonify(character)
+    if character:
+        return jsonify(character), 201
+    else:
+        return jsonify({'error': 'Failed to create character'}), 500
 
 @app.route('/api/admin/events', methods=['POST'])
 @login_required
