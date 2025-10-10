@@ -726,8 +726,10 @@
     
     .sidebar-btn {
         white-space: nowrap;
-        padding: 0.625rem;
-        font-size: 0.55rem;
+        padding: none;
+        font-size: 0.75rem;
+        flex-shrink: 0;
+        min-width: fit-content;
     }
     
     .sidebar-btn::before {
