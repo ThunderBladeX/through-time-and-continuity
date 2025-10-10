@@ -159,7 +159,7 @@ def api_login():
     admin_username = os.getenv('ADMIN_USERNAME', 'admin')
     admin_password = os.getenv('ADMIN_PASSWORD', 'admin123')
 
-    print("DEBUG LOGIN:", username, password, "ENV:", admin_username, admin_password)
+    print(f"DEBUG LOGIN: username={username}, password={password}, ADMIN_USERNAME={admin_username}, ADMIN_PASSWORD={admin_password}")
     
     if username == admin_username and password == admin_password:
         user = User(1)
