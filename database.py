@@ -16,19 +16,23 @@ class SupabaseClient:
     def __init__(self, url, key):
         self.url = url.rstrip('/')
         self.key = key
-        self.headers = {
+        # Base headers for most requests
+        self.base_headers = {
             'apikey': key,
-            'Authorization': f'Bearer {key}'
+            'Authorization': f'Bearer {key}',
         }
     
     def query(self, table, method='GET', params=None, data=None, select='*'):
-        """Make a request to Supabase REST API"""
+        """Make a request to Supabase REST API for database tables"""
         if not self.url or not self.key:
             return []
         
         url = f"{self.url}/rest/v1/{table}"
         
-        # Add select parameter for GET requests
+        headers = self.base_headers.copy()
+        headers['Content-Type'] = 'application/json'
+        headers['Prefer'] = 'return=representation'
+        
         if method == 'GET':
             if params is None:
                 params = {}
@@ -37,17 +41,15 @@ class SupabaseClient:
         try:
             with httpx.Client() as client:
                 if method == 'GET':
-                    response = client.get(url, headers=self.headers, params=params)
+                    response = client.get(url, headers=headers, params=params)
                 elif method == 'POST':
-                    response = client.post(url, headers=self.headers, json=data, params={'select': select} if select else None)
+                    response = client.post(url, headers=headers, json=data, params={'select': select} if select else None)
                 elif method == 'PATCH':
-                    response = client.patch(url, headers=self.headers, json=data, params=params)
+                    response = client.patch(url, headers=headers, json=data, params=params)
                 elif method == 'DELETE':
-                    response = client.delete(url, headers=self.headers, params=params)
+                    response = client.delete(url, headers=headers, params=params)
                 
-                # Accept both 200/201 for success and 204 for successful mutations
                 if response.status_code in [200, 201, 204]:
-                    # Return empty list for 204 No Content
                     if response.status_code == 204:
                         return []
                     try:
@@ -68,7 +70,7 @@ class SupabaseClient:
 
         storage_url = f"{self.url}/storage/v1/object/{bucket_name}/{destination_path}"
         
-        upload_headers = self.headers.copy()
+        upload_headers = self.base_headers.copy()
         upload_headers['Content-Type'] = content_type
 
         try:
@@ -91,11 +93,16 @@ class SupabaseClient:
             return None
         return f"{self.url}/storage/v1/object/public/{bucket_name}/{path}"
 
+
 # Initialize client
 supabase = SupabaseClient(SUPABASE_URL, SUPABASE_KEY)
 
 # Database helper functions
 class Database:
+    def __init__(self):
+        # Give the Database class a reference to the client
+        self.supabase = supabase
+
     @staticmethod
     def get_all_characters(family=None):
         """Get all characters, optionally filtered by family"""
@@ -237,7 +244,7 @@ class Database:
         return result
     
     @staticmethod
-    def create_relationship(data):
+def create_relationship(data):
         """Create a new relationship"""
         result = supabase.query('relationships', method='POST', data=data, select='*')
         return result[0] if result else None
