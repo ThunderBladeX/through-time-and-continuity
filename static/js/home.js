@@ -4,10 +4,10 @@ async function loadRecentActivities() {
     if (!activityList) return;
     
     try {
-        // Fetch recent events
-        const data = await fetchAPI('/timeline/recent?limit=6');
+        // Fetch recent events - backend returns array directly
+        const events = await fetchAPI('/events?limit=6');
         
-        if (!data.events || data.events.length === 0) {
+        if (!events || events.length === 0) {
             activityList.innerHTML = `
                 <div class="empty-state">
                     <p>No recent timeline updates yet.</p>
@@ -20,7 +20,7 @@ async function loadRecentActivities() {
         activityList.innerHTML = '';
         
         // Render activity cards
-        data.events.forEach(event => {
+        events.forEach(event => {
             const card = createActivityCard(event);
             activityList.appendChild(card);
         });
@@ -40,34 +40,35 @@ function createActivityCard(event) {
     card.className = 'activity-card';
     card.onclick = () => {
         // Navigate to first character's profile with event highlighted
-        if (event.characters && event.characters.length > 0) {
-            window.location.href = `/profile.html?id=${event.characters[0].id}&event=${event.id}`;
+        if (event.character_id) {
+            window.location.href = `/profile/${event.character_id}?event=${event.id}`;
         }
     };
     
-    // Get first character for avatar
-    const character = event.characters && event.characters.length > 0 ? event.characters[0] : null;
+    // Event data comes pre-formatted from backend with character info
+    const hasCharacter = event.character_id && event.character_image;
     
     card.innerHTML = `
         <div class="activity-header">
-            ${character ? `
-                <img src="${character.profile_image_url}" 
-                     alt="${character.name}" 
-                     class="activity-avatar">
+            ${hasCharacter ? `
+                <img src="${event.character_image}" 
+                     alt="${event.character_name || 'Character'}" 
+                     class="activity-avatar"
+                     onerror="this.src='/static/images/default-avatar.jpg'">
             ` : ''}
             <div class="activity-meta">
                 <h3>${event.title}</h3>
                 <p class="activity-date">${formatDate(event.event_date)}</p>
             </div>
         </div>
-        <span class="activity-era-badge" data-era="${event.era}">
-            ${getEraName(event.era)}
+        <span class="activity-era-badge era-badge" data-era="${event.era}">
+            ${event.era_display || getEraName(event.era)}
         </span>
         <p class="activity-summary">${event.summary}</p>
         ${event.characters && event.characters.length > 0 ? `
             <div class="activity-characters">
-                ${event.characters.map(char => `
-                    <span class="character-tag">${char.name}</span>
+                ${event.characters.map(charName => `
+                    <span class="character-tag">${charName}</span>
                 `).join('')}
             </div>
         ` : ''}
