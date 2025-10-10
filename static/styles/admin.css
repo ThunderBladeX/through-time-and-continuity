@@ -678,7 +678,6 @@
 }
 
 @media (max-width: 768px) {
-    /* Remove animations and shadows for performance */
     * {
         animation: none !important;
         transition: none !important;
@@ -701,35 +700,57 @@
     
     .dashboard-header {
         position: relative;
-        padding: var(--spacing-md);
+        padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm);
+        height: auto;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 1.1rem;
+        line-height: 1.3;
     }
     
     .dashboard-content {
         grid-template-columns: 1fr;
+        min-height: calc(100vh - 70px);
     }
     
     .dashboard-sidebar {
-        position: relative;
-        top: 0;
+        position: sticky;
+        top: 70px;
         height: auto;
         border-right: none;
         border-bottom: 1px solid var(--border);
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm) var(--spacing-md);
+        background: var(--bg-primary);
+        z-index: 90;
     }
     
     .dashboard-sidebar nav {
         flex-direction: row;
         overflow-x: auto;
-        gap: var(--spacing-xs);
-        padding-bottom: var(--spacing-sm);
+        gap: var(--spacing-sm);
+        padding-bottom: 0;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    
+    .dashboard-sidebar nav::-webkit-scrollbar {
+        display: none;
     }
     
     .sidebar-btn {
         white-space: nowrap;
-        padding: 0.75rem 1.25rem;
-        font-size: 1rem;
+        padding: 0.625rem 1rem;
+        font-size: 0.9rem;
         flex-shrink: 0;
         min-width: fit-content;
+        border-radius: 20px;
+        font-weight: 500;
+    }
+    
+    .sidebar-btn.active {
+        background: var(--accent);
+        color: white;
     }
     
     .sidebar-btn::before {
@@ -738,6 +759,11 @@
     
     .sidebar-btn:hover {
         transform: none;
+    }
+    
+    .badge {
+        padding: 0.125rem 0.5rem;
+        font-size: 0.7rem;
     }
     
     .dashboard-main {
@@ -749,10 +775,17 @@
         flex-direction: column;
         align-items: flex-start;
         gap: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
+        padding-bottom: var(--spacing-sm);
     }
     
     .section-header h2 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        padding-left: 0;
+    }
+    
+    .section-header h2::before {
+        display: none;
     }
     
     .form-row {
