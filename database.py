@@ -217,7 +217,9 @@ class Database:
     def update_character(character_id, data):
         """Update a character"""
         params = {'id': f'eq.{character_id}'}
-        result = supabase.query('characters', method='PATCH', params=params, data=data)
+        # FIX: Remove empty fields before updating to avoid type errors
+        clean_data = {k: v for k, v in data.items() if v}
+        result = supabase.query('characters', method='PATCH', params=params, data=clean_data)
         return result[0] if result else None
     
     @staticmethod
@@ -244,7 +246,8 @@ class Database:
     def update_event(event_id, data):
         """Update a timeline event"""
         params = {'id': f'eq.{event_id}'}
-        result = supabase.query('events', method='PATCH', params=params, data=data)
+        clean_data = {k: v for k, v in data.items() if v}
+        result = supabase.query('events', method='PATCH', params=params, data=clean_data)
         return result[0] if result else None
 
     @staticmethod
