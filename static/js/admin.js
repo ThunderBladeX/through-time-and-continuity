@@ -7,25 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventForm();
 });
 
-// Helper to handle API responses and show proper errors
-async function handleFormSubmitResponse(response, successType) {
-    if (response.ok) {
-        return await response.json();
-    }
-    // If response is not OK, try to get a meaningful error message
-    const contentType = response.headers.get('content-type');
-    let error;
-    if (contentType && contentType.includes('application/json')) {
-        const errorJson = await response.json();
-        error = new Error(errorJson.error || 'An unknown error occurred.');
-    } else {
-        const errorText = await response.text();
-        error = new Error(`Server returned an error: ${errorText.substring(0, 200)}...`);
-    }
-    throw error;
-}
-
-
 function setupLogin() {
     const loginForm = document.getElementById('login-form');
     
@@ -356,16 +337,14 @@ function setupCharacterForm() {
         const formData = new FormData(form);
         const id = formData.get('id');
         const url = id ? `/api/admin/characters/${id}` : '/api/admin/characters';
-        const method = 'POST'; // Using POST for both create and update as per app.py
-
+        
         try {
-            const response = await fetch(url, { method, body: formData });
-            await handleFormSubmitResponse(response); // Use the new handler
+            const response = await fetch(url, { method: 'POST', body: formData });
+            if (!response.ok) throw new Error((await response.json()).error);
             showNotification(`Character ${id ? 'updated' : 'created'} successfully!`, 'success');
             closeCharacterForm();
             loadCharactersAdmin();
         } catch (error) {
-            console.error('Character form error:', error);
             showNotification(error.message, 'error');
         }
     });
@@ -387,18 +366,15 @@ async function setupEventForm() {
         const selectedIds = Array.from(charSelect.selectedOptions).map(opt => opt.value);
         formData.set('character_ids', selectedIds.join(','));
         const id = formData.get('id');
-        // NOTE: The update route for events wasn't implemented, so we only handle creation for now.
         const url = id ? `/api/admin/events/${id}` : '/api/admin/events';
-        const method = 'POST';
 
         try {
-            const response = await fetch(url, { method, body: formData });
-            await handleFormSubmitResponse(response); // Use the new handler
+            const response = await fetch(url, { method: 'POST', body: formData });
+            if (!response.ok) throw new Error((await response.json()).error);
             showNotification(`Event ${id ? 'updated' : 'created'} successfully!`, 'success');
             closeEventForm();
             loadTimelineAdmin();
         } catch (error) {
-            console.error('Event form error:', error);
             showNotification(error.message, 'error');
         }
     });
