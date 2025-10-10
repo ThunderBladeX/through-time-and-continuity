@@ -200,7 +200,10 @@ def api_create_character():
             else:
                 return jsonify({'error': 'Failed to upload image to storage'}), 500
     character = db.create_character(data)
-    return jsonify(character), 201 if character else (jsonify({'error': 'Failed to create character'}), 500)
+    if character:
+        return jsonify(character), 201
+    else:
+        return jsonify({'error': 'Failed to create character in database'}), 500
 
 @app.route('/api/admin/characters/<int:character_id>', methods=['POST'])
 @login_required
@@ -220,12 +223,13 @@ def api_update_character(character_id):
             else:
                 return jsonify({'error': 'Failed to upload image'}), 500
     character = db.update_character(character_id, data)
-    return jsonify(character), 200 if character else (jsonify({'error': 'Failed to update character'}), 500)
+    return (jsonify(character), 200) if character else (jsonify({'error': 'Failed to update character. Check for empty required fields.'}), 500)
 
 @app.route('/api/admin/characters/<int:character_id>', methods=['DELETE'])
 @login_required
 def api_delete_character(character_id):
-    return jsonify({'success': True}) if db.delete_character(character_id) else (jsonify({'error': 'Failed to delete'}), 500)
+    db.delete_character(character_id)
+    return jsonify({'success': True}), 200
 
 @app.route('/api/admin/events', methods=['POST'])
 @login_required
@@ -259,7 +263,8 @@ def api_create_event():
 @app.route('/api/admin/events/<int:event_id>', methods=['DELETE'])
 @login_required
 def api_delete_event(event_id):
-    return jsonify({'success': True}) if db.delete_event(event_id) else (jsonify({'error': 'Failed to delete event'}), 500)
+    db.delete_event(event_id)
+    return jsonify({'success': True}), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
