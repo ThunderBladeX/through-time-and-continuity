@@ -222,17 +222,41 @@ class Database:
     
     @staticmethod
     def delete_character(character_id):
-        """Delete a character"""
-        params = {'id': f'eq.{character_id}'}
-        supabase.query('characters', method='DELETE', params=params)
+        """Delete a character and associated data"""
+        # Delete relationships where this character is the primary or related character
+        supabase.query('relationships', method='DELETE', params={'character_id': f'eq.{character_id}'})
+        supabase.query('relationships', method='DELETE', params={'related_character_id': f'eq.{character_id}'})
+        # Delete other associated data
+        supabase.query('gallery_images', method='DELETE', params={'character_id': f'eq.{character_id}'})
+        supabase.query('event_characters', method='DELETE', params={'character_id': f'eq.{character_id}'})
+        # Finally, delete the character itself
+        supabase.query('characters', method='DELETE', params={'id': f'eq.{character_id}'})
         return True
     
     @staticmethod
     def create_event(data):
         """Create a new timeline event"""
-        result = supabase.query('events', method='POST', data=data, select='*')
+        clean_data = {k: v for k, v in data.items() if v}
+        result = supabase.query('events', method='POST', data=clean_data, select='*')
         return result[0] if result else None
         
+    @staticmethod
+    def update_event(event_id, data):
+        """Update a timeline event"""
+        params = {'id': f'eq.{event_id}'}
+        result = supabase.query('events', method='PATCH', params=params, data=data)
+        return result[0] if result else None
+
+    @staticmethod
+    def delete_event(event_id):
+        """Delete an event and its associated links/images"""
+        params = {'event_id': f'eq.{event_id}'}
+        supabase.query('event_characters', method='DELETE', params=params)
+        supabase.query('event_images', method='DELETE', params=params)
+        params = {'id': f'eq.{event_id}'}
+        supabase.query('events', method='DELETE', params=params)
+        return True
+
     @staticmethod
     def create_event_images(images_data):
         """Create multiple event image entries"""
@@ -264,6 +288,29 @@ class Database:
         params = {'status': 'eq.pending', 'order': 'created_at.desc'}
         return supabase.query('pending_edits', params=params, select='*')
     
+    @staticmethod
+    def get_all_relationships():
+        """Get all relationships, populating character names"""
+        relationships = supabase.query('relationships', select='*', params={'order': 'id'})
+        if not relationships: return []
+        characters = supabase.query('characters', select='id,full_name')
+        char_map = {c['id']: c for c in characters}
+        for rel in relationships:
+            rel['character'] = char_map.get(rel['character_id'], {})
+            rel['related_character'] = char_map.get(rel['related_character_id'], {})
+        return relationships
+
+    @staticmethod
+    def get_all_gallery_images():
+        """Get all gallery images, populating character names"""
+        images = supabase.query('gallery_images', select='*', params={'order': 'created_at.desc'})
+        if not images: return []
+        characters = supabase.query('characters', select='id,full_name')
+        char_map = {c['id']: c for c in characters}
+        for img in images:
+            img['character'] = char_map.get(img['character_id'], {})
+        return images
+
     @staticmethod
     def approve_edit(edit_id):
         """Approve a pending edit"""
