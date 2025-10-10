@@ -258,3 +258,36 @@ function openUploadForm() {
 function closeUploadForm() {
     closeModal('upload-modal');
 }
+
+function setupCharacterForm() {
+    const charForm = document.getElementById('character-form');
+    if (!charForm) return;
+
+    charForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Use FormData to handle file uploads
+        const formData = new FormData(charForm);
+        
+        try {
+            const response = await fetch('/api/admin/characters', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to create character');
+            }
+
+            const newCharacter = await response.json();
+            showNotification('Character created successfully!', 'success');
+            closeCharacterForm();
+            loadCharactersAdmin(); // Reload the list to show the new character
+
+        } catch (error) {
+            console.error('Error creating character:', error);
+            showNotification(error.message, 'error');
+        }
+    });
+}
