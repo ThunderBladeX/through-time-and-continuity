@@ -16,14 +16,14 @@ class SupabaseClient:
     def __init__(self, url, key):
         self.url = url.rstrip('/')
         self.key = key
-        # Base headers for most requests
+        # Base headers for all requests
         self.base_headers = {
             'apikey': key,
             'Authorization': f'Bearer {key}',
         }
     
     def query(self, table, method='GET', params=None, data=None, select='*'):
-        """Make a request to Supabase REST API for database tables"""
+        """Make a request to Supabase REST API (for database tables)"""
         if not self.url or not self.key:
             return []
         
@@ -32,7 +32,8 @@ class SupabaseClient:
         headers = self.base_headers.copy()
         headers['Content-Type'] = 'application/json'
         headers['Prefer'] = 'return=representation'
-        
+
+        # Add select parameter for GET requests
         if method == 'GET':
             if params is None:
                 params = {}
@@ -86,23 +87,23 @@ class SupabaseClient:
         except Exception as e:
             print(f"File upload error: {e}")
             return None
-
+            
     def get_public_url(self, bucket_name, path):
         """Gets the public URL for a file in storage."""
         if not self.url:
             return None
         return f"{self.url}/storage/v1/object/public/{bucket_name}/{path}"
 
-
 # Initialize client
 supabase = SupabaseClient(SUPABASE_URL, SUPABASE_KEY)
 
 # Database helper functions
 class Database:
-    def __init__(self):
-        # Give the Database class a reference to the client
-        self.supabase = supabase
-
+    @property
+    def supabase(self):
+        """Provide access to the raw SupabaseClient for storage operations"""
+        return supabase
+        
     @staticmethod
     def get_all_characters(family=None):
         """Get all characters, optionally filtered by family"""
@@ -122,7 +123,6 @@ class Database:
     @staticmethod
     def get_character_timeline(character_id):
         """Get all timeline events for a character"""
-        # First get event IDs
         params = {'character_id': f'eq.{character_id}'}
         event_chars = supabase.query('event_characters', params=params, select='event_id')
         
@@ -133,7 +133,6 @@ class Database:
         if not event_ids:
             return []
         
-        # Get events
         params = {'id': f'in.({",".join(event_ids)})', 'order': 'event_date'}
         events = supabase.query('events', params=params, select='*')
         return events
@@ -144,7 +143,6 @@ class Database:
         params = {'character_id': f'eq.{character_id}'}
         relationships = supabase.query('relationships', params=params, select='*')
         
-        # For each relationship, fetch the related character
         for rel in relationships:
             rel_char = Database.get_character_by_id(rel['related_character_id'])
             rel['related_character'] = rel_char if rel_char else {}
@@ -163,7 +161,6 @@ class Database:
         params = {'order': 'event_date.desc', 'limit': limit}
         events = supabase.query('events', params=params, select='*')
         
-        # Get characters for each event
         for event in events:
             params = {'event_id': f'eq.{event["id"]}'}
             event_chars = supabase.query('event_characters', params=params, select='character_id')
@@ -190,7 +187,6 @@ class Database:
         
         event = result[0]
         
-        # Get characters for this event
         params = {'event_id': f'eq.{event_id}'}
         event_chars = supabase.query('event_characters', params=params, select='character_id')
         event['event_characters'] = []
@@ -203,7 +199,6 @@ class Database:
                     'characters': char
                 })
         
-        # Get images
         params = {'event_id': f'eq.{event_id}'}
         images = supabase.query('event_images', params=params, select='image_url')
         event['images'] = [img['image_url'] for img in images] if images else []
@@ -213,7 +208,9 @@ class Database:
     @staticmethod
     def create_character(data):
         """Create a new character"""
-        result = supabase.query('characters', method='POST', data=data, select='*')
+        # Remove empty fields before inserting
+        clean_data = {k: v for k, v in data.items() if v}
+        result = supabase.query('characters', method='POST', data=clean_data, select='*')
         return result[0] if result else None
     
     @staticmethod
@@ -235,7 +232,13 @@ class Database:
         """Create a new timeline event"""
         result = supabase.query('events', method='POST', data=data, select='*')
         return result[0] if result else None
-    
+        
+    @staticmethod
+    def create_event_images(images_data):
+        """Create multiple event image entries"""
+        result = supabase.query('event_images', method='POST', data=images_data, select='*')
+        return result
+
     @staticmethod
     def link_event_to_characters(event_id, character_ids):
         """Link an event to multiple characters"""
@@ -244,7 +247,7 @@ class Database:
         return result
     
     @staticmethod
-def create_relationship(data):
+    def create_relationship(data):
         """Create a new relationship"""
         result = supabase.query('relationships', method='POST', data=data, select='*')
         return result[0] if result else None
