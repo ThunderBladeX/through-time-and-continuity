@@ -1,6 +1,7 @@
-// Get character ID from URL
+// Get character ID from URL path (Flask uses /profile/<id>, not query params)
+const pathParts = window.location.pathname.split('/');
+const characterId = pathParts[pathParts.length - 1];
 const urlParams = new URLSearchParams(window.location.search);
-const characterId = urlParams.get('id');
 const highlightEventId = urlParams.get('event');
 
 let currentCharacter = null;
@@ -8,18 +9,24 @@ let currentTab = 'overview';
 
 // Load character data
 async function loadCharacter() {
-    if (!characterId) {
-        window.location.href = '/characters.html';
+    if (!characterId || isNaN(characterId)) {
+        window.location.href = '/characters';
         return;
     }
     
     try {
-        const data = await fetchAPI(`/characters/${characterId}`);
-        currentCharacter = data.character;
+        // Backend returns character object directly, not wrapped
+        const character = await fetchAPI(`/characters/${characterId}`);
+        currentCharacter = character;
+        
+        // Use correct field name
+        const charName = currentCharacter.full_name || currentCharacter.name || 'Unknown';
         
         // Set page title
-        document.getElementById('page-title').textContent = `${currentCharacter.name} - DC Timeline`;
-        document.title = `${currentCharacter.name} - DC Timeline`;
+        if (document.getElementById('page-title')) {
+            document.getElementById('page-title').textContent = `${charName} - DC Timeline`;
+        }
+        document.title = `${charName} - DC Timeline`;
         
         // Apply character-specific theming
         applyCharacterTheme(currentCharacter);
@@ -27,8 +34,8 @@ async function loadCharacter() {
         // Load character info
         loadCharacterInfo();
         
-        // Load bio sections
-        loadBioSections(data.bio_sections || []);
+        // Load bio sections (not implemented in backend yet)
+        loadBioSections([]);
         
         // Load other tabs (lazy load on tab switch)
         setupTabs();
@@ -36,23 +43,43 @@ async function loadCharacter() {
     } catch (error) {
         console.error('Error loading character:', error);
         showNotification('Failed to load character', 'error');
+        // Redirect to characters page on error
+        setTimeout(() => window.location.href = '/characters', 2000);
     }
 }
 
 // Load character basic info
 function loadCharacterInfo() {
+    // Use correct field names from database
+    const charName = currentCharacter.full_name || currentCharacter.name || 'Unknown';
+    const imageSrc = currentCharacter.profile_image || '/static/images/default-avatar.jpg';
+    
     // Desktop
-    document.getElementById('profile-image').src = currentCharacter.profile_image_url;
-    document.getElementById('profile-image').alt = currentCharacter.name;
-    document.getElementById('character-name').textContent = currentCharacter.name;
+    const profileImg = document.getElementById('profile-image');
+    if (profileImg) {
+        profileImg.src = imageSrc;
+        profileImg.alt = charName;
+        profileImg.onerror = function() { this.src = '/static/images/default-avatar.jpg'; };
+    }
+    
+    const charNameEl = document.getElementById('character-name');
+    if (charNameEl) charNameEl.textContent = charName;
     
     // Mobile
-    document.getElementById('mobile-profile-image').src = currentCharacter.profile_image_url;
-    document.getElementById('mobile-profile-image').alt = currentCharacter.name;
-    document.getElementById('mobile-character-name').textContent = currentCharacter.name;
+    const mobileImg = document.getElementById('mobile-profile-image');
+    if (mobileImg) {
+        mobileImg.src = imageSrc;
+        mobileImg.alt = charName;
+        mobileImg.onerror = function() { this.src = '/static/images/default-avatar.jpg'; };
+    }
     
-    if (currentCharacter.quote) {
-        document.getElementById('character-quote').textContent = currentCharacter.quote;
+    const mobileNameEl = document.getElementById('mobile-character-name');
+    if (mobileNameEl) mobileNameEl.textContent = charName;
+    
+    // Quote
+    const quoteEl = document.getElementById('character-quote');
+    if (currentCharacter.quote && quoteEl) {
+        quoteEl.textContent = currentCharacter.quote;
     }
 }
 
@@ -153,12 +180,13 @@ function switchTab(tabName) {
 // Load timeline events
 async function loadTimeline() {
     const timelineList = document.getElementById('timeline-list');
+    if (!timelineList) return;
     
     try {
-        const data = await fetchAPI(`/timeline/character/${characterId}`);
-        const events = data.events || [];
+        // Use correct API endpoint - backend returns array directly
+        const events = await fetchAPI(`/characters/${characterId}/timeline`);
         
-        if (events.length === 0) {
+        if (!events || events.length === 0) {
             timelineList.innerHTML = '<p class="empty-state">No timeline events yet.</p>';
             return;
         }
@@ -188,15 +216,16 @@ async function loadTimeline() {
 
 // Create timeline event HTML
 function createTimelineEvent(event) {
+    const eraDisplay = event.era_display || getEraName(event.era);
     return `
         <div class="timeline-event" data-event-id="${event.id}">
-            <div class="event-card" data-era="${event.era}" onclick="openEventModal('${event.id}')">
+            <div class="event-card" data-era="${event.era}" onclick="openEventModal(${event.id})">
                 <div class="event-header">
-                    <span class="era-badge" data-era="${event.era}">${getEraName(event.era)}</span>
+                    <span class="era-badge" data-era="${event.era}">${eraDisplay}</span>
                     <span class="event-date">${formatDate(event.event_date)}</span>
                 </div>
                 <h3 class="event-title">${event.title}</h3>
-                <p class="event-summary">${event.summary}</p>
+                <p class="event-summary">${event.summary || ''}</p>
             </div>
         </div>
     `;
@@ -205,28 +234,46 @@ function createTimelineEvent(event) {
 // Open event modal with full details
 async function openEventModal(eventId) {
     try {
-        const data = await fetchAPI(`/timeline/event/${eventId}`);
-        const event = data.event;
+        // Use correct API endpoint - backend returns event directly
+        const event = await fetchAPI(`/events/${eventId}`);
         
-        // Populate modal
-        document.getElementById('modal-era-badge').dataset.era = event.era;
-        document.getElementById('modal-era-badge').textContent = getEraName(event.era);
-        document.getElementById('modal-event-title').textContent = event.title;
-        document.getElementById('modal-event-date').textContent = formatDate(event.event_date);
+        const eraDisplay = event.era_display || getEraName(event.era);
+        
+        // Populate modal (with safety checks for missing elements)
+        const eraBadge = document.getElementById('modal-era-badge');
+        if (eraBadge) {
+            eraBadge.dataset.era = event.era;
+            eraBadge.textContent = eraDisplay;
+        }
+        
+        const titleEl = document.getElementById('modal-event-title');
+        if (titleEl) titleEl.textContent = event.title;
+        
+        const dateEl = document.getElementById('modal-event-date');
+        if (dateEl) dateEl.textContent = formatDate(event.event_date);
         
         // Load images
         const imagesContainer = document.getElementById('modal-event-images');
-        if (event.images && event.images.length > 0) {
-            imagesContainer.innerHTML = event.images.map(img => `
-                <img src="${img.image_url}" alt="${img.caption || event.title}" loading="lazy">
-            `).join('');
-        } else {
-            imagesContainer.innerHTML = '';
+        if (imagesContainer) {
+            if (event.images && event.images.length > 0) {
+                imagesContainer.innerHTML = event.images.map(imgUrl => `
+                    <img src="${imgUrl}" alt="${event.title}" loading="lazy" onerror="this.style.display='none'">
+                `).join('');
+            } else {
+                imagesContainer.innerHTML = '';
+            }
         }
         
-        // Load description
+        // Load description - note: backend already converts markdown to HTML
         const descContainer = document.getElementById('modal-event-description');
-        descContainer.innerHTML = parseMarkdown(event.full_description || event.summary);
+        if (descContainer) {
+            if (event.full_description) {
+                // Backend already converted to HTML
+                descContainer.innerHTML = event.full_description;
+            } else {
+                descContainer.innerHTML = `<p>${event.summary || ''}</p>`;
+            }
+        }
         
         openModal('event-modal');
         
@@ -239,29 +286,28 @@ async function openEventModal(eventId) {
 // Load relationships
 async function loadRelationships() {
     const relationshipsList = document.getElementById('relationships-list');
+    if (!relationshipsList) return;
     
     try {
-        const data = await fetchAPI(`/relationships/character/${characterId}`);
-        const relationships = data.relationships || [];
+        // Use correct API endpoint - backend returns formatted array
+        const relationships = await fetchAPI(`/characters/${characterId}/relationships`);
         
-        if (relationships.length === 0) {
+        if (!relationships || relationships.length === 0) {
             relationshipsList.innerHTML = '<p class="empty-state">No relationships defined yet.</p>';
             return;
         }
         
-        // Sort by display order
-        relationships.sort((a, b) => a.display_order - b.display_order);
-        
         relationshipsList.innerHTML = relationships.map(rel => `
             <div class="relationship-card" 
-                 data-type="${rel.relationship_type}"
-                 onclick="window.location.href='/profile.html?id=${rel.related_character.id}'">
-                <img src="${rel.related_character.profile_image_url}" 
-                     alt="${rel.related_character.name}"
-                     class="relationship-avatar">
+                 data-type="${rel.type || ''}"
+                 onclick="window.location.href='/profile/${rel.related_character_id}'">
+                <img src="${rel.related_character_image || '/static/images/default-avatar.jpg'}" 
+                     alt="${rel.related_character_name || 'Character'}"
+                     class="relationship-avatar"
+                     onerror="this.src='/static/images/default-avatar.jpg'">
                 <div class="relationship-info">
-                    <div class="relationship-name">${rel.related_character.name}</div>
-                    <div class="relationship-status">${rel.relationship_label}</div>
+                    <div class="relationship-name">${rel.related_character_name || 'Unknown'}</div>
+                    <div class="relationship-status">${rel.type || ''} ${rel.status ? '(' + rel.status + ')' : ''}</div>
                 </div>
             </div>
         `).join('');
@@ -295,25 +341,33 @@ async function applyCharacterTheme(character) {
     // Set body attributes
     document.body.dataset.characterId = character.id;
     
+    // Use correct field name
+    const charName = character.full_name || character.name || 'unknown';
+    
     // Convert character name to CSS filename format
     // "Damian Wayne" -> "damian-wayne.css"
-    const cssFileName = character.name.toLowerCase().replace(/\s+/g, '-') + '.css';
-    const cssPath = `/styles/characters/${cssFileName}`;
+    const cssFileName = charName.toLowerCase().replace(/\s+/g, '-') + '.css';
+    const cssPath = `/static/styles/characters/${cssFileName}`;
     
     // Set character data attribute for CSS targeting
-    document.body.dataset.character = character.name.toLowerCase().replace(/\s+/g, '-');
+    document.body.dataset.character = charName.toLowerCase().replace(/\s+/g, '-');
     
     // Try to load character-specific CSS file
     const themeLink = document.getElementById('character-theme');
     
-    // Check if CSS file exists
-    const cssExists = await checkFileExists(cssPath);
-    
-    if (cssExists) {
-        // Load custom CSS file
-        themeLink.href = cssPath;
+    if (themeLink) {
+        // Check if CSS file exists
+        const cssExists = await checkFileExists(cssPath);
+        
+        if (cssExists) {
+            // Load custom CSS file
+            themeLink.href = cssPath;
+        } else {
+            // Apply dynamic theme from database colors
+            applyDynamicTheme(character);
+        }
     } else {
-        // Apply dynamic theme from database colors
+        // Apply dynamic theme if no theme link element
         applyDynamicTheme(character);
     }
 }
