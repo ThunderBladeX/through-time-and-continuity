@@ -16,7 +16,7 @@ function getCharacterIdFromURL() {
 
 async function loadCharacterProfile(characterId) {
     try {
-        const character = await apiRequest(`/api/characters/${characterId}`);
+        const character = await fetchAPI(`/characters/${characterId}`);
         
         // Update page title
         document.getElementById('page-title').textContent = `${character.full_name} - DC Timeline`;
@@ -67,7 +67,7 @@ async function loadTimeline(characterId) {
     const timelineList = document.getElementById('timeline-list');
     
     try {
-        const events = await apiRequest(`/api/characters/${characterId}/timeline`);
+        const events = await fetchAPI(`/characters/${characterId}/timeline`);
         
         if (events.length === 0) {
             timelineList.innerHTML = '<p>No timeline events yet.</p>';
@@ -95,7 +95,7 @@ async function loadRelationships(characterId) {
     const relationshipsList = document.getElementById('relationships-list');
     
     try {
-        const relationships = await apiRequest(`/api/characters/${characterId}/relationships`);
+        const relationships = await fetchAPI(`/characters/${characterId}/relationships`);
         
         if (relationships.length === 0) {
             relationshipsList.innerHTML = '<p>No relationships defined yet.</p>';
@@ -123,7 +123,7 @@ async function loadGallery(characterId) {
     const galleryGrid = document.getElementById('gallery-masonry');
     
     try {
-        const images = await apiRequest(`/api/characters/${characterId}/gallery`);
+        const images = await fetchAPI(`/characters/${characterId}/gallery`);
         
         if (images.length === 0) {
             galleryGrid.innerHTML = '<p>No images in gallery yet.</p>';
@@ -163,7 +163,7 @@ async function showEventModal(eventId) {
     const modal = document.getElementById('event-modal');
     
     try {
-        const event = await apiRequest(`/api/events/${eventId}`);
+        const event = await fetchAPI(`/events/${eventId}`);
         
         document.getElementById('modal-era-badge').dataset.era = event.era;
         document.getElementById('modal-era-badge').textContent = event.era_display;
