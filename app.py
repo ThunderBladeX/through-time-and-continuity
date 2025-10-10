@@ -186,7 +186,6 @@ def api_get_all_gallery_images():
 @login_required
 def api_create_character():
     data = request.form.to_dict()
-    data.pop('id', None)
     if 'profile_image' in request.files:
         file = request.files['profile_image']
         if file and file.filename:
