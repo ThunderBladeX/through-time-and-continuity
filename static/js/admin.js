@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     setupLogin();
     setupDashboard();
+    setupCharacterForm();
 });
 
 function setupLogin() {
