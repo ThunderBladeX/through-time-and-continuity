@@ -16,7 +16,7 @@ function setupLogin() {
         const errorMsg = document.getElementById('login-error');
         
         try {
-            const result = await fetchAPI('/api/login', {
+            const result = await fetchAPI('/login', {
                 method: 'POST',
                 body: JSON.stringify({ username, password })
             });
@@ -37,7 +37,7 @@ function setupDashboard() {
     
     logoutBtn?.addEventListener('click', async () => {
         try {
-            await fetchAPI('/api/logout', { method: 'POST' });
+            await fetchAPI('/logout', { method: 'POST' });
             location.reload();
         } catch (error) {
             console.error('Logout failed:', error);
