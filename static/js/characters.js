@@ -7,8 +7,9 @@ async function loadCharacters() {
     if (!grid) return;
     
     try {
-        const data = await fetchAPI('/characters');
-        allCharacters = data.characters || [];
+        // Backend returns array directly, not wrapped in object
+        const characters = await fetchAPI('/characters');
+        allCharacters = characters || [];
         
         if (allCharacters.length === 0) {
             grid.innerHTML = `
@@ -59,20 +60,26 @@ function createCharacterCard(character) {
     const card = document.createElement('div');
     card.className = 'character-card';
     card.onclick = () => {
-        window.location.href = `/profile.html?id=${character.id}`;
+        // Use path params, not query params, and no .html extension
+        window.location.href = `/profile/${character.id}`;
     };
     
+    // Use correct field names from database
+    const displayName = character.full_name || character.name || 'Unknown';
+    const imageSrc = character.profile_image || '/static/images/default-avatar.jpg';
+    
     card.innerHTML = `
-        <img src="${character.profile_image_url}" 
-             alt="${character.name}" 
+        <img src="${imageSrc}" 
+             alt="${displayName}" 
              class="character-card-image"
-             loading="lazy">
+             loading="lazy"
+             onerror="this.src='/static/images/default-avatar.jpg'">
         <div class="character-card-overlay">
-            <h3 class="character-card-name">${character.name}</h3>
+            <h3 class="character-card-name">${displayName}</h3>
             ${character.nickname ? `
                 <p class="character-card-nickname">${character.nickname}</p>
             ` : ''}
-            <span class="character-card-family">${character.family}</span>
+            <span class="character-card-family">${character.family || 'Other'}</span>
         </div>
     `;
     
@@ -124,12 +131,12 @@ function setupSearch() {
             filtered = filtered.filter(char => char.family === currentFilter);
         }
         
-        // Apply search
+        // Apply search - use correct field names
         if (query) {
             filtered = filtered.filter(char => 
-                char.name.toLowerCase().includes(query) ||
-                (char.nickname && char.nickname.toLowerCase().includes(query)) ||
-                (char.full_name && char.full_name.toLowerCase().includes(query))
+                (char.full_name && char.full_name.toLowerCase().includes(query)) ||
+                (char.name && char.name.toLowerCase().includes(query)) ||
+                (char.nickname && char.nickname.toLowerCase().includes(query))
             );
         }
         
