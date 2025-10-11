@@ -345,7 +345,7 @@ async function applyCharacterTheme(character) {
     document.body.dataset.characterId = character.id;
     
     // Use correct field name
-    const charName = character.full_name || character.name || 'unknown';
+    const charName = character.name || 'unknown';
     
     // Convert character name to CSS filename format
     // "Damian Wayne" -> "damian-wayne.css"
