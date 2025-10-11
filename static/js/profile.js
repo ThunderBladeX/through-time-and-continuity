@@ -51,7 +51,7 @@ async function loadCharacter() {
 // Load character basic info
 function loadCharacterInfo() {
     // Use correct field names from database
-    const charName = currentCharacter.full_name || currentCharacter.name || 'Unknown';
+    const charName = currentCharacter.name || 'Unknown';
     const imageSrc = currentCharacter.profile_image || '/static/images/default-avatar.jpg';
     
     // Desktop
