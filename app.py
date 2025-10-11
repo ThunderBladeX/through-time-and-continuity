@@ -27,16 +27,25 @@ class User(UserMixin):
 def load_user(user_id):
     return User(user_id)
 
-# Era display names mapping
-ERA_NAMES = {
-    'pre-52': 'Pre-New 52',
-    'new-52': 'New 52',
-    'rebirth': 'Rebirth',
-    'infinite-frontier': 'Infinite Frontier',
-    'elseworlds': 'Elseworlds',
-    'post-crisis': 'Post-Crisis',
-    'future-state': 'Future State'
-}
+# Era display names mapping - Loaded from the database
+ERA_NAMES = {}
+try:
+    with app.app_context():
+        ERA_NAMES = db.get_all_eras()
+except Exception as e:
+    print(f"Initial ERA_NAMES load from database failed: {e}")
+
+if not ERA_NAMES:
+    print("Warning: Could not load ERA_NAMES from database. Using fallback.")
+    ERA_NAMES = {
+        'pre-52': 'Pre-New 52',
+        'new-52': 'New 52',
+        'rebirth': 'Rebirth',
+        'infinite-frontier': 'Infinite Frontier',
+        'elseworlds': 'Elseworlds',
+        'post-crisis': 'Post-Crisis',
+        'future-state': 'Future State'
+    }
 
 # Routes
 @app.route('/')
