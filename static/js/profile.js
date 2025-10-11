@@ -15,7 +15,7 @@ async function loadCharacter() {
     }
     
     try {
-        // Backend returns character object directly, not wrapped
+        // Backend returns character object directly, now includes bio_sections
         const character = await fetchAPI(`/characters/${characterId}`);
         currentCharacter = character;
         
@@ -34,8 +34,8 @@ async function loadCharacter() {
         // Load character info
         loadCharacterInfo();
         
-        // Load bio sections (not implemented in backend yet)
-        loadBioSections([]);
+        // Load bio sections (now implemented in backend)
+        loadBioSections(currentCharacter.bio_sections || []);
         
         // Load other tabs (lazy load on tab switch)
         setupTabs();
@@ -105,6 +105,7 @@ function loadBioSections(sections) {
     
     // Create additional sections from database
     if (sections && sections.length > 0) {
+        // The database query already sorts by display_order, this is a fallback.
         sections.sort((a, b) => a.display_order - b.display_order);
         
         additionalSections.innerHTML = sections.map(section => `
@@ -115,6 +116,8 @@ function loadBioSections(sections) {
                 </div>
             </div>
         `).join('');
+    } else {
+        additionalSections.innerHTML = '';
     }
 }
 
