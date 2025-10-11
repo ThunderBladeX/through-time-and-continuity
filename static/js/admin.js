@@ -254,7 +254,7 @@ async function editCharacter(id) {
         form.querySelector('input[name="id"]')?.remove();
         form.insertAdjacentHTML('beforeend', `<input type="hidden" name="id" value="${id}">`);
         populateForm(form, character);
-        document.getElementById('character-modal-title').textContent = 'Edit Character';
+        document.getElementById('character-form-title').textContent = 'Edit Character';
         openCharacterForm();
     } catch (error) {
         showNotification('Could not load character data.', 'error');
@@ -332,7 +332,7 @@ function closeCharacterForm() {
     const form = document.getElementById('character-form');
     form?.reset();
     form?.querySelector('input[name="id"]')?.remove();
-    document.getElementById('character-modal-title').textContent = 'Add New Character';
+    document.getElementById('character-form-title').textContent = 'Add New Character';
     closeModal('character-modal');
 }
 
