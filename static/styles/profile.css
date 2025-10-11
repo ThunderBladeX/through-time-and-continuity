@@ -451,8 +451,12 @@
     border-left: 4px solid #f59e0b;
 }
 
-.relationship-card[data-type="complicated"] {
+.relationship-card[data-type="professional"] {
     border-left: 4px solid #3b82f6;
+}
+
+.relationship-card[data-type="complicated"] {
+    border-left: 4px solid #a444ef;
 }
 
 .relationship-card[data-type="hate"] {
