@@ -290,6 +290,10 @@
 }
 
 [data-character="damian-wayne"] .section-header::before {
+    background: linear-gradient(90deg, var(--accent), #323B38);
+}
+
+[data-character="damian-wayne"] .section-header::before {
     animation: rotate 4s linear infinite;
 }
 
