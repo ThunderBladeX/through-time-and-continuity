@@ -225,18 +225,14 @@ class Database:
     @staticmethod
     def create_character(data):
         """Create a new character"""
-        # Remove empty fields before inserting
-        clean_data = {k: v for k, v in data.items() if v}
-        result = supabase.query('characters', method='POST', data=clean_data, select='*')
+        result = supabase.query('characters', method='POST', data=data, select='*')
         return result[0] if result else None
     
     @staticmethod
     def update_character(character_id, data):
         """Update a character"""
         params = {'id': f'eq.{character_id}'}
-        # Remove empty fields before updating to avoid type errors
-        clean_data = {k: v for k, v in data.items() if v}
-        result = supabase.query('characters', method='PATCH', params=params, data=clean_data)
+        result = supabase.query('characters', method='PATCH', params=params, data=data)
         return result[0] if result else None
     
     @staticmethod
