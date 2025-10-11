@@ -290,13 +290,7 @@
 }
 
 [data-character="damian-wayne"] .section-header::after {
-    content: '✧';
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
     color: var(--accent);
-    font-size: 1.5rem;
     opacity: 0.6;
 }
 
