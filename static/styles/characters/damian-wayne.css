@@ -834,7 +834,7 @@
 
 [data-character="damian-wayne"] .back-btn {
     position: fixed;
-    top: 90px;
+    top: 10px;
     left: var(--spacing-lg);
     z-index: 100;
     padding: 0.75rem 1.5rem;
