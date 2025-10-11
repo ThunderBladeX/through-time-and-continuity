@@ -47,6 +47,13 @@ if not ERA_NAMES:
         'future-state': 'Future State'
     }
 
+def clean_form_data(data):
+    """Helper function to convert empty strings for specific fields to None."""
+    if 'birthday' in data and data['birthday'] == '':
+        data['birthday'] = None
+    
+    return data
+
 # Routes
 @app.route('/')
 def index():
@@ -195,6 +202,7 @@ def api_get_all_gallery_images():
 @login_required
 def api_create_character():
     data = request.form.to_dict()
+    data = clean_form_data(data)
     print(f"Attempting to create character with data: {data}")
     if 'profile_image' in request.files:
         file = request.files['profile_image']
@@ -220,6 +228,7 @@ def api_create_character():
 @login_required
 def api_update_character(character_id):
     data = request.form.to_dict()
+    data = clean_form_data(data)
     if 'profile_image' in request.files:
         file = request.files['profile_image']
         if file and file.filename:
