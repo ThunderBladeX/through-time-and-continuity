@@ -25,6 +25,7 @@ class SupabaseClient:
     def query(self, table, method='GET', params=None, data=None, select='*'):
         """Make a request to Supabase REST API (for database tables)"""
         if not self.url or not self.key:
+            print("ERROR: SUPABASE_URL or SUPABASE_KEY is missing.")
             return []
         
         url = f"{self.url}/rest/v1/{table}"
@@ -41,6 +42,7 @@ class SupabaseClient:
         
         try:
             with httpx.Client() as client:
+                print(f"Sending {method} request to {url}")
                 if method == 'GET':
                     response = client.get(url, headers=headers, params=params)
                 elif method == 'POST':
@@ -50,18 +52,19 @@ class SupabaseClient:
                 elif method == 'DELETE':
                     response = client.delete(url, headers=headers, params=params)
                 
-                if response.status_code in [200, 201, 204]:
+                if 200 <= response.status_code < 300:
                     if response.status_code == 204:
                         return []
-                    try:
-                        return response.json()
-                    except:
-                        return []
+                    return response.json()
                 else:
-                    print(f"Database error: {response.status_code} - {response.text}")
+                    print("--- SUPABASE DATABASE ERROR ---")
+                    print(f"URL: {response.url}")
+                    print(f"STATUS CODE: {response.status_code}")
+                    print(f"RESPONSE BODY: {response.text}")
+                    print("--- END OF ERROR ---")
                     return []
         except Exception as e:
-            print(f"Database query error: {e}")
+            print(f"An exception occurred during the database query: {e}")
             return []
 
     def upload_file(self, bucket_name, destination_path, file_body, content_type):
