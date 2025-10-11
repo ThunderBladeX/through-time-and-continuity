@@ -591,6 +591,38 @@
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
 
+/* Style the multi-select box itself */
+.form-group select[multiple] {
+    min-height: 150px;
+    padding: var(--spacing-md); /* Add some internal padding */
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all var(--transition-medium);
+}
+
+.form-group select[multiple]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15), 0 4px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Style the options within the select box */
+.form-group select[multiple] option {
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--text-secondary);
+    background: var(--bg-tertiary);
+}
+
+/* Style for selected options */
+.form-group select[multiple] option:checked {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: white;
+}
+
 /* Image Preview */
 .image-preview-grid {
     display: grid;
