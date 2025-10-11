@@ -54,7 +54,7 @@
 }
 
 [data-character="damian-wayne"] .profile-image-container::before {
-    content: '✦';
+    content: '🜲';
     position: absolute;
     top: -15px;
     left: 50%;
@@ -62,8 +62,7 @@
     font-size: 1.5rem;
     color: var(--gold);
     z-index: 10;
-    text-shadow: 0 0 20px rgba(201, 169, 97, 0.6);
-    animation: pulseGlow 3s ease-in-out infinite;
+    text-shadow: 0 0 20px rgba(101, 69, 47, 0.6);
 }
 
 [data-character="damian-wayne"] .profile-image-container::after {
