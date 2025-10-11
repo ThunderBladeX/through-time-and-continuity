@@ -119,6 +119,11 @@ function loadBioSections(sections) {
     } else {
         additionalSections.innerHTML = '';
     }
+    const desktopOverviewContent = document.getElementById('overview-tab').innerHTML;
+    const mobileOverviewContainer = document.getElementById('mobile-overview');
+    if (mobileOverviewContainer) {
+        mobileOverviewContainer.innerHTML = desktopOverviewContent;
+    }
 }
 
 // Setup tab navigation
@@ -198,6 +203,12 @@ async function loadTimeline() {
         events.sort((a, b) => new Date(b.event_date) - new Date(a.event_date));
         
         timelineList.innerHTML = events.map(event => createTimelineEvent(event)).join('');
+
+        const desktopTimelineContent = document.getElementById('timeline-tab').innerHTML;
+        const mobileTimelineContainer = document.getElementById('mobile-timeline');
+        if (mobileTimelineContainer) {
+            mobileTimelineContainer.innerHTML = desktopTimelineContent;
+        }
         
         // Setup event modal triggers
         setupEventModals();
@@ -314,6 +325,12 @@ async function loadRelationships() {
                 </div>
             </div>
         `).join('');
+
+        const desktopRelationshipsContent = document.getElementById('relationships-tab').innerHTML;
+        const mobileRelationshipsContainer = document.getElementById('mobile-relationships');
+        if (mobileRelationshipsContainer) {
+            mobileRelationshipsContainer.innerHTML = desktopRelationshipsContent;
+        }
         
     } catch (error) {
         console.error('Error loading relationships:', error);
