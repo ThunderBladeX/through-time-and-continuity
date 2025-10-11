@@ -1,164 +1,165 @@
 [data-character="damian-wayne"] {
-    --bg-primary: #0F1419;
-    --bg-secondary: #1A1F2E;
-    --bg-tertiary: #242B3D;
-    --border: #2A5A34;
     --accent: #2A5A34;
     --accent-rgb: 42, 90, 52;
+    --accent-secondary: #8B1538;
+    --accent-tertiary: #DAE1E7;
+    --bg-primary: #0a0e0d;
+    --bg-secondary: #141a17;
+    --bg-tertiary: #1a2420;
     --text-primary: #DAE1E7;
     --text-secondary: #9FA4A9;
-    --text-muted: #6B7280;
-    --accent-wine: #6B3E42;
-    --accent-gold: #B8944C;
-    --font-heading: 'Georgia', serif;
-    --transition-fast: 150ms cubic-bezier(0.34, 1.56, 0.64, 1);
-    --transition-medium: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
-    --transition-slow: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 2rem;
-    --spacing-2xl: 3rem;
+    --text-muted: #6b7278;
+    --border: rgba(218, 225, 231, 0.1);
+    --gold: #c9a961;
 }
 
-/* Background marble texture effect */
 [data-character="damian-wayne"] .profile-page {
-    min-height: 100vh;
-    padding-top: 90px;
-    background: 
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 2px,
-            rgba(42, 90, 52, 0.03) 2px,
-            rgba(42, 90, 52, 0.03) 4px
-        ),
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 2px,
-            rgba(42, 90, 52, 0.02) 2px,
-            rgba(42, 90, 52, 0.02) 4px
-        ),
-        linear-gradient(135deg, #0F1419 0%, #1A1F2E 50%, #0F1419 100%);
+    background: linear-gradient(135deg, #0a0e0d 0%, #141a17 100%);
     position: relative;
 }
 
-/* Subtle bat symbol watermark as pseudo-element hint */
 [data-character="damian-wayne"] .profile-page::before {
-    content: '🦇';
+    content: '';
     position: fixed;
-    top: 100px;
-    right: 20px;
-    font-size: 4rem;
-    opacity: 0.02;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(42, 90, 52, 0.02) 2px, rgba(42, 90, 52, 0.02) 4px),
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(42, 90, 52, 0.02) 2px, rgba(42, 90, 52, 0.02) 4px);
     pointer-events: none;
     z-index: 1;
 }
 
 [data-character="damian-wayne"] .profile-container {
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: var(--spacing-xl);
+    position: relative;
+    z-index: 2;
 }
 
-/* Gold accent line on edges */
+/* ═══════════════════════════════════════════════════════════════
+   LEFT SIDEBAR - The Heir's Portrait
+   ═══════════════════════════════════════════════════════════════ */
+
 [data-character="damian-wayne"] .profile-image-container {
-    position: relative;
-    margin-bottom: var(--spacing-lg);
-    border-radius: 4px;
-    overflow: hidden;
+    border-radius: 0;
+    border: 3px solid var(--accent-tertiary);
     box-shadow: 
-        0 0 0 2px #B8944C,
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    transition: all var(--transition-medium);
-    will-change: box-shadow;
-    background: linear-gradient(135deg, #1A1F2E 0%, #242B3D 100%);
+        0 0 0 1px rgba(42, 90, 52, 0.3),
+        0 20px 40px rgba(0, 0, 0, 0.5),
+        inset 0 0 30px rgba(42, 90, 52, 0.1);
+    background: linear-gradient(135deg, rgba(42, 90, 52, 0.1), rgba(139, 21, 56, 0.1));
+    position: relative;
+    overflow: visible;
+}
+
+[data-character="damian-wayne"] .profile-image-container::before {
+    content: '✦';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.5rem;
+    color: var(--gold);
+    z-index: 10;
+    text-shadow: 0 0 20px rgba(201, 169, 97, 0.6);
+    animation: pulseGlow 3s ease-in-out infinite;
+}
+
+[data-character="damian-wayne"] .profile-image-container::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--accent), var(--accent-secondary), var(--gold), var(--accent));
+    background-size: 300% 300%;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    z-index: -1;
+    animation: gradientShift 8s ease infinite;
+}
+
+[data-character="damian-wayne"] .profile-image-container:hover::after {
+    opacity: 0.3;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
 }
 
 [data-character="damian-wayne"] .profile-image-container:hover {
     box-shadow: 
-        0 0 0 2px #B8944C,
-        0 30px 60px rgba(42, 90, 52, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    transform: translateY(-4px);
+        0 0 0 1px rgba(42, 90, 52, 0.5),
+        0 30px 60px rgba(0, 0, 0, 0.7),
+        0 0 60px rgba(42, 90, 52, 0.2),
+        inset 0 0 30px rgba(42, 90, 52, 0.2);
 }
 
-[data-character="damian-wayne"] .profile-image {
-    width: 100%;
-    aspect-ratio: 3/4;
-    object-fit: cover;
-    display: block;
-    transition: transform var(--transition-slow);
-    will-change: transform;
-    filter: contrast(1.1) brightness(0.95);
-}
-
-[data-character="damian-wayne"] .profile-image-container:hover .profile-image {
-    transform: scale(1.02);
-    filter: contrast(1.15) brightness(1);
-}
-
-/* Ornate name overlay with gold leaf effect */
 [data-character="damian-wayne"] .profile-name-overlay {
+    background: linear-gradient(135deg, 
+        rgba(10, 14, 13, 0.98) 0%, 
+        rgba(42, 90, 52, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    border-top: 2px solid rgba(201, 169, 97, 0.3);
+    position: relative;
+}
+
+[data-character="damian-wayne"] .profile-name-overlay::before {
+    content: '⚔';
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: var(--spacing-lg);
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.98) 0%, rgba(42, 90, 52, 0.8) 100%);
-    backdrop-filter: blur(8px);
-    border-top: 2px solid #B8944C;
+    top: -30px;
+    right: 20px;
+    font-size: 2rem;
+    opacity: 0.15;
+    transform: rotate(-15deg);
 }
 
 [data-character="damian-wayne"] .profile-name-overlay h1 {
-    font-size: 2rem;
-    font-family: 'Georgia', serif;
-    margin: 0;
-    letter-spacing: 1px;
-    color: #DAE1E7;
-    text-shadow: 
-        0 2px 8px rgba(0, 0, 0, 0.5),
-        0 0 20px rgba(184, 148, 76, 0.2);
-    font-weight: 700;
-}
-
-/* Crown and sword motif decoration */
-[data-character="damian-wayne"] .profile-name-overlay h1::before {
-    content: '⚔';
-    margin-right: 0.5rem;
-    opacity: 0.7;
+    font-family: 'Cinzel', serif, var(--font-heading);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--accent-tertiary), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 2px 10px rgba(42, 90, 52, 0.5);
+    position: relative;
 }
 
 [data-character="damian-wayne"] .profile-name-overlay h1::after {
-    content: '♔';
-    margin-left: 0.5rem;
+    content: '— Al Ghul-Wayne —';
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    font-size: 0.4em;
+    letter-spacing: 3px;
+    color: var(--gold);
     opacity: 0.7;
+    font-weight: 400;
 }
 
-/* Tactical navigation tabs */
+/* ═══════════════════════════════════════════════════════════════
+   NAVIGATION - Tactical Command Interface
+   ═══════════════════════════════════════════════════════════════ */
+
 [data-character="damian-wayne"] .profile-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    background: 
-        linear-gradient(135deg, #1A1F2E 0%, #242B3D 100%),
-        repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            rgba(42, 90, 52, 0.05) 10px,
-            rgba(42, 90, 52, 0.05) 20px
-        );
-    border: 1px solid #2A5A34;
+    background: linear-gradient(135deg, rgba(20, 26, 23, 0.95), rgba(26, 36, 32, 0.95));
+    border: 1px solid rgba(218, 225, 231, 0.15);
     border-radius: 0;
-    padding: 0;
-    overflow: hidden;
     box-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(218, 225, 231, 0.05);
     position: relative;
+    overflow: visible;
 }
 
 [data-character="damian-wayne"] .profile-nav::before {
@@ -166,26 +167,36 @@
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #B8944C 50%, transparent);
-    pointer-events: none;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.5;
+}
+
+[data-character="damian-wayne"] .profile-nav::after {
+    content: '◈';
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    color: var(--gold);
+    font-size: 1.2rem;
+    text-shadow: 0 0 10px rgba(201, 169, 97, 0.8);
 }
 
 [data-character="damian-wayne"] .nav-tab {
-    padding: 0.875rem 1.25rem;
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    text-align: left;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all var(--transition-fast);
+    font-family: 'Rajdhani', sans-serif, var(--font-sans);
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(218, 225, 231, 0.05);
     position: relative;
-    overflow: hidden;
-    border-bottom: 1px solid rgba(42, 90, 52, 0.3);
-    letter-spacing: 0.5px;
+    padding: 1rem 1.5rem;
+    background: transparent;
+}
+
+[data-character="damian-wayne"] .nav-tab:last-child {
+    border-bottom: none;
 }
 
 [data-character="damian-wayne"] .nav-tab::before {
@@ -193,687 +204,568 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 3px;
+    width: 4px;
     height: 100%;
-    background: linear-gradient(180deg, #B8944C, #2A5A34);
+    background: linear-gradient(180deg, var(--accent), var(--gold));
     transform: scaleY(0);
     transform-origin: top;
-    transition: transform var(--transition-medium);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-character="damian-wayne"] .nav-tab::after {
-    content: '';
+    content: '▸';
     position: absolute;
-    right: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 4px,
-        rgba(184, 148, 76, 0.1) 4px,
-        rgba(184, 148, 76, 0.1) 5px
-    );
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%) translateX(-20px);
     opacity: 0;
-    transition: opacity var(--transition-fast);
+    color: var(--gold);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-character="damian-wayne"] .nav-tab:hover {
-    background: rgba(42, 90, 52, 0.15);
-    color: #DAE1E7;
+    background: linear-gradient(90deg, 
+        rgba(42, 90, 52, 0.15), 
+        rgba(42, 90, 52, 0.05));
+    color: var(--accent-tertiary);
+    padding-left: 2.5rem;
 }
 
 [data-character="damian-wayne"] .nav-tab:hover::after {
     opacity: 1;
+    transform: translateY(-50%) translateX(0);
 }
 
 [data-character="damian-wayne"] .nav-tab.active {
-    background: rgba(42, 90, 52, 0.25);
-    color: #B8944C;
-    font-weight: 600;
-    text-shadow: 0 0 10px rgba(184, 148, 76, 0.3);
+    background: linear-gradient(90deg, 
+        rgba(42, 90, 52, 0.3), 
+        rgba(42, 90, 52, 0.1));
+    color: var(--gold);
+    font-weight: 700;
+    box-shadow: inset 0 0 20px rgba(42, 90, 52, 0.3);
+    padding-left: 2.5rem;
 }
 
 [data-character="damian-wayne"] .nav-tab.active::before {
     transform: scaleY(1);
 }
 
-/* Tab content */
-[data-character="damian-wayne"] .profile-content {
-    min-height: 600px;
+[data-character="damian-wayne"] .nav-tab.active::after {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+    color: var(--gold);
+    animation: pulse 2s ease-in-out infinite;
 }
 
-[data-character="damian-wayne"] .tab-content {
-    display: none;
-    animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
 }
 
-[data-character="damian-wayne"] .tab-content.active {
-    display: block;
-}
+/* ═══════════════════════════════════════════════════════════════
+   SECTION HEADERS - Ornamental Dividers
+   ═══════════════════════════════════════════════════════════════ */
 
-/* Section headers with ornamental design */
 [data-character="damian-wayne"] .section-header {
-    font-size: 1.75rem;
-    font-family: 'Georgia', serif;
-    margin-bottom: var(--spacing-lg);
-    padding-bottom: var(--spacing-md);
-    border-bottom: 2px solid #2A5A34;
-    position: relative;
-    letter-spacing: 0.5px;
-    color: #DAE1E7;
+    font-family: 'Cinzel', serif, var(--font-heading);
+    font-size: 2rem;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    color: var(--gold);
+    border-bottom: none;
+    padding-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+    position: relative;
+    text-align: center;
 }
 
 [data-character="damian-wayne"] .section-header::before {
-    content: '🥷';
+    content: '✧';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
     font-size: 1.5rem;
     opacity: 0.6;
 }
 
 [data-character="damian-wayne"] .section-header::after {
-    content: '';
+    content: '✧';
     position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 120px;
-    height: 2px;
-    background: linear-gradient(90deg, #B8944C, transparent);
-    animation: slideRight 0.6s ease;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-size: 1.5rem;
+    opacity: 0.6;
 }
 
-/* Bio grid items with tactical cards */
-[data-character="damian-wayne"] .bio-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-lg);
+[data-character="damian-wayne"] .section-header::before,
+[data-character="damian-wayne"] .section-header::after {
+    animation: rotate 4s linear infinite;
 }
+
+@keyframes rotate {
+    0%, 100% { transform: translateY(-50%) rotate(0deg); }
+    50% { transform: translateY(-50%) rotate(180deg); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BIO ITEMS - Marble Tactical Cards
+   ═══════════════════════════════════════════════════════════════ */
 
 [data-character="damian-wayne"] .bio-item {
-    background: 
-        linear-gradient(135deg, rgba(26, 31, 46, 0.8) 0%, rgba(42, 90, 52, 0.1) 100%),
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 1px,
-            rgba(184, 148, 76, 0.05) 1px,
-            rgba(184, 148, 76, 0.05) 2px
-        );
-    border: 1px solid #2A5A34;
+    background: linear-gradient(135deg, 
+        rgba(20, 26, 23, 0.8) 0%, 
+        rgba(26, 36, 32, 0.8) 100%);
+    border: 1px solid rgba(218, 225, 231, 0.15);
     border-radius: 0;
-    padding: var(--spacing-lg);
-    transition: all var(--transition-medium);
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(218, 225, 231, 0.05);
     position: relative;
     overflow: hidden;
-    will-change: transform, box-shadow;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
 }
 
 [data-character="damian-wayne"] .bio-item::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
-    width: 3px;
-    height: 100%;
-    background: linear-gradient(180deg, #B8944C, #2A5A34 50%, transparent);
-    transition: width var(--transition-medium);
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 12px 12px 0;
+    border-color: transparent var(--accent) transparent transparent;
+    opacity: 0.6;
 }
 
 [data-character="damian-wayne"] .bio-item::after {
     content: '';
     position: absolute;
     top: 0;
-    right: -100%;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, rgba(184, 148, 76, 0.1), transparent);
-    transition: right var(--transition-medium);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(45deg, transparent 48%, rgba(42, 90, 52, 0.1) 49%, rgba(42, 90, 52, 0.1) 51%, transparent 52%),
+        linear-gradient(-45deg, transparent 48%, rgba(42, 90, 52, 0.1) 49%, rgba(42, 90, 52, 0.1) 51%, transparent 52%);
+    background-size: 20px 20px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
 
 [data-character="damian-wayne"] .bio-item:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     box-shadow: 
-        0 12px 24px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(184, 148, 76, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border-color: #B8944C;
+        0 12px 32px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(42, 90, 52, 0.2),
+        inset 0 1px 0 rgba(218, 225, 231, 0.1);
+    border-color: var(--accent);
 }
 
 [data-character="damian-wayne"] .bio-item:hover::after {
-    right: 100%;
+    opacity: 1;
 }
 
 [data-character="damian-wayne"] .bio-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #6B7280;
-    margin-bottom: var(--spacing-sm);
+    color: var(--accent);
+    font-family: 'Rajdhani', sans-serif, var(--font-sans);
     font-weight: 700;
-    font-family: 'Monaco', monospace;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+    position: relative;
+    padding-left: 15px;
+}
+
+[data-character="damian-wayne"] .bio-label::before {
+    content: '◆';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 0.7rem;
 }
 
 [data-character="damian-wayne"] .bio-value {
-    font-size: 1.25rem;
-    color: #DAE1E7;
-    font-weight: 700;
-    font-family: 'Georgia', serif;
-    text-shadow: 0 0 10px rgba(42, 90, 52, 0.3);
+    color: var(--accent-tertiary);
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
-/* Timeline with tactical styling */
-[data-character="damian-wayne"] .timeline-container {
-    position: relative;
-    padding: var(--spacing-lg) 0;
-}
+/* ═══════════════════════════════════════════════════════════════
+   TIMELINE - Legacy Chronicle
+   ═══════════════════════════════════════════════════════════════ */
 
 [data-character="damian-wayne"] .timeline-container::before {
-    content: '';
-    position: absolute;
+    background: linear-gradient(180deg, 
+        var(--gold) 0%, 
+        var(--accent) 25%, 
+        var(--accent-secondary) 50%,
+        rgba(42, 90, 52, 0.3) 75%, 
+        transparent 100%);
+    width: 3px;
     left: 30px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(180deg, #B8944C 0%, #2A5A34 30%, #2A5A34 70%, transparent);
-}
-
-[data-character="damian-wayne"] #timeline-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg);
-}
-
-[data-character="damian-wayne"] .timeline-event {
-    position: relative;
-    padding-left: 70px;
-    transition: all var(--transition-medium);
+    box-shadow: 0 0 10px rgba(42, 90, 52, 0.5);
 }
 
 [data-character="damian-wayne"] .timeline-event::before {
-    content: '⚔';
-    position: absolute;
-    left: 14px;
-    top: 0;
-    width: 34px;
-    height: 34px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #2A5A34, #1A1F2E);
-    border: 2px solid #B8944C;
-    z-index: 2;
-    transition: all var(--transition-medium);
-    will-change: transform, box-shadow;
+    background: radial-gradient(circle, var(--bg-primary) 30%, var(--accent) 31%, var(--accent) 50%, var(--gold) 51%);
+    border: none;
+    width: 20px;
+    height: 20px;
+    left: 21px;
     box-shadow: 
         0 0 0 4px rgba(42, 90, 52, 0),
-        0 0 20px rgba(184, 148, 76, 0);
-    font-size: 1rem;
-    color: #B8944C;
+        0 0 20px rgba(42, 90, 52, 0);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-character="damian-wayne"] .timeline-event:hover::before {
-    transform: scale(1.4) rotate(45deg);
+    transform: scale(1.5) rotate(45deg);
     box-shadow: 
-        0 0 0 6px rgba(42, 90, 52, 0.3),
-        0 0 30px rgba(184, 148, 76, 0.4);
+        0 0 0 8px rgba(42, 90, 52, 0.3),
+        0 0 30px rgba(201, 169, 97, 0.6);
 }
 
 [data-character="damian-wayne"] .event-card {
-    background: 
-        linear-gradient(135deg, rgba(26, 31, 46, 0.9) 0%, rgba(42, 90, 52, 0.15) 100%),
-        repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            rgba(184, 148, 76, 0.02) 10px,
-            rgba(184, 148, 76, 0.02) 20px
-        );
-    border: 1px solid #2A5A34;
+    background: linear-gradient(135deg, 
+        rgba(20, 26, 23, 0.95) 0%, 
+        rgba(26, 36, 32, 0.95) 100%);
+    border: 1px solid rgba(218, 225, 231, 0.15);
     border-radius: 0;
-    padding: var(--spacing-lg);
-    cursor: pointer;
-    transition: all var(--transition-medium);
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(218, 225, 231, 0.05);
     position: relative;
     overflow: hidden;
-    will-change: transform, box-shadow;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 [data-character="damian-wayne"] .event-card::before {
-    content: '';
+    width: 6px;
+    background: linear-gradient(180deg, var(--gold), var(--accent), var(--accent-secondary));
+    box-shadow: 0 0 15px rgba(42, 90, 52, 0.5);
+}
+
+[data-character="damian-wayne"] .event-card::after {
+    content: '⚔';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(180deg, #B8944C, #2A5A34);
-    transition: width var(--transition-medium);
+    bottom: 10px;
+    right: 15px;
+    font-size: 3rem;
+    opacity: 0.05;
+    transform: rotate(-15deg);
+    pointer-events: none;
 }
 
 [data-character="damian-wayne"] .event-card:hover {
-    transform: translateX(8px);
+    transform: translateX(12px);
     box-shadow: 
-        0 16px 32px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(184, 148, 76, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border-color: #B8944C;
-}
-
-[data-character="damian-wayne"] .event-card:hover::before {
-    width: 6px;
-}
-
-[data-character="damian-wayne"] .event-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    margin-bottom: var(--spacing-md);
-    gap: var(--spacing-md);
+        0 16px 48px rgba(0, 0, 0, 0.4),
+        0 0 60px rgba(42, 90, 52, 0.2);
+    border-color: var(--accent);
 }
 
 [data-character="damian-wayne"] .event-date {
-    font-size: 0.85rem;
-    color: #9FA4A9;
+    color: var(--gold);
+    font-family: 'Rajdhani', sans-serif, var(--font-sans);
     font-weight: 700;
-    white-space: nowrap;
-    font-family: 'Monaco', monospace;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
 }
 
 [data-character="damian-wayne"] .era-badge {
-    padding: 0.35rem 0.875rem;
-    border-radius: 0;
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: help;
-    background: rgba(42, 90, 52, 0.2);
-    color: #B8944C;
-    border: 1px solid #2A5A34;
-    transition: all var(--transition-fast);
-    font-family: 'Monaco', monospace;
-}
-
-[data-character="damian-wayne"] .era-badge:hover {
-    background: rgba(42, 90, 52, 0.35);
-    border-color: #B8944C;
-    box-shadow: 0 0 15px rgba(184, 148, 76, 0.25);
-    transform: scale(1.05);
-}
-
-[data-character="damian-wayne"] .event-title {
-    font-size: 1.3rem;
-    margin-bottom: var(--spacing-sm);
-    font-weight: 700;
-    letter-spacing: 0px;
-    color: #DAE1E7;
-    font-family: 'Georgia', serif;
-}
-
-[data-character="damian-wayne"] .event-summary {
-    color: #9FA4A9;
-    line-height: 1.7;
-}
-
-/* Relationships with relationship type colors */
-[data-character="damian-wayne"] .relationships-grid {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-}
-
-[data-character="damian-wayne"] .relationship-card {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-lg);
-    background: 
-        linear-gradient(135deg, rgba(26, 31, 46, 0.8) 0%, rgba(42, 90, 52, 0.1) 100%),
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 1px,
-            rgba(184, 148, 76, 0.03) 1px,
-            rgba(184, 148, 76, 0.03) 2px
-        );
-    border: 1px solid #2A5A34;
-    border-radius: 0;
-    padding: var(--spacing-lg);
-    transition: all var(--transition-medium);
-    cursor: pointer;
+    background: linear-gradient(135deg, 
+        rgba(42, 90, 52, 0.3), 
+        rgba(139, 21, 56, 0.3));
+    border: 1px solid rgba(201, 169, 97, 0.4);
+    color: var(--gold);
+    font-family: 'Rajdhani', sans-serif, var(--font-sans);
+    text-shadow: 0 0 10px rgba(201, 169, 97, 0.3);
     position: relative;
     overflow: hidden;
-    will-change: transform, box-shadow;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-[data-character="damian-wayne"] .relationship-card::before {
+[data-character="damian-wayne"] .era-badge::before {
     content: '';
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(184, 148, 76, 0.1));
-    transition: left var(--transition-medium);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
 }
 
-[data-character="damian-wayne"] .relationship-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: currentColor;
-    opacity: 0.3;
-    transition: opacity var(--transition-medium), height var(--transition-medium);
+[data-character="damian-wayne"] .era-badge:hover {
+    background: linear-gradient(135deg, 
+        rgba(42, 90, 52, 0.5), 
+        rgba(139, 21, 56, 0.5));
+    border-color: var(--gold);
+    box-shadow: 0 0 20px rgba(201, 169, 97, 0.3);
 }
 
-[data-character="damian-wayne"] .relationship-card:hover {
-    transform: translateX(6px);
-    box-shadow: 
-        0 12px 24px rgba(0, 0, 0, 0.3),
-        0 0 15px rgba(184, 148, 76, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-[data-character="damian-wayne"] .relationship-card:hover::before {
+[data-character="damian-wayne"] .era-badge:hover::before {
     left: 100%;
 }
 
-[data-character="damian-wayne"] .relationship-card:hover::after {
-    opacity: 1;
-    height: 3px;
+[data-character="damian-wayne"] .event-title {
+    color: var(--accent-tertiary);
+    font-family: 'Cinzel', serif, var(--font-heading);
+    letter-spacing: 1px;
+}
+
+[data-character="damian-wayne"] .event-summary {
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RELATIONSHIPS - Allied Forces Registry
+   ═══════════════════════════════════════════════════════════════ */
+
+[data-character="damian-wayne"] .relationship-card {
+    background: linear-gradient(135deg, 
+        rgba(20, 26, 23, 0.9) 0%, 
+        rgba(26, 36, 32, 0.9) 100%);
+    border: 1px solid rgba(218, 225, 231, 0.15);
+    border-radius: 0;
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(218, 225, 231, 0.05);
+    position: relative;
+    clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+}
+
+[data-character="damian-wayne"] .relationship-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 12px 12px 0 0;
+    border-color: var(--accent) transparent transparent transparent;
+    opacity: 0.6;
+}
+
+[data-character="damian-wayne"] .relationship-card::after {
+    content: '◈';
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    opacity: 0.08;
+    pointer-events: none;
+}
+
+[data-character="damian-wayne"] .relationship-card:hover {
+    transform: translateX(10px);
+    box-shadow: 
+        0 12px 32px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(42, 90, 52, 0.2);
 }
 
 [data-character="damian-wayne"] .relationship-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 0;
-    object-fit: cover;
-    flex-shrink: 0;
-    border: 2px solid #2A5A34;
-    transition: all var(--transition-medium);
-    will-change: transform;
-    box-shadow: 0 0 20px rgba(184, 148, 76, 0);
+    border: 3px solid var(--accent);
+    box-shadow: 
+        0 0 0 2px var(--bg-primary),
+        0 4px 12px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-character="damian-wayne"] .relationship-card:hover .relationship-avatar {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(184, 148, 76, 0.3);
-}
-
-[data-character="damian-wayne"] .relationship-info {
-    flex-grow: 1;
-    z-index: 1;
+    transform: scale(1.15) rotate(5deg);
+    border-color: var(--gold);
+    box-shadow: 
+        0 0 0 2px var(--bg-primary),
+        0 0 20px rgba(201, 169, 97, 0.6);
 }
 
 [data-character="damian-wayne"] .relationship-name {
-    font-size: 1.1rem;
+    color: var(--accent-tertiary);
     font-weight: 700;
-    margin-bottom: 0.25rem;
-    letter-spacing: 0.3px;
-    color: #DAE1E7;
-    font-family: 'Georgia', serif;
-}
-
-[data-character="damian-wayne"] .relationship-status {
-    color: #9FA4A9;
-    font-size: 0.9rem;
-    font-family: 'Monaco', monospace;
-    font-size: 0.85rem;
     letter-spacing: 0.5px;
 }
 
-/* Relationship type colors (enhanced) */
-[data-character="damian-wayne"] .relationship-card[data-type="romantic"] {
-    border-left: 4px solid #c53030;
+[data-character="damian-wayne"] .relationship-status {
+    color: var(--text-secondary);
+    font-style: italic;
 }
 
-[data-character="damian-wayne"] .relationship-card[data-type="romantic"] .relationship-avatar {
-    border-color: #c53030;
+/* Relationship Type Tactical Borders */
+[data-character="damian-wayne"] .relationship-card[data-type="romantic"] {
+    border-left: 5px solid #8B1538;
+    box-shadow: -5px 0 15px rgba(139, 21, 56, 0.3);
 }
 
 [data-character="damian-wayne"] .relationship-card[data-type="platonic"] {
-    border-left: 4px solid #22863a;
-}
-
-[data-character="damian-wayne"] .relationship-card[data-type="platonic"] .relationship-avatar {
-    border-color: #22863a;
+    border-left: 5px solid #2A5A34;
+    box-shadow: -5px 0 15px rgba(42, 90, 52, 0.3);
 }
 
 [data-character="damian-wayne"] .relationship-card[data-type="familial"] {
-    border-left: 4px solid #B8944C;
-}
-
-[data-character="damian-wayne"] .relationship-card[data-type="familial"] .relationship-avatar {
-    border-color: #B8944C;
+    border-left: 5px solid #c9a961;
+    box-shadow: -5px 0 15px rgba(201, 169, 97, 0.3);
 }
 
 [data-character="damian-wayne"] .relationship-card[data-type="complicated"] {
-    border-left: 4px solid #6B3E42;
-}
-
-[data-character="damian-wayne"] .relationship-card[data-type="complicated"] .relationship-avatar {
-    border-color: #6B3E42;
+    border-left: 5px solid #9FA4A9;
+    box-shadow: -5px 0 15px rgba(159, 164, 169, 0.3);
 }
 
 [data-character="damian-wayne"] .relationship-card[data-type="hate"] {
-    border-left: 4px solid #743a3a;
+    border-left: 5px solid #8B1538;
+    box-shadow: -5px 0 15px rgba(139, 21, 56, 0.4);
 }
 
-[data-character="damian-wayne"] .relationship-card[data-type="hate"] .relationship-avatar {
-    border-color: #743a3a;
-}
-
-/* Gallery with tactical masonry */
-[data-character="damian-wayne"] .masonry-grid {
-    column-count: 3;
-    column-gap: var(--spacing-md);
-}
+/* ═══════════════════════════════════════════════════════════════
+   GALLERY - Arsenal Archives
+   ═══════════════════════════════════════════════════════════════ */
 
 [data-character="damian-wayne"] .gallery-item {
-    break-inside: avoid;
-    margin-bottom: var(--spacing-md);
+    border-radius: 0;
+    border: 2px solid rgba(218, 225, 231, 0.1);
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        inset 0 0 20px rgba(42, 90, 52, 0.1);
     position: relative;
     overflow: hidden;
-    border-radius: 0;
-    cursor: pointer;
-    transition: all var(--transition-medium);
-    will-change: transform, box-shadow;
-    border: 1px solid #2A5A34;
-    box-shadow: 0 0 0 0 rgba(184, 148, 76, 0);
 }
 
 [data-character="damian-wayne"] .gallery-item::before {
     content: '';
     position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(184, 148, 76, 0.2) 0%, transparent 100%);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(42, 90, 52, 0.2) 0%, 
+        transparent 50%,
+        rgba(139, 21, 56, 0.2) 100%);
     opacity: 0;
-    transition: opacity var(--transition-medium);
-    z-index: 2;
+    transition: opacity 0.4s ease;
+    z-index: 1;
     pointer-events: none;
 }
 
+[data-character="damian-wayne"] .gallery-item::after {
+    content: '✦';
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: var(--gold);
+    font-size: 1.5rem;
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 2;
+    pointer-events: none;
+    text-shadow: 0 0 20px rgba(201, 169, 97, 0.8);
+}
+
 [data-character="damian-wayne"] .gallery-item:hover {
-    transform: translateY(-6px);
+    transform: translateY(-8px) scale(1.02);
     box-shadow: 
-        0 20px 40px rgba(0, 0, 0, 0.3),
-        0 0 30px rgba(184, 148, 76, 0.2);
+        0 20px 50px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(42, 90, 52, 0.3);
+    border-color: var(--accent);
 }
 
 [data-character="damian-wayne"] .gallery-item:hover::before {
     opacity: 1;
 }
 
+[data-character="damian-wayne"] .gallery-item:hover::after {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+}
+
 [data-character="damian-wayne"] .gallery-item img {
-    width: 100%;
-    display: block;
     border-radius: 0;
-    transition: transform var(--transition-slow);
-    will-change: transform;
-    filter: brightness(0.95) contrast(1.05);
 }
 
-[data-character="damian-wayne"] .gallery-item:hover img {
-    transform: scale(1.06);
-    filter: brightness(1) contrast(1.1);
-}
-
-[data-character="damian-wayne"] .gallery-loader {
-    display: none;
-    justify-content: center;
-    padding: var(--spacing-xl);
-}
-
-[data-character="damian-wayne"] .gallery-loader.active {
-    display: flex;
-}
-
-/* Modal content styling */
-[data-character="damian-wayne"] .modal-header {
-    margin-bottom: var(--spacing-lg);
-    border-bottom: 2px solid #2A5A34;
-    padding-bottom: var(--spacing-md);
-}
+/* ═══════════════════════════════════════════════════════════════
+   MODAL - Mission Briefing Interface
+   ═══════════════════════════════════════════════════════════════ */
 
 [data-character="damian-wayne"] .modal-header h2 {
-    margin-top: var(--spacing-sm);
-    letter-spacing: 0.5px;
-    color: #DAE1E7;
-    font-family: 'Georgia', serif;
+    font-family: 'Cinzel', serif, var(--font-heading);
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    position: relative;
+    padding-left: 30px;
 }
 
-[data-character="damian-wayne"] .modal-body {
-    max-height: calc(90vh - 200px);
-    overflow-y: auto;
-}
-
-[data-character="damian-wayne"] .event-images {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
-}
-
-[data-character="damian-wayne"] .event-images img {
-    width: 100%;
-    border-radius: 0;
-    transition: transform var(--transition-medium);
-    border: 1px solid #2A5A34;
-    box-shadow: 0 0 0 0 rgba(184, 148, 76, 0);
-}
-
-[data-character="damian-wayne"] .event-images img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(184, 148, 76, 0.25);
-}
-
-[data-character="damian-wayne"] .event-description {
-    color: #9FA4A9;
-    line-height: 1.8;
+[data-character="damian-wayne"] .modal-header h2::before {
+    content: '◆';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
 }
 
 [data-character="damian-wayne"] .event-description h3 {
-    color: #B8944C;
-    margin-top: var(--spacing-lg);
-    font-family: 'Georgia', serif;
-    letter-spacing: 0.5px;
+    font-family: 'Cinzel', serif, var(--font-heading);
+    color: var(--accent-tertiary);
+    letter-spacing: 1px;
+    border-left: 4px solid var(--accent);
+    padding-left: var(--spacing-md);
+    margin-top: var(--spacing-xl);
 }
 
-/* Tooltip with tactical styling */
+/* ═══════════════════════════════════════════════════════════════
+   TOOLTIP - Intel Display
+   ═══════════════════════════════════════════════════════════════ */
+
 [data-character="damian-wayne"] .tooltip {
-    position: fixed;
-    background: linear-gradient(135deg, #1A1F2E 0%, #242B3D 100%);
-    border: 1px solid #2A5A34;
+    background: linear-gradient(135deg, rgba(20, 26, 23, 0.98), rgba(26, 36, 32, 0.98));
+    border: 1px solid rgba(201, 169, 97, 0.3);
     border-radius: 0;
-    padding: var(--spacing-sm) var(--spacing-md);
-    font-size: 0.85rem;
-    color: #9FA4A9;
-    pointer-events: none;
-    z-index: 3000;
-    opacity: 0;
-    transition: opacity var(--transition-fast);
-    max-width: 250px;
     box-shadow: 
-        0 8px 24px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(184, 148, 76, 0.1);
-    font-family: 'Monaco', monospace;
-    letter-spacing: 0.5px;
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(218, 225, 231, 0.1);
+    color: var(--accent-tertiary);
+    font-family: 'Rajdhani', sans-serif, var(--font-sans);
+    backdrop-filter: blur(10px);
 }
 
-[data-character="damian-wayne"] .tooltip.active {
-    opacity: 1;
+/* ═══════════════════════════════════════════════════════════════
+   SCROLLBAR - Tactical Interface Element
+   ═══════════════════════════════════════════════════════════════ */
+
+[data-character="damian-wayne"] ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
 }
 
-/* Easter egg: Damian's tactical notes on hover of specific elements */
-[data-character="damian-wayne"] .nav-tab[aria-label*="Overview"]::after {
-    content: attr(data-easter-1);
-    position: absolute;
-    bottom: -25px;
-    left: 0;
-    background: rgba(26, 31, 46, 0.95);
-    color: #B8944C;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.7rem;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 1000;
-    transition: opacity var(--transition-fast);
-    font-family: 'Monaco', monospace;
-    white-space: nowrap;
-    border: 1px solid #2A5A34;
+[data-character="damian-wayne"] ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-left: 1px solid rgba(218, 225, 231, 0.1);
 }
 
-[data-character="damian-wayne"] .nav-tab:hover[aria-label*="Overview"]::after {
-    opacity: 1;
+[data-character="damian-wayne"] ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--accent), var(--accent-secondary));
+    border: 2px solid var(--bg-secondary);
+    transition: background 0.3s ease;
 }
 
-/* Responsive design */
-@media (max-width: 1024px) {
-    [data-character="damian-wayne"] .desktop-view {
-        grid-template-columns: 300px 1fr;
-        gap: var(--spacing-xl);
-    }
-    
-    [data-character="damian-wayne"] .masonry-grid {
-        column-count: 2;
-    }
+[data-character="damian-wayne"] ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--gold), var(--accent));
+    box-shadow: 0 0 10px rgba(201, 169, 97, 0.5);
 }
 
-@media (max-width: 768px) {
-    [data-character="damian-wayne"] .mobile-view {
-        display: block;
-    }
-    
-    [data-character="damian-wayne"] .desktop-view {
-        display: none;
-    }
-}
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATIONS - Signature Movement
+   ═══════════════════════════════════════════════════════════════ */
 
-/* Tactical animations */
-@keyframes slideRight {
-    from {
-        width: 0;
-    }
-    to {
-        width: 120px;
-    }
-}
-
-@keyframes fadeInUp {
+@keyframes damianFadeIn {
     from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
@@ -881,345 +773,66 @@
     }
 }
 
-/* Neon glow effect on active elements (for the nerds) */
-[data-character="damian-wayne"] .nav-tab.active::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: 
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 2px,
-            rgba(184, 148, 76, 0.1) 2px,
-            rgba(184, 148, 76, 0.1) 4px
-        );
-    animation: scanlines 8s linear infinite;
-    pointer-events: none;
+[data-character="damian-wayne"] .tab-content.active {
+    animation: damianFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes scanlines {
-    0% {
-        transform: translateY(0);
-    }
-    100% {
-        transform: translateY(10px);
-    }
-}
+/* ═══════════════════════════════════════════════════════════════
+   DECORATIVE ELEMENTS - Wayne Manor Gothic
+   ═══════════════════════════════════════════════════════════════ */
 
-/* Bat signal Easter egg - hidden element */
-[data-character="damian-wayne"]::before {
-    content: '🦇 Signal Detected 🦇';
+[data-character="damian-wayne"] .profile-content::before {
+    content: '◈';
     position: fixed;
-    bottom: 10px;
-    right: 10px;
-    font-size: 0.7rem;
-    color: rgba(184, 148, 76, 0);
+    top: 120px;
+    right: 40px;
+    font-size: 15rem;
+    opacity: 0.02;
+    color: var(--accent);
     pointer-events: none;
-    z-index: 1;
-    font-family: 'Monaco', monospace;
-    transition: color 0.3s ease;
+    z-index: 0;
+    animation: slowRotate 30s linear infinite;
 }
 
-[data-character="damian-wayne"]:hover::before {
-    color: rgba(184, 148, 76, 0.3);
+@keyframes slowRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
-/* Gold leaf accents */
-[data-character="damian-wayne"] .profile-sidebar::before {
-    content: '✦';
-    position: absolute;
-    top: -20px;
-    right: 0;
-    font-size: 2rem;
-    color: rgba(184, 148, 76, 0.3);
-    opacity: 0;
-    animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0px);
-        opacity: 0;
-    }
-    50% {
-        transform: translateY(-20px);
-        opacity: 0.5;
-    }
-}
-
-/* Tactical grid background on specific sections */
-[data-character="damian-wayne"] .bio-grid::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: 
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 19px,
-            rgba(42, 90, 52, 0.05) 19px,
-            rgba(42, 90, 52, 0.05) 20px
-        ),
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 19px,
-            rgba(42, 90, 52, 0.05) 19px,
-            rgba(42, 90, 52, 0.05) 20px
-        );
-    pointer-events: none;
-    z-index: -1;
-}
-
-/* Metallic text effect for premium feel */
-[data-character="damian-wayne"] .section-header {
-    background: linear-gradient(90deg, #DAE1E7 0%, #9FA4A9 50%, #DAE1E7 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: shimmer 3s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-    0%, 100% {
-        filter: drop-shadow(0 0 0 rgba(184, 148, 76, 0));
-    }
-    50% {
-        filter: drop-shadow(0 0 8px rgba(184, 148, 76, 0.3));
-    }
-}
-
-/* Sword motif divider */
-[data-character="damian-wayne"] .bio-section::before {
-    content: '⚔ ⚔ ⚔';
-    display: block;
-    text-align: center;
-    color: rgba(184, 148, 76, 0.2);
-    font-size: 1rem;
-    margin: var(--spacing-2xl) 0 var(--spacing-lg) 0;
-    letter-spacing: 1rem;
-}
-
-[data-character="damian-wayne"] .bio-section:first-child::before {
-    display: none;
-}
-
-/* Crown accents on headers */
-[data-character="damian-wayne"] .profile-nav::after {
-    content: '♔';
-    position: absolute;
-    bottom: 10px;
-    right: 12px;
-    font-size: 1.2rem;
-    opacity: 0.15;
-    pointer-events: none;
-}
-
-/* Subtle leather texture overlay */
-[data-character="damian-wayne"] .profile-image-container::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: 
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 2px,
-            rgba(0, 0, 0, 0.03) 2px,
-            rgba(0, 0, 0, 0.03) 4px
-        ),
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 2px,
-            rgba(0, 0, 0, 0.02) 2px,
-            rgba(0, 0, 0, 0.02) 4px
-        );
-    pointer-events: none;
-    border-radius: 4px;
-}
-
-/* Marble texture on accent elements */
-[data-character="damian-wayne"] .bio-item::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: 
-        repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            rgba(184, 148, 76, 0.02) 10px,
-            rgba(184, 148, 76, 0.02) 20px
-        );
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity var(--transition-medium);
-}
-
-[data-character="damian-wayne"] .bio-item:hover::after {
-    opacity: 1;
-}
-
-/* Shuriken rotation on timeline events (nerd Easter egg) */
-[data-character="damian-wayne"] .timeline-event:nth-child(3n)::before {
-    content: '✦';
-}
-
-[data-character="damian-wayne"] .timeline-event:nth-child(3n+1)::before {
+[data-character="damian-wayne"] .bio-section::after {
     content: '⚔';
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    opacity: 0.05;
+    pointer-events: none;
 }
 
-[data-character="damian-wayne"] .timeline-event:nth-child(3n+2)::before {
-    content: '✦';
-}
+/* ═══════════════════════════════════════════════════════════════
+   LOADING STATES - Mission Prep
+   ═══════════════════════════════════════════════════════════════ */
 
-/* Sleek scrollbar styling */
-[data-character="damian-wayne"] .modal-body::-webkit-scrollbar {
-    width: 8px;
-}
-
-[data-character="damian-wayne"] .modal-body::-webkit-scrollbar-track {
-    background: rgba(42, 90, 52, 0.1);
-}
-
-[data-character="damian-wayne"] .modal-body::-webkit-scrollbar-thumb {
-    background: #B8944C;
-    border-radius: 0;
-    transition: background 0.3s;
-}
-
-[data-character="damian-wayne"] .modal-body::-webkit-scrollbar-thumb:hover {
-    background: #DAE1E7;
-}
-
-/* Parchment paper effect on cards */
-[data-character="damian-wayne"] .event-card {
+[data-character="damian-wayne"] .gallery-loader {
     position: relative;
 }
 
-[data-character="damian-wayne"] .event-card::after {
-    content: '';
-    position: absolute;
-    inset: 1px;
-    background-image: 
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 1px,
-            rgba(184, 148, 76, 0.02) 1px,
-            rgba(184, 148, 76, 0.02) 2px
-        );
-    pointer-events: none;
-}
-
-/* Gold border shimmer on hover (premium feel) */
-[data-character="damian-wayne"] .profile-image-container:hover {
-    animation: goldShimmer 2s ease-in-out;
-}
-
-@keyframes goldShimmer {
-    0% {
-        box-shadow: 
-            0 0 0 2px #B8944C,
-            0 20px 40px rgba(0, 0, 0, 0.4);
-    }
-    50% {
-        box-shadow: 
-            0 0 0 2px #DAE1E7,
-            0 20px 40px rgba(0, 0, 0, 0.4);
-    }
-    100% {
-        box-shadow: 
-            0 0 0 2px #B8944C,
-            0 20px 40px rgba(0, 0, 0, 0.4);
-    }
-}
-
-/* Moon phase indicator (ultra nerd Easter egg) */
-[data-character="damian-wayne"] .profile-nav::before {
-    content: '🌙';
-    position: absolute;
-    top: 5px;
-    left: 12px;
-    font-size: 0.9rem;
-    opacity: 0.3;
-    pointer-events: none;
-    animation: moonPhase 29.5s linear infinite;
-}
-
-@keyframes moonPhase {
-    0% { content: '🌑'; }
-    7% { content: '🌒'; }
-    14% { content: '🌓'; }
-    21% { content: '🌔'; }
-    28% { content: '🌕'; }
-    35% { content: '🌖'; }
-    42% { content: '🌗'; }
-    50% { content: '🌘'; }
-    100% { content: '🌘'; }
-}
-
-/* Watchband pattern on sidebar */
-[data-character="damian-wayne"] .profile-sidebar {
-    background-image: 
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 4px,
-            rgba(184, 148, 76, 0.02) 4px,
-            rgba(184, 148, 76, 0.02) 8px
-        );
-}
-
-/* Tactical crosshair on bio values (ultra Easter egg) */
-[data-character="damian-wayne"] .bio-value::before {
+[data-character="damian-wayne"] .gallery-loader::before {
     content: '◆';
-    margin-right: 0.5rem;
-    opacity: 0.4;
-    font-size: 0.9em;
+    display: inline-block;
+    font-size: 2rem;
+    color: var(--gold);
+    animation: pulse 2s ease-in-out infinite;
 }
 
-/* Snake/serpent motif on relationship cards */
-[data-character="damian-wayne"] .relationship-card[data-type="complicated"]::before {
-    content: '🐍';
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    font-size: 1rem;
-    opacity: 0.2;
-    pointer-events: none;
-}
-
-/* Building/Gotham skyline hint */
-[data-character="damian-wayne"] .profile-content::before {
-    content: '🏙️';
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    font-size: 3rem;
-    opacity: 0.02;
-    pointer-events: none;
-    z-index: 1;
-}
-
-/* Premium underline on active tab */
-[data-character="damian-wayne"] .nav-tab.active {
-    box-shadow: 
-        inset 0 -3px 0 #B8944C,
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-/* Ink effect text shadow */
-[data-character="damian-wayne"] .event-title {
-    text-shadow: 
-        1px 1px 0 rgba(0, 0, 0, 0.3),
-        2px 2px 0 rgba(42, 90, 52, 0.2);
-}
-
-/* Final touch: Tactical border animation on focus */
-[data-character="damian-wayne"] .nav-tab:focus-visible {
-    outline: 2px solid #B8944C;
-    outline-offset: -2px;
+[data-character="damian-wayne"] .gallery-loader::after {
+    content: 'Loading Arsenal...';
+    display: block;
+    margin-top: var(--spacing-md);
+    color: var(--text-secondary);
+    font-family: 'Rajdhani', sans-serif, var(--font-sans);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
 }
