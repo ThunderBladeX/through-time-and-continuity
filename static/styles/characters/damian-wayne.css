@@ -134,7 +134,7 @@
 }
 
 [data-character="damian-wayne"] .profile-name-overlay h1::after {
-    content: '— Al Ghul-Wayne —';
+    content: '— Al Ghul —';
     position: absolute;
     bottom: -20px;
     left: 0;
@@ -300,8 +300,7 @@
     opacity: 0.6;
 }
 
-[data-character="damian-wayne"] .section-header::before,
-[data-character="damian-wayne"] .section-header::after {
+[data-character="damian-wayne"] .section-header::before {
     animation: rotate 4s linear infinite;
 }
 
