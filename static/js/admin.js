@@ -286,7 +286,7 @@ async function editEvent(id) {
             const charIds = event.event_characters.map(ec => ec.character_id.toString());
             Array.from(charSelect.options).forEach(opt => opt.selected = charIds.includes(opt.value));
         }
-        document.getElementById('event-modal-title').textContent = 'Edit Event';
+        document.getElementById('event-form-title').textContent = 'Edit Event';
         openEventForm();
     } catch (error) {
         showNotification('Could not load event data.', 'error');
@@ -341,7 +341,7 @@ function closeEventForm() {
     const form = document.getElementById('event-form');
     form?.reset();
     form?.querySelector('input[name="id"]')?.remove();
-    document.getElementById('event-modal-title').textContent = 'Add New Event';
+    document.getElementById('event-form-title').textContent = 'Add New Event';
     closeModal('event-modal');
 }
 
