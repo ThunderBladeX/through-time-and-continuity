@@ -881,3 +881,32 @@
     border-color: transparent var(--accent) transparent transparent;
     opacity: 0.4;
 }
+
+[data-character="damian-wayne"] .back-btn:hover {
+    background: linear-gradient(135deg, 
+        rgba(42, 90, 52, 0.3), 
+        rgba(42, 90, 52, 0.15));
+    color: var(--accent-tertiary);
+    border-color: var(--accent);
+    transform: translateX(-8px);
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(42, 90, 52, 0.2),
+        inset 0 1px 0 rgba(218, 225, 231, 0.1);
+    padding-left: 2.5rem;
+}
+
+[data-character="damian-wayne"] .back-btn:hover::before {
+    left: 12px;
+    color: var(--gold);
+    text-shadow: 0 0 10px rgba(201, 169, 97, 0.6);
+}
+
+[data-character="damian-wayne"] .back-btn:hover::after {
+    opacity: 0.8;
+    border-color: transparent var(--gold) transparent transparent;
+}
+
+[data-character="damian-wayne"] .back-btn:active {
+    transform: translateX(-6px) scale(0.98);
+}
