@@ -289,11 +289,6 @@
     opacity: 0.6;
 }
 
-[data-character="damian-wayne"] .section-header::after {
-    color: var(--accent);
-    opacity: 0.6;
-}
-
 [data-character="damian-wayne"] .section-header::before {
     animation: rotate 4s linear infinite;
 }
