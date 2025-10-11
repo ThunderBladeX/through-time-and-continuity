@@ -103,6 +103,12 @@ class Database:
     def supabase(self):
         """Provide access to the raw SupabaseClient for storage operations"""
         return supabase
+    
+    @staticmethod
+    def get_all_eras():
+        """Get all era definitions from the database"""
+        eras = supabase.query('eras', select='id,name')
+        return {era['id']: era['name'] for era in eras} if eras else {}
         
     @staticmethod
     def get_all_characters(family=None):
@@ -115,10 +121,21 @@ class Database:
     
     @staticmethod
     def get_character_by_id(character_id):
-        """Get a single character by ID"""
+        """Get a single character by ID, including their bio sections"""
         params = {'id': f'eq.{character_id}'}
         result = supabase.query('characters', params=params, select='*')
-        return result[0] if result else None
+        
+        if not result:
+            return None
+        
+        character = result[0]
+        
+        # Fetch associated bio sections from the character_bio table
+        bio_params = {'character_id': f'eq.{character_id}', 'order': 'display_order'}
+        bio_sections = supabase.query('character_bio', params=bio_params, select='*')
+        character['bio_sections'] = bio_sections if bio_sections else []
+        
+        return character
     
     @staticmethod
     def get_character_timeline(character_id):
@@ -217,7 +234,7 @@ class Database:
     def update_character(character_id, data):
         """Update a character"""
         params = {'id': f'eq.{character_id}'}
-        # FIX: Remove empty fields before updating to avoid type errors
+        # Remove empty fields before updating to avoid type errors
         clean_data = {k: v for k, v in data.items() if v}
         result = supabase.query('characters', method='PATCH', params=params, data=clean_data)
         return result[0] if result else None
