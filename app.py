@@ -195,6 +195,7 @@ def api_get_all_gallery_images():
 @login_required
 def api_create_character():
     data = request.form.to_dict()
+    print(f"Attempting to create character with data: {data}")
     if 'profile_image' in request.files:
         file = request.files['profile_image']
         if file and file.filename:
@@ -212,6 +213,7 @@ def api_create_character():
     if character:
         return jsonify(character), 201
     else:
+        print("db.create_character returned None. Character creation failed in database.py.")
         return jsonify({'error': 'Failed to create character in database'}), 500
 
 @app.route('/api/admin/characters/<int:character_id>', methods=['POST'])
