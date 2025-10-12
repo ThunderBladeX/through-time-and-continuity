@@ -546,7 +546,7 @@ function setupEditRelationshipForm() {
         const data = Object.fromEntries(formData.entries());
 
         try {
-            const response = await fetch('/admin/relationships', {
+            const response = await fetchAPI('/admin/relationships', {
                 method: 'PATCH', // Using PATCH for updates
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
