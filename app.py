@@ -205,17 +205,31 @@ def api_create_relationship():
     if not data or 'character_id' not in data or 'related_character_id' not in data:
         return jsonify({'error': 'Missing required fields'}), 400
 
-    # Create the inverse relationship as well for full mapping
-    relationship_a = db.create_relationship(data)
-    inverse_data = {
-        'character_id': data['related_character_id'],
-        'related_character_id': data['character_id'],
+    char_id_a = data.get('character_id')
+    char_id_b = data.get('related_character_id')
+    
+    # Data for the A -> B relationship
+    data_a_to_b = {
+        'character_id': char_id_a,
+        'related_character_id': char_id_b,
         'type': data.get('type'),
-        'status': data.get('status')
+        'status': data.get('status_a_to_b') or None  # Use the first status field
     }
-    db.create_relationship(inverse_data)
+    
+    # Data for the B -> A relationship (the inverse)
+    data_b_to_a = {
+        'character_id': char_id_b,
+        'related_character_id': char_id_a,
+        'type': data.get('type'), # Type is symmetrical
+        'status': data.get('status_b_to_a') or None # Use the second status field
+    }
+
+    # Create both rows in the database
+    relationship_a = db.create_relationship(data_a_to_b)
+    db.create_relationship(data_b_to_a)
 
     if relationship_a:
+        # Return the first one as confirmation
         return jsonify(relationship_a), 201
     else:
         return jsonify({'error': 'Failed to create relationship'}), 500
