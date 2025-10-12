@@ -86,10 +86,32 @@ function createCharacterCard(character) {
     return card;
 }
 
+async function buildFilterBar() {
+    const filterBar = document.querySelector('.filter-bar');
+    if (!filterBar) return;
+
+    try {
+        const families = await fetchAPI('/families');
+        const familyButtons = families.map(family => 
+            `<button class="filter-btn" data-family="${family.slug}">${family.name}</button>`
+        ).join('');
+
+        filterBar.innerHTML = `
+            <button class="filter-btn active" data-family="all">All</button>
+            ${familyButtons}
+        `;
+
+        // Now that the buttons exist, set up their click listeners
+        setupFilterListeners();
+    } catch (error) {
+        console.error("Failed to build filter bar:", error);
+    }
+}
+
 // Setup filter buttons
-function setupFilters() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    
+function setupFilterListeners() {
+    const filterButtons = document.querySelectorAll('.filter-bar .filter-btn');
+
     filterButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             // Update active state
@@ -146,7 +168,7 @@ function setupSearch() {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    setupFilters();
+    buildFilterBar();
     setupSearch();
     loadCharacters();
 });
