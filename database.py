@@ -352,7 +352,6 @@ class Database:
         supabase.query('relationships', method='DELETE', params=params_b)
         return True
 
-    @staticmethod
     def update_relationship_pair(self, data):
         """Update both sides of an asymmetrical relationship."""
         char1_id = data.get('character_id')
