@@ -93,13 +93,14 @@ function loadCharacterInfo() {
 function loadBioSections(sections) {
     const identitySection = document.getElementById('bio-identity');
     const additionalSections = document.getElementById('additional-bio-sections');
+    const familyName = (currentCharacter.families && currentCharacter.families.name) || currentCharacter.family;
     
     // Create identity grid
     const identityItems = [
         { label: 'Full Name', value: currentCharacter.full_name },
         { label: 'Alias', value: currentCharacter.nickname },
         { label: 'Birthday', value: currentCharacter.birthday ? formatDate(currentCharacter.birthday) : null },
-        { label: 'Family', value: currentCharacter.family }
+        { label: 'Family', value: familyName }
     ].filter(item => item.value);
     
     identitySection.innerHTML = identityItems.map(item => `
