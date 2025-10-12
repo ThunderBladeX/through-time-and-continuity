@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupCharacterForm();
     setupEventForm();
     setupRelationshipForm();
+    setupEditRelationshipForm();
     populateFamilyDropdown();
 });
 
@@ -197,15 +198,23 @@ async function loadRelationshipsAdmin() {
             list.innerHTML = '<p class="empty-state">No relationships yet</p>';
             return;
         }
-        list.innerHTML = relationships.map(rel => `
+        const uniquePairs = new Map();
+        relationships.forEach(rel => {
+            const charIds = [rel.character_id, rel.related_character_id].sort();
+            const pairKey = charIds.join('-');
+            if (!uniquePairs.has(pairKey)) {
+                uniquePairs.set(pairKey, rel);
+            }
+        });
+        list.innerHTML = Array.from(uniquePairs.values()).map(rel => `
             <div class="admin-item">
                 <div class="admin-item-info">
                     <h4>${rel.character.full_name} & ${rel.related_character.full_name}</h4>
                     <p>Type: ${rel.type} • Status: ${rel.status}</p>
                 </div>
                 <div class="admin-item-actions">
-                    <button class="btn-secondary btn-sm disabled" disabled>Edit</button>
-                    <button class="btn-danger btn-sm disabled" disabled>Delete</button>
+                    <button onclick="editRelationship(${rel.character_id}, ${rel.related_character_id})" class="btn-secondary btn-sm">Edit</button>
+                    <button onclick="deleteRelationship(${rel.character_id}, ${rel.related_character_id})" class="btn-danger btn-sm">Delete</button>
                 </div>
             </div>
         `).join('');
@@ -485,6 +494,68 @@ async function setupRelationshipForm() {
             loadRelationshipsAdmin();
         } catch (error) {
             console.error('Relationship form error:', error);
+            showNotification(error.message, 'error');
+        }
+    });
+}
+
+async function deleteRelationship(char1Id, char2Id) {
+    if (confirm('Are you sure you want to delete this relationship? This will remove it for both characters.')) {
+        try {
+            // We will create this new API endpoint next
+            await fetch(`/api/admin/relationships/${char1Id}/${char2Id}`, { method: 'DELETE' });
+            showNotification('Relationship deleted successfully', 'success');
+            loadRelationshipsAdmin();
+        } catch (error) {
+            showNotification('Failed to delete relationship', 'error');
+        }
+    }
+}
+
+async function editRelationship(char1Id, char2Id) {
+    try {
+        // We will create this new API endpoint next
+        const { a_to_b, b_to_a } = await fetchAPI(`/api/admin/relationships/${char1Id}/${char2Id}`);
+        const form = document.getElementById('edit-relationship-form');
+        
+        // Populate the form fields
+        form.elements['character_id'].value = char1Id;
+        form.elements['related_character_id'].value = char2Id;
+        form.elements['character_1_name'].value = a_to_b.character.full_name;
+        form.elements['character_2_name'].value = b_to_a.character.full_name;
+        form.elements['type'].value = a_to_b.type;
+        form.elements['status_a_to_b'].value = a_to_b.status || '';
+        form.elements['status_b_to_a'].value = b_to_a.status || '';
+        
+        // Update labels for clarity
+        document.getElementById('edit-status-a-to-b-label').textContent = `${a_to_b.character.full_name}'s Status towards ${b_to_a.character.full_name}`;
+        document.getElementById('edit-status-b-to-a-label').textContent = `${b_to_a.character.full_name}'s Status towards ${a_to_b.character.full_name}`;
+
+        openModal('edit-relationship-modal');
+    } catch (error) {
+        showNotification('Could not load relationship data.', 'error');
+    }
+}
+
+function setupEditRelationshipForm() {
+    const form = document.getElementById('edit-relationship-form');
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch('/api/admin/relationships', {
+                method: 'PATCH', // Using PATCH for updates
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            await handleFormSubmitResponse(response);
+            showNotification('Relationship updated successfully!', 'success');
+            closeModal('edit-relationship-modal');
+            loadRelationshipsAdmin();
+        } catch (error) {
             showNotification(error.message, 'error');
         }
     });
