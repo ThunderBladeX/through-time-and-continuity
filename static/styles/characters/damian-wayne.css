@@ -996,12 +996,12 @@
     }
     
     [data-character="damian-wayne"] .speech-bubble::before {
-        border-top-color: var(--accent);
+        border-bottom-color: var(--accent);
         filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
     }
     
     [data-character="damian-wayne"] .speech-bubble::after {
-        border-top-color: rgba(20, 26, 23, 0.95);
+        border-bottom-color: rgba(20, 26, 23, 0.95);
     }
     
     [data-character="damian-wayne"] .speech-bubble p {
@@ -1326,9 +1326,6 @@
     
     [data-character="damian-wayne"] .mobile-tab-content .relationship-card:active {
         transform: scale(0.97);
-        box-shadow: 
-            0 8px 8px rgba(0, 0, 0, 0.4),
-            0 0 8px rgba(42, 90, 52, 0.2);
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .relationship-avatar {
