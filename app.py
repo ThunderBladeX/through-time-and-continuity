@@ -198,6 +198,28 @@ def api_update_pending_edit(edit_id):
 def api_get_all_relationships():
     return jsonify(db.get_all_relationships())
 
+@app.route('/api/admin/relationships', methods=['POST'])
+@login_required
+def api_create_relationship():
+    data = request.get_json()
+    if not data or 'character_id' not in data or 'related_character_id' not in data:
+        return jsonify({'error': 'Missing required fields'}), 400
+
+    # Create the inverse relationship as well for full mapping
+    relationship_a = db.create_relationship(data)
+    inverse_data = {
+        'character_id': data['related_character_id'],
+        'related_character_id': data['character_id'],
+        'type': data.get('type'),
+        'status': data.get('status')
+    }
+    db.create_relationship(inverse_data)
+
+    if relationship_a:
+        return jsonify(relationship_a), 201
+    else:
+        return jsonify({'error': 'Failed to create relationship'}), 500
+
 @app.route('/api/admin/gallery', methods=['GET'])
 @login_required
 def api_get_all_gallery_images():
