@@ -193,12 +193,7 @@ def api_update_pending_edit(edit_id):
         return jsonify(edit) if edit else (jsonify({'error': 'Failed to deny edit'}), 400)
     return jsonify({'error': 'Invalid action'}), 400
 
-@app.route('/api/admin/relationships', methods=['GET'])
-@login_required
-def api_get_all_relationships():
-    return jsonify(db.get_all_relationships())
-
-@app.route('/api/admin/relationships', methods=['POST', 'PATCH'])
+@app.route('/api/admin/relationships', methods=['POST', 'PATCH', 'GET'])
 @login_required
 def api_manage_relationships():
     data = request.get_json()
@@ -236,6 +231,12 @@ def api_manage_relationships():
         if updated:
             return jsonify(updated), 200
         return jsonify({'error': 'Failed to update relationship'}), 500
+
+    elif request.method == 'GET':
+        all_relations = db.get_all_relationships()
+        if all_relations:
+            return jsonify(all_relations), 200
+        return jsonify({'error': 'Failed to load relationship'}), 500
 
 @app.route('/api/admin/relationships/<int:char1_id>/<int:char2_id>', methods=['GET', 'DELETE'])
 @login_required
