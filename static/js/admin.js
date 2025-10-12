@@ -193,7 +193,7 @@ async function loadRelationshipsAdmin() {
     list.innerHTML = '<div class="loading-state"><div class="spinner"></div></div>';
     
     try {
-        const relationships = await fetchAPI('/admin/relationships');
+        const relationships = await fetchAPI('/admin/relationships', { method: 'GET' });
         if (!relationships || relationships.length === 0) {
             list.innerHTML = '<p class="empty-state">No relationships yet</p>';
             return;
