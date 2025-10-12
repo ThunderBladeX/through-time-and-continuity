@@ -996,12 +996,12 @@
     }
     
     [data-character="damian-wayne"] .speech-bubble::before {
-        border-bottom-color: var(--accent);
         filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        border-bottom-color: rgba(20, 26, 23, 0.95);
     }
     
     [data-character="damian-wayne"] .speech-bubble::after {
-        border-bottom-color: rgba(20, 26, 23, 0.95);
+        border-bottom-color: var(--accent);
     }
     
     [data-character="damian-wayne"] .speech-bubble p {
