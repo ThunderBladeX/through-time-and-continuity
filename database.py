@@ -319,6 +319,56 @@ class Database:
             rel['related_character'] = char_map.get(rel['related_character_id'], {})
         return relationships
 
+    def get_relationship_pair(self, char1_id, char2_id):
+        """Get both sides of a relationship."""
+        # Get A -> B
+        params_a = {'character_id': f'eq.{char1_id}', 'related_character_id': f'eq.{char2_id}'}
+        a_to_b = supabase.query('relationships', params=params_a, select='*')
+        
+        # Get B -> A
+        params_b = {'character_id': f'eq.{char2_id}', 'related_character_id': f'eq.{char1_id}'}
+        b_to_a = supabase.query('relationships', params=params_b, select='*')
+
+        if not a_to_b or not b_to_a:
+            return None
+        
+        # Populate character names for the frontend form
+        char1 = self.get_character_by_id(char1_id)
+        char2 = self.get_character_by_id(char2_id)
+
+        a_to_b[0]['character'] = char1
+        b_to_a[0]['character'] = char2
+
+        return {'a_to_b': a_to_b[0], 'b_to_a': b_to_a[0]}
+
+    def delete_relationship_pair(self, char1_id, char2_id):
+        """Delete both sides of a relationship."""
+        # Delete A -> B
+        params_a = {'character_id': f'eq.{char1_id}', 'related_character_id': f'eq.{char2_id}'}
+        supabase.query('relationships', method='DELETE', params=params_a)
+
+        # Delete B -> A
+        params_b = {'character_id': f'eq.{char2_id}', 'related_character_id': f'eq.{char1_id}'}
+        supabase.query('relationships', method='DELETE', params=params_b)
+        return True
+
+    def update_relationship_pair(self, data):
+        """Update both sides of an asymmetrical relationship."""
+        char1_id = data.get('character_id')
+        char2_id = data.get('related_character_id')
+
+        # Update A -> B
+        params_a = {'character_id': f'eq.{char1_id}', 'related_character_id': f'eq.{char2_id}'}
+        data_a = {'type': data.get('type'), 'status': data.get('status_a_to_b') or None}
+        updated_a = supabase.query('relationships', method='PATCH', params=params_a, data=data_a)
+        
+        # Update B -> A
+        params_b = {'character_id': f'eq.{char2_id}', 'related_character_id': f'eq.{char1_id}'}
+        data_b = {'type': data.get('type'), 'status': data.get('status_b_to_a') or None}
+        supabase.query('relationships', method='PATCH', params=params_b, data=data_b)
+        
+        return updated_a[0] if updated_a else None
+
     @staticmethod
     def get_all_gallery_images():
         """Get all gallery images, populating character names"""
