@@ -1,5 +1,3 @@
-// Admin dashboard functionality
-
 document.addEventListener('DOMContentLoaded', () => {
     setupLogin();
     setupDashboard();
@@ -24,7 +22,6 @@ async function handleFormSubmitResponse(response, successType) {
     }
     throw error;
 }
-
 
 function setupLogin() {
     const loginForm = document.getElementById('login-form');
@@ -243,6 +240,21 @@ async function loadGalleryAdmin() {
     } catch (error) {
         console.error('Error loading gallery:', error);
         list.innerHTML = '<p class="error-state">Failed to load gallery</p>';
+    }
+}
+
+async function populateFamilyDropdown() {
+    const familySelect = document.querySelector('#character-form select[name="family"]');
+    if (!familySelect) return;
+
+    try {
+        const families = await fetchAPI('/families');
+        familySelect.innerHTML = families.map(family => 
+            `<option value="${family.slug}">${family.name}</option>`
+        ).join('');
+    } catch (error) {
+        console.error('Failed to load families for dropdown:', error);
+        familySelect.innerHTML = '<option value="">Error loading families</option>';
     }
 }
 
