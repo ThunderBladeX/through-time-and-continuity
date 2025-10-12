@@ -6,15 +6,7 @@
         width: 100% !important;
     }
 
-    /* Hide all desktop elements absolutely */
-    .desktop-view,
-    .profile-sidebar,
-    .profile-content,
-    .profile-nav,
-    .profile-image-container,
-    .profile-name-overlay,
-    .nav-tab,
-    .tab-content {
+    .desktop-view {
         display: none !important;
         visibility: hidden !important;
     }
