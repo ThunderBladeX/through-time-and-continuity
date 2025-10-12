@@ -503,7 +503,7 @@ async function deleteRelationship(char1Id, char2Id) {
     if (confirm('Are you sure you want to delete this relationship? This will remove it for both characters.')) {
         try {
             // We will create this new API endpoint next
-            await fetch(`/api/admin/relationships/${char1Id}/${char2Id}`, { method: 'DELETE' });
+            await fetch(`/admin/relationships/${char1Id}/${char2Id}`, { method: 'DELETE' });
             showNotification('Relationship deleted successfully', 'success');
             loadRelationshipsAdmin();
         } catch (error) {
@@ -515,7 +515,7 @@ async function deleteRelationship(char1Id, char2Id) {
 async function editRelationship(char1Id, char2Id) {
     try {
         // We will create this new API endpoint next
-        const { a_to_b, b_to_a } = await fetchAPI(`/api/admin/relationships/${char1Id}/${char2Id}`);
+        const { a_to_b, b_to_a } = await fetchAPI(`/admin/relationships/${char1Id}/${char2Id}`);
         const form = document.getElementById('edit-relationship-form');
         
         // Populate the form fields
@@ -546,7 +546,7 @@ function setupEditRelationshipForm() {
         const data = Object.fromEntries(formData.entries());
 
         try {
-            const response = await fetch('/api/admin/relationships', {
+            const response = await fetch('/admin/relationships', {
                 method: 'PATCH', // Using PATCH for updates
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
