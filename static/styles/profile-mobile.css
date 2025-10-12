@@ -18,6 +18,7 @@
         width: 100vw !important;
         min-height: 100vh;
         background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        overflow: hidden;
     }
     
     .profile-container {
