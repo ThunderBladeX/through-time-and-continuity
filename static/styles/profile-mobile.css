@@ -100,7 +100,7 @@
         position: absolute;
         top: -25px;
         left: 50%;
-        transform: translateX(50%);
+        transform: translateX(-50%);
         width: 0;
         height: 0;
         border-left: 20px solid transparent;
@@ -113,7 +113,7 @@
         position: absolute;
         top: -18px;
         left: 50%;
-        transform: translateX(50%);
+        transform: translateX(-50%);
         width: 0;
         height: 0;
         border-left: 16px solid transparent;
