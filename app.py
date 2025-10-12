@@ -150,6 +150,11 @@ def api_event_detail(event_id):
         event['full_description'] = md.markdown(event['full_description'])
     return jsonify(event)
 
+@app.route('/api/families')
+def api_families():
+    families = db.get_all_families()
+    return jsonify(families)
+
 @app.route('/api/login', methods=['POST'])
 def api_login():
     data = request.get_json()
