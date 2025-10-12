@@ -34,8 +34,14 @@ async function loadCharacter() {
         // Load character info
         loadCharacterInfo();
         
-        // Load bio sections (now implemented in backend)
+        // Load bio sections
         loadBioSections(currentCharacter.bio_sections || []);
+
+        const desktopOverviewContent = document.getElementById('overview-tab').innerHTML;
+        const mobileOverviewContainer = document.getElementById('mobile-overview');
+        if (mobileOverviewContainer) {
+            mobileOverviewContainer.innerHTML = desktopOverviewContent;
+        }
         
         // Load other tabs (lazy load on tab switch)
         setupTabs();
