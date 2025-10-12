@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - DC Timeline</title>
+    <title>DC Timeline</title>
     <link rel="stylesheet" href="/static/styles/global.css">
     <link rel="stylesheet" href="/static/styles/admin.css">
 </head>
@@ -76,7 +76,10 @@
 
                 <!-- Relationships Section -->
                 <section id="relationships-section" class="admin-section">
-                    <h2>Manage Relationships</h2>
+                    <div class="section-header">
+                        <h2>Manage Relationships</h2>
+                        <button class="btn-primary" onclick="openRelationshipForm()">+ New Relationship</button>
+                    </div>
                     <div id="relationships-admin-list">
                         <!-- Loaded via JS -->
                     </div>
@@ -268,6 +271,44 @@
                 <div class="form-actions">
                     <button type="button" class="btn-secondary" onclick="closeUploadForm()">Cancel</button>
                     <button type="submit" class="btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="relationship-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeRelationshipForm()">×</button>
+            <h2>Add New Relationship</h2>
+            <form id="relationship-form" class="admin-form">
+                <div class="form-group">
+                    <label>Character 1 *</label>
+                    <select name="character_id" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Character 2 *</label>
+                    <select name="related_character_id" required></select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Relationship Type *</label>
+                        <select name="type" required>
+                            <option value="platonic">Platonic</option>
+                            <option value="romantic">Romantic</option>
+                            <option value="familial">Familial</option>
+                            <option value="hate">Hate</option>
+                            <option value="complicated">Complicated</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status (Optional)</label>
+                        <input type="text" name="status" placeholder="e.g., Exes, Allies">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeRelationshipForm()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Relationship</button>
                 </div>
             </form>
         </div>
