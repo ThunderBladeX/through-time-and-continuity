@@ -234,21 +234,20 @@ def api_create_relationship():
     else:
         return jsonify({'error': 'Failed to create relationship'}), 500
 
-@app.route('/api/admin/relationships/<int:char1_id>/<int:char2_id>', methods=['GET'])
+@app.route('/api/admin/relationships/<int:char1_id>/<int:char2_id>', methods=['GET', 'DELETE'])
 @login_required
-def api_get_relationship_pair(char1_id, char2_id):
-    pair_data = db.get_relationship_pair(char1_id, char2_id)
-    if not pair_data:
-        return jsonify({'error': 'Relationship not found'}), 404
-    return jsonify(pair_data)
-
-@app.route('/api/admin/relationships/<int:char1_id>/<int:char2_id>', methods=['DELETE'])
-@login_required
-def api_delete_relationship(char1_id, char2_id):
-    success = db.delete_relationship_pair(char1_id, char2_id)
-    if success:
-        return jsonify({'success': True}), 200
-    return jsonify({'error': 'Failed to delete relationship'}), 500
+def api_manage_relationship_pair(char1_id, char2_id):
+    if request.method == 'GET':
+        pair_data = db.get_relationship_pair(char1_id, char2_id)
+        if not pair_data:
+            return jsonify({'error': 'Relationship not found'}), 404
+        return jsonify(pair_data)
+    
+    elif request.method == 'DELETE':
+        success = db.delete_relationship_pair(char1_id, char2_id)
+        if success:
+            return jsonify({'success': True}), 200
+        return jsonify({'error': 'Failed to delete relationship'}), 500
 
 @app.route('/api/admin/relationships', methods=['PATCH'])
 @login_required
