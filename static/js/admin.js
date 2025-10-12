@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupDashboard();
     setupCharacterForm();
     setupEventForm();
+    setupRelationshipForm();
     populateFamilyDropdown();
 });
 
@@ -338,7 +339,6 @@ async function denyEdit(id) {
     }
 }
 
-
 // Form handling functions
 function openCharacterForm() { openModal('character-modal'); }
 function closeCharacterForm() {
@@ -425,4 +425,53 @@ function populateForm(form, data) {
             else if (field.type !== 'file') field.value = data[key] || '';
         }
     }
+}
+
+function openRelationshipForm() { openModal('relationship-modal'); }
+function closeRelationshipForm() { closeModal('relationship-modal'); }
+
+async function setupRelationshipForm() {
+    const form = document.getElementById('relationship-form');
+    if (!form) return;
+
+    // Fetch all characters and populate both dropdowns
+    const char1Select = form.querySelector('select[name="character_id"]');
+    const char2Select = form.querySelector('select[name="related_character_id"]');
+    try {
+        const characters = await fetchAPI('/characters');
+        const options = characters.map(c => `<option value="${c.id}">${c.full_name}</option>`).join('');
+        char1Select.innerHTML = options;
+        char2Select.innerHTML = options;
+    } catch (e) {
+        console.error('Failed to load characters for relationship form');
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        // Basic validation to prevent self-relationship
+        if (data.character_id === data.related_character_id) {
+            showNotification('A character cannot be in a relationship with themselves.', 'error');
+            return;
+        }
+
+        try {
+            // Note: We are using a new API endpoint we will create next
+            const response = await fetch('/api/admin/relationships', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            await handleFormSubmitResponse(response);
+            showNotification('Relationship created successfully!', 'success');
+            closeRelationshipForm();
+            loadRelationshipsAdmin(); // Refresh the list
+        } catch (error) {
+            console.error('Relationship form error:', error);
+            showNotification(error.message, 'error');
+        }
+    });
 }
