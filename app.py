@@ -232,7 +232,7 @@ def api_manage_relationships():
             return jsonify(updated), 200
         return jsonify({'error': 'Failed to update relationship'}), 500
 
-    elif request.method == 'GET':
+    else:
         return jsonify(db.get_all_relationships()), 200
 
 @app.route('/api/admin/relationships/<int:char1_id>/<int:char2_id>', methods=['GET', 'DELETE'])
