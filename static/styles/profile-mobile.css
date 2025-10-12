@@ -17,7 +17,7 @@
         margin: 0 !important;
         width: 100vw !important;
         min-height: 100vh;
-        background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(59, 130, 246, 0.02) 100%);
+        background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
     }
     
     .profile-container {
@@ -93,27 +93,29 @@
     .speech-bubble::before {
         content: '';
         position: absolute;
-        top: -25px;
+        bottom: -20px;
         left: 50%;
         transform: translateX(-50%);
         width: 0;
         height: 0;
-        border-left: 20px solid transparent;
-        border-right: 20px solid transparent;
-        border-bottom: 25px solid var(--border);
+        border-left: 15px solid transparent;
+        border-right: 0 solid transparent;
+        border-top: 20px solid var(--bg-secondary);
+        z-index: 2;
     }
     
     .speech-bubble::after {
         content: '';
         position: absolute;
-        top: -18px;
+        bottom: -26px;
         left: 50%;
         transform: translateX(-50%);
         width: 0;
         height: 0;
         border-left: 16px solid transparent;
-        border-right: 16px solid transparent;
-        border-bottom: 20px solid var(--bg-secondary);
+        border-right: 0 solid transparent;
+        border-top: 22px solid var(--border);
+        z-index: 1;
     }
     
     .speech-bubble p {
