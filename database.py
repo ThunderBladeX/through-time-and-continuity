@@ -126,7 +126,7 @@ class Database:
     def get_character_by_id(character_id):
         """Get a single character by ID, including their bio sections"""
         params = {'id': f'eq.{character_id}'}
-        result = supabase.query('characters', params=params, select='*')
+        result = supabase.query('characters', params=params, select='*,families(name)')
         
         if not result:
             return None
