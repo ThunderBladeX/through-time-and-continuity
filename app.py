@@ -6,7 +6,7 @@ import os
 import markdown as md
 from datetime import datetime
 import json
-from database import db
+from database import db, Database
 import mimetypes
 
 app = Flask(__name__)
