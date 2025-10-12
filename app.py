@@ -198,41 +198,44 @@ def api_update_pending_edit(edit_id):
 def api_get_all_relationships():
     return jsonify(db.get_all_relationships())
 
-@app.route('/api/admin/relationships', methods=['POST'])
+@app.route('/api/admin/relationships', methods=['POST', 'PATCH'])
 @login_required
-def api_create_relationship():
+def api_manage_relationships():
     data = request.get_json()
     if not data or 'character_id' not in data or 'related_character_id' not in data:
         return jsonify({'error': 'Missing required fields'}), 400
 
-    char_id_a = data.get('character_id')
-    char_id_b = data.get('related_character_id')
-    
-    # Data for the A -> B relationship
-    data_a_to_b = {
-        'character_id': char_id_a,
-        'related_character_id': char_id_b,
-        'type': data.get('type'),
-        'status': data.get('status_a_to_b') or None  # Use the first status field
-    }
-    
-    # Data for the B -> A relationship (the inverse)
-    data_b_to_a = {
-        'character_id': char_id_b,
-        'related_character_id': char_id_a,
-        'type': data.get('type'), # Type is symmetrical
-        'status': data.get('status_b_to_a') or None # Use the second status field
-    }
+    if request.method == 'POST':
+        char_id_a = data.get('character_id')
+        char_id_b = data.get('related_character_id')
+        
+        data_a_to_b = {
+            'character_id': char_id_a,
+            'related_character_id': char_id_b,
+            'type': data.get('type'),
+            'status': data.get('status_a_to_b') or None
+        }
+        data_b_to_a = {
+            'character_id': char_id_b,
+            'related_character_id': char_id_a,
+            'type': data.get('type'),
+            'status': data.get('status_b_to_a') or None
+        }
 
-    # Create both rows in the database
-    relationship_a = db.create_relationship(data_a_to_b)
-    db.create_relationship(data_b_to_a)
+        relationship_a = db.create_relationship(data_a_to_b)
+        db.create_relationship(data_b_to_a)
 
-    if relationship_a:
-        # Return the first one as confirmation
-        return jsonify(relationship_a), 201
-    else:
-        return jsonify({'error': 'Failed to create relationship'}), 500
+        if relationship_a:
+            return jsonify(relationship_a), 201
+        else:
+            return jsonify({'error': 'Failed to create relationship'}), 500
+
+    elif request.method == 'PATCH':
+        # This is the logic from your old 'update' function
+        updated = db.update_relationship_pair(data)
+        if updated:
+            return jsonify(updated), 200
+        return jsonify({'error': 'Failed to update relationship'}), 500
 
 @app.route('/api/admin/relationships/<int:char1_id>/<int:char2_id>', methods=['GET', 'DELETE'])
 @login_required
@@ -248,15 +251,6 @@ def api_manage_relationship_pair(char1_id, char2_id):
         if success:
             return jsonify({'success': True}), 200
         return jsonify({'error': 'Failed to delete relationship'}), 500
-
-@app.route('/api/admin/relationships', methods=['PATCH'])
-@login_required
-def api_update_relationship():
-    data = request.get_json()
-    updated = db.update_relationship_pair(data)
-    if updated:
-        return jsonify(updated), 200
-    return jsonify({'error': 'Failed to update relationship'}), 500
 
 @app.route('/api/admin/gallery', methods=['GET'])
 @login_required
