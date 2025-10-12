@@ -490,8 +490,8 @@
     }
     
     .mobile-nav-tab.active {
-        background: rgba(59, 130, 246, 0.08) !important;
-        color: var(--accent) !important;
+        background: rgba(59, 130, 246, 0.08);
+        color: var(--accent);
     }
     
     .mobile-nav-tab.active::before {
