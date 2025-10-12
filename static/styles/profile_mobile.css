@@ -4,8 +4,8 @@
     }
 
     .mobile-content > * {
-    display: block !important;
-    width: 100% !important;
+       display: block !important;
+       width: 100% !important;
     }
 
     /* Hide all desktop elements absolutely */
@@ -19,6 +19,7 @@
     .tab-content {
         display: none !important;
         visibility: hidden !important;
+        grid-template-columns: 1fr;
     }
     
     .mobile-view {
