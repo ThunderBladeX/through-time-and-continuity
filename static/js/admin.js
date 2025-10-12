@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupDashboard();
     setupCharacterForm();
     setupEventForm();
+    populateFamilyDropdown();
 });
 
 // Helper to handle API responses and show proper errors
