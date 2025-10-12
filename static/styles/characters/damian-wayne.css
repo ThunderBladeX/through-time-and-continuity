@@ -950,7 +950,7 @@
             rgba(42, 90, 52, 0.2) 100%);
         border-radius: 0 0 0 0;
         box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.5),
+            0 8px 10px rgba(0, 0, 0, 0.5),
             inset 0 -1px 0 rgba(201, 169, 97, 0.3);
         position: relative;
         padding: var(--spacing-2xl) var(--spacing-md) var(--spacing-xl);
@@ -986,8 +986,8 @@
         box-shadow: 
             0 0 0 2px var(--bg-primary),
             0 0 0 4px var(--gold),
-            0 16px 40px rgba(0, 0, 0, 0.5),
-            inset 0 0 30px rgba(42, 90, 52, 0.2);
+            0 16px 10px rgba(0, 0, 0, 0.5),
+            inset 0 0 10px rgba(42, 90, 52, 0.2);
         position: relative;
     }
     
@@ -999,7 +999,7 @@
         transform: translateX(-50%);
         font-size: 1.5rem;
         color: var(--gold);
-        text-shadow: 0 0 20px rgba(201, 169, 97, 0.8);
+        text-shadow: 0 0 10px rgba(201, 169, 97, 0.8);
         z-index: 10;
     }
 
@@ -1011,9 +1011,8 @@
         border: 3px solid var(--accent);
         box-shadow: 
             6px 6px 0 rgba(42, 90, 52, 0.3),
-            0 8px 32px rgba(0, 0, 0, 0.4);
+            0 8px 10px rgba(0, 0, 0, 0.4);
         position: relative;
-        backdrop-filter: blur(10px);
     }
     
     [data-character="damian-wayne"] .speech-bubble::before {
@@ -1072,9 +1071,8 @@
             rgba(26, 36, 32, 0.98) 100%);
         border-top: 2px solid rgba(201, 169, 97, 0.2);
         box-shadow: 
-            0 -8px 32px rgba(0, 0, 0, 0.5),
+            0 -8px 10px rgba(0, 0, 0, 0.5),
             inset 0 1px 0 rgba(218, 225, 231, 0.05);
-        backdrop-filter: blur(15px);
     }
     
     [data-character="damian-wayne"] .mobile-nav::before {
@@ -1108,7 +1106,7 @@
     }
     
     [data-character="damian-wayne"] .mobile-nav-tab::after {
-        content: '◆';
+        content: '';
         position: absolute;
         top: 8px;
         left: 50%;
@@ -1183,7 +1181,7 @@
         border: 1px solid rgba(218, 225, 231, 0.15);
         border-radius: 0;
         box-shadow: 
-            0 4px 16px rgba(0, 0, 0, 0.3),
+            0 4px 10px rgba(0, 0, 0, 0.3),
             inset 0 1px 0 rgba(218, 225, 231, 0.05);
         clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
         position: relative;
@@ -1205,8 +1203,8 @@
     [data-character="damian-wayne"] .mobile-tab-content .bio-item:active {
         transform: scale(0.97);
         box-shadow: 
-            0 8px 24px rgba(0, 0, 0, 0.4),
-            0 0 30px rgba(42, 90, 52, 0.2);
+            0 8px 10px rgba(0, 0, 0, 0.4),
+            0 0 10px rgba(42, 90, 52, 0.2);
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .bio-label {
@@ -1253,7 +1251,7 @@
         width: 18px;
         height: 18px;
         left: 1.5px;
-        box-shadow: 0 0 15px rgba(42, 90, 52, 0.5);
+        box-shadow: 0 0 10px rgba(42, 90, 52, 0.5);
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .event-card {
@@ -1263,7 +1261,7 @@
         border: 1px solid rgba(218, 225, 231, 0.15);
         border-radius: 0;
         box-shadow: 
-            0 4px 16px rgba(0, 0, 0, 0.3),
+            0 4px 10px rgba(0, 0, 0, 0.3),
             inset 0 1px 0 rgba(218, 225, 231, 0.05);
         position: relative;
     }
@@ -1292,8 +1290,8 @@
     [data-character="damian-wayne"] .mobile-tab-content .event-card:active {
         transform: scale(0.97);
         box-shadow: 
-            0 8px 24px rgba(0, 0, 0, 0.4),
-            0 0 40px rgba(42, 90, 52, 0.2);
+            0 8px 10px rgba(0, 0, 0, 0.4),
+            0 0 10px rgba(42, 90, 52, 0.2);
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .event-date {
@@ -1328,7 +1326,7 @@
         border: 1px solid rgba(218, 225, 231, 0.15);
         border-radius: 0;
         box-shadow: 
-            0 4px 16px rgba(0, 0, 0, 0.3),
+            0 4px 10px rgba(0, 0, 0, 0.3),
             inset 0 1px 0 rgba(218, 225, 231, 0.05);
         clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
         position: relative;
@@ -1360,15 +1358,15 @@
     [data-character="damian-wayne"] .mobile-tab-content .relationship-card:active {
         transform: scale(0.97);
         box-shadow: 
-            0 8px 24px rgba(0, 0, 0, 0.4),
-            0 0 40px rgba(42, 90, 52, 0.2);
+            0 8px 10px rgba(0, 0, 0, 0.4),
+            0 0 10px rgba(42, 90, 52, 0.2);
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .relationship-avatar {
         border: 3px solid var(--accent);
         box-shadow: 
             0 0 0 2px var(--bg-primary),
-            0 4px 12px rgba(0, 0, 0, 0.4);
+            0 4px 10px rgba(0, 0, 0, 0.4);
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .relationship-name {
@@ -1389,8 +1387,8 @@
         border: 2px solid rgba(218, 225, 231, 0.1);
         border-radius: 0;
         box-shadow: 
-            0 8px 24px rgba(0, 0, 0, 0.3),
-            inset 0 0 20px rgba(42, 90, 52, 0.1);
+            0 8px 10px rgba(0, 0, 0, 0.3),
+            inset 0 0 10px rgba(42, 90, 52, 0.1);
         position: relative;
         overflow: hidden;
     }
@@ -1422,15 +1420,15 @@
         opacity: 0;
         z-index: 2;
         pointer-events: none;
-        text-shadow: 0 0 20px rgba(201, 169, 97, 0.8);
+        text-shadow: 0 0 10px rgba(201, 169, 97, 0.8);
         transition: opacity 0.3s ease;
     }
     
     [data-character="damian-wayne"] .mobile-gallery-item:active {
         transform: scale(0.98);
         box-shadow: 
-            0 12px 32px rgba(0, 0, 0, 0.5),
-            0 0 40px rgba(42, 90, 52, 0.3);
+            0 12px 10px rgba(0, 0, 0, 0.5),
+            0 0 10px rgba(42, 90, 52, 0.3);
         border-color: var(--accent);
     }
     
@@ -1449,7 +1447,7 @@
         border: 1px solid rgba(218, 225, 231, 0.15);
         border-radius: 0;
         box-shadow: 
-            0 4px 16px rgba(0, 0, 0, 0.3),
+            0 4px 10px rgba(0, 0, 0, 0.3),
             inset 0 1px 0 rgba(218, 225, 231, 0.05);
     }
     
@@ -1472,8 +1470,8 @@
         border-color: var(--gold);
         color: var(--accent-tertiary);
         box-shadow: 
-            0 4px 12px rgba(0, 0, 0, 0.4),
-            0 0 20px rgba(42, 90, 52, 0.3);
+            0 4px 10px rgba(0, 0, 0, 0.4),
+            0 0 10px rgba(42, 90, 52, 0.3);
     }
     
     [data-character="damian-wayne"] .page-btn:disabled {
@@ -1574,7 +1572,7 @@
         padding: var(--spacing-lg);
         box-shadow: 
             4px 4px 0 rgba(42, 90, 52, 0.3),
-            0 6px 24px rgba(0, 0, 0, 0.4);
+            0 6px 10px rgba(0, 0, 0, 0.4);
     }
     
     [data-character="damian-wayne"] .speech-bubble p {
