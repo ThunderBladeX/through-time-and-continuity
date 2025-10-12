@@ -233,7 +233,7 @@ def api_manage_relationships():
         return jsonify({'error': 'Failed to update relationship'}), 500
 
     elif request.method == 'GET':
-        all_relations = db.get_all_relationships()
+        all_relations = db.get_all_relationships(data)
         if all_relations:
             return jsonify(all_relations), 200
         return jsonify({'error': 'Failed to load relationship'}), 500
