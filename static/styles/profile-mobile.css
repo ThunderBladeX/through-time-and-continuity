@@ -1,11 +1,6 @@
 @media (max-width: 768px) {
     * {box-sizing: border-box;}
 
-    .mobile-content > * {
-        display: block !important;
-        width: 100% !important;
-    }
-
     .desktop-view {
         display: none !important;
         visibility: hidden !important;
