@@ -17,8 +17,6 @@
     .tab-content {
         display: none !important;
         visibility: hidden !important;
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
     }
     
     .mobile-view {
@@ -27,13 +25,6 @@
         width: 100%;
     }
 
-   .profile-container.mobile-view {
-        display: block !important;
-        width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-   }
-    
     .profile-page {
         padding: 0 !important;
         margin: 0 !important;
