@@ -1087,9 +1087,7 @@
     }
     
     [data-character="damian-wayne"] .mobile-nav-tab.active {
-        background: linear-gradient(180deg, 
-            rgba(42, 90, 52, 0.2) 0%, 
-            rgba(42, 90, 52, 0.05) 100%);
+        background: none;
         color: var(--gold);
     }
     
@@ -1294,9 +1292,6 @@
             rgba(26, 36, 32, 0.9) 100%);
         border: 1px solid rgba(218, 225, 231, 0.15);
         border-radius: 0;
-        box-shadow: 
-            0 4px 8px rgba(0, 0, 0, 0.3),
-            inset 0 1px 0 rgba(218, 225, 231, 0.05);
         clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
         position: relative;
     }
@@ -1330,9 +1325,6 @@
     
     [data-character="damian-wayne"] .mobile-tab-content .relationship-avatar {
         border: 3px solid var(--accent);
-        box-shadow: 
-            0 0 0 2px var(--bg-primary),
-            0 4px 8px rgba(0, 0, 0, 0.4);
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .relationship-name {
