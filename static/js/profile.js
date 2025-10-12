@@ -328,7 +328,7 @@ async function loadRelationships() {
                      onerror="this.src='/static/images/default-avatar.jpg'">
                 <div class="relationship-info">
                     <div class="relationship-name">${rel.related_character_name || 'Unknown'}</div>
-                    <div class="relationship-status">${rel.status ? '(' + rel.status + ')' : ''}</div>
+                    <div class="relationship-status">${rel.status ? '•' + rel.status : ''}</div>
                 </div>
             </div>
         `).join('');
