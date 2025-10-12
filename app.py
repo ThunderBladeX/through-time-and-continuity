@@ -231,6 +231,7 @@ def api_manage_relationships():
             return jsonify({'error': 'Failed to create relationship'}), 500
 
     elif request.method == 'PATCH':
+        db = Database()
         updated = db.update_relationship_pair(data)
         if updated:
             return jsonify(updated), 200
