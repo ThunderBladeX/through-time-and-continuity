@@ -434,9 +434,11 @@ async function setupRelationshipForm() {
     const form = document.getElementById('relationship-form');
     if (!form) return;
 
-    // Fetch all characters and populate both dropdowns
     const char1Select = form.querySelector('select[name="character_id"]');
     const char2Select = form.querySelector('select[name="related_character_id"]');
+    const statusALabel = document.getElementById('status-a-to-b-label');
+    const statusBLabel = document.getElementById('status-b-to-a-label');
+
     try {
         const characters = await fetchAPI('/characters');
         const options = characters.map(c => `<option value="${c.id}">${c.full_name}</option>`).join('');
@@ -446,19 +448,29 @@ async function setupRelationshipForm() {
         console.error('Failed to load characters for relationship form');
     }
 
+    function updateStatusLabels() {
+        const char1Name = char1Select.options[char1Select.selectedIndex]?.text || 'Character 1';
+        const char2Name = char2Select.options[char2Select.selectedIndex]?.text || 'Character 2';
+        statusALabel.textContent = `${char1Name}'s Status towards ${char2Name}`;
+        statusBLabel.textContent = `${char2Name}'s Status towards ${char1Name}`;
+    }
+
+    char1Select.addEventListener('change', updateStatusLabels);
+    char2Select.addEventListener('change', updateStatusLabels);
+    // Initial call to set the labels correctly on load
+    updateStatusLabels();
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
-        // Basic validation to prevent self-relationship
         if (data.character_id === data.related_character_id) {
             showNotification('A character cannot be in a relationship with themselves.', 'error');
             return;
         }
 
         try {
-            // Note: We are using a new API endpoint we will create next
             const response = await fetch('/api/admin/relationships', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -468,7 +480,9 @@ async function setupRelationshipForm() {
             await handleFormSubmitResponse(response);
             showNotification('Relationship created successfully!', 'success');
             closeRelationshipForm();
-            loadRelationshipsAdmin(); // Refresh the list
+            form.reset(); // Reset form for next use
+            updateStatusLabels(); // Reset labels
+            loadRelationshipsAdmin();
         } catch (error) {
             console.error('Relationship form error:', error);
             showNotification(error.message, 'error');
