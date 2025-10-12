@@ -65,8 +65,10 @@ function createCharacterCard(character) {
     };
     
     // Use correct field names from database
-    const displayName = character.full_name || character.name || 'Unknown';
+    const displayName = character.name || character.full_name || 'Unknown';
     const imageSrc = character.profile_image || '/static/images/default-avatar.jpg';
+    // Use the nested family name, with a fallback to the slug
+    const familyName = (character.families && character.families.name) || character.family;
     
     card.innerHTML = `
         <img src="${imageSrc}" 
@@ -79,7 +81,7 @@ function createCharacterCard(character) {
             ${character.nickname ? `
                 <p class="character-card-nickname">${character.nickname}</p>
             ` : ''}
-            <span class="character-card-family">${character.family || 'Other'}</span>
+            <span class="character-card-family">${familyName || 'Other'}</span>
         </div>
     `;
     
