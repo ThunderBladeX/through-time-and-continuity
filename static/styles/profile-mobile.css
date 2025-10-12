@@ -22,7 +22,7 @@
         margin: 0 !important;
         width: 100vw !important;
         min-height: 100vh;
-        background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(59, 130, 246, 0.02) 100%);
+        background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(var(--accent-rgb), 0.02) 100%);
     }
     
     .profile-container {
@@ -35,7 +35,7 @@
     /* ===== MOBILE HEADER ===== */
     .mobile-header {
         text-align: center;
-        background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(59, 130, 246, 0.1) 100%);
+        background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(var(--accent-rgb), 0.1) 100%);
         padding: var(--spacing-2xl) var(--spacing-md) var(--spacing-xl);
         margin: 0 !important;
         width: 100%;
@@ -61,7 +61,7 @@
         border-radius: 50%;
         object-fit: cover;
         margin: 0 auto var(--spacing-xl);
-        border: 6px solid var(--accent);
+        border: 6px solid white;
         box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
         transition: transform var(--transition-medium);
         will-change: transform;
@@ -74,11 +74,11 @@
     /* ===== SPEECH BUBBLE ===== */
     .speech-bubble {
         position: relative;
-        background: var(--bg-secondary);
-        color: var(--text-primary);
+        background: linear-gradient(135deg, white 0%, rgba(255, 255, 255, 0.98) 100%);
+        color: #000;
         padding: var(--spacing-xl);
         border-radius: 16px;
-        border: 2px solid var(--border);
+        border: 4px solid #000;
         margin: var(--spacing-md) var(--spacing-md) var(--spacing-2xl) !important;
         box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.25);
         animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -105,7 +105,7 @@
         height: 0;
         border-left: 20px solid transparent;
         border-right: 20px solid transparent;
-        border-bottom: 25px solid var(--border);
+        border-bottom: 25px solid #000;
     }
     
     .speech-bubble::after {
@@ -118,7 +118,7 @@
         height: 0;
         border-left: 16px solid transparent;
         border-right: 16px solid transparent;
-        border-bottom: 20px solid var(--bg-secondary);
+        border-bottom: 20px solid white;
     }
     
     .speech-bubble p {
@@ -129,7 +129,6 @@
         margin: 0;
         text-align: center;
         letter-spacing: 0.5px;
-        color: var(--text-primary);
     }
     
     #mobile-character-name {
@@ -137,7 +136,6 @@
         margin: var(--spacing-xl) 0 var(--spacing-md) !important;
         font-weight: 800;
         letter-spacing: -1px;
-        color: var(--text-primary);
     }
     
     /* ===== MOBILE CONTENT AREA ===== */
@@ -176,7 +174,6 @@
         padding: 0 !important;
         border: none !important;
         letter-spacing: -0.5px;
-        color: var(--text-primary);
     }
     
     .section-header::after {
@@ -192,19 +189,17 @@
     
     .mobile-tab-content .bio-item {
         display: block !important;
-        background: var(--bg-secondary) !important;
+        background: white !important;
         border: 1px solid var(--border) !important;
         border-radius: 16px !important;
         padding: var(--spacing-lg) !important;
         transition: all var(--transition-fast);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        color: var(--text-primary) !important;
     }
     
     .mobile-tab-content .bio-item:active {
         transform: scale(0.98);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        border-color: var(--accent);
     }
     
     .bio-label {
@@ -231,7 +226,6 @@
     .mobile-tab-content .timeline-container::before {
         left: 10px !important;
         width: 2px !important;
-        background: linear-gradient(180deg, var(--accent), var(--border) 50%, transparent) !important;
     }
     
     .mobile-tab-content .timeline-event {
@@ -244,26 +238,21 @@
         left: 2px !important;
         width: 16px !important;
         height: 16px !important;
-        background: var(--bg-primary) !important;
-        border: 3px solid var(--accent) !important;
-        border-radius: 50% !important;
     }
     
     .mobile-tab-content .event-card {
         display: block !important;
         padding: var(--spacing-lg) !important;
-        background: var(--bg-secondary) !important;
+        background: white !important;
         border: 1px solid var(--border) !important;
         border-radius: 16px !important;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         transition: all var(--transition-fast);
-        color: var(--text-primary) !important;
     }
     
     .mobile-tab-content .event-card:active {
         transform: scale(0.98);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        border-color: var(--accent);
     }
     
     .mobile-tab-content .event-card::before {
@@ -282,7 +271,6 @@
         font-weight: 700 !important;
         letter-spacing: -0.3px;
         margin: 0 !important;
-        color: var(--text-primary) !important;
     }
     
     .event-date {
@@ -298,9 +286,9 @@
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.6px;
-        background: rgba(59, 130, 246, 0.15);
+        background: rgba(var(--accent-rgb), 0.15);
         color: var(--accent);
-        border: 1px solid rgba(59, 130, 246, 0.3);
+        border: none;
         align-self: flex-start;
     }
     
@@ -309,14 +297,13 @@
         display: flex !important;
         padding: var(--spacing-lg) !important;
         gap: var(--spacing-md) !important;
-        background: var(--bg-secondary) !important;
+        background: white !important;
         border: 1px solid var(--border) !important;
         border-radius: 16px !important;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         transition: all var(--transition-fast);
         margin-bottom: var(--spacing-md);
         align-items: center;
-        color: var(--text-primary) !important;
     }
     
     .mobile-tab-content .relationship-card:active {
@@ -336,7 +323,6 @@
         font-size: 1.1rem;
         font-weight: 700;
         letter-spacing: -0.2px;
-        color: var(--text-primary);
     }
     
     .relationship-status {
@@ -389,8 +375,7 @@
         align-items: center;
         padding: var(--spacing-lg);
         gap: var(--spacing-md);
-        background: var(--bg-secondary);
-        border: 1px solid var(--border);
+        background: white;
         border-radius: 12px;
         margin: var(--spacing-lg) 0;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -399,7 +384,7 @@
     .page-btn {
         flex: 1;
         padding: var(--spacing-md);
-        background: var(--bg-tertiary);
+        background: var(--bg-secondary);
         border: 1px solid var(--border);
         border-radius: 12px;
         color: var(--text-primary);
@@ -436,7 +421,7 @@
         grid-template-columns: repeat(4, 1fr) !important;
         gap: 0 !important;
         background: var(--bg-secondary) !important;
-        border: 1px solid var(--border) !important;
+        border: none !important;
         border-radius: 0 !important;
         padding: 0 !important;
         margin: 0 !important;
@@ -484,7 +469,7 @@
     }
     
     .mobile-nav-tab.active {
-        background: rgba(59, 130, 246, 0.08) !important;
+        background: rgba(var(--accent-rgb), 0.08) !important;
         color: var(--accent) !important;
     }
     
@@ -502,7 +487,6 @@
         max-width: 100% !important;
         display: flex !important;
         flex-direction: column !important;
-        background: var(--bg-primary) !important;
     }
     
     .modal-header {
@@ -514,14 +498,12 @@
     .modal-header h2 {
         font-size: 1.5rem;
         letter-spacing: -0.3px;
-        color: var(--text-primary);
     }
     
     .modal-body {
         flex: 1;
         overflow-y: auto;
         padding: var(--spacing-lg) var(--spacing-md);
-        background: var(--bg-primary);
     }
     
     .event-images {
@@ -568,33 +550,27 @@
         width: 150px;
         height: 150px;
         margin-bottom: var(--spacing-lg);
-        border: 5px solid var(--accent);
     }
     
     .speech-bubble {
         margin: var(--spacing-md) var(--spacing-sm) var(--spacing-2xl) !important;
         padding: var(--spacing-lg);
-        border: 2px solid var(--border);
+        border: 3px solid #000;
         border-radius: 14px;
-        background: var(--bg-secondary);
-        color: var(--text-primary);
     }
     
     .speech-bubble p {
         font-size: 1rem;
         line-height: 1.5;
-        color: var(--text-primary);
     }
     
     #mobile-character-name {
         font-size: 1.8rem;
-        color: var(--text-primary);
     }
     
     .section-header {
         font-size: 1.4rem;
         margin: var(--spacing-md) 0 !important;
-        color: var(--text-primary);
     }
     
     .mobile-nav {
@@ -604,11 +580,6 @@
     .mobile-nav-tab {
         font-size: 0.65rem !important;
         padding: var(--spacing-sm) !important;
-    }
-    
-    .mobile-nav-tab.active {
-        background: rgba(59, 130, 246, 0.08) !important;
-        color: var(--accent) !important;
     }
     
     .mobile-content {
@@ -625,9 +596,6 @@
     .mobile-tab-content .relationship-card {
         padding: var(--spacing-md) !important;
         border-radius: 12px;
-        background: var(--bg-secondary) !important;
-        border: 1px solid var(--border) !important;
-        color: var(--text-primary) !important;
     }
     
     .mobile-tab-content .relationship-avatar {
@@ -642,30 +610,22 @@
     .gallery-pagination {
         padding: var(--spacing-md);
         margin: var(--spacing-md) 0;
-        background: var(--bg-secondary);
-        border: 1px solid var(--border);
     }
     
     .page-btn {
         padding: var(--spacing-sm) var(--spacing-md);
         font-size: 0.85rem;
-        background: var(--bg-tertiary);
-        border: 1px solid var(--border);
-        color: var(--text-primary);
     }
     
     .bio-value {
         font-size: 1.15rem;
-        color: var(--text-primary);
     }
     
     .mobile-tab-content .event-title {
         font-size: 1.1rem !important;
-        color: var(--text-primary) !important;
     }
     
     .mobile-tab-content .relationship-name {
         font-size: 1rem;
-        color: var(--text-primary);
     }
 }
