@@ -120,7 +120,7 @@ class Database:
         if family and family != 'all':
             params['family'] = f'eq.{family}'
         
-        return supabase.query('characters', params=params, select='*')
+        return supabase.query('characters', params=params, select='*,families(name)')
     
     @staticmethod
     def get_character_by_id(character_id):
@@ -345,5 +345,10 @@ class Database:
         data = {'status': 'denied'}
         result = supabase.query('pending_edits', method='PATCH', params=params, data=data)
         return result[0] if result else None
+
+    @staticmethod
+    def get_all_families():
+        """Get all family definitions from the database"""
+        return supabase.query('families', params={'order': 'name'}, select='*')
 
 db = Database()
