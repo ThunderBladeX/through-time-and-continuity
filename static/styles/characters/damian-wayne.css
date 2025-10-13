@@ -942,7 +942,7 @@
             rgba(42, 90, 52, 0.2) 100%);
         border-radius: 0 0 0 0;
         box-shadow: 
-            0 8px 0 rgba(0, 0, 0, 0.5), /* Blur removed (was 8px) */
+            0 8px 0 rgba(0, 0, 0, 0.5),
             inset 0 -1px 0 rgba(201, 169, 97, 0.3);
         position: relative;
         padding: var(--spacing-2xl) var(--spacing-md) var(--spacing-xl);
@@ -978,8 +978,8 @@
         box-shadow: 
             0 0 0 2px var(--bg-primary),
             0 0 0 4px var(--gold),
-            0 16px 0 rgba(0, 0, 0, 0.5), /* Blur removed (was 8px) */
-            inset 0 0 0 rgba(42, 90, 52, 0.2); /* Blur removed (was 8px) */
+            0 16px 0 rgba(0, 0, 0, 0.5),
+            inset 1px 1px 0 rgba(42, 90, 52, 0.2);
         position: relative;
     }
 
@@ -991,12 +991,12 @@
         border: 3px solid var(--accent);
         box-shadow: 
             6px 6px 0 rgba(42, 90, 52, 0.3),
-            0 8px 0 rgba(0, 0, 0, 0.4); /* Blur removed (was 8px) */
+            0 8px 0 rgba(0, 0, 0, 0.4);
         position: relative;
     }
     
     [data-character="damian-wayne"] .speech-bubble::before {
-        /* filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)); */ /* Removed backdrop-filter/filter */
+        filter: drop-shadow(0 4px 0px rgba(0, 0, 0, 0.3));
     }
     
     [data-character="damian-wayne"] .speech-bubble::after {
@@ -1050,7 +1050,7 @@
             rgba(26, 36, 32, 0.98) 100%);
         border-top: 2px solid rgba(201, 169, 97, 0.2);
         box-shadow: 
-            0 -8px 0 rgba(0, 0, 0, 0.5), /* Blur removed (was 8px) */
+            0 -8px 0 rgba(0, 0, 0, 0.5),
             inset 0 1px 0 rgba(218, 225, 231, 0.05);
     }
 
@@ -1070,7 +1070,7 @@
     [data-character="damian-wayne"] .mobile-nav-tab::before {
         background: linear-gradient(90deg, var(--accent), var(--gold));
         height: 3px;
-        box-shadow: 0 0 0 rgba(201, 169, 97, 0.5); /* Blur removed (was 8px) */
+        box-shadow: 1px 1px 0 rgba(201, 169, 97, 0.5);
     }
     
     [data-character="damian-wayne"] .mobile-nav-tab::after {
@@ -1147,7 +1147,7 @@
         border: 1px solid rgba(218, 225, 231, 0.15);
         border-radius: 0;
         box-shadow: 
-            0 4px 0 rgba(0, 0, 0, 0.3), /* Blur removed (was 8px) */
+            0 4px 0 rgba(0, 0, 0, 0.3),
             inset 0 1px 0 rgba(218, 225, 231, 0.05);
         clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
         position: relative;
@@ -1169,8 +1169,8 @@
     [data-character="damian-wayne"] .mobile-tab-content .bio-item:active {
         transform: scale(0.97);
         box-shadow: 
-            0 8px 0 rgba(0, 0, 0, 0.4), /* Blur removed (was 8px) */
-            0 0 0 rgba(42, 90, 52, 0.2); /* Blur removed (was 8px) */
+            0 8px 0 rgba(0, 0, 0, 0.4),
+            1px 1px 0 rgba(42, 90, 52, 0.2);
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .bio-label {
@@ -1204,7 +1204,7 @@
             rgba(42, 90, 52, 0.3) 70%, 
             transparent 100%);
         width: 3px;
-        box-shadow: 0 0 0 rgba(42, 90, 52, 0.5); /* Blur removed (was 8px) */
+        box-shadow: 1px 1px 0 rgba(42, 90, 52, 0.5);
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .timeline-event::before {
@@ -1217,7 +1217,7 @@
         width: 18px;
         height: 18px;
         left: 1.5px;
-        box-shadow: 0 0 0 rgba(42, 90, 52, 0.5); /* Blur removed (was 8px) */
+        box-shadow: 1px 1px 0 rgba(42, 90, 52, 0.5);
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .event-card {
@@ -1227,7 +1227,7 @@
         border: 1px solid rgba(218, 225, 231, 0.15);
         border-radius: 0;
         box-shadow: 
-            0 4px 0 rgba(0, 0, 0, 0.3), /* Blur removed (was 8px) */
+            0 4px 0 rgba(0, 0, 0, 0.3),
             inset 0 1px 0 rgba(218, 225, 231, 0.05);
         position: relative;
     }
@@ -1240,7 +1240,7 @@
         width: 4px;
         height: 100%;
         background: linear-gradient(180deg, var(--gold), var(--accent));
-        box-shadow: 0 0 0 rgba(42, 90, 52, 0.5); /* Blur removed (was 8px) */
+        box-shadow: 1px 1px 0 rgba(42, 90, 52, 0.5);
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .event-card::after {
@@ -1256,8 +1256,8 @@
     [data-character="damian-wayne"] .mobile-tab-content .event-card:active {
         transform: scale(0.97);
         box-shadow: 
-            0 8px 0 rgba(0, 0, 0, 0.4), /* Blur removed (was 8px) */
-            0 0 0 rgba(42, 90, 52, 0.2); /* Blur removed (was 8px) */
+            0 8px 0 rgba(0, 0, 0, 0.4),
+            1px 1px 0 rgba(42, 90, 52, 0.2);
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .event-date {
@@ -1272,7 +1272,7 @@
         border: 1px solid rgba(201, 169, 97, 0.4);
         color: var(--gold);
         font-family: 'Rajdhani', sans-serif, var(--font-sans);
-        text-shadow: 0 0 0 rgba(201, 169, 97, 0.3); /* Blur removed (was 8px) */
+        text-shadow: 1px 1px 0 rgba(201, 169, 97, 0.3);
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .event-title {
@@ -1318,10 +1318,11 @@
         opacity: 0.05;
     }
 
-    [data-character="damian-wayne"].mobile-tab-content.relationship-card:hover,
-    [data-character="damian-wayne"].mobile-tab-content.relationship-avatar:hover,
-    [data-character="damian-wayne"].mobile-tab-content.relationship-card:active,
-    [data-character="damian-wayne"].mobile-tab-content.relationship-avatar:active{box-shadow:none}
+    [data-character="damian-wayne"] .mobile-tab-content.relationship-card:hover,
+    [data-character="damian-wayne"] .mobile-tab-content.relationship-avatar:hover,
+    [data-character="damian-wayne"] .mobile-tab-content.relationship-card:active,
+    [data-character="damian-wayne"] .mobile-tab-content.relationship-avatar:active,
+    [data-character="damian-wayne"] .era-badge{box-shadow:none}
     
     [data-character="damian-wayne"] .mobile-tab-content .relationship-card:active {
         transform: scale(0.97);
@@ -1349,8 +1350,8 @@
         border: 2px solid rgba(218, 225, 231, 0.1);
         border-radius: 0;
         box-shadow: 
-            0 8px 0 rgba(0, 0, 0, 0.3), /* Blur removed (was 8px) */
-            inset 0 0 0 rgba(42, 90, 52, 0.1); /* Blur removed (was 8px) */
+            0 8px 0 rgba(0, 0, 0, 0.3),
+            inset 1px 1px 0 rgba(42, 90, 52, 0.1);
         position: relative;
         overflow: hidden;
     }
@@ -1382,15 +1383,15 @@
         opacity: 0;
         z-index: 2;
         pointer-events: none;
-        text-shadow: 0 0 0 rgba(201, 169, 97, 0.8); /* Blur removed (was 8px) */
+        text-shadow: 1px 1px 0 rgba(201, 169, 97, 0.8);
         transition: opacity 0.3s ease;
     }
     
     [data-character="damian-wayne"] .mobile-gallery-item:active {
         transform: scale(0.98);
         box-shadow: 
-            0 12px 0 rgba(0, 0, 0, 0.5), /* Blur removed (was 8px) */
-            0 0 0 rgba(42, 90, 52, 0.3); /* Blur removed (was 8px) */
+            0 12px 0 rgba(0, 0, 0, 0.5),
+            1px 1px 0 rgba(42, 90, 52, 0.3);
         border-color: var(--accent);
     }
     
@@ -1409,7 +1410,7 @@
         border: 1px solid rgba(218, 225, 231, 0.15);
         border-radius: 0;
         box-shadow: 
-            0 4px 0 rgba(0, 0, 0, 0.3), /* Blur removed (was 8px) */
+            0 4px 0 rgba(0, 0, 0, 0.3),
             inset 0 1px 0 rgba(218, 225, 231, 0.05);
     }
     
@@ -1424,7 +1425,7 @@
         font-weight: 700;
         letter-spacing: 1px;
         text-transform: uppercase;
-        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2); /* Blur removed (was 8px) */
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
     }
     
     [data-character="damian-wayne"] .page-btn:active:not(:disabled) {
@@ -1432,8 +1433,8 @@
         border-color: var(--gold);
         color: var(--accent-tertiary);
         box-shadow: 
-            0 4px 0 rgba(0, 0, 0, 0.4), /* Blur removed (was 8px) */
-            0 0 0 rgba(42, 90, 52, 0.3); /* Blur removed (was 8px) */
+            0 4px 0 rgba(0, 0, 0, 0.4),
+            1px 1px 0 rgba(42, 90, 52, 0.3);
     }
     
     [data-character="damian-wayne"] .page-btn:disabled {
@@ -1534,7 +1535,7 @@
         padding: var(--spacing-lg);
         box-shadow: 
             4px 4px 0 rgba(42, 90, 52, 0.3),
-            0 6px 0 rgba(0, 0, 0, 0.4); /* Blur removed (was 8px) */
+            0 6px 0 rgba(0, 0, 0, 0.4);
     }
     
     [data-character="damian-wayne"] .speech-bubble p {
