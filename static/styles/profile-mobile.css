@@ -267,9 +267,10 @@ font-weight: 700;
 text-transform: uppercase;
 letter-spacing: 0.6px;
 background: rgba(59, 130, 246, 0.15);
-color: var(--accent);
+color: var(--text-primary);
 border: 1px solid rgba(59, 130, 246, 0.3);
 align-self: flex-start;
+box-shadow: none;
 }
 .mobile-tab-content .relationship-card {
 display: flex;
