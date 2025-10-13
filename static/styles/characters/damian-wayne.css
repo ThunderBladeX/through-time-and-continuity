@@ -696,9 +696,9 @@
     content: '◆';
     position: absolute;
     color: var(--accent);
-    font-size: 0.8rem;
-    left: 2px;
-    top: 5px;
+    font-size: 0.9rem;
+    left:2px;
+    top:10px;
 }
 
 [data-character="damian-wayne"] .event-description h3 {
@@ -1486,7 +1486,7 @@
         color: var(--accent);
         font-size:.8rem;
         left:-3px;
-        top:5px;
+        top:8px;
     }
     
     [data-character="damian-wayne"] .event-description h3 {
