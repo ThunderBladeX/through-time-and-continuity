@@ -475,6 +475,7 @@ highlightStyle.textContent = `
         0%, 100% { box-shadow: var(--shadow-lg); }
         50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.8); }
     }
+    @media (max-width:768px){@keyframes highlight{display:none;visibility:hidden}}
 `;
 document.head.appendChild(highlightStyle);
 
