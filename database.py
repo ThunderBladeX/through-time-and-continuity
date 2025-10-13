@@ -247,9 +247,42 @@ class Database:
         # Delete other associated data
         supabase.query('gallery_images', method='DELETE', params={'character_id': f'eq.{character_id}'})
         supabase.query('event_characters', method='DELETE', params={'character_id': f'eq.{character_id}'})
+        supabase.query('character_bio', method='DELETE', params={'character_id': f'eq.{character_id}'})
         # Finally, delete the character itself
         supabase.query('characters', method='DELETE', params={'id': f'eq.{character_id}'})
         return True
+
+    @staticmethod
+    def update_character_bio_sections(character_id, sections_data):
+        """Deletes all existing bio sections and inserts the new ones for a character."""
+        if not character_id:
+            return False
+
+        # 1. Delete all existing sections for this character
+        supabase.query('character_bio', method='DELETE', params={'character_id': f'eq.{character_id}'})
+
+        # 2. Insert new sections if any are provided
+        if not sections_data:
+            return True # Successfully cleared sections
+
+        # Add character_id and display_order to each section
+        sections_to_insert = []
+        for i, section in enumerate(sections_data):
+            # Make sure we don't insert empty sections
+            if section.get('section_title') and section.get('content'):
+                sections_to_insert.append({
+                    'character_id': character_id,
+                    'section_title': section.get('section_title'),
+                    'content': section.get('content'),
+                    'display_order': i
+                })
+        
+        if not sections_to_insert:
+            return True
+
+        result = supabase.query('character_bio', method='POST', data=sections_to_insert, select='id')
+        
+        return bool(result)
     
     @staticmethod
     def create_event(data):
