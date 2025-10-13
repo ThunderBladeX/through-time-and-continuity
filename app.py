@@ -336,6 +336,7 @@ def api_delete_character(character_id):
 def api_create_event():
     data = request.form.to_dict()
     character_ids_str = data.pop('character_ids', '')
+    data.pop('character_ids_select', None) # <<< FIX: Remove the unwanted field
     event = db.create_event(data)
     if not event:
         return jsonify({'error': 'Failed to create event'}), 500
@@ -359,6 +360,40 @@ def api_create_event():
     if image_urls:
         db.create_event_images(image_urls)
     return jsonify(event), 201
+
+@app.route('/api/admin/events/<int:event_id>', methods=['POST'])
+@login_required
+def api_update_event(event_id):
+    data = request.form.to_dict()
+    character_ids_str = data.pop('character_ids', '')
+    data.pop('character_ids_select', None) # <<< FIX: Remove the unwanted field here too
+
+    event = db.update_event(event_id, data)
+    if not event:
+        return jsonify({'error': 'Failed to update event'}), 500
+    
+    # Update character links
+    character_ids = [int(id) for id in character_ids_str.split(',') if id.isdigit()]
+    db.update_event_character_links(event_id, character_ids)
+    
+    # Handle new image uploads (does not delete old ones)
+    images = request.files.getlist('event_images')
+    image_urls = []
+    bucket_name = 'event-images'
+    for file in images:
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            unique_filename = f"{event_id}/{int(datetime.now().timestamp())}_{filename}"
+            content_type = file.mimetype or mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+            file_body = file.read()
+            public_url = db.supabase.upload_file(bucket_name, unique_filename, file_body, content_type)
+            if public_url:
+                image_urls.append({'event_id': event_id, 'image_url': public_url})
+    if image_urls:
+        db.create_event_images(image_urls)
+        
+    return jsonify(event), 200
+
 
 @app.route('/api/admin/events/<int:event_id>', methods=['DELETE'])
 @login_required
