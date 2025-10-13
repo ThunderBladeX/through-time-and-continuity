@@ -923,19 +923,17 @@
         padding-top: 0;
         background: linear-gradient(135deg, #0a0e0d 0%, #141a17 100%);
         position: relative;
+        overflow-x: hidden;
     }
     
     [data-character="damian-wayne"] .profile-page::before {
-        opacity: 0.5;
-        background: 
-            repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(42, 90, 52, 0.02) 1px, rgba(42, 90, 52, 0.02) 2px),
-            repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(42, 90, 52, 0.02) 1px, rgba(42, 90, 52, 0.02) 2px);
+        /*opacity: 0.5;*/
+        display:none;
     }
     
     [data-character="damian-wayne"] .profile-container {
         padding: 0;
         max-width: 100%;
-        overflow-x: hidden;
     }
     
     /* ═══════════════════════════
@@ -995,8 +993,8 @@
             rgba(26, 36, 32, 0.95) 100%);
         color: var(--accent-tertiary);
         border: 3px solid var(--accent);
-        box-shadow: none;
-            /*6px 6px 0 rgba(42, 90, 52, 0.3),
+        /*box-shadow:
+            6px 6px 0 rgba(42, 90, 52, 0.3),
             0 8px 0 rgba(0, 0, 0, 0.4);*/
         position: relative;
     }
