@@ -457,7 +457,7 @@ border-bottom: 1px solid var(--border);
 background: var(--bg-secondary);
 }
 .modal-header h2 {
-font-size: 1.5rem;
+font-size: 1.3rem;
 letter-spacing: -0.3px;
 color: var(--text-primary);
 }
