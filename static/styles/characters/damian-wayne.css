@@ -992,13 +992,13 @@
         color: var(--accent-tertiary);
         border: 3px solid var(--accent);
         box-shadow: 
-            6px 6px 0 rgba(42, 90, 52, 0.3),
+            /*6px 6px 0 rgba(42, 90, 52, 0.3),*/
             0 8px 0 rgba(0, 0, 0, 0.4);
         position: relative;
     }
     
     [data-character="damian-wayne"] .speech-bubble::before {
-        filter: drop-shadow(0 4px 0px rgba(0, 0, 0, 0.3));
+        /*filter: drop-shadow(0 4px 0px rgba(0, 0, 0, 0.3));*/
     }
     
     [data-character="damian-wayne"] .speech-bubble::after {
@@ -1048,11 +1048,11 @@
     
     [data-character="damian-wayne"] .mobile-nav {
         background: linear-gradient(180deg, 
-            rgba(20, 26, 23, 0.98) 0%, 
-            rgba(26, 36, 32, 0.98) 100%);
-        border-top: 2px solid rgba(201, 169, 97, 0.2);
+            rgba(20, 26, 23, /*0.98*/1) 0%, 
+            rgba(26, 36, 32, /*0.98*/1) 100%);
+        border-top: 2px solid rgba(201, 169, 97, /*0.2*/1);
         box-shadow: 
-            0 -8px 0 rgba(0, 0, 0, 0.5),
+            0 -8px 0 /*rgba(0, 0, 0, 0.5)*/#050706,
             inset 0 1px 0 rgba(218, 225, 231, 0.05);
     }
 
