@@ -273,7 +273,7 @@ align-self: flex-start;
 box-shadow: none;
 overflow: hidden:
 }
-.era-badge:hover,.era-badge:active{box-shadow:none}
+.era-badge:hover,.era-badge:active{box-shadow:none;}
 .mobile-tab-content .relationship-card {
 display: flex;
 padding: var(--spacing-lg);
@@ -450,6 +450,7 @@ display: flex;
 flex-direction: column;
 background: var(--bg-primary);
 }
+.modal-content.era-badge{overflow:hidden;}
 .modal-header {
 padding: var(--spacing-lg) var(--spacing-md);
 border-bottom: 1px solid var(--border);
@@ -495,6 +496,7 @@ border-left: 3px solid #a444ef;
 border-left: 3px solid #ef4444;
 }
 }
+
 @media (max-width: 480px) {
 .mobile-header {
 padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
