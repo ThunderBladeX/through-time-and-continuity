@@ -463,6 +463,10 @@ async function setupEventForm() {
         const formData = new FormData(form);
         const selectedIds = Array.from(charSelect.selectedOptions).map(opt => opt.value);
         formData.set('character_ids', selectedIds.join(','));
+        
+        // <<< FIX: Clean up the form data on the client side
+        formData.delete('character_ids_select');
+
         const id = formData.get('id');
         const url = id ? `/api/admin/events/${id}` : '/api/admin/events';
         const method = 'POST';
