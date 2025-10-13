@@ -345,7 +345,8 @@
     color: var(--text-primary);
     border: 1px solid rgba(var(--accent-rgb), 0.3);
     transition: all var(--transition-fast);
-    overflo: hidden;
+    overflow: hidden;
+    position: relative;
 }
 
 .era-badge:hover {
