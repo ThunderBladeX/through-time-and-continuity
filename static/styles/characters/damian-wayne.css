@@ -1486,7 +1486,7 @@
         color: var(--accent);
         font-size:.8rem;
         left:-3px;
-        top:8px;
+        top:7px;
     }
     
     [data-character="damian-wayne"] .event-description h3 {
