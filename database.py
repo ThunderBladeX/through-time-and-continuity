@@ -318,9 +318,19 @@ class Database:
     @staticmethod
     def link_event_to_characters(event_id, character_ids):
         """Link an event to multiple characters"""
+        if not character_ids:
+            return []
         links = [{'event_id': event_id, 'character_id': char_id} for char_id in character_ids]
         result = supabase.query('event_characters', method='POST', data=links, select='*')
         return result
+
+    @staticmethod
+    def update_event_character_links(event_id, character_ids):
+        """Deletes all existing character links for an event and creates new ones."""
+        # 1. Delete all existing links for this event
+        supabase.query('event_characters', method='DELETE', params={'event_id': f'eq.{event_id}'})
+        # 2. Link the new characters
+        return Database.link_event_to_characters(event_id, character_ids)
     
     @staticmethod
     def create_relationship(data):
