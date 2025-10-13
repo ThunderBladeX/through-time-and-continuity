@@ -342,7 +342,7 @@
     letter-spacing: 0.6px;
     cursor: help;
     background: rgba(var(--accent-rgb), 0.15);
-    color: var(--accent);
+    color: var(--text-primary);
     border: 1px solid rgba(var(--accent-rgb), 0.3);
     transition: all var(--transition-fast);
 }
