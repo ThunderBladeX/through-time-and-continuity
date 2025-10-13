@@ -261,7 +261,9 @@ def api_get_all_gallery_images():
 @login_required
 def api_create_character():
     data = request.form.to_dict()
+    bio_sections_json = data.pop('bio_sections', None)
     data = clean_form_data(data)
+    
     print(f"Attempting to create character with data: {data}")
     if 'profile_image' in request.files:
         file = request.files['profile_image']
@@ -276,8 +278,16 @@ def api_create_character():
                 data['profile_image'] = public_url
             else:
                 return jsonify({'error': 'Failed to upload image to storage'}), 500
+    
     character = db.create_character(data)
+    
     if character:
+        if bio_sections_json:
+            try:
+                bio_sections_data = json.loads(bio_sections_json)
+                db.update_character_bio_sections(character['id'], bio_sections_data)
+            except json.JSONDecodeError:
+                print("Warning: Could not decode bio_sections JSON.")
         return jsonify(character), 201
     else:
         print("db.create_character returned None. Character creation failed in database.py.")
@@ -287,7 +297,9 @@ def api_create_character():
 @login_required
 def api_update_character(character_id):
     data = request.form.to_dict()
+    bio_sections_json = data.pop('bio_sections', None)
     data = clean_form_data(data)
+
     if 'profile_image' in request.files:
         file = request.files['profile_image']
         if file and file.filename:
@@ -301,7 +313,16 @@ def api_update_character(character_id):
                 data['profile_image'] = public_url
             else:
                 return jsonify({'error': 'Failed to upload image'}), 500
+    
     character = db.update_character(character_id, data)
+    
+    if bio_sections_json is not None:
+        try:
+            bio_sections_data = json.loads(bio_sections_json)
+            db.update_character_bio_sections(character_id, bio_sections_data)
+        except json.JSONDecodeError:
+            print(f"Warning: Could not decode bio_sections JSON for character {character_id}.")
+
     return (jsonify(character), 200) if character else (jsonify({'error': 'Failed to update character. Check for empty required fields.'}), 500)
 
 @app.route('/api/admin/characters/<int:character_id>', methods=['DELETE'])
