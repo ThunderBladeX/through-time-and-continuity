@@ -695,8 +695,9 @@
 [data-character="damian-wayne"] .modal-header h2::before {
     content: '◆';
     position: absolute;
-    left: 0;
     color: var(--accent);
+    font-size: 0.8rem;
+    left: 2px;
 }
 
 [data-character="damian-wayne"] .event-description h3 {
