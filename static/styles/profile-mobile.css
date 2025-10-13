@@ -75,7 +75,7 @@
         padding: var(--spacing-xl);
         border-radius: 16px;
         border: 2px solid var(--border);
-        margin: var(--spacing-md) var(--spacing-md) var(--spacing-2xl) !important;
+        margin: var(--spacing-md) var(--spacing-md) var(--spacing-2xl);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
@@ -95,8 +95,8 @@
         content: '';
         position: absolute;
         top: -18px;
-        left: 52%;
-        transform: translateX(52%);
+        left: 57%;
+        transform: translateX(57%);
         width: 0;
         height: 0;
         border-left: 0px solid transparent;
@@ -109,8 +109,8 @@
         content: '';
         position: absolute;
         top: -25px;
-        left: 50.6%;
-        transform: translateX(52%);
+        left: 55.6%;
+        transform: translateX(57%);
         width: 0;
         height: 0;
         border-left: 0px solid transparent;
