@@ -1274,7 +1274,7 @@
         color: var(--gold);
         font-family: 'Rajdhani', sans-serif, var(--font-sans);
         text-shadow: 1px 1px 0 rgba(201, 169, 97, 0.3);
-        overflow-x: hidden;
+        overflow: hidden;
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .event-title {
