@@ -132,7 +132,7 @@
     
     #mobile-character-name {
         font-size: 2.2rem;
-        margin: var(--spacing-xl) 0 var(--spacing-md) !important;
+        margin: var(--spacing-xl) 0 var(--spacing-md);
         font-weight: 800;
         letter-spacing: -1px;
         color: var(--text-primary);
@@ -170,7 +170,7 @@
     .section-header {
         font-size: 1.6rem;
         font-weight: 800;
-        margin: var(--spacing-lg) 0 var(--spacing-md) 0 !important;
+        margin: var(--spacing-lg) 0 var(--spacing-md) 0;
         padding: 0;
         border: none;
         letter-spacing: -0.5px;
