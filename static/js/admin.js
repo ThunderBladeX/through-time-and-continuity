@@ -277,6 +277,16 @@ async function editCharacter(id) {
         form.querySelector('input[name="id"]')?.remove();
         form.insertAdjacentHTML('beforeend', `<input type="hidden" name="id" value="${id}">`);
         populateForm(form, character);
+        
+        // Clear and populate bio sections
+        const bioContainer = document.getElementById('bio-sections-container');
+        bioContainer.innerHTML = '';
+        if (character.bio_sections) {
+            // Sort by display order just in case
+            character.bio_sections.sort((a,b) => a.display_order - b.display_order);
+            character.bio_sections.forEach(section => addBioSectionRow(section));
+        }
+
         document.getElementById('character-form-title').textContent = 'Edit Character';
         openCharacterForm();
     } catch (error) {
@@ -354,6 +364,8 @@ function closeCharacterForm() {
     const form = document.getElementById('character-form');
     form?.reset();
     form?.querySelector('input[name="id"]')?.remove();
+    const bioContainer = document.getElementById('bio-sections-container');
+    if (bioContainer) bioContainer.innerHTML = '';
     document.getElementById('character-form-title').textContent = 'Add New Character';
     closeModal('character-modal');
 }
@@ -370,12 +382,55 @@ function closeEventForm() {
 function openUploadForm() { openModal('upload-modal'); }
 function closeUploadForm() { closeModal('upload-modal'); }
 
+function addBioSectionRow(section = {}) {
+    const container = document.getElementById('bio-sections-container');
+    if (!container) return;
+
+    const div = document.createElement('div');
+    div.className = 'form-row bio-section-row';
+    // Note: The admin.css styles for .form-row might need tweaking for this layout.
+    // This HTML structure is a suggestion.
+    div.innerHTML = `
+        <div class="form-group" style="flex: 1;">
+            <label>Section Title</label>
+            <input type="text" class="bio-section-title" value="${section.section_title || ''}" placeholder="e.g., Powers and Abilities">
+        </div>
+        <div class="form-group" style="flex-basis: 100%; width: 100%;">
+            <label>Content (Markdown)</label>
+            <textarea class="bio-section-content" rows="4" placeholder="Describe the section content here...">${section.content || ''}</textarea>
+        </div>
+        <button type="button" class="btn-danger btn-sm remove-bio-section-btn" title="Remove Section" style="position: absolute; top: 5px; right: 5px;">×</button>
+    `;
+
+    div.querySelector('.remove-bio-section-btn').addEventListener('click', () => {
+        div.remove();
+    });
+
+    container.appendChild(div);
+    div.querySelector('.bio-section-title').focus();
+}
+
 function setupCharacterForm() {
     const form = document.getElementById('character-form');
     if (!form) return;
+
+    document.getElementById('add-bio-section-btn')?.addEventListener('click', () => addBioSectionRow());
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(form);
+
+        // Collect bio sections data
+        const bioSections = [];
+        document.querySelectorAll('.bio-section-row').forEach(row => {
+            const title = row.querySelector('.bio-section-title').value;
+            const content = row.querySelector('.bio-section-content').value;
+            if (title.trim() && content.trim()) {
+                bioSections.push({ section_title: title, content: content });
+            }
+        });
+        formData.append('bio_sections', JSON.stringify(bioSections));
+
         const id = formData.get('id');
         const url = id ? `/api/admin/characters/${id}` : '/api/admin/characters';
         const method = 'POST'; // Using POST for both create and update as per app.py
