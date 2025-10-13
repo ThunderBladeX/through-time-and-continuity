@@ -1318,6 +1318,8 @@
         font-size: 1.8rem;
         opacity: 0.05;
     }
+
+    .relationship-card:hover{box-shadow:none}
     
     [data-character="damian-wayne"] .mobile-tab-content .relationship-card:active {
         transform: scale(0.97);
