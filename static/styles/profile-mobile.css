@@ -113,8 +113,8 @@
         transform: translateX(-50%);
         width: 0;
         height: 0;
-        border-left: 2px solid transparent;
-        border-right: 15px solid transparent;
+        border-left: 0px solid transparent;
+        border-right: 17px solid transparent;
         border-bottom: 25px solid var(--border);
         z-index: 1;
     }
