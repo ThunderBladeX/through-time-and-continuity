@@ -1319,7 +1319,10 @@
         opacity: 0.05;
     }
 
-    .mobile-tab-content.relationship-card:hover,.mobile-tab-content.relationship-avatar:hover,.mobile-tab-content.relationship-card:active,.mobile-tab-content.relationship-avatar:active{box-shadow:none}
+    [data-character="damian-wayne"].mobile-tab-content.relationship-card:hover,
+    [data-character="damian-wayne"].mobile-tab-content.relationship-avatar:hover,
+    [data-character="damian-wayne"].mobile-tab-content.relationship-card:active,
+    [data-character="damian-wayne"].mobile-tab-content.relationship-avatar:active{box-shadow:none}
     
     [data-character="damian-wayne"] .mobile-tab-content .relationship-card:active {
         transform: scale(0.97);
