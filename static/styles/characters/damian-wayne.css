@@ -927,11 +927,15 @@
     
     [data-character="damian-wayne"] .profile-page::before {
         opacity: 0.5;
+        background: 
+            repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(42, 90, 52, 0.02) 1px, rgba(42, 90, 52, 0.02) 2px),
+            repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(42, 90, 52, 0.02) 1px, rgba(42, 90, 52, 0.02) 2px);
     }
     
     [data-character="damian-wayne"] .profile-container {
         padding: 0;
         max-width: 100%;
+        overflow-x: hidden;
     }
     
     /* ═══════════════════════════
