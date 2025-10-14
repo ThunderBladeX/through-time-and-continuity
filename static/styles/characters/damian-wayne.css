@@ -1504,6 +1504,10 @@
         border-left: 4px solid var(--accent);
         padding-left: var(--spacing-md);
     }
+
+    [data-character="damian-wayne"] .modal-content .era-badge {
+        transform: translateZ(0);
+    }
     
     /* ═══════════════════════════
        BACK BUTTON MOBILE
