@@ -271,7 +271,7 @@ color: var(--text-primary);
 border: 1px solid rgba(59, 130, 246, 0.3);
 align-self: flex-start;
 box-shadow: none;
-overflow: hidden:
+overflow: hidden;
 }
 .era-badge:hover,.era-badge:active{box-shadow:none;}
 .mobile-tab-content .relationship-card {
