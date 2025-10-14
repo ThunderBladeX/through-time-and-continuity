@@ -929,6 +929,10 @@
     [data-character="damian-wayne"] .profile-page::before {
         /*opacity: 0.5;*/
         display:none;
+        visibility: hidden;
+        color: transparent;
+        background: transparent;
+        opacity: 0;
     }
     
     [data-character="damian-wayne"] .profile-container {
@@ -999,9 +1003,9 @@
         position: relative;
     }
     
-    [data-character="damian-wayne"] .speech-bubble::before {
-        /*filter: drop-shadow(0 4px 0px rgba(0, 0, 0, 0.3));*/
-    }
+    /*[data-character="damian-wayne"] .speech-bubble::before {
+        filter: drop-shadow(0 4px 0px rgba(0, 0, 0, 0.3));
+    }*/
     
     [data-character="damian-wayne"] .speech-bubble::after {
         border-bottom-color: var(--accent);
@@ -1052,7 +1056,7 @@
         background: linear-gradient(180deg, 
             rgba(20, 26, 23, /*0.98*/1) 0%, 
             rgba(26, 36, 32, /*0.98*/1) 100%);
-        border-top: 2px solid rgba(201, 169, 97, /*0.2*/1);
+        border-top: 2px solid rgba(201, 169, 97, 0.2);
         box-shadow: 
             0 -8px 0 /*rgba(0, 0, 0, 0.5)*/#050706,
             inset 0 1px 0 rgba(218, 225, 231, 0.05);
