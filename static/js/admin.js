@@ -388,8 +388,6 @@ function addBioSectionRow(section = {}) {
 
     const div = document.createElement('div');
     div.className = 'form-row bio-section-row';
-    // Note: The admin.css styles for .form-row might need tweaking for this layout.
-    // This HTML structure is a suggestion.
     div.innerHTML = `
         <div class="form-group" style="flex: 1;">
             <label>Section Title</label>
@@ -464,7 +462,7 @@ async function setupEventForm() {
         const selectedIds = Array.from(charSelect.selectedOptions).map(opt => opt.value);
         formData.set('character_ids', selectedIds.join(','));
         
-        // <<< FIX: Clean up the form data on the client side
+        // Clean up the form data on the client side
         formData.delete('character_ids_select');
 
         const id = formData.get('id');
