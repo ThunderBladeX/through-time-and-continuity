@@ -1289,10 +1289,8 @@
         color: var(--accent-tertiary);
         font-family: 'Cinzel', serif, var(--font-heading);
         letter-spacing: 0.5px;
-        font-size:1.1rem;
+        font-size:1rem;
     }
-
-    [data-character="damian-wayne"] tooltip{backdrop-filter:none}
     
     /* ═══════════════════════════
        RELATIONSHIPS - Allied Forces
