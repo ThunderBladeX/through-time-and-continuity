@@ -466,9 +466,9 @@
 }
 
 [data-character="damian-wayne"] .era-badge {
-    background: linear-gradient(135deg, 
+    /*background: linear-gradient(135deg, 
         rgba(42, 90, 52, 0.3), 
-        rgba(139, 21, 56, 0.3));
+        rgba(139, 21, 56, 0.3));*/
     border: 1px solid rgba(201, 169, 97, 0.4);
     color: var(--gold);
     font-family: 'Rajdhani', sans-serif, var(--font-sans);
@@ -477,6 +477,9 @@
     overflow: hidden !important;
     transform: translateZ(0);
     isolation: isolate;
+    background:
+        linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.2) 50%, transparent 80%),
+        linear-gradient(135deg, rgba(42, 90, 52, 0.3), rgba(139, 21, 56, 0.3));
     background-repeat: no-repeat;
     background-size: 250% 100%, 100% 100%;
     background-position: -150% 0, 0 0;
@@ -940,12 +943,7 @@
     }
     
     [data-character="damian-wayne"] .profile-page::before {
-        /*opacity: 0.5;*/
-        display:none;
-        visibility: hidden;
-        color: transparent;
-        background: transparent;
-        opacity: 0;
+        opacity: 0.5;
     }
     
     [data-character="damian-wayne"] .profile-container {
@@ -1013,10 +1011,6 @@
         box-shadow: /*6px 6px 0 rgba(42, 90, 52, 0.3),*/0 8px 0 rgba(0, 0, 0, 0.4) !important;
         position: relative;
     }
-    
-    /*[data-character="damian-wayne"] .speech-bubble::before {
-        filter: drop-shadow(0 4px 0px rgba(0, 0, 0, 0.3));
-    }*/
     
     [data-character="damian-wayne"] .speech-bubble::after {
         border-bottom-color: var(--accent);
@@ -1285,17 +1279,10 @@
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .era-badge {
-        background: linear-gradient(135deg, 
-            rgba(42, 90, 52, 0.3), 
-            rgba(139, 21, 56, 0.3));
         border: 1px solid rgba(201, 169, 97, 0.4);
         color: var(--gold);
         font-family: 'Rajdhani', sans-serif, var(--font-sans);
         text-shadow: 1px 1px 0 rgba(201, 169, 97, 0.3);
-        overflow: hidden;
-        position: relative;
-        transform: translateZ(0);
-        isolation: isolate;
     }
     
     [data-character="damian-wayne"] .mobile-tab-content .event-title {
