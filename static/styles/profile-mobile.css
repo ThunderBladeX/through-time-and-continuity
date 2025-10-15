@@ -274,7 +274,7 @@ box-shadow: none;
 overflow: hidden;
 position: relative;
 }
-.era-badge:hover,.era-badge:active{box-shadow:none;}
+.era-badge:hover,.era-badge:active,tooltip{box-shadow:none;backdrop-filter:none!important;}
 .mobile-tab-content .relationship-card {
 display: flex;
 padding: var(--spacing-lg);
