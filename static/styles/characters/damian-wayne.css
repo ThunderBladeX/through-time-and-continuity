@@ -474,7 +474,7 @@
     font-family: 'Rajdhani', sans-serif, var(--font-sans);
     text-shadow: 0 0 10px rgba(201, 169, 97, 0.3);
     position: relative;
-    overflow: hidden;
+    overflow: hidden !important;
     transform: translateZ(0);
     isolation: isolate;
 }
