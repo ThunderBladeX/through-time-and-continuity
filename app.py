@@ -54,7 +54,6 @@ def clean_form_data(data):
     
     return data
 
-print(db.connected)
 print("DB:", db)
 print("Type:", type(db))
 
