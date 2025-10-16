@@ -268,7 +268,7 @@ box-shadow: none;
 overflow: hidden;
 position: relative;
 }
-.era-badge:hover,.era-badge:active,tooltip{box-shadow:none;backdrop-filter:none!important;}
+.era-badge,.era-badge:hover,.era-badge:active,tooltip{box-shadow:none;backdrop-filter:none!important;}
 .mobile-tab-content .relationship-card {
 display: flex;
 padding: var(--spacing-lg);
@@ -445,7 +445,7 @@ display: flex;
 flex-direction: column;
 background: var(--bg-primary);
 }
-.modal-content .era-badge{overflow:hidden;position:relative;}
+.modal-content .era-badge{overflow:hidden;position:relative;box-shadow:none;}
 .modal-header {
 padding: var(--spacing-lg) var(--spacing-md);
 border-bottom: 1px solid var(--border);
