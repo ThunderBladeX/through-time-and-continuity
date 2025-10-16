@@ -1529,7 +1529,7 @@
        ═════════════════════════ */
     
     [data-character="damian-wayne"] .back-btn {
-        top: -10px;
+        top: 50px;
         left: var(--spacing-md);
         padding: 0.6rem 1.2rem;
         font-size: 0.75rem;
