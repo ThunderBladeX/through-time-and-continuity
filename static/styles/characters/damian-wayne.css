@@ -937,7 +937,7 @@
 
 @media (max-width: 768px) {
     [data-character="damian-wayne"] .profile-page {
-        padding-top: 0;
+        padding-top: 0 !important;
         background: linear-gradient(135deg, #0a0e0d 0%, #141a17 100%);
         position: relative;
         overflow-x: hidden !important;
@@ -972,6 +972,7 @@
        ═════════════════════════ */
     
     [data-character="damian-wayne"] .mobile-header {
+        margin-top: 0;
         background: linear-gradient(135deg, 
             rgba(20, 26, 23, 0.98) 0%, 
             rgba(42, 90, 52, 0.2) 100%);
