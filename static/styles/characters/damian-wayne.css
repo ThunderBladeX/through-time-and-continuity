@@ -16,6 +16,7 @@
 [data-character="damian-wayne"] .profile-page {
     background: linear-gradient(135deg, #0a0e0d 0%, #141a17 100%);
     position: relative;
+    overflow-x: hidden;
 }
 
 [data-character="damian-wayne"] .profile-page::before {
@@ -35,7 +36,6 @@
 [data-character="damian-wayne"] .profile-container {
     position: relative;
     z-index: 2;
-    overflow-x: hidden;
 }
 
 /* ═══════════════════════════════
@@ -950,6 +950,8 @@
     [data-character="damian-wayne"] .profile-container {
         padding: 0;
         max-width: 100%;
+        overflow-x: hidden;
+        overflow-y: visible;
     }
     
     /* ═══════════════════════════
