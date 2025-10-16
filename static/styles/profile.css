@@ -272,7 +272,7 @@
 .timeline-event::before {
     content: '';
     position: absolute;
-    left: 23px;
+    left: 21px;
     top: 0;
     width: 18px;
     height: 18px;
