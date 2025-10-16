@@ -309,7 +309,7 @@ p {
 /* Back Button */
 .back-btn {
     position: fixed;
-    top: 80px;
+    top: 60px;
     left: var(--spacing-lg);
     z-index: 100;
     padding: 0.5rem 1rem;
@@ -356,7 +356,7 @@ p {
     }
     
     .back-btn {
-        top: 40px;
+        top: 20px;
         left: var(--spacing-md);
         font-size: 0.9rem;
     }
