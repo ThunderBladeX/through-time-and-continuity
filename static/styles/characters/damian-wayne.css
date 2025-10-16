@@ -1349,6 +1349,7 @@
     [data-character="damian-wayne"] .mobile-tab-content .relationship-avatar:hover,
     [data-character="damian-wayne"] .mobile-tab-content .relationship-card:active,
     [data-character="damian-wayne"] .mobile-tab-content .relationship-avatar:active,
+    [data-character="damian-wayne"] .mobile-tab-content .relationship-avatar,
     [data-character="damian-wayne"] .mobile-tab-content .era-badge,
     [data-character="damian-wayne"] .modal-content .era-badge { box-shadow: none !important; }
     
