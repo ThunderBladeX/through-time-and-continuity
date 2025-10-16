@@ -952,12 +952,19 @@
         max-width: 100%;
     }
 
+    [data-character="damian-wayne"] .profile-container,
     [data-character="damian-wayne"] .mobile-tab-content,
     [data-character="damian-wayne"] .mobile-content,
     [data-character="damian-wayne"] .mobile-nav {
         overflow-x: hidden;
         width: 100%;
         max-width: 100%;
+    }
+
+    [data-character="damian-wayne"] #mobile-overview {
+        overflow: visible;
+        position: relative;
+        z-index: 2;
     }
     
     /* ═══════════════════════════
