@@ -828,13 +828,13 @@
     position: relative;
 }
 
-[data-character="damian-wayne"] .gallery-loader::before {
+/*[data-character="damian-wayne"] .gallery-loader::before {
     content: '◆';
     display: inline-block;
     font-size: 2rem;
     color: var(--gold);
     animation: pulse 2s ease-in-out infinite;
-}
+}*/
 
 [data-character="damian-wayne"] .gallery-loader::after {
     content: 'Loading Arsenal...';
