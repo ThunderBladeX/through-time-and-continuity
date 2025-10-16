@@ -350,7 +350,7 @@ box-shadow: 0 4px 0 rgba(0, 0, 0, 0.05);
 }
 .page-btn {
 flex: 1;
-padding: var(--spacing-md);
+padding: var(--spacing-sm);
 background: var(--bg-tertiary);
 border: 1px solid var(--border);
 border-radius: 12px;
