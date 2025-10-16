@@ -54,8 +54,8 @@ def clean_form_data(data):
     
     return data
 
-print("DB:", db)
-print("Type:", type(db))
+print(f"DB: {db}.")
+print(f"Type: {type(db)}.")
 
 # Routes
 @app.route('/')
