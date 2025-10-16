@@ -201,6 +201,7 @@ def api_get_all_relationships():
 @app.route('/api/admin/relationships', methods=['POST', 'PATCH'])
 @login_required
 def api_manage_relationships():
+    db = Database()
     data = request.get_json()
     if not data or 'character_id' not in data or 'related_character_id' not in data:
         return jsonify({'error': 'Missing required fields'}), 400
