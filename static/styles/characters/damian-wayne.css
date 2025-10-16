@@ -951,6 +951,14 @@
         padding: 0;
         max-width: 100%;
     }
+
+    [data-character="damian-wayne"] .mobile-tab-content,
+    [data-character="damian-wayne"] .mobile-content,
+    [data-character="damian-wayne"] .mobile-nav {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+    }
     
     /* ═══════════════════════════
        MOBILE HEADER - Heir's Banner
