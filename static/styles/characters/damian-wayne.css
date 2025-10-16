@@ -839,7 +839,8 @@
 [data-character="damian-wayne"] .gallery-loader::after {
     content: 'Loading Arsenal...';
     display: block;
-    margin-top: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+    margin-left: var(--spacing-md);
     color: var(--text-secondary);
     font-family: 'Rajdhani', sans-serif, var(--font-sans);
     letter-spacing: 2px;
