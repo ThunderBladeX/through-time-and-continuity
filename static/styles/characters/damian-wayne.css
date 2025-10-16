@@ -1322,6 +1322,25 @@
         clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
         position: relative;
     }
+
+    [data-character="damian-wayne"] .mobile-tab-content .relationship-card[data-type="romantic"] {
+        border-left: 3px solid #8B1538;
+    }
+    [data-character="damian-wayne"] .mobile-tab-content .relationship-card[data-type="platonic"] {
+        border-left: 3px solid #2A5A34;
+    }
+    [data-character="damian-wayne"] .mobile-tab-content .relationship-card[data-type="familial"] {
+        border-left: 3px solid #c9a961;
+    }
+    [data-character="damian-wayne"] .mobile-tab-content .relationship-card[data-type="complicated"] {
+        border-left: 3px solid #9FA4A9;
+    }
+    [data-character="damian-wayne"] .mobile-tab-content .relationship-card[data-type="hate"] {
+        border-left: 3px solid #8B1538;
+    }
+    [data-character="damian-wayne"] .mobile-tab-content .relationship-card[data-type="professional"] {
+        border-left: 3px solid #3b82f6;
+    }
     
     [data-character="damian-wayne"] .mobile-tab-content .relationship-card::before {
         content: '';
