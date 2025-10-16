@@ -1,5 +1,9 @@
 @media (max-width: 768px) {
 * {box-sizing: border-box;}
+html, body {
+overflow-x: hidden;
+width: 100%;
+}
 .desktop-view {
 display: none !important;
 visibility: hidden !important;
