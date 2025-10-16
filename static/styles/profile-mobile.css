@@ -1,9 +1,5 @@
 @media (max-width: 768px) {
 * {box-sizing: border-box;}
-body {
-overflow-x: hidden;
-width: 100%;
-}
 .desktop-view {
 display: none !important;
 visibility: hidden !important;
@@ -13,6 +9,7 @@ visibility: hidden !important;
 --shadow-md: 0 4px 0px rgba(0, 0, 0, 0.4);
 --shadow-lg: 0 10px 0px rgba(0, 0, 0, 0.5);
 --shadow-xl: 0 20px 0px rgba(0, 0, 0, 0.6);
+overflow-x: clip;
 }
 .mobile-view {
 display: block !important;
