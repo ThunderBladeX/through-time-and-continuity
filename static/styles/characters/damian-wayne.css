@@ -1553,10 +1553,11 @@
     [data-character="damian-wayne"] .back-btn {
         position: fixed;
         top: 0;
-        transform: translate(-10px, -13px);
+        transform: translate(-10px, -15px);
         left: var(--spacing-md);
         padding: 0.6rem 1.2rem;
         font-size: 0.75rem;
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
     }
     
     [data-character="damian-wayne"] .back-btn::before {
