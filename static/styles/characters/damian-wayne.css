@@ -1553,7 +1553,7 @@
     [data-character="damian-wayne"] .back-btn {
         position: fixed;
         top: 0;
-        bottom: -20px;
+        transform: translate(-10px, -10px);
         left: var(--spacing-md);
         padding: 0.6rem 1.2rem;
         font-size: 0.75rem;
