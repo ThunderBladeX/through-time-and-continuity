@@ -1551,7 +1551,8 @@
        ═════════════════════════ */
     
     [data-character="damian-wayne"] .back-btn {
-        position: sticky;
+        position: fixed;
+        top: 0;
         left: var(--spacing-md);
         padding: 0.6rem 1.2rem;
         font-size: 0.75rem;
