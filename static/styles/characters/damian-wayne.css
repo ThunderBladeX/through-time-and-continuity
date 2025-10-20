@@ -1557,7 +1557,7 @@
         left: var(--spacing-md);
         padding: 0.6rem 1.2rem;
         font-size: 0.75rem;
-        clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%) !important;
+        clip-path: none;
     }
     
     [data-character="damian-wayne"] .back-btn::before {
