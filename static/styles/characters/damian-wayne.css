@@ -1557,7 +1557,7 @@
         left: var(--spacing-md);
         padding: 0.6rem 1.2rem;
         font-size: 0.75rem;
-        clip-path: none;
+        clip-path: none !important;
     }
     
     [data-character="damian-wayne"] .back-btn::before {
@@ -1571,7 +1571,7 @@
     
     [data-character="damian-wayne"] .back-btn:hover {
         padding-left: 2rem;
-        padding-top: 1px;
+        transform: translate(-8px, -1px);
     }
     
     [data-character="damian-wayne"] .back-btn:hover::before {
