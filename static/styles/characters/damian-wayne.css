@@ -1571,7 +1571,7 @@
     
     [data-character="damian-wayne"] .back-btn:hover {
         padding-left: 2rem;
-        transform: translate(-8px, -1px);
+        transform: translate(-7px, -14px);
     }
     
     [data-character="damian-wayne"] .back-btn:hover::before {
