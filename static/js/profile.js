@@ -398,12 +398,6 @@ function applyAdvancedTheme(themeData) {
     }
 }
 
-// Helper to get era display name
-function getEraName(eraId) {
-    const eraNames = { 'pre-52': 'Pre-New 52', 'new-52': 'New 52', 'rebirth': 'Rebirth', 'infinite-frontier': 'Infinite Frontier', 'elseworlds': 'Elseworlds', 'post-crisis': 'Post-Crisis', 'future-state': 'Future State' };
-    return eraNames[eraId] || eraId;
-}
-
 // Add highlight animation
 const highlightStyle = document.createElement('style');
 highlightStyle.textContent = `
