@@ -1,3 +1,6 @@
+// Counter for dynamically generated markdown editors to ensure unique IDs
+let bioSectionCounter = 0;
+
 document.addEventListener('DOMContentLoaded', () => {
     // Check for login token first, then setup page
     if (localStorage.getItem('admin_token')) {
@@ -320,6 +323,7 @@ async function editCharacter(id) {
         
         const bioContainer = document.getElementById('bio-sections-container');
         bioContainer.innerHTML = '';
+        bioSectionCounter = 0; // Reset counter before adding sections for editing
         if (character.bio_sections) {
             character.bio_sections.sort((a,b) => a.display_order - b.display_order);
             character.bio_sections.forEach(section => addBioSectionRow(section));
@@ -355,6 +359,9 @@ async function editEvent(id) {
         const charSelect = document.getElementById('event-characters');
         const charIds = event.characters?.map(c => c.id.toString()) || [];
         Array.from(charSelect.options).forEach(opt => opt.selected = charIds.includes(opt.value));
+        
+        // Trigger input event for markdown preview to update
+        document.getElementById('event-description')?.dispatchEvent(new Event('input'));
 
         document.getElementById('event-form-title').textContent = 'Edit Event';
         openEventForm();
@@ -403,6 +410,7 @@ function closeCharacterForm() {
     form?.querySelector('input[name="id"]')?.remove();
     document.getElementById('bio-sections-container').innerHTML = '';
     document.getElementById('character-form-title').textContent = 'Add New Character';
+    bioSectionCounter = 0; // Reset counter for the next time the form is opened
     closeModal('character-modal');
 }
 
@@ -412,6 +420,8 @@ function closeEventForm() {
     form?.reset();
     form?.querySelector('input[name="id"]')?.remove();
     document.getElementById('event-form-title').textContent = 'Add New Event';
+    // Manually trigger input on markdown fields to clear previews
+    document.getElementById('event-description')?.dispatchEvent(new Event('input'));
     closeModal('event-modal');
 }
 
@@ -420,8 +430,16 @@ function closeUploadForm() { closeModal('upload-modal'); }
 
 function addBioSectionRow(section = {}) {
     const container = document.getElementById('bio-sections-container');
+    const uniqueId = bioSectionCounter++; // Use counter to ensure unique IDs
+
     const div = document.createElement('div');
     div.className = 'form-row bio-section-row';
+    
+    // Create unique IDs for the markdown editor, toolbar, and preview
+    const textareaId = `bio-section-content-${uniqueId}`;
+    const toolbarId = `bio-section-toolbar-${uniqueId}`;
+    const previewId = `bio-section-preview-${uniqueId}`;
+
     div.innerHTML = `
         <input type="hidden" class="bio-section-id" value="${section.id || ''}">
         <div class="form-group" style="flex: 1;">
@@ -429,13 +447,21 @@ function addBioSectionRow(section = {}) {
             <input type="text" class="bio-section-title" value="${section.section_title || ''}" placeholder="e.g., Powers and Abilities">
         </div>
         <div class="form-group" style="flex-basis: 100%; width: 100%;">
-            <label>Content (Markdown)</label>
-            <textarea class="bio-section-content" rows="4" placeholder="Describe the section content here...">${section.content || ''}</textarea>
+            <label for="${textareaId}">Content (Markdown)</label>
+            <div id="${toolbarId}" class="markdown-toolbar"></div>
+            <textarea id="${textareaId}" class="bio-section-content" rows="4" placeholder="Describe the section content here...">${section.content || ''}</textarea>
+            <div id="${previewId}" class="markdown-preview admin-preview"></div>
         </div>
         <button type="button" class="btn-danger btn-sm remove-bio-section-btn" title="Remove Section">×</button>
     `;
     div.querySelector('.remove-bio-section-btn').addEventListener('click', () => div.remove());
     container.appendChild(div);
+
+    // Setup markdown editor for the new section
+    if (typeof setupMarkdownToolbar === 'function' && typeof setupMarkdownPreview === 'function') {
+        setupMarkdownToolbar(textareaId, toolbarId);
+        setupMarkdownPreview(textareaId, previewId);
+    }
 }
 
 function setupCharacterForm() {
@@ -476,11 +502,20 @@ function setupCharacterForm() {
 async function setupEventForm() {
     const form = document.getElementById('event-form');
     if (!form) return;
+
+    // Setup markdown editor for the event description field.
+    // This assumes the HTML contains <textarea id="event-description"> and related elements.
+    if (document.getElementById('event-description') && typeof setupMarkdownToolbar === 'function') {
+        setupMarkdownToolbar('event-description', 'event-description-toolbar');
+        setupMarkdownPreview('event-description', 'event-description-preview');
+    }
+
     const charSelect = document.getElementById('event-characters');
     try {
         const characters = await fetchAPI('/characters');
         charSelect.innerHTML = characters.map(c => `<option value="${c.id}">${c.full_name}</option>`).join('');
     } catch (e) { console.error('Failed to load characters for event form'); }
+    
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(form);
@@ -490,8 +525,7 @@ async function setupEventForm() {
         const url = id ? `/admin/events/${id}` : '/admin/events';
         const method = id ? 'PUT' : 'POST';
         try {
-            const response = await fetchAPI(url, { method, body: formData, isFormData: true });
-            await handleFormSubmitResponse(new Response(JSON.stringify(response)));
+            await fetchAPI(url, { method, body: formData, isFormData: true });
             showNotification(`Event ${id ? 'updated' : 'created'} successfully!`, 'success');
             closeEventForm();
             loadTimelineAdmin();
