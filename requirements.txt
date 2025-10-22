@@ -6,3 +6,4 @@ supabase==2.9.0
 postgrest==0.17.0
 gotrue==2.8.1
 werkzeug==3.0.1
+Flask-JWT-Extended
