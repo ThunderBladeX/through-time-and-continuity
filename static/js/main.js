@@ -178,7 +178,7 @@ function setupEraTooltips() {
     if (!tooltip) return;
     
     const eraDescriptions = {
-        'pre-52': 'Pre-New 52: The original DC timeline before the 2011 reboot',
+        'pre-52': 'Classic: The original DC timeline before the 2011 reboot',
         'new-52': 'New 52: DC Comics reboot starting in 2011',
         'rebirth': 'Rebirth: Restoration of legacy and hope starting in 2016',
         'infinite-frontier': 'Infinite Frontier: Omniverse storytelling post-2021',
