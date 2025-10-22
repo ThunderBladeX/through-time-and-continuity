@@ -77,19 +77,6 @@ function createActivityCard(event) {
     return card;
 }
 
-function getEraName(eraId) {
-    const eraNames = {
-        'pre-52': 'Classic',
-        'new-52': 'New 52',
-        'rebirth': 'Rebirth',
-        'infinite-frontier': 'Infinite Frontier',
-        'elseworlds': 'Elseworlds',
-        'post-crisis': 'Post-Crisis',
-        'future-state': 'Future State'
-    };
-    return eraNames[eraId] || eraId;
-}
-
 // Hero parallax effect
 function setupHeroParallax() {
     const hero = document.querySelector('.hero');
