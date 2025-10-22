@@ -79,7 +79,7 @@ function createActivityCard(event) {
 
 function getEraName(eraId) {
     const eraNames = {
-        'pre-52': 'Pre-New 52',
+        'pre-52': 'Classic',
         'new-52': 'New 52',
         'rebirth': 'Rebirth',
         'infinite-frontier': 'Infinite Frontier',
