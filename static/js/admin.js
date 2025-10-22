@@ -1,6 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-    setupLogin();
-    setupDashboard();
+    // Check for login token first, then setup page
+    if (localStorage.getItem('admin_token')) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        setupDashboard();
+        handleUrlParameters(); // Handle deep links for editing
+    } else {
+        setupLogin();
+    }
+
+    // Setup forms regardless of login state
     setupCharacterForm();
     setupEventForm();
     setupRelationshipForm();
@@ -8,10 +17,47 @@ document.addEventListener('DOMContentLoaded', () => {
     populateFamilyDropdown();
 });
 
+// Handle direct links to edit items from profile pages
+function handleUrlParameters() {
+    const params = new URLSearchParams(window.location.search);
+    const editType = params.get('edit');
+    const id = params.get('id');
+
+    if (!editType) return;
+
+    switch(editType) {
+        case 'character':
+            if (id) {
+                document.querySelector('.sidebar-btn[data-section="characters"]').click();
+                editCharacter(id);
+            }
+            break;
+        case 'event':
+            if (id) {
+                document.querySelector('.sidebar-btn[data-section="timeline"]').click();
+                editEvent(id);
+            }
+            break;
+        case 'relationship':
+            const char1 = params.get('char1');
+            const char2 = params.get('char2');
+            if (char1 && char2) {
+                document.querySelector('.sidebar-btn[data-section="relationships"]').click();
+                editRelationship(char1, char2);
+            }
+            break;
+    }
+}
+
+
 // Helper to handle API responses and show proper errors
-async function handleFormSubmitResponse(response, successType) {
-    if (response.ok) {
-        return await response.json();
+async function handleFormSubmitResponse(response) {
+    if (response.ok || (response.status >= 200 && response.status < 300)) {
+        try {
+            return await response.json();
+        } catch (e) {
+            return {}; // Handle cases with no JSON body (e.g., 204 No Content)
+        }
     }
     // If response is not OK, try to get a meaningful error message
     const contentType = response.headers.get('content-type');
@@ -42,13 +88,16 @@ function setupLogin() {
                 body: JSON.stringify({ username, password })
             });
             
-            if (result.success) {
+            if (result.access_token) {
+                localStorage.setItem('admin_token', result.access_token);
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
-                loadDashboard();
+                setupDashboard();
+            } else {
+                 errorMsg.textContent = result.message || 'Invalid username or password';
             }
         } catch (error) {
-            errorMsg.textContent = 'Invalid username or password';
+            errorMsg.textContent = 'Login failed. Please try again.';
         }
     });
 }
@@ -57,17 +106,11 @@ function setupDashboard() {
     const logoutBtn = document.getElementById('logout-btn');
     
     logoutBtn?.addEventListener('click', async () => {
-        try {
-            await fetchAPI('/logout', { method: 'POST' });
-            location.reload();
-        } catch (error) {
-            console.error('Logout failed:', error);
-        }
+        localStorage.removeItem('admin_token');
+        location.reload();
     });
     
-    // Setup sidebar navigation
     const sidebarBtns = document.querySelectorAll('.sidebar-btn');
-    
     sidebarBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             sidebarBtns.forEach(b => b.classList.remove('active'));
@@ -80,10 +123,8 @@ function setupDashboard() {
             loadSection(section);
         });
     });
-}
-
-async function loadDashboard() {
-    await loadSection('pending');
+    // Load default section
+    loadSection('pending');
 }
 
 async function loadSection(section) {
@@ -143,7 +184,7 @@ async function loadCharactersAdmin() {
                 <img src="${char.profile_image || '/static/images/default-avatar.jpg'}" alt="${char.full_name}" class="admin-item-image" onerror="this.src='/static/images/default-avatar.jpg'">
                 <div class="admin-item-info">
                     <h4>${char.full_name}</h4>
-                    <p>${char.family || 'Unknown'} • ${char.nickname || 'No alias'}</p>
+                    <p>${char.family?.name || 'Unknown'} • ${char.nickname || 'No alias'}</p>
                 </div>
                 <div class="admin-item-actions">
                     <button onclick="editCharacter(${char.id})" class="btn-secondary btn-sm">Edit</button>
@@ -193,7 +234,7 @@ async function loadRelationshipsAdmin() {
     list.innerHTML = '<div class="loading-state"><div class="spinner"></div></div>';
     
     try {
-        const relationships = await fetchAPI('/admin/relationships', { method: 'GET' });
+        const relationships = await fetchAPI('/admin/relationships');
         if (!relationships || relationships.length === 0) {
             list.innerHTML = '<p class="empty-state">No relationships yet</p>';
             return;
@@ -255,13 +296,13 @@ async function loadGalleryAdmin() {
 }
 
 async function populateFamilyDropdown() {
-    const familySelect = document.querySelector('#character-form select[name="family"]');
+    const familySelect = document.querySelector('#character-form select[name="family_id"]');
     if (!familySelect) return;
 
     try {
         const families = await fetchAPI('/families');
-        familySelect.innerHTML = families.map(family => 
-            `<option value="${family.slug}">${family.name}</option>`
+        familySelect.innerHTML = '<option value="">None</option>' + families.map(family => 
+            `<option value="${family.id}">${family.name}</option>`
         ).join('');
     } catch (error) {
         console.error('Failed to load families for dropdown:', error);
@@ -278,11 +319,9 @@ async function editCharacter(id) {
         form.insertAdjacentHTML('beforeend', `<input type="hidden" name="id" value="${id}">`);
         populateForm(form, character);
         
-        // Clear and populate bio sections
         const bioContainer = document.getElementById('bio-sections-container');
         bioContainer.innerHTML = '';
         if (character.bio_sections) {
-            // Sort by display order just in case
             character.bio_sections.sort((a,b) => a.display_order - b.display_order);
             character.bio_sections.forEach(section => addBioSectionRow(section));
         }
@@ -297,7 +336,7 @@ async function editCharacter(id) {
 async function deleteCharacter(id) {
     if (confirm('Are you sure you want to delete this character? This is permanent.')) {
         try {
-            await fetch(`/api/admin/characters/${id}`, { method: 'DELETE' });
+            await fetchAPI(`/admin/characters/${id}`, { method: 'DELETE' });
             showNotification('Character deleted successfully', 'success');
             loadCharactersAdmin();
         } catch (error) {
@@ -315,10 +354,9 @@ async function editEvent(id) {
         populateForm(form, event);
         
         const charSelect = document.getElementById('event-characters');
-        if (event.event_characters) {
-            const charIds = event.event_characters.map(ec => ec.character_id.toString());
-            Array.from(charSelect.options).forEach(opt => opt.selected = charIds.includes(opt.value));
-        }
+        const charIds = event.characters?.map(c => c.id.toString()) || [];
+        Array.from(charSelect.options).forEach(opt => opt.selected = charIds.includes(opt.value));
+
         document.getElementById('event-form-title').textContent = 'Edit Event';
         openEventForm();
     } catch (error) {
@@ -329,7 +367,7 @@ async function editEvent(id) {
 async function deleteEvent(id) {
     if (confirm('Are you sure you want to delete this event? This is permanent.')) {
         try {
-            await fetch(`/api/admin/events/${id}`, { method: 'DELETE' });
+            await fetchAPI(`/admin/events/${id}`, { method: 'DELETE' });
             showNotification('Event deleted successfully', 'success');
             loadTimelineAdmin();
         } catch (error) {
@@ -364,8 +402,7 @@ function closeCharacterForm() {
     const form = document.getElementById('character-form');
     form?.reset();
     form?.querySelector('input[name="id"]')?.remove();
-    const bioContainer = document.getElementById('bio-sections-container');
-    if (bioContainer) bioContainer.innerHTML = '';
+    document.getElementById('bio-sections-container').innerHTML = '';
     document.getElementById('character-form-title').textContent = 'Add New Character';
     closeModal('character-modal');
 }
@@ -384,11 +421,10 @@ function closeUploadForm() { closeModal('upload-modal'); }
 
 function addBioSectionRow(section = {}) {
     const container = document.getElementById('bio-sections-container');
-    if (!container) return;
-
     const div = document.createElement('div');
     div.className = 'form-row bio-section-row';
     div.innerHTML = `
+        <input type="hidden" class="bio-section-id" value="${section.id || ''}">
         <div class="form-group" style="flex: 1;">
             <label>Section Title</label>
             <input type="text" class="bio-section-title" value="${section.section_title || ''}" placeholder="e.g., Powers and Abilities">
@@ -397,50 +433,43 @@ function addBioSectionRow(section = {}) {
             <label>Content (Markdown)</label>
             <textarea class="bio-section-content" rows="4" placeholder="Describe the section content here...">${section.content || ''}</textarea>
         </div>
-        <button type="button" class="btn-danger btn-sm remove-bio-section-btn" title="Remove Section" style="position: absolute; top: 5px; right: 5px;">×</button>
+        <button type="button" class="btn-danger btn-sm remove-bio-section-btn" title="Remove Section">×</button>
     `;
-
-    div.querySelector('.remove-bio-section-btn').addEventListener('click', () => {
-        div.remove();
-    });
-
+    div.querySelector('.remove-bio-section-btn').addEventListener('click', () => div.remove());
     container.appendChild(div);
-    div.querySelector('.bio-section-title').focus();
 }
 
 function setupCharacterForm() {
     const form = document.getElementById('character-form');
     if (!form) return;
-
     document.getElementById('add-bio-section-btn')?.addEventListener('click', () => addBioSectionRow());
-
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(form);
-
-        // Collect bio sections data
         const bioSections = [];
-        document.querySelectorAll('.bio-section-row').forEach(row => {
+        document.querySelectorAll('.bio-section-row').forEach((row, index) => {
             const title = row.querySelector('.bio-section-title').value;
             const content = row.querySelector('.bio-section-content').value;
             if (title.trim() && content.trim()) {
-                bioSections.push({ section_title: title, content: content });
+                bioSections.push({ 
+                    id: row.querySelector('.bio-section-id').value || null,
+                    section_title: title, 
+                    content: content,
+                    display_order: index 
+                });
             }
         });
         formData.append('bio_sections', JSON.stringify(bioSections));
-
         const id = formData.get('id');
-        const url = id ? `/api/admin/characters/${id}` : '/api/admin/characters';
-        const method = 'POST'; // Using POST for both create and update as per app.py
-
+        const url = id ? `/admin/characters/${id}` : '/admin/characters';
+        const method = id ? 'PUT' : 'POST';
         try {
-            const response = await fetch(url, { method, body: formData });
-            await handleFormSubmitResponse(response); // Use the new handler
+            const response = await fetchAPI(url, { method, body: formData, isFormData: true });
+            await handleFormSubmitResponse(new Response(JSON.stringify(response)));
             showNotification(`Character ${id ? 'updated' : 'created'} successfully!`, 'success');
             closeCharacterForm();
             loadCharactersAdmin();
         } catch (error) {
-            console.error('Character form error:', error);
             showNotification(error.message, 'error');
         }
     });
@@ -449,46 +478,41 @@ function setupCharacterForm() {
 async function setupEventForm() {
     const form = document.getElementById('event-form');
     if (!form) return;
-
     const charSelect = document.getElementById('event-characters');
     try {
         const characters = await fetchAPI('/characters');
         charSelect.innerHTML = characters.map(c => `<option value="${c.id}">${c.full_name}</option>`).join('');
     } catch (e) { console.error('Failed to load characters for event form'); }
-
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(form);
         const selectedIds = Array.from(charSelect.selectedOptions).map(opt => opt.value);
-        formData.set('character_ids', selectedIds.join(','));
-        
-        // Clean up the form data on the client side
-        formData.delete('character_ids_select');
-
+        formData.set('character_ids', JSON.stringify(selectedIds));
         const id = formData.get('id');
-        const url = id ? `/api/admin/events/${id}` : '/api/admin/events';
-        const method = 'POST';
-
+        const url = id ? `/admin/events/${id}` : '/admin/events';
+        const method = id ? 'PUT' : 'POST';
         try {
-            const response = await fetch(url, { method, body: formData });
-            await handleFormSubmitResponse(response); // Use the new handler
+            const response = await fetchAPI(url, { method, body: formData, isFormData: true });
+            await handleFormSubmitResponse(new Response(JSON.stringify(response)));
             showNotification(`Event ${id ? 'updated' : 'created'} successfully!`, 'success');
             closeEventForm();
             loadTimelineAdmin();
         } catch (error) {
-            console.error('Event form error:', error);
             showNotification(error.message, 'error');
         }
     });
 }
 
-// Helper to populate form fields from a data object
 function populateForm(form, data) {
     for (const key in data) {
         const field = form.elements[key];
         if (field) {
             if (field.type === 'checkbox') field.checked = !!data[key];
             else if (field.type !== 'file') field.value = data[key] || '';
+        } else if (key === 'family' && data[key]) {
+            // Handle nested family object
+            const familyField = form.elements['family_id'];
+            if (familyField) familyField.value = data[key].id;
         }
     }
 }
@@ -499,58 +523,28 @@ function closeRelationshipForm() { closeModal('relationship-modal'); }
 async function setupRelationshipForm() {
     const form = document.getElementById('relationship-form');
     if (!form) return;
-
     const char1Select = form.querySelector('select[name="character_id"]');
     const char2Select = form.querySelector('select[name="related_character_id"]');
-    const statusALabel = document.getElementById('status-a-to-b-label');
-    const statusBLabel = document.getElementById('status-b-to-a-label');
-
     try {
         const characters = await fetchAPI('/characters');
         const options = characters.map(c => `<option value="${c.id}">${c.full_name}</option>`).join('');
         char1Select.innerHTML = options;
         char2Select.innerHTML = options;
-    } catch (e) {
-        console.error('Failed to load characters for relationship form');
-    }
-
-    function updateStatusLabels() {
-        const char1Name = char1Select.options[char1Select.selectedIndex]?.text || 'Character 1';
-        const char2Name = char2Select.options[char2Select.selectedIndex]?.text || 'Character 2';
-        statusALabel.textContent = `${char1Name}'s Status towards ${char2Name}`;
-        statusBLabel.textContent = `${char2Name}'s Status towards ${char1Name}`;
-    }
-
-    char1Select.addEventListener('change', updateStatusLabels);
-    char2Select.addEventListener('change', updateStatusLabels);
-    // Initial call to set the labels correctly on load
-    updateStatusLabels();
-
+    } catch (e) { console.error('Failed to load characters for relationship form'); }
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-
+        const data = Object.fromEntries(new FormData(form).entries());
         if (data.character_id === data.related_character_id) {
             showNotification('A character cannot be in a relationship with themselves.', 'error');
             return;
         }
-
         try {
-            const response = await fetch('/api/admin/relationships', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            await handleFormSubmitResponse(response);
+            const response = await fetchAPI('/admin/relationships', { method: 'POST', body: JSON.stringify(data) });
             showNotification('Relationship created successfully!', 'success');
             closeRelationshipForm();
-            form.reset(); // Reset form for next use
-            updateStatusLabels(); // Reset labels
+            form.reset();
             loadRelationshipsAdmin();
         } catch (error) {
-            console.error('Relationship form error:', error);
             showNotification(error.message, 'error');
         }
     });
@@ -559,8 +553,7 @@ async function setupRelationshipForm() {
 async function deleteRelationship(char1Id, char2Id) {
     if (confirm('Are you sure you want to delete this relationship? This will remove it for both characters.')) {
         try {
-            // We will create this new API endpoint next
-            await fetch(`/admin/relationships/${char1Id}/${char2Id}`, { method: 'DELETE' });
+            await fetchAPI(`/admin/relationships/${char1Id}/${char2Id}`, { method: 'DELETE' });
             showNotification('Relationship deleted successfully', 'success');
             loadRelationshipsAdmin();
         } catch (error) {
@@ -571,11 +564,8 @@ async function deleteRelationship(char1Id, char2Id) {
 
 async function editRelationship(char1Id, char2Id) {
     try {
-        // We will create this new API endpoint next
         const { a_to_b, b_to_a } = await fetchAPI(`/admin/relationships/${char1Id}/${char2Id}`);
         const form = document.getElementById('edit-relationship-form');
-        
-        // Populate the form fields
         form.elements['character_id'].value = char1Id;
         form.elements['related_character_id'].value = char2Id;
         form.elements['character_1_name'].value = a_to_b.character.full_name;
@@ -583,11 +573,8 @@ async function editRelationship(char1Id, char2Id) {
         form.elements['type'].value = a_to_b.type;
         form.elements['status_a_to_b'].value = a_to_b.status || '';
         form.elements['status_b_to_a'].value = b_to_a.status || '';
-        
-        // Update labels for clarity
         document.getElementById('edit-status-a-to-b-label').textContent = `${a_to_b.character.full_name}'s Status towards ${b_to_a.character.full_name}`;
         document.getElementById('edit-status-b-to-a-label').textContent = `${b_to_a.character.full_name}'s Status towards ${a_to_b.character.full_name}`;
-
         openModal('edit-relationship-modal');
     } catch (error) {
         showNotification('Could not load relationship data.', 'error');
@@ -599,16 +586,9 @@ function setupEditRelationshipForm() {
     if (!form) return;
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-
+        const data = Object.fromEntries(new FormData(form).entries());
         try {
-            const response = await fetchAPI('/admin/relationships', {
-                method: 'PATCH', // Using PATCH for updates
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            await handleFormSubmitResponse(response);
+            await fetchAPI('/admin/relationships', { method: 'PATCH', body: JSON.stringify(data) });
             showNotification('Relationship updated successfully!', 'success');
             closeModal('edit-relationship-modal');
             loadRelationshipsAdmin();
