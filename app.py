@@ -38,7 +38,7 @@ except Exception as e:
 if not ERA_NAMES:
     print("Warning: Could not load ERA_NAMES from database. Using fallback.")
     ERA_NAMES = {
-        'pre-52': 'Pre-New 52',
+        'pre-52': 'Classic',
         'new-52': 'New 52',
         'rebirth': 'Rebirth',
         'infinite-frontier': 'Infinite Frontier',
