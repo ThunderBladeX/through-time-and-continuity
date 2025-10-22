@@ -49,7 +49,6 @@ function handleUrlParameters() {
     }
 }
 
-
 // Helper to handle API responses and show proper errors
 async function handleFormSubmitResponse(response) {
     if (response.ok || (response.status >= 200 && response.status < 300)) {
