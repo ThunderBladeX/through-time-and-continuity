@@ -360,6 +360,7 @@ cursor: pointer;
 transition: all var(--transition-fast);
 user-select: none;
 font-size: 0.95rem;
+white-space: nowrap;
 }
 .page-btn:active:not(:disabled) {
 transform: scale(0.95);
