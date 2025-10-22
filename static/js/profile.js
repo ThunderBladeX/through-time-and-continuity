@@ -87,6 +87,32 @@ function loadCharacterInfo() {
     if (currentCharacter.quote && quoteEl) {
         quoteEl.textContent = currentCharacter.quote;
     }
+
+    // Add quick edit button for admin
+    if (localStorage.getItem('admin_token')) {
+        addQuickEditButton();
+}
+
+// Add quick edit button for overall character
+function addQuickEditButton() {
+    const profileSidebar = document.querySelector('.profile-sidebar');
+    const mobileHeader = document.querySelector('.mobile-header');
+    
+    const editButton = document.createElement('button');
+    editButton.className = 'quick-edit-btn';
+    editButton.innerHTML = '⚙️ Edit Character';
+    editButton.onclick = () => {
+        window.location.href = `/admin.html?edit=character&id=${characterId}`;
+    };
+    
+    if (profileSidebar) {
+        profileSidebar.appendChild(editButton);
+    }
+    
+    if (mobileHeader) {
+        mobileHeader.appendChild(editButton.cloneNode(true));
+        mobileHeader.lastChild.onclick = editButton.onclick;
+    }
 }
 
 // Load bio sections
@@ -482,4 +508,230 @@ document.head.appendChild(highlightStyle);
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadCharacter();
+    setupEditButtons();
 });
+
+// Setup edit buttons for admin
+function setupEditButtons() {
+    // Check if user is admin
+    const isAdmin = localStorage.getItem('admin_token');
+    if (!isAdmin) return;
+    
+    // Add edit buttons on hover for editable elements
+    const editableSelectors = [
+        '.bio-item',
+        '.bio-section',
+        '.event-card',
+        '.relationship-card'
+    ];
+    
+    editableSelectors.forEach(selector => {
+        document.addEventListener('mouseover', (e) => {
+            const element = e.target.closest(selector);
+            if (element && !element.querySelector('.edit-btn')) {
+                addEditButton(element);
+            }
+        });
+        
+        document.addEventListener('mouseout', (e) => {
+            const element = e.target.closest(selector);
+            if (element && !element.matches(':hover')) {
+                removeEditButton(element);
+            }
+        });
+    });
+}
+
+// Add edit button to element
+function addEditButton(element) {
+    const editBtn = document.createElement('button');
+    editBtn.className = 'edit-btn';
+    editBtn.innerHTML = '✏️';
+    editBtn.title = 'Edit';
+    editBtn.onclick = (e) => {
+        e.stopPropagation();
+        handleEdit(element);
+    };
+    
+    element.style.position = 'relative';
+    element.appendChild(editBtn);
+}
+
+// Remove edit button from element
+function removeEditButton(element) {
+    const editBtn = element.querySelector('.edit-btn');
+    if (editBtn) {
+        editBtn.remove();
+    }
+}
+
+// Handle edit action
+function handleEdit(element) {
+    // Determine what type of content is being edited
+    if (element.classList.contains('bio-item')) {
+        editBioItem(element);
+    } else if (element.classList.contains('bio-section')) {
+        editBioSection(element);
+    } else if (element.classList.contains('event-card')) {
+        const eventId = element.closest('.timeline-event').dataset.eventId;
+        editEvent(eventId);
+    } else if (element.classList.contains('relationship-card')) {
+        editRelationship(element);
+    }
+}
+
+// Edit bio item (inline editing)
+function editBioItem(element) {
+    const valueEl = element.querySelector('.bio-value');
+    const currentValue = valueEl.textContent;
+    const label = element.querySelector('.bio-label').textContent;
+    
+    // Create input
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = currentValue;
+    input.className = 'inline-edit-input';
+    
+    // Replace value with input
+    valueEl.textContent = '';
+    valueEl.appendChild(input);
+    input.focus();
+    input.select();
+    
+    // Save on blur or enter
+    const save = async () => {
+        const newValue = input.value;
+        if (newValue !== currentValue) {
+            try {
+                // Submit as pending edit
+                await submitPendingEdit({
+                    type: 'character_bio',
+                    character_id: characterId,
+                    field: label.toLowerCase().replace(/\s+/g, '_'),
+                    old_value: currentValue,
+                    new_value: newValue
+                });
+                showNotification('Edit submitted for approval', 'success');
+            } catch (error) {
+                showNotification('Failed to submit edit', 'error');
+            }
+        }
+        valueEl.textContent = currentValue; // Restore original until approved
+    };
+    
+    input.addEventListener('blur', save);
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') save();
+        if (e.key === 'Escape') valueEl.textContent = currentValue;
+    });
+}
+
+// Edit bio section
+function editBioSection(element) {
+    const sectionId = element.dataset.sectionId;
+    // Open modal with markdown editor
+    openBioSectionModal(sectionId);
+}
+
+// Edit event
+function editEvent(eventId) {
+    // Redirect to admin with event pre-loaded
+    window.location.href = `/admin.html?edit=event&id=${eventId}`;
+}
+
+// Edit relationship
+function editRelationship(element) {
+    const relationshipId = element.dataset.relationshipId;
+    // Open relationship edit modal
+    openRelationshipModal(relationshipId);
+}
+
+// Submit pending edit to admin for approval
+async function submitPendingEdit(editData) {
+    const response = await fetchAPI('/admin/pending-edits', {
+        method: 'POST',
+        body: JSON.stringify(editData)
+    });
+    return response;
+}
+
+// Add edit button styles
+const editButtonStyles = document.createElement('style');
+editButtonStyles.textContent = `
+    .edit-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 32px;
+        height: 32px;
+        background: rgba(59, 130, 246, 0.9);
+        border: none;
+        border-radius: 6px;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: all 0.2s ease;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .bio-item:hover .edit-btn,
+    .bio-section:hover .edit-btn,
+    .event-card:hover .edit-btn,
+    .relationship-card:hover .edit-btn {
+        opacity: 1;
+    }
+    
+    .edit-btn:hover {
+        background: rgba(59, 130, 246, 1);
+        transform: scale(1.1);
+    }
+    
+    .inline-edit-input {
+        width: 100%;
+        padding: 0.5rem;
+        background: var(--bg-tertiary);
+        border: 2px solid var(--accent);
+        border-radius: 6px;
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+    
+    .inline-edit-input:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    
+    .quick-edit-btn {
+        width: 100%;
+        padding: 0.75rem;
+        margin-top: var(--spacing-lg);
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid var(--accent);
+        border-radius: 8px;
+        color: var(--accent);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .quick-edit-btn:hover {
+        background: var(--accent);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+        .quick-edit-btn {
+            margin-top: var(--spacing-md);
+            font-size: 0.9rem;
+        }
+    }
+`;
+document.head.appendChild(editButtonStyles);
