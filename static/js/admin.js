@@ -463,8 +463,7 @@ function setupCharacterForm() {
         const url = id ? `/admin/characters/${id}` : '/admin/characters';
         const method = id ? 'PUT' : 'POST';
         try {
-            const response = await fetchAPI(url, { method, body: formData, isFormData: true });
-            await handleFormSubmitResponse(new Response(JSON.stringify(response)));
+            const result = await fetchAPI(url, { method, body: formData, isFormData: true });
             showNotification(`Character ${id ? 'updated' : 'created'} successfully!`, 'success');
             closeCharacterForm();
             loadCharactersAdmin();
