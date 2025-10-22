@@ -17,7 +17,14 @@ async function fetchAPI(endpoint, options = {}) {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            let errorMessage = `HTTP error! status: ${response.status}`;
+            try {
+                const errorBody = await response.json();
+                errorMessage = errorBody.error || errorBody.message || errorMessage;
+            } catch (e) {
+                // Response was not JSON, stick with the original error
+            }
+            throw new Error(errorMessage);
         }
 
         return await response.json();
