@@ -172,6 +172,19 @@ function setupLazyLoading() {
     });
 }
 
+function getEraName(eraId) {
+    const eraNames = {
+        'pre-52': 'Classic',
+        'new-52': 'New 52',
+        'rebirth': 'Rebirth',
+        'infinite-frontier': 'Infinite Frontier',
+        'elseworlds': 'Elseworlds',
+        'post-crisis': 'Post-Crisis',
+        'future-state': 'Future State'
+    };
+    return eraNames[eraId] || eraId;
+}
+
 // Era tooltip
 function setupEraTooltips() {
     const tooltip = document.getElementById('era-tooltip');
