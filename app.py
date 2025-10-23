@@ -152,7 +152,7 @@ def api_families():
 def api_login():
     data = request.get_json()
     if not data:
-        return jsonify({'success': False, 'error': 'No data provided'}), 400
+        return jsonify({"message": "No input data provided"}), 400
     username = data.get('username')
     password = data.get('password')
     admin_username = os.getenv('ADMIN_USERNAME', 'admin')
@@ -163,7 +163,7 @@ def api_login():
     if username == admin_username and check_password_hash(admin_password_hash, password):
         access_token = create_access_token(identity=username)
         return jsonify(access_token=access_token)
-    return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
+    return jsonify({"message": "Invalid username or password"}), 401
 
 @app.route('/api/logout', methods=['POST'])
 @jwt_required()
