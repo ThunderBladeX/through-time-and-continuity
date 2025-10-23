@@ -203,6 +203,11 @@ def api_get_all_relationships():
 @jwt_required()
 def api_manage_relationships():
     data = request.get_json()
+    if isinstance(data, str):
+        try:
+            data = json.loads(data)
+        except json.JSONDecodeError:
+            return jsonify({'error': 'Invalid JSON format in request body'}), 400
     if not data or 'character_id' not in data or 'related_character_id' not in data:
         return jsonify({'error': 'Missing required fields'}), 400
 
