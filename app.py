@@ -299,6 +299,7 @@ def api_update_character(character_id):
     data = request.form.to_dict()
     bio_sections_json = data.pop('bio_sections', None)
     data = clean_form_data(data)
+    print(f"Received data for updating character {character_id}: {data}")
 
     if 'profile_image' in request.files:
         file = request.files['profile_image']
@@ -336,7 +337,7 @@ def api_delete_character(character_id):
 def api_create_event():
     data = request.form.to_dict()
     character_ids_str = data.pop('character_ids', '')
-    data.pop('character_ids_select', None) # <<< FIX: Remove the unwanted field
+    data.pop('character_ids_select', None)
     event = db.create_event(data)
     if not event:
         return jsonify({'error': 'Failed to create event'}), 500
