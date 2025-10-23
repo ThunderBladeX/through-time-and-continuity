@@ -152,6 +152,11 @@ def api_families():
 @app.route('/api/login', methods=['POST'])
 def api_login():
     data = request.get_json()
+    if isinstance(data, str):
+        try:
+            data = json.loads(data)
+        except json.JSONDecodeError:
+            return jsonify({"message": "Invalid JSON format"}), 400
     if not data:
         return jsonify({"message": "No input data provided"}), 400
     username = data.get('username')
