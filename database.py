@@ -120,13 +120,13 @@ class Database:
         if family and family != 'all':
             params['family'] = f'eq.{family}'
         
-        return supabase.query('characters', params=params, select='*,families(slug,name)')
+        return supabase.query('characters', params=params, select='*,family:families(slug,name)')
     
     @staticmethod
     def get_character_by_id(character_id):
         """Get a single character by ID, including their bio sections"""
         params = {'id': f'eq.{character_id}'}
-        result = supabase.query('characters', params=params, select='*,families(slug,name)')
+        result = supabase.query('characters', params=params, select='*,family:families(slug,name)')
         
         if not result:
             return None
