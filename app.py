@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from flask_jwt_extended import create_access_token, jwt_required, JWTManager
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 import os
@@ -10,22 +10,12 @@ from database import db, Database
 import mimetypes
 
 app = Flask(__name__)
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET', 'secret-jwt-key')
 app.config['SECRET_KEY'] = os.getenv('SESSION_SECRET', 'dev-secret-key')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max upload
 
-# Flask-Login setup
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = None
-
-# Simple user class for admin authentication
-class User(UserMixin):
-    def __init__(self, id):
-        self.id = id
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User(user_id)
+# JWT Setup
+jwt = JWTManager(app)
 
 # Era display names mapping - Loaded from the database
 ERA_NAMES = {}
@@ -166,26 +156,28 @@ def api_login():
     username = data.get('username')
     password = data.get('password')
     admin_username = os.getenv('ADMIN_USERNAME', 'admin')
-    admin_password = os.getenv('ADMIN_PASSWORD', 'admin123')
-    if username == admin_username and password == admin_password:
-        user = User(1)
-        login_user(user)
-        return jsonify({'success': True})
+    admin_password_hash = os.getenv('ADMIN_PASSWORD')
+    if not admin_password_hash:
+        admin_password_hash = 'pbkdf2:sha256:260000$....'
+        print("WARNING: ADMIN_PASSWORD env var not set. Using insecure fallback.")
+    if username == admin_username and check_password_hash(admin_password_hash, password):
+        access_token = create_access_token(identity=username)
+        return jsonify(access_token=access_token)
     return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
 
 @app.route('/api/logout', methods=['POST'])
-@login_required
+@jwt_required()
 def api_logout():
     logout_user()
     return jsonify({'success': True})
 
 @app.route('/api/admin/pending-edits', methods=['GET'])
-@login_required
+@jwt_required()
 def api_get_pending_edits():
     return jsonify(db.get_pending_edits())
 
 @app.route('/api/admin/pending-edits/<int:edit_id>', methods=['PATCH'])
-@login_required
+@jwt_required()
 def api_update_pending_edit(edit_id):
     action = request.json.get('action')
     if action == 'approve':
@@ -197,12 +189,12 @@ def api_update_pending_edit(edit_id):
     return jsonify({'error': 'Invalid action'}), 400
 
 @app.route('/api/admin/relationships', methods=['GET'])
-@login_required
+@jwt_required()
 def api_get_all_relationships():
     return jsonify(db.get_all_relationships())
 
 @app.route('/api/admin/relationships', methods=['POST', 'PATCH'])
-@login_required
+@jwt_required()
 def api_manage_relationships():
     data = request.get_json()
     if not data or 'character_id' not in data or 'related_character_id' not in data:
@@ -240,7 +232,7 @@ def api_manage_relationships():
         return jsonify({'error': 'Failed to update relationship'}), 500
 
 @app.route('/api/admin/relationships/<int:char1_id>/<int:char2_id>', methods=['GET', 'DELETE'])
-@login_required
+@jwt_required()
 def api_manage_relationship_pair(char1_id, char2_id):
     if request.method == 'GET':
         pair_data = db.get_relationship_pair(char1_id, char2_id)
@@ -255,12 +247,12 @@ def api_manage_relationship_pair(char1_id, char2_id):
         return jsonify({'error': 'Failed to delete relationship'}), 500
 
 @app.route('/api/admin/gallery', methods=['GET'])
-@login_required
+@jwt_required()
 def api_get_all_gallery_images():
     return jsonify(db.get_all_gallery_images())
 
 @app.route('/api/admin/characters', methods=['POST'])
-@login_required
+@jwt_required()
 def api_create_character():
     data = request.form.to_dict()
     bio_sections_json = data.pop('bio_sections', None)
@@ -296,7 +288,7 @@ def api_create_character():
         return jsonify({'error': 'Failed to create character in database'}), 500
 
 @app.route('/api/admin/characters/<int:character_id>', methods=['POST'])
-@login_required
+@jwt_required()
 def api_update_character(character_id):
     data = request.form.to_dict()
     bio_sections_json = data.pop('bio_sections', None)
@@ -328,13 +320,13 @@ def api_update_character(character_id):
     return (jsonify(character), 200) if character else (jsonify({'error': 'Failed to update character. Check for empty required fields.'}), 500)
 
 @app.route('/api/admin/characters/<int:character_id>', methods=['DELETE'])
-@login_required
+@jwt_required()
 def api_delete_character(character_id):
     db.delete_character(character_id)
     return jsonify({'success': True}), 200
 
 @app.route('/api/admin/events', methods=['POST'])
-@login_required
+@jwt_required()
 def api_create_event():
     data = request.form.to_dict()
     character_ids_str = data.pop('character_ids', '')
@@ -364,7 +356,7 @@ def api_create_event():
     return jsonify(event), 201
 
 @app.route('/api/admin/events/<int:event_id>', methods=['POST'])
-@login_required
+@jwt_required()
 def api_update_event(event_id):
     data = request.form.to_dict()
     character_ids_str = data.pop('character_ids', '')
@@ -398,7 +390,7 @@ def api_update_event(event_id):
 
 
 @app.route('/api/admin/events/<int:event_id>', methods=['DELETE'])
-@login_required
+@jwt_required()
 def api_delete_event(event_id):
     db.delete_event(event_id)
     return jsonify({'success': True}), 200
