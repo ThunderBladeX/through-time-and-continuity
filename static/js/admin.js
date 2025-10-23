@@ -304,7 +304,7 @@ async function populateFamilyDropdown() {
     try {
         const families = await fetchAPI('/families');
         familySelect.innerHTML = '<option value="">None</option>' + families.map(family => 
-            `<option value="${family.id}">${family.name}</option>`
+            `<option value="${family.slug}">${family.name}</option>`
         ).join('');
     } catch (error) {
         console.error('Failed to load families for dropdown:', error);
@@ -544,7 +544,7 @@ function populateForm(form, data) {
         } else if (key === 'family' && data[key]) {
             // Handle nested family object
             const familyField = form.elements['family_id'];
-            if (familyField) familyField.value = data[key].id;
+            if (familyField) familyField.value = data[key].slug;
         }
     }
 }
