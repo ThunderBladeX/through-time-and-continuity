@@ -444,12 +444,4 @@ class Database:
         """Get all family definitions from the database"""
         return supabase.query('families', params={'order': 'name'}, select='*')
 
-    @staticmethod
-    def get_family_id_by_slug(slug):
-        """Get a family's integer ID from its slug."""
-        if not slug:
-            return None
-        result = supabase.query('families', params={'slug': f'eq.{slug}'}, select='id')
-        return result[0]['id'] if result else None
-
 db = Database()
