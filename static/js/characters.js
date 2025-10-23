@@ -68,7 +68,7 @@ function createCharacterCard(character) {
     const displayName = character.name || character.full_name || 'Unknown';
     const imageSrc = character.profile_image || '/static/images/default-avatar.jpg';
     // Use the nested family name, with a fallback to the slug
-    const familyName = (character.families && character.families.name) || character.family;
+    const familyName = (character.family && character.family.name) || 'Unknown';
     
     card.innerHTML = `
         <img src="${imageSrc}" 
@@ -135,7 +135,7 @@ function filterCharacters(family) {
     if (family === 'all') {
         renderCharacters(allCharacters);
     } else {
-        const filtered = allCharacters.filter(char => char.family === family);
+        const filtered = allCharacters.filter(char => char.family && char.family.slug === family);
         renderCharacters(filtered);
     }
 }
