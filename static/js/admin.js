@@ -489,7 +489,11 @@ function setupCharacterForm() {
         const url = id ? `/admin/characters/${id}` : '/admin/characters';
         const method = id ? 'PUT' : 'POST';
         try {
-            const result = await fetchAPI(url, { method, body: formData, isFormData: true });
+            const result = await fetchAPI(url, {
+                method,
+                body: formData,
+                isFormData: true
+            });
             showNotification(`Character ${id ? 'updated' : 'created'} successfully!`, 'success');
             closeCharacterForm();
             loadCharactersAdmin();
@@ -525,7 +529,11 @@ async function setupEventForm() {
         const url = id ? `/admin/events/${id}` : '/admin/events';
         const method = id ? 'PUT' : 'POST';
         try {
-            await fetchAPI(url, { method, body: formData, isFormData: true });
+            await fetchAPI(url, {
+                method,
+                body: formData,
+                isFormData: true
+            });
             showNotification(`Event ${id ? 'updated' : 'created'} successfully!`, 'success');
             closeEventForm();
             loadTimelineAdmin();
