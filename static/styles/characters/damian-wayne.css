@@ -467,9 +467,6 @@
 }
 
 [data-character="damian-wayne"] .era-badge {
-    /*background: linear-gradient(135deg, 
-        rgba(42, 90, 52, 0.3), 
-        rgba(139, 21, 56, 0.3));*/
     border: 1px solid rgba(201, 169, 97, 0.4);
     color: var(--gold);
     font-family: 'Rajdhani', sans-serif, var(--font-sans);
@@ -500,9 +497,6 @@
 }
 
 [data-character="damian-wayne"] .era-badge:hover {
-    /*background: linear-gradient(135deg, 
-        rgba(42, 90, 52, 0.5), 
-        rgba(139, 21, 56, 0.5));*/
     border-color: var(--gold);
     box-shadow: 0 0 20px rgba(201, 169, 97, 0.3);
     background: 
@@ -1565,7 +1559,7 @@
     
     [data-character="damian-wayne"] .back-btn:hover {
         padding-left: 2rem;
-        transform: translateX(-10px);
+        transform: translateX(10px);
     }
     
     [data-character="damian-wayne"] .back-btn:hover::before {
