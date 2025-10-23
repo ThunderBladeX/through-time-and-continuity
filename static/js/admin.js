@@ -8,15 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('dashboard').style.display = 'block';
         setupDashboard();
         handleUrlParameters(); // Handle deep links for editing
+        setupCharacterForm();
+        setupEventForm();
+        setupRelationshipForm();
+        setupEditRelationshipForm();
     } else {
         setupLogin();
     }
-
-    // Setup forms regardless of login state
-    setupCharacterForm();
-    setupEventForm();
-    setupRelationshipForm();
-    setupEditRelationshipForm();
 });
 
 // Handle direct links to edit items from profile pages
