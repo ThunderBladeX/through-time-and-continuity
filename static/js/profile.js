@@ -104,7 +104,7 @@ function addQuickEditButton() {
     editButton.className = 'quick-edit-btn';
     editButton.innerHTML = '⚙️ Edit Character';
     editButton.onclick = () => {
-        window.location.href = `/admin.html?edit=character&id=${characterId}`;
+        window.location.href = `/admin?edit=character&id=${characterId}`;
     };
     
     if (profileSidebar) {
