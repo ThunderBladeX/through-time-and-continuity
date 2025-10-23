@@ -508,17 +508,17 @@ function editBioItem(element) {
 
 // Edit bio section by redirecting to the main character edit page
 function editBioSection() {
-    window.location.href = `/admin.html?edit=character&id=${characterId}`;
+    window.location.href = `/admin?edit=character&id=${characterId}`;
 }
 
 // Edit event by redirecting to the admin event form
 function editEvent(eventId) {
-    window.location.href = `/admin.html?edit=event&id=${eventId}`;
+    window.location.href = `/admin?edit=event&id=${eventId}`;
 }
 
 // Edit relationship by redirecting to the admin relationship form
 function editRelationship(relatedCharacterId) {
-    window.location.href = `/admin.html?edit=relationship&char1=${characterId}&char2=${relatedCharacterId}`;
+    window.location.href = `/admin?edit=relationship&char1=${characterId}&char2=${relatedCharacterId}`;
 }
 
 // Submit pending edit to admin for approval
