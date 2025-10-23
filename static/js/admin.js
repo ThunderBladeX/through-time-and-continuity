@@ -252,7 +252,7 @@ async function loadRelationshipsAdmin() {
         list.innerHTML = Array.from(uniquePairs.values()).map(rel => `
             <div class="admin-item">
                 <div class="admin-item-info">
-                    <h4>${rel.character.full_name} & ${rel.related_character.full_name}</h4>
+                    <h4>${rel.character.name} & ${rel.related_character.name}</h4>
                     <p>Type: ${rel.type} • Status: ${rel.status}</p>
                 </div>
                 <div class="admin-item-actions">
