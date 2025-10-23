@@ -10,11 +10,28 @@ async function fetchAPI(endpoint, options = {}) {
         ...options.headers
     };
 
+    if (options.isFormData) {
+        delete headers['Content-Type'];
+    }
+
     try {
         const response = await fetch(`${API_BASE}${endpoint}`, {
             ...options,
-            headers
+            headers,
+            body: options.isFormData ? options.body : (options.body ? JSON.stringify(options.body) : null)
         });
+
+        if (response.status === 401) {
+            // Token is invalid or expired. Log the user out.
+            localStorage.removeItem('admin_token');
+            showNotification('Your session has expired. Please log in again.', 'error');
+            // Give the notification time to show before reloading
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+            // Throw an error to stop the original function from continuing
+            throw new Error('Session expired');
+        }
 
         if (!response.ok) {
             let errorMessage = `HTTP error! status: ${response.status}`;
@@ -27,9 +44,19 @@ async function fetchAPI(endpoint, options = {}) {
             throw new Error(errorMessage);
         }
 
-        return await response.json();
+        // Handle empty responses (like from a DELETE request)
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+            return await response.json();
+        } else {
+            return {}; // Return empty object for non-json responses
+        }
+
     } catch (error) {
-        console.error('API Error:', error);
+        // Avoid showing a generic error if we've already handled the session expiration
+        if (error.message !== 'Session expired') {
+            console.error('API Error:', error);
+            }
         throw error;
     }
 }
