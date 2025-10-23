@@ -122,7 +122,7 @@ function addQuickEditButton() {
 function loadBioSections(sections) {
     const identitySection = document.getElementById('bio-identity');
     const additionalSections = document.getElementById('additional-bio-sections');
-    const familyName = (currentCharacter.families && currentCharacter.families.name) || currentCharacter.family;
+    const familyName = (currentCharacter.family && currentCharacter.family.name) || 'Unknown';
     
     // Create identity grid
     const identityItems = [
