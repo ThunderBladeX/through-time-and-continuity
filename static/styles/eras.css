@@ -1,9 +1,3 @@
-/* Era Badge Base Styles */
-.era-badge {
-    position: relative;
-    overflow: hidden;
-}
-
 /* Pre-New 52: Smoke, worn newspaper, yellow tint */
 .era-badge[data-era="pre-52"],
 .event-card[data-era="pre-52"]::before {
