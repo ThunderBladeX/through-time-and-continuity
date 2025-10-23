@@ -293,7 +293,7 @@ def api_create_character():
         print("db.create_character returned None. Character creation failed in database.py.")
         return jsonify({'error': 'Failed to create character in database'}), 500
 
-@app.route('/api/admin/characters/<int:character_id>', methods=['POST'])
+@app.route('/api/admin/characters/<int:character_id>', methods=['PUT'])
 @jwt_required()
 def api_update_character(character_id):
     data = request.form.to_dict()
