@@ -1565,6 +1565,7 @@
     
     [data-character="damian-wayne"] .back-btn:hover {
         padding-left: 2rem;
+        transform: translateX(-10px);
     }
     
     [data-character="damian-wayne"] .back-btn:hover::before {
