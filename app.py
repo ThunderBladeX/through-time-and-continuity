@@ -158,7 +158,7 @@ def api_login():
     admin_username = os.getenv('ADMIN_USERNAME', 'admin')
     admin_password_hash = os.getenv('ADMIN_PASSWORD')
     if not admin_password_hash:
-        admin_password_hash = 'pbkdf2:sha256:260000$....'
+        admin_password_hash = 'pbkdf2:sha256:600000$QOlgUXyHBQdPQTyQ$a6f40e9034b4ff7744f08a2e7f106141c490e8119bab8fb63751a65a5f91eb6d'
         print("WARNING: ADMIN_PASSWORD env var not set. Using insecure fallback.")
     if username == admin_username and check_password_hash(admin_password_hash, password):
         access_token = create_access_token(identity=username)
