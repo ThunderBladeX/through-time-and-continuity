@@ -600,13 +600,13 @@ async function editRelationship(char1Id, char2Id) {
         const form = document.getElementById('edit-relationship-form');
         form.elements['character_id'].value = char1Id;
         form.elements['related_character_id'].value = char2Id;
-        form.elements['character_1_name'].value = a_to_b.character.full_name;
-        form.elements['character_2_name'].value = b_to_a.character.full_name;
+        form.elements['character_1_name'].value = a_to_b.character.name;
+        form.elements['character_2_name'].value = b_to_a.character.name;
         form.elements['type'].value = a_to_b.type;
         form.elements['status_a_to_b'].value = a_to_b.status || '';
         form.elements['status_b_to_a'].value = b_to_a.status || '';
-        document.getElementById('edit-status-a-to-b-label').textContent = `${a_to_b.character.full_name}'s Status towards ${b_to_a.character.full_name}`;
-        document.getElementById('edit-status-b-to-a-label').textContent = `${b_to_a.character.full_name}'s Status towards ${a_to_b.character.full_name}`;
+        document.getElementById('edit-status-a-to-b-label').textContent = `${a_to_b.character.name} thinks of ${b_to_a.character.name} as a`;
+        document.getElementById('edit-status-b-to-a-label').textContent = `${b_to_a.character.name} thinks of ${a_to_b.character.name} as a`;
         openModal('edit-relationship-modal');
     } catch (error) {
         showNotification('Could not load relationship data.', 'error');
