@@ -295,12 +295,12 @@ async function loadGalleryAdmin() {
 }
 
 async function populateFamilyDropdown() {
-    const familySelect = document.querySelector('#character-form select[name="family_id"]');
+    const familySelect = document.querySelector('#character-form select[name="family"]');
     if (!familySelect) return;
 
     try {
         const families = await fetchAPI('/families');
-        familySelect.innerHTML = '<option value="">None</option>' + families.map(family => 
+        familySelect.innerHTML = '<option value="" disabled selected>Select a family...</option>' + families.map(family => 
             `<option value="${family.slug}">${family.name}</option>`
         ).join('');
     } catch (error) {
@@ -330,6 +330,7 @@ async function editCharacter(id) {
         openCharacterForm();
     } catch (error) {
         showNotification('Could not load character data.', 'error');
+        console.error('Failed to load character for editing:', error);
     }
 }
 
@@ -549,7 +550,7 @@ function populateForm(form, data) {
             else if (field.type !== 'file') field.value = data[key] || '';
         } else if (key === 'family' && data[key]) {
             // Handle nested family object
-            const familyField = form.elements['family_id'];
+            const familyField = form.elements['family'];
             if (familyField) familyField.value = data[key].slug;
         }
     }
