@@ -1553,25 +1553,18 @@
     [data-character="damian-wayne"] .back-btn {
         position: fixed;
         top: 0;
-        transform: translate(-10px, -16px);
         left: var(--spacing-md);
         padding: 0.6rem 1.2rem;
         font-size: 0.75rem;
-        clip-path: none !important;
     }
     
     [data-character="damian-wayne"] .back-btn::before {
         left: -20px;
         font-size: 1rem;
     }
-
-    [data-character="damian-wayne"] .back-btn::after {
-        display: none;
-    }
     
     [data-character="damian-wayne"] .back-btn:hover {
         padding-left: 2rem;
-        transform: translate(-7px, -13px);
     }
     
     [data-character="damian-wayne"] .back-btn:hover::before {
