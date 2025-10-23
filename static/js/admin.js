@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventForm();
     setupRelationshipForm();
     setupEditRelationshipForm();
-    populateFamilyDropdown();
 });
 
 // Handle direct links to edit items from profile pages
@@ -467,6 +466,7 @@ function addBioSectionRow(section = {}) {
 function setupCharacterForm() {
     const form = document.getElementById('character-form');
     if (!form) return;
+    populateFamilyDropdown();
     document.getElementById('add-bio-section-btn')?.addEventListener('click', () => addBioSectionRow());
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
