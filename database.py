@@ -53,12 +53,14 @@ class SupabaseClient:
                     response = client.delete(url, headers=headers, params=params)
                 
                 if 200 <= response.status_code < 300:
-                    if response.status_code == 204:
+                    if response.status_code == 204: # No Content for DELETE
                         return []
                     return response.json()
                 else:
                     print("--- SUPABASE DATABASE ERROR ---")
-                    print(f"URL: {response.url}")
+                    print(f"REQUEST: {method} {response.url}")
+                    if data:
+                        print(f"REQUEST BODY: {data}")
                     print(f"STATUS CODE: {response.status_code}")
                     print(f"RESPONSE BODY: {response.text}")
                     print("--- END OF ERROR ---")
