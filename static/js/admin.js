@@ -578,7 +578,7 @@ async function setupRelationshipForm() {
             return;
         }
         try {
-            const response = await fetchAPI('/admin/relationships', { method: 'POST', body: JSON.stringify(data) });
+            const response = await fetchAPI('/admin/relationships', { method: 'POST', body: data });
             showNotification('Relationship created successfully!', 'success');
             closeRelationshipForm();
             form.reset();
@@ -627,7 +627,7 @@ function setupEditRelationshipForm() {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(form).entries());
         try {
-            await fetchAPI('/admin/relationships', { method: 'PATCH', body: JSON.stringify(data) });
+            await fetchAPI('/admin/relationships', { method: 'PATCH', body: data });
             showNotification('Relationship updated successfully!', 'success');
             closeModal('edit-relationship-modal');
             loadRelationshipsAdmin();
