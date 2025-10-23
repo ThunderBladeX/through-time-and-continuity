@@ -110,7 +110,7 @@ def api_character_relationships(character_id):
             'type': rel['type'],
             'status': rel['status'],
             'related_character_id': rel['related_character_id'],
-            'related_character_name': related.get('full_name', ''),
+            'related_character_name': related.get('name', ''),
             'related_character_image': related.get('profile_image', '/static/images/default-avatar.jpg')
         })
     return jsonify(formatted)
@@ -137,9 +137,9 @@ def api_events():
             'era_display': ERA_NAMES.get(event['era'], event['era']),
             'summary': event['summary'],
             'character_id': event_chars[0]['character_id'] if event_chars else None,
-            'character_name': first_char.get('full_name', ''),
+            'character_name': first_char.get('name', ''),
             'character_image': first_char.get('profile_image', '/static/images/default-avatar.jpg'),
-            'characters': [ec['characters']['full_name'] for ec in event_chars if 'characters' in ec]
+            'characters': [ec['characters']['name'] for ec in event_chars if 'characters' in ec]
         })
     return jsonify(formatted)
 
