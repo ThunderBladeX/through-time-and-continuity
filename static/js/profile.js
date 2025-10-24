@@ -147,7 +147,7 @@ function loadBioSections(sections) {
         additionalSections.innerHTML = sections.map(section => `
             <div class="bio-section" data-section-id="${section.id}">
                 <h2 class="section-header">${section.section_title}</h2>
-                <div class="bio-content">
+                <div class="bio-content" data-raw-content="${encodeURIComponent(section.content)}">
                     ${parseMarkdown(section.content)}
                 </div>
             </div>
@@ -408,14 +408,14 @@ document.head.appendChild(highlightStyle);
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadCharacter();
-    if (localStorage.getItem('admin_token')) {
-        setupEditButtons();
-    }
+    // Public contribution buttons for everyone
+    setupContributionButtons();
 });
 
-// Setup edit buttons for admin
-function setupEditButtons() {
-    const editableSelectors = ['.bio-item', '.bio-section', '.event-card', '.relationship-card'];
+// Setup contribution buttons for public
+function setupContributionButtons() {
+    // Only bio items and sections are editable by the public
+    const editableSelectors = ['.bio-item', '.bio-section'];
     
     document.body.addEventListener('mouseover', (e) => {
         const selector = editableSelectors.find(s => e.target.closest(s));
@@ -433,7 +433,7 @@ function addEditButton(element) {
     const editBtn = document.createElement('button');
     editBtn.className = 'edit-btn';
     editBtn.innerHTML = '✏️';
-    editBtn.title = 'Edit';
+    editBtn.title = 'Suggest an Edit';
     editBtn.onclick = (e) => {
         e.stopPropagation();
         handleEdit(element);
@@ -454,13 +454,8 @@ function handleEdit(element) {
     if (element.classList.contains('bio-item')) {
         editBioItem(element);
     } else if (element.classList.contains('bio-section')) {
-        editBioSection();
-    } else if (element.classList.contains('event-card')) {
-        const eventId = element.closest('.timeline-event').dataset.eventId;
-        editEvent(eventId);
-    } else if (element.classList.contains('relationship-card')) {
-        const relatedId = element.dataset.relatedCharacterId;
-        editRelationship(relatedId);
+        const sectionId = element.dataset.sectionId;
+        editBioSection(element, sectionId);
     }
 }
 
@@ -485,8 +480,8 @@ function editBioItem(element) {
         if (newValue !== currentValue && newValue.trim() !== '') {
             try {
                 await submitPendingEdit({
-                    type: 'character_bio',
-                    character_id: characterId,
+                    type: 'character', // Table name
+                    record_id: characterId,
                     field: label.toLowerCase().replace(/\s+/g, '_'),
                     old_value: currentValue,
                     new_value: newValue
@@ -501,28 +496,86 @@ function editBioItem(element) {
     
     input.addEventListener('blur', save);
     input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') input.blur();
-        if (e.key === 'Escape') valueEl.textContent = currentValue;
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            input.blur();
+        }
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            input.removeEventListener('blur', save); // Prevent saving
+            valueEl.textContent = currentValue; // Restore UI
+        }
     });
 }
 
-// Edit bio section by redirecting to the main character edit page
-function editBioSection() {
-    window.location.href = `/admin?edit=character&id=${characterId}`;
-}
+// Edit bio section using a modal
+function editBioSection(element, sectionId) {
+    const modal = document.getElementById('bio-edit-modal');
+    const form = document.getElementById('bio-edit-form');
+    if (!modal || !form) return;
 
-// Edit event by redirecting to the admin event form
-function editEvent(eventId) {
-    window.location.href = `/admin?edit=event&id=${eventId}`;
-}
+    const currentTitle = element.querySelector('.section-header').textContent;
+    const contentDiv = element.querySelector('.bio-content');
+    const rawContent = contentDiv.dataset.rawContent ? decodeURIComponent(contentDiv.dataset.rawContent) : '';
 
-// Edit relationship by redirecting to the admin relationship form
-function editRelationship(relatedCharacterId) {
-    window.location.href = `/admin?edit=relationship&char1=${characterId}&char2=${relatedCharacterId}`;
+    // Populate the form with current data
+    form.elements['section_id'].value = sectionId;
+    form.elements['old_value_title'].value = currentTitle;
+    form.elements['old_value_content'].value = rawContent;
+    form.elements['new_value_title'].value = currentTitle;
+    form.elements['new_value_content'].value = rawContent;
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const newTitle = form.elements['new_value_title'].value;
+        const newContent = form.elements['new_value_content'].value;
+        let editsSubmitted = 0;
+
+        if (newTitle.trim() && newTitle !== currentTitle) {
+            try {
+                await submitPendingEdit({
+                    type: 'character_bio', // Table name
+                    record_id: sectionId,
+                    field: 'section_title',
+                    old_value: currentTitle,
+                    new_value: newTitle
+                });
+                editsSubmitted++;
+            } catch (error) {
+                showNotification('Failed to submit title edit', 'error');
+            }
+        }
+
+        if (newContent.trim() && newContent !== rawContent) {
+            try {
+                await submitPendingEdit({
+                    type: 'character_bio', // Table name
+                    record_id: sectionId,
+                    field: 'content',
+                    old_value: rawContent,
+                    new_value: newContent
+                });
+                editsSubmitted++;
+            } catch (error) {
+                showNotification('Failed to submit content edit', 'error');
+            }
+        }
+        
+        if (editsSubmitted > 0) {
+            showNotification('Edit(s) submitted for approval!', 'success');
+        } else {
+            showNotification('No changes were made.', 'info');
+        }
+        closeModal('bio-edit-modal');
+    };
+    
+    form.onsubmit = handleSubmit; // Assign handler, overwriting any previous one
+    openModal('bio-edit-modal');
 }
 
 // Submit pending edit to admin for approval
 async function submitPendingEdit(editData) {
+    // This endpoint must be public on the backend to allow suggestions
     return await fetchAPI('/admin/pending-edits', {
         method: 'POST',
         body: JSON.stringify(editData)
