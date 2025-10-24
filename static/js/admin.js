@@ -355,7 +355,7 @@ async function editEvent(id) {
         populateForm(form, event);
         
         const charSelect = document.getElementById('event-characters');
-        const charIds = event.characters?.map(c => c.id.toString()) || [];
+        const charIds = event.event_characters?.map(ec => ec.characters.id.toString()) || [];
         Array.from(charSelect.options).forEach(opt => opt.selected = charIds.includes(opt.value));
         
         // Trigger input event for markdown preview to update
@@ -365,6 +365,7 @@ async function editEvent(id) {
         openEventForm();
     } catch (error) {
         showNotification('Could not load event data.', 'error');
+        console.error("Error loading event for editing:", error);
     }
 }
 
@@ -523,7 +524,7 @@ async function setupEventForm() {
         e.preventDefault();
         const formData = new FormData(form);
         const selectedIds = Array.from(charSelect.selectedOptions).map(opt => opt.value);
-        formData.set('character_ids', JSON.stringify(selectedIds));
+        formData.set('character_ids', selectedIds.join(','));
         const id = formData.get('id');
         const url = id ? `/admin/events/${id}` : '/admin/events';
         const method = id ? 'PUT' : 'POST';
