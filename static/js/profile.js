@@ -411,10 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Public contribution buttons for everyone
     setupContributionButtons();
 
-    // START: FIX FOR LINGERING EDIT BUTTONS ON MOBILE
-    // On touch devices, a "tap" triggers a `mouseover` event but not always a `mouseout` event
-    // when tapping elsewhere. This causes the edit button to get "stuck" on screen.
-    // This listener handles the "tap away" behavior to remove any stray buttons.
+    // Handles "tap away" behavior to remove any stray buttons
     document.addEventListener('touchstart', (e) => {
         document.querySelectorAll('.edit-btn').forEach(btn => {
             const parentElement = btn.parentElement;
@@ -424,7 +421,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }, { passive: true });
-    // END: FIX
 });
 
 // Setup contribution buttons for public
@@ -436,6 +432,8 @@ function setupContributionButtons() {
         const selector = editableSelectors.find(s => e.target.closest(s));
         if (selector) {
             const element = e.target.closest(selector);
+            if (element && element.classList.contains('bio-item') && element.closest('#bio-identity')) {
+                return;
             if (element && !element.querySelector('.edit-btn')) {
                 addEditButton(element);
             }
