@@ -110,6 +110,31 @@
         </div>
     </div>
 
+    <!-- Bio Section Edit Modal -->
+    <div id="bio-edit-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">×</button>
+            <h2 id="bio-edit-modal-title">Suggest an Edit</h2>
+            <form id="bio-edit-form" style="margin-top: 1rem;">
+                <input type="hidden" name="section_id">
+                <input type="hidden" name="old_value_title">
+                <input type="hidden" name="old_value_content">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="new_value_title" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Section Title</label>
+                    <input type="text" id="new_value_title" name="new_value_title" class="form-control" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #ccc;">
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="new_value_content" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Content (Markdown supported)</label>
+                    <textarea id="new_value_content" name="new_value_content" rows="10" class="form-control" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #ccc;"></textarea>
+                </div>
+                <div class="form-actions" style="margin-top: 1.5rem; text-align: right;">
+                    <button type="submit" class="btn-primary" style="padding: 0.75rem 1.5rem; background-color: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Submit for Approval</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Timeline Event Modal -->
     <div id="event-modal" class="modal">
         <div class="modal-overlay"></div>
