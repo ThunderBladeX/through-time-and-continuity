@@ -512,6 +512,8 @@
 /* Modal Content */
 .modal-header {
     margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border);
 }
 
 .modal-header h2 {
