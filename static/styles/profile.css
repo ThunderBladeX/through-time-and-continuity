@@ -524,6 +524,7 @@
 .modal-body {
     max-height: calc(90vh - 200px);
     overflow-y: auto;
+    padding-right: var(--spacing-sm);
 }
 
 .event-images {
