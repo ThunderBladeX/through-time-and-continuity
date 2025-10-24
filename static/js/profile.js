@@ -585,8 +585,8 @@ async function submitPendingEdit(editData) {
 // Add edit button styles
 const editButtonStyles = document.createElement('style');
 editButtonStyles.textContent = `
-    .edit-btn { position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; background: transparent; border: none; border-radius: 6px; color: white; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 1; transition: all 0.2s ease; z-index: 10; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); }
-    .edit-btn:hover { background: var(--glow); transform: scale(1.1); }
+    .edit-btn { position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; background: transparent; border: none; border-radius: 6px; color: white; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 1; transition: all 0.2s ease; z-index: 10; }
+    .edit-btn:hover { text-shadow: 0 0 8px var(--glow); transform: scale(1.1); }
     .relationship-card .edit-btn { top: 50%; transform: translateY(-50%); }
     .inline-edit-input { width: 100%; padding: 0.5rem; background: var(--bg-tertiary); border: 2px solid var(--accent); border-radius: 6px; color: var(--text-primary); font-size: 1rem; font-weight: 500; }
     .inline-edit-input:focus { outline: none; box-shadow: 0 0 0 3px var(--glow); }
