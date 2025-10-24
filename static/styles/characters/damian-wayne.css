@@ -11,7 +11,7 @@
     --text-muted: #6b7278;
     --border: rgba(218, 225, 231, 0.1);
     --gold: #c9a961;
-    --glow: rgba(66, 226, 138, 0.3);
+    --glow: rgba(33, 62, 40, 0.3);
 }
 
 [data-character="damian-wayne"] .profile-page {
