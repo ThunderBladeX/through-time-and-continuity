@@ -24,9 +24,9 @@ async function loadCharacter() {
         
         // Set page title
         if (document.getElementById('page-title')) {
-            document.getElementById('page-title').textContent = `${charName} - DC Timeline`;
+            document.getElementById('page-title').textContent = `${charName} - Periaphe`;
         }
-        document.title = `${charName} - DC Timeline`;
+        document.title = `${charName} - Periaphe`;
         
         // Apply character-specific theming
         applyCharacterTheme(currentCharacter);
