@@ -429,14 +429,24 @@ function setupContributionButtons() {
     const editableSelectors = ['.bio-item', '.bio-section'];
     
     document.body.addEventListener('mouseover', (e) => {
-        const selector = editableSelectors.find(s => e.target.closest(s));
-        if (selector) {
-            const element = e.target.closest(selector);
-            if (element && element.classList.contains('bio-item') && element.closest('#bio-identity')) {
-                return;
-            if (element && !element.querySelector('.edit-btn')) {
-                addEditButton(element);
+        // Find the closest editable item or section.
+        const bioItem = e.target.closest('.bio-item');
+        const bioSection = e.target.closest('.bio-section');
+        
+        let targetElement = null;
+
+        // Priority 1: If hovering over a specific item, that's our target.
+        if (bioItem) {
+            targetElement = bioItem;
+        } 
+        // Priority 2: If not over an item, check if we're over a section.
+        else if (bioSection) {
+            if (!bioSection.querySelector('#bio-identity')) {
+                targetElement = bioSection;
             }
+        }
+        if (targetElement && !targetElement.querySelector('.edit-btn')) {
+            addEditButton(targetElement);
         }
     });
 }
