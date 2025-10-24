@@ -367,12 +367,12 @@ def api_create_event():
         db.create_event_images(image_urls)
     return jsonify(event), 201
 
-@app.route('/api/admin/events/<int:event_id>', methods=['POST'])
+@app.route('/api/admin/events/<int:event_id>', methods=['PUT'])
 @jwt_required()
 def api_update_event(event_id):
     data = request.form.to_dict()
     character_ids_str = data.pop('character_ids', '')
-    data.pop('character_ids_select', None) # <<< FIX: Remove the unwanted field here too
+    data.pop('character_ids_select', None)
 
     event = db.update_event(event_id, data)
     if not event:
