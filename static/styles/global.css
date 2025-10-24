@@ -262,6 +262,7 @@ body {
     max-width: 600px;
     width: 90%;
     max-height: 90vh;
+    height: auto;
     overflow-y: auto;
     box-shadow: var(--shadow-xl);
     animation: modalSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
