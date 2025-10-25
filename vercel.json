@@ -8,16 +8,16 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
-      "dest": "app.py"
-    },
-    {
       "src": "/favicon.ico",
       "dest": "/static/images/favicon.ico"
     },
     {
       "src": "/favicon.png",
       "dest": "/static/images/favicon.png"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
     }
   ],
   "env": {
