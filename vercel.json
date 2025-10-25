@@ -12,12 +12,12 @@
       "dest": "app.py"
     },
     {
-      "source": "/favicon.ico",
-      "destination": "/static/images/favicon.ico"
+      "src": "/favicon.ico",
+      "dest": "/static/images/favicon.ico"
     },
     {
-      "source": "/favicon.png",
-      "destination": "/static/images/favicon.png"
+      "src": "/favicon.png",
+      "dest": "/static/images/favicon.png"
     }
   ],
   "env": {
