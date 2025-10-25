@@ -12,6 +12,16 @@
       "dest": "app.py"
     }
   ],
+  "rewrites": [
+  {
+    "source": "/favicon.ico",
+    "destination": "/static/images/favicon.ico"
+  },
+  {
+    "source": "/favicon.png",
+    "destination": "/static/images/favicon.png"
+  }
+  ],
   "env": {
     "FLASK_ENV": "production"
   }
