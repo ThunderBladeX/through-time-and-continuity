@@ -13,12 +13,10 @@ app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET', 'secret-jwt-key')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=8)
 app.config['SECRET_KEY'] = os.getenv('SESSION_SECRET', 'dev-secret-key')
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max upload
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  
 
-# JWT Setup
 jwt = JWTManager(app)
 
-# Era display names mapping - Loaded from the database
 ERA_NAMES = {}
 try:
     with app.app_context():
@@ -42,13 +40,12 @@ def clean_form_data(data):
     """Helper function to convert empty strings for specific fields to None."""
     if 'birthday' in data and data['birthday'] == '':
         data['birthday'] = None
-    
+
     return data
 
 print(f"DB: {db}.")
 print(f"Type: {type(db)}.")
 
-# Routes
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -69,7 +66,6 @@ def profile(character_id):
 def admin():
     return render_template('admin.html')
 
-# API Routes
 @app.route('/api/characters')
 def api_characters():
     family = request.args.get('family', 'all')
@@ -105,6 +101,12 @@ def api_character_relationships(character_id):
             'related_character_image': related.get('profile_image', '/static/images/default-avatar.jpg')
         })
     return jsonify(formatted)
+
+@app.route('/api/characters/<int:character_id>/love-interests')
+def api_character_love_interests(character_id):
+    interests = db.get_character_love_interests(character_id)
+
+    return jsonify(interests)
 
 @app.route('/api/characters/<int:character_id>/gallery')
 def api_character_gallery(character_id):
@@ -174,7 +176,7 @@ def api_login():
 @app.route('/api/logout', methods=['POST'])
 @jwt_required()
 def api_logout():
-    logout_user()
+
     return jsonify({'success': True})
 
 @app.route('/api/admin/pending-edits', methods=['GET'])
@@ -214,7 +216,7 @@ def api_manage_relationships():
     if request.method == 'POST':
         char_id_a = data.get('character_id')
         char_id_b = data.get('related_character_id')
-        
+
         data_a_to_b = {
             'character_id': char_id_a,
             'related_character_id': char_id_b,
@@ -250,12 +252,44 @@ def api_manage_relationship_pair(char1_id, char2_id):
         if not pair_data:
             return jsonify({'error': 'Relationship not found'}), 404
         return jsonify(pair_data)
-    
+
     elif request.method == 'DELETE':
         success = db.delete_relationship_pair(char1_id, char2_id)
         if success:
             return jsonify({'success': True}), 200
         return jsonify({'error': 'Failed to delete relationship'}), 500
+
+@app.route('/api/admin/love-interests', methods=['GET', 'POST'])
+@jwt_required()
+def api_manage_love_interests():
+    if request.method == 'GET':
+        return jsonify(db.get_all_love_interests())
+
+    if request.method == 'POST':
+        data = request.get_json()
+        if not data or 'character_id' not in data or 'love_interest_id' not in data:
+            return jsonify({'error': 'Missing required fields'}), 400
+
+        result = db.create_love_interest(data)
+        if result:
+            return jsonify(result), 201
+        return jsonify({'error': 'Failed to create love interest'}), 500
+
+@app.route('/api/admin/love-interests/<int:relationship_id>', methods=['PUT', 'DELETE'])
+@jwt_required()
+def api_manage_love_interest_by_id(relationship_id):
+    if request.method == 'PUT':
+        data = request.get_json()
+        result = db.update_love_interest(relationship_id, data)
+        if result:
+            return jsonify(result), 200
+        return jsonify({'error': 'Failed to update love interest'}), 500
+
+    if request.method == 'DELETE':
+        success = db.delete_love_interest(relationship_id)
+        if success:
+            return jsonify({'success': True}), 200
+        return jsonify({'error': 'Failed to delete love interest'}), 500
 
 @app.route('/api/admin/gallery', methods=['GET'])
 @jwt_required()
@@ -268,7 +302,7 @@ def api_create_character():
     data = request.form.to_dict()
     bio_sections_json = data.pop('bio_sections', None)
     data = clean_form_data(data)
-    
+
     print(f"Attempting to create character with data: {data}")
     if 'profile_image' in request.files:
         file = request.files['profile_image']
@@ -283,9 +317,9 @@ def api_create_character():
                 data['profile_image'] = public_url
             else:
                 return jsonify({'error': 'Failed to upload image to storage'}), 500
-    
+
     character = db.create_character(data)
-    
+
     if character:
         if bio_sections_json:
             try:
@@ -319,9 +353,9 @@ def api_update_character(character_id):
                 data['profile_image'] = public_url
             else:
                 return jsonify({'error': 'Failed to upload image'}), 500
-    
+
     character = db.update_character(character_id, data)
-    
+
     if bio_sections_json is not None:
         try:
             bio_sections_data = json.loads(bio_sections_json)
@@ -377,12 +411,10 @@ def api_update_event(event_id):
     event = db.update_event(event_id, data)
     if not event:
         return jsonify({'error': 'Failed to update event'}), 500
-    
-    # Update character links
+
     character_ids = [int(id) for id in character_ids_str.split(',') if id.isdigit()]
     db.update_event_character_links(event_id, character_ids)
-    
-    # Handle new image uploads (does not delete old ones)
+
     images = request.files.getlist('event_images')
     image_urls = []
     bucket_name = 'event-images'
@@ -397,9 +429,8 @@ def api_update_event(event_id):
                 image_urls.append({'event_id': event_id, 'image_url': public_url})
     if image_urls:
         db.create_event_images(image_urls)
-        
-    return jsonify(event), 200
 
+    return jsonify(event), 200
 
 @app.route('/api/admin/events/<int:event_id>', methods=['DELETE'])
 @jwt_required()
