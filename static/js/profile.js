@@ -1,4 +1,3 @@
-// Get character ID from URL path
 const pathParts = window.location.pathname.split('/');
 const characterId = pathParts[pathParts.length - 1];
 const urlParams = new URLSearchParams(window.location.search);
@@ -7,110 +6,96 @@ const highlightEventId = urlParams.get('event');
 let currentCharacter = null;
 let currentTab = 'overview';
 
-// Load character data
 async function loadCharacter() {
     if (!characterId || isNaN(characterId)) {
         window.location.href = '/characters';
         return;
     }
-    
+
     try {
-        // Backend returns character object directly, now includes bio_sections
+
         const character = await fetchAPI(`/characters/${characterId}`);
         currentCharacter = character;
-        
-        // Use correct field name
+
         const charName = currentCharacter.full_name || currentCharacter.name || 'Unknown';
-        
-        // Set page title
+
         if (document.getElementById('page-title')) {
             document.getElementById('page-title').textContent = `${charName} - Periaphe`;
         }
         document.title = `${charName} - Periaphe`;
-        
-        // Apply character-specific theming
+
         applyCharacterTheme(currentCharacter);
-        
-        // Load character info
+
         loadCharacterInfo();
-        
-        // Load bio sections
+
         loadBioSections(currentCharacter.bio_sections || []);
 
-        // Sync desktop overview content to mobile container after all content is loaded
         const desktopOverviewContent = document.getElementById('overview-tab').innerHTML;
         const mobileOverviewContainer = document.getElementById('mobile-overview');
         if (mobileOverviewContainer) {
             mobileOverviewContainer.innerHTML = desktopOverviewContent;
         }
-        
-        // Load other tabs (lazy load on tab switch)
+
         setupTabs();
-        
+
     } catch (error) {
         console.error('Error loading character:', error);
         showNotification('Failed to load character', 'error');
-        // Redirect to characters page on error
+
         setTimeout(() => window.location.href = '/characters', 2000);
     }
 }
 
-// Load character basic info
 function loadCharacterInfo() {
-    // Use correct field names from database
+
     const charName = currentCharacter.name || 'Unknown';
     const imageSrc = currentCharacter.profile_image || '/static/images/default-avatar.jpg';
-    
-    // Desktop
+
     const profileImg = document.getElementById('profile-image');
     if (profileImg) {
         profileImg.src = imageSrc;
         profileImg.alt = charName;
         profileImg.onerror = function() { this.src = '/static/images/default-avatar.jpg'; };
     }
-    
+
     const charNameEl = document.getElementById('character-name');
     if (charNameEl) charNameEl.textContent = charName;
-    
-    // Mobile
+
     const mobileImg = document.getElementById('mobile-profile-image');
     if (mobileImg) {
         mobileImg.src = imageSrc;
         mobileImg.alt = charName;
         mobileImg.onerror = function() { this.src = '/static/images/default-avatar.jpg'; };
     }
-    
+
     const mobileNameEl = document.getElementById('mobile-character-name');
     if (mobileNameEl) mobileNameEl.textContent = charName;
-    
-    // Quote
+
     const quoteEl = document.getElementById('character-quote');
     if (currentCharacter.quote && quoteEl) {
         quoteEl.textContent = currentCharacter.quote;
     }
 
-    // Add quick edit button for admin
     if (localStorage.getItem('admin_token')) {
         addQuickEditButton();
     }
 }
 
-// Add quick edit button for overall character
 function addQuickEditButton() {
     const profileSidebar = document.querySelector('.profile-sidebar');
     const mobileHeader = document.querySelector('.mobile-header');
-    
+
     const editButton = document.createElement('button');
     editButton.className = 'quick-edit-btn';
     editButton.innerHTML = '⚙️ Edit Character';
     editButton.onclick = () => {
         window.location.href = `/admin?edit=character&id=${characterId}`;
     };
-    
+
     if (profileSidebar) {
         profileSidebar.appendChild(editButton);
     }
-    
+
     if (mobileHeader) {
         const clonedButton = editButton.cloneNode(true);
         clonedButton.onclick = editButton.onclick;
@@ -118,32 +103,29 @@ function addQuickEditButton() {
     }
 }
 
-// Load bio sections
 function loadBioSections(sections) {
     const identitySection = document.getElementById('bio-identity');
     const additionalSections = document.getElementById('additional-bio-sections');
     const familyName = (currentCharacter.family && currentCharacter.family.name) || 'Unknown';
-    
-    // Create identity grid
+
     const identityItems = [
         { label: 'Full Name', value: currentCharacter.full_name },
         { label: 'Alias', value: currentCharacter.nickname },
         { label: 'Birthday', value: currentCharacter.birthday ? formatDate(currentCharacter.birthday) : null },
         { label: 'Family', value: familyName }
     ].filter(item => item.value);
-    
+
     identitySection.innerHTML = identityItems.map(item => `
         <div class="bio-item">
             <div class="bio-label">${item.label}</div>
             <div class="bio-value">${item.value}</div>
         </div>
     `).join('');
-    
-    // Create additional sections from database
+
     if (sections && sections.length > 0) {
-        // The database query already sorts by display_order, this is a fallback.
+
         sections.sort((a, b) => a.display_order - b.display_order);
-        
+
         additionalSections.innerHTML = sections.map(section => `
             <div class="bio-section" data-section-id="${section.id}">
                 <h2 class="section-header">${section.section_title}</h2>
@@ -157,10 +139,9 @@ function loadBioSections(sections) {
     }
 }
 
-// Setup tab navigation
 function setupTabs() {
     const tabs = document.querySelectorAll('.nav-tab, .mobile-nav-tab');
-    
+
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const tabName = tab.dataset.tab;
@@ -169,27 +150,23 @@ function setupTabs() {
     });
 }
 
-// Switch between tabs
 function switchTab(tabName) {
     currentTab = tabName;
-    
-    // Update active tab buttons
+
     document.querySelectorAll('.nav-tab, .mobile-nav-tab').forEach(tab => {
         tab.classList.toggle('active', tab.dataset.tab === tabName);
     });
-    
-    // Update active content
+
     document.querySelectorAll('.tab-content, .mobile-tab-content').forEach(content => {
         content.classList.remove('active');
     });
-    
+
     const desktopContent = document.getElementById(`${tabName}-tab`);
     const mobileContent = document.getElementById(`mobile-${tabName}`);
-    
+
     if (desktopContent) desktopContent.classList.add('active');
     if (mobileContent) mobileContent.classList.add('active');
-    
-    // Load content if not loaded yet
+
     if (desktopContent && !desktopContent.dataset.loaded) {
         switch(tabName) {
             case 'timeline':
@@ -197,6 +174,9 @@ function switchTab(tabName) {
                 break;
             case 'relationships':
                 loadRelationships();
+                break;
+            case 'love-interests': 
+                loadLoveInterests();
                 break;
             case 'gallery':
                 loadGallery();
@@ -206,26 +186,25 @@ function switchTab(tabName) {
     }
 }
 
-// Load timeline events
 async function loadTimeline() {
     const timelineList = document.getElementById('timeline-list');
     const mobileTimelineContainer = document.getElementById('mobile-timeline');
     if (!timelineList || !mobileTimelineContainer) return;
-    
+
     try {
         const events = await fetchAPI(`/characters/${characterId}/timeline`);
-        
+
         let contentHTML = '<p class="empty-state">No timeline events yet.</p>';
         if (events && events.length > 0) {
             events.sort((a, b) => new Date(b.event_date) - new Date(a.event_date));
             contentHTML = events.map(event => createTimelineEvent(event)).join('');
         }
-        
+
         timelineList.innerHTML = contentHTML;
         mobileTimelineContainer.innerHTML = contentHTML;
-        
+
         setupEventModals();
-        
+
         if (highlightEventId) {
             const eventCard = document.querySelector(`[data-event-id="${highlightEventId}"]`);
             if (eventCard) {
@@ -233,7 +212,7 @@ async function loadTimeline() {
                 eventCard.style.animation = 'highlight 2s ease';
             }
         }
-        
+
     } catch (error) {
         console.error('Error loading timeline:', error);
         const errorHTML = '<p class="error-state">Failed to load timeline.</p>';
@@ -242,7 +221,6 @@ async function loadTimeline() {
     }
 }
 
-// Create timeline event HTML
 function createTimelineEvent(event) {
     const eraDisplay = event.era_display || getEraName(event.era);
     return `
@@ -259,12 +237,11 @@ function createTimelineEvent(event) {
     `;
 }
 
-// Open event modal with full details
 async function openEventModal(eventId) {
     try {
         const event = await fetchAPI(`/events/${eventId}`);
         const eraDisplay = event.era_display || getEraName(event.era);
-        
+
         const modal = document.getElementById('event-modal');
         if (!modal) return;
 
@@ -272,7 +249,7 @@ async function openEventModal(eventId) {
         modal.querySelector('#modal-era-badge').textContent = eraDisplay;
         modal.querySelector('#modal-event-title').textContent = event.title;
         modal.querySelector('#modal-event-date').textContent = formatDate(event.event_date);
-        
+
         const imagesContainer = modal.querySelector('#modal-event-images');
         imagesContainer.innerHTML = (event.images && event.images.length > 0)
             ? event.images.map(imgUrl => `<img src="${imgUrl}" alt="${event.title}" loading="lazy" onerror="this.style.display='none'">`).join('')
@@ -280,7 +257,7 @@ async function openEventModal(eventId) {
 
         const descContainer = modal.querySelector('#modal-event-description');
         descContainer.innerHTML = event.full_description || `<p>${event.summary || ''}</p>`;
-        
+
         openModal('event-modal');
     } catch (error) {
         console.error('Error loading event details:', error);
@@ -288,15 +265,14 @@ async function openEventModal(eventId) {
     }
 }
 
-// Load relationships
 async function loadRelationships() {
     const relationshipsList = document.getElementById('relationships-list');
     const mobileRelationshipsContainer = document.getElementById('mobile-relationships');
     if (!relationshipsList || !mobileRelationshipsContainer) return;
-    
+
     try {
         const relationships = await fetchAPI(`/characters/${characterId}/relationships`);
-        
+
         let contentHTML = '<p class="empty-state">No relationships defined yet.</p>';
         if (relationships && relationships.length > 0) {
             contentHTML = relationships.map(rel => `
@@ -319,7 +295,7 @@ async function loadRelationships() {
 
         relationshipsList.innerHTML = contentHTML;
         mobileRelationshipsContainer.innerHTML = contentHTML;
-        
+
     } catch (error) {
         console.error('Error loading relationships:', error);
         const errorHTML = '<p class="error-state">Failed to load relationships.</p>';
@@ -328,14 +304,53 @@ async function loadRelationships() {
     }
 }
 
-// Load gallery (handled by gallery.js)
+async function loadLoveInterests() {
+    const container = document.getElementById('love-interests-list');
+    const mobileContainer = document.getElementById('mobile-love-interests');
+    if (!container || !mobileContainer) return;
+
+    try {
+        const interests = await fetchAPI(`/characters/${characterId}/love-interests`);
+
+        let contentHTML = '<p class="empty-state">No love interests recorded.</p>';
+        if (interests && interests.length > 0) {
+            contentHTML = interests.map(item => {
+                const partner = item.love_interest;
+                const partnerName = partner.full_name || partner.name || 'Unknown';
+                const partnerImage = partner.profile_image || '/static/images/default-avatar.jpg';
+                const statusText = item.status ? item.status.charAt(0).toUpperCase() + item.status.slice(1) : 'Complicated';
+
+                return `
+                    <div class="love-interest-card" data-status="${item.status}">
+                        <img src="${partnerImage}" alt="${partnerName}" class="love-interest-avatar" onerror="this.src='/static/images/default-avatar.jpg'">
+                        <div class="love-interest-details">
+                            <h3 class="love-interest-name">
+                                <a href="/profile/${partner.id}">${partnerName}</a>
+                            </h3>
+                            <p class="love-interest-status">${statusText}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        container.innerHTML = contentHTML;
+        mobileContainer.innerHTML = contentHTML;
+
+    } catch (error) {
+        console.error('Error loading love interests:', error);
+        const errorHTML = '<p class="error-state">Failed to load love interests.</p>';
+        container.innerHTML = errorHTML;
+        mobileContainer.innerHTML = errorHTML;
+    }
+}
+
 function loadGallery() {
     if (typeof initGallery === 'function') {
         initGallery(characterId);
     }
 }
 
-// Setup event modal triggers
 function setupEventModals() {
     document.querySelectorAll('.event-card').forEach(card => {
         card.addEventListener('click', (e) => {
@@ -345,14 +360,13 @@ function setupEventModals() {
     });
 }
 
-// Apply character-specific theme
 async function applyCharacterTheme(character) {
     document.body.dataset.characterId = character.id;
     const charName = character.name || 'unknown';
     const cssFileName = charName.toLowerCase().replace(/\s+/g, '-') + '.css';
     const cssPath = `/static/styles/characters/${cssFileName}`;
     document.body.dataset.character = charName.toLowerCase().replace(/\s+/g, '-');
-    
+
     const themeLink = document.getElementById('character-theme');
     if (themeLink) {
         const cssExists = await checkFileExists(cssPath);
@@ -366,7 +380,6 @@ async function applyCharacterTheme(character) {
     }
 }
 
-// Check if a file exists
 async function checkFileExists(url) {
     try {
         const response = await fetch(url, { method: 'HEAD' });
@@ -376,7 +389,6 @@ async function checkFileExists(url) {
     }
 }
 
-// Apply dynamic theme from database colors
 function applyDynamicTheme(character) {
     const root = document.documentElement;
     if (character.color_primary) root.style.setProperty('--character-primary', character.color_primary);
@@ -386,7 +398,6 @@ function applyDynamicTheme(character) {
     if (character.theme_data) applyAdvancedTheme(character.theme_data);
 }
 
-// Apply advanced theme options from theme_data JSON
 function applyAdvancedTheme(themeData) {
     if (!themeData) return;
     if (themeData.cursor) document.body.style.cursor = `url('${themeData.cursor}'), auto`;
@@ -398,24 +409,21 @@ function applyAdvancedTheme(themeData) {
     }
 }
 
-// Add highlight animation
 const highlightStyle = document.createElement('style');
 highlightStyle.textContent = `
     @keyframes highlight { 0%, 100% { box-shadow: var(--shadow-lg); } 50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.8); } }
 `;
 document.head.appendChild(highlightStyle);
 
-// Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadCharacter();
-    // Public contribution buttons for everyone
+
     setupContributionButtons();
 
-    // Handles "tap away" behavior to remove any stray buttons
     document.addEventListener('touchstart', (e) => {
         document.querySelectorAll('.edit-btn').forEach(btn => {
             const parentElement = btn.parentElement;
-            // If the tap occurred outside the button's parent container, remove the button.
+
             if (parentElement && !parentElement.contains(e.target)) {
                 btn.remove();
             }
@@ -423,23 +431,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
 });
 
-// Setup contribution buttons for public
 function setupContributionButtons() {
-    // Only bio items and sections are editable by the public
+
     const editableSelectors = ['.bio-item', '.bio-section'];
-    
+
     document.body.addEventListener('mouseover', (e) => {
-        // Find the closest editable item or section.
+
         const bioItem = e.target.closest('.bio-item');
         const bioSection = e.target.closest('.bio-section');
-        
+
         let targetElement = null;
 
-        // Priority 1: If hovering over a specific item, that's our target.
         if (bioItem) {
             targetElement = bioItem;
         } 
-        // Priority 2: If not over an item, check if we're over a section.
+
         else if (bioSection) {
             if (!bioSection.querySelector('#bio-identity')) {
                 targetElement = bioSection;
@@ -451,7 +457,6 @@ function setupContributionButtons() {
     });
 }
 
-// Add edit button to element
 function addEditButton(element) {
     const editBtn = document.createElement('button');
     editBtn.className = 'edit-btn';
@@ -461,10 +466,10 @@ function addEditButton(element) {
         e.stopPropagation();
         handleEdit(element);
     };
-    
+
     element.style.position = 'relative';
     element.appendChild(editBtn);
-    
+
     element.addEventListener('mouseout', (e) => {
         if (!element.contains(e.relatedTarget)) {
             editBtn.remove();
@@ -472,7 +477,6 @@ function addEditButton(element) {
     }, { once: true });
 }
 
-// Handle edit action
 function handleEdit(element) {
     if (element.classList.contains('bio-item')) {
         editBioItem(element);
@@ -482,28 +486,27 @@ function handleEdit(element) {
     }
 }
 
-// Edit bio item (inline editing for pending changes)
 function editBioItem(element) {
     const valueEl = element.querySelector('.bio-value');
     const currentValue = valueEl.textContent;
     const label = element.querySelector('.bio-label').textContent;
-    
+
     const input = document.createElement('input');
     input.type = 'text';
     input.value = currentValue;
     input.className = 'inline-edit-input';
-    
+
     valueEl.innerHTML = '';
     valueEl.appendChild(input);
     input.focus();
     input.select();
-    
+
     const save = async () => {
         const newValue = input.value;
         if (newValue !== currentValue && newValue.trim() !== '') {
             try {
                 await submitPendingEdit({
-                    type: 'character', // Table name
+                    type: 'character', 
                     record_id: characterId,
                     field: label.toLowerCase().replace(/\s+/g, '_'),
                     old_value: currentValue,
@@ -514,9 +517,9 @@ function editBioItem(element) {
                 showNotification('Failed to submit edit', 'error');
             }
         }
-        valueEl.textContent = currentValue; // Restore original until approved
+        valueEl.textContent = currentValue; 
     };
-    
+
     input.addEventListener('blur', save);
     input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
@@ -525,13 +528,12 @@ function editBioItem(element) {
         }
         if (e.key === 'Escape') {
             e.preventDefault();
-            input.removeEventListener('blur', save); // Prevent saving
-            valueEl.textContent = currentValue; // Restore UI
+            input.removeEventListener('blur', save); 
+            valueEl.textContent = currentValue; 
         }
     });
 }
 
-// Edit bio section using a modal
 function editBioSection(element, sectionId) {
     const modal = document.getElementById('bio-edit-modal');
     const form = document.getElementById('bio-edit-form');
@@ -541,13 +543,12 @@ function editBioSection(element, sectionId) {
     const contentDiv = element.querySelector('.bio-content');
     const rawContent = contentDiv.dataset.rawContent ? decodeURIComponent(contentDiv.dataset.rawContent) : '';
 
-    // Populate the form with current data
     form.elements['section_id'].value = sectionId;
     form.elements['old_value_title'].value = currentTitle;
     form.elements['old_value_content'].value = rawContent;
     form.elements['new_value_title'].value = currentTitle;
     form.elements['new_value_content'].value = rawContent;
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const newTitle = form.elements['new_value_title'].value;
@@ -557,7 +558,7 @@ function editBioSection(element, sectionId) {
         if (newTitle.trim() && newTitle !== currentTitle) {
             try {
                 await submitPendingEdit({
-                    type: 'character_bio', // Table name
+                    type: 'character_bio', 
                     record_id: sectionId,
                     field: 'section_title',
                     old_value: currentTitle,
@@ -572,7 +573,7 @@ function editBioSection(element, sectionId) {
         if (newContent.trim() && newContent !== rawContent) {
             try {
                 await submitPendingEdit({
-                    type: 'character_bio', // Table name
+                    type: 'character_bio', 
                     record_id: sectionId,
                     field: 'content',
                     old_value: rawContent,
@@ -583,7 +584,7 @@ function editBioSection(element, sectionId) {
                 showNotification('Failed to submit content edit', 'error');
             }
         }
-        
+
         if (editsSubmitted > 0) {
             showNotification('Edit(s) submitted for approval!', 'success');
         } else {
@@ -591,21 +592,19 @@ function editBioSection(element, sectionId) {
         }
         closeModal('bio-edit-modal');
     };
-    
-    form.onsubmit = handleSubmit; // Assign handler, overwriting any previous one
+
+    form.onsubmit = handleSubmit; 
     openModal('bio-edit-modal');
 }
 
-// Submit pending edit to admin for approval
 async function submitPendingEdit(editData) {
-    // This endpoint must be public on the backend to allow suggestions
+
     return await fetchAPI('/admin/pending-edits', {
         method: 'POST',
         body: JSON.stringify(editData)
     });
 }
 
-// Add edit button styles
 const editButtonStyles = document.createElement('style');
 editButtonStyles.textContent = `
     .edit-btn { position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; background: transparent; border: none; border-radius: 6px; color: white; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 1; transition: all 0.2s ease; z-index: 10; }
