@@ -176,7 +176,7 @@ def api_login():
 @app.route('/api/logout', methods=['POST'])
 @jwt_required()
 def api_logout():
-
+    logout_user()
     return jsonify({'success': True})
 
 @app.route('/api/admin/pending-edits', methods=['GET'])
