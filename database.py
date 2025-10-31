@@ -438,16 +438,16 @@ class Database:
     @staticmethod
     def get_character_love_interests(character_id):
         """Get all love interests for a character."""
-
         params = {'or': f'(character_one_id.eq.{character_id},character_two_id.eq.{character_id})'}
-        select_query = '*,character_one:characters(id,name,profile_image),character_two:characters(id,name,profile_image)'
+
+        select_query = '*,character_one:character_one_id(id,name,profile_image),character_two:character_two_id(id,name,profile_image)'
         interests = supabase.query('love_interests', params=params, select=select_query)
 
         formatted = []
         for interest in interests:
-            is_char_one = interest['character_one_id'] == character_id
+            is_char_one_in_db = interest['character_one_id'] == character_id
 
-            if is_char_one:
+            if is_char_one_in_db:
                 partner = interest.get('character_two', {})
                 description = interest.get('description_one_to_two')
             else:
@@ -465,7 +465,8 @@ class Database:
     @staticmethod
     def get_all_love_interests():
         """Get all love interests for the admin panel."""
-        select_query = '*,character_one:characters(id,name),character_two:characters(id,name)'
+
+        select_query = '*,character_one:character_one_id(id,name),character_two:character_two_id(id,name)'
         return supabase.query('love_interests', params={'order': 'created_at.desc'}, select=select_query)
 
     @staticmethod
@@ -478,30 +479,39 @@ class Database:
     @staticmethod
     def create_love_interest(data):
         """Create a new love interest."""
-
         char1 = int(data.get('character_one_id'))
         char2 = int(data.get('character_two_id'))
 
+        insert_data = {
+            'category': data.get('category')
+        }
+
         if char1 < char2:
-            data['character_one_id'] = char1
-            data['character_two_id'] = char2
+            insert_data['character_one_id'] = char1
+            insert_data['character_two_id'] = char2
+            insert_data['description_one_to_two'] = data.get('description_one_to_two')
+            insert_data['description_two_to_one'] = data.get('description_two_to_one')
         else:
-            data['character_one_id'] = char2
-            data['character_two_id'] = char1
+            insert_data['character_one_id'] = char2
+            insert_data['character_two_id'] = char1
 
-            desc1 = data.get('description_one_to_two')
-            desc2 = data.get('description_two_to_one')
-            data['description_one_to_two'] = desc2
-            data['description_two_to_one'] = desc1
+            insert_data['description_one_to_two'] = data.get('description_two_to_one')
+            insert_data['description_two_to_one'] = data.get('description_one_to_two')
 
-        result = supabase.query('love_interests', method='POST', data=data, select='*')
+        result = supabase.query('love_interests', method='POST', data=insert_data, select='*')
         return result[0] if result else None
 
     @staticmethod
     def update_love_interest(interest_id, data):
         """Update a love interest."""
         params = {'id': f'eq.{interest_id}'}
-        result = supabase.query('love_interests', method='PATCH', params=params, data=data)
+
+        update_data = {
+            'category': data.get('category'),
+            'description_one_to_two': data.get('description_one_to_two'),
+            'description_two_to_one': data.get('description_two_to_one')
+        }
+        result = supabase.query('love_interests', method='PATCH', params=params, data=update_data)
         return result[0] if result else None
 
     @staticmethod
