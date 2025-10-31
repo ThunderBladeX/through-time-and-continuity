@@ -83,7 +83,7 @@
 
 .hero-subtitle::before,
 .hero-subtitle::after {
-    content: '✧';
+    content: '✦';
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -344,10 +344,10 @@
         filter:none
     }
     .hero-subtitle::before{
-        left:5rem
+        left:7rem
     }
     .hero-subtitle::after{
-        right:5rem
+        right:7rem
     }
 }
 
@@ -363,10 +363,10 @@
         font-size:.6rem
     }
     .hero-subtitle::before{
-        left:30px
+        left:35px
     }
     .hero-subtitle::after{
-        right:30px
+        right:35px
     }
     .activity-card{
         background:var(--bg-secondary);
