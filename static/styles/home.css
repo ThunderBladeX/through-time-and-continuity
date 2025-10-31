@@ -343,6 +343,12 @@
         animation:none;
         filter:none
     }
+    .hero-subtitle::before{
+        left:20px
+    }
+    .hero-subtitle::after{
+        right:20px
+    }
 }
 
 @media (max-width:768px){
@@ -350,37 +356,23 @@
         height:70vh;
         background-attachment:scroll
     }
-    
     .hero-title{
         font-size:clamp(2rem,12vw,4rem)
     }
-    
     .hero-subtitle{
         font-size:.6rem
     }
-
-    .hero-subtitle::before{
-        left:10px
-    }
-
-    .hero-subtitle::after{
-        right:10px
-    }
-
     .activity-card{
         background:var(--bg-secondary);
         backdrop-filter:none;
         border-background:var(--border);
     }
-
     .activity-list{
         grid-template-columns:1fr
     }
-    
     .era-explanations{
         grid-template-columns:1fr
     }
-    
     .about-content{
         padding:var(--spacing-md)
     }
