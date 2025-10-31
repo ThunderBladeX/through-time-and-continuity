@@ -39,6 +39,7 @@
                     <button class="sidebar-btn" data-section="characters">Characters</button>
                     <button class="sidebar-btn" data-section="timeline">Timeline Events</button>
                     <button class="sidebar-btn" data-section="relationships">Relationships</button>
+                    <button class="sidebar-btn" data-section="love-interests">Love Interests</button>
                     <button class="sidebar-btn" data-section="gallery">Gallery</button>
                 </nav>
             </aside>
@@ -82,6 +83,17 @@
                         <button class="btn-primary" onclick="openRelationshipForm()">+ New Relationship</button>
                     </div>
                     <div id="relationships-admin-list">
+                        <!-- Loaded via JS -->
+                    </div>
+                </section>
+
+                <!-- Love Interests Section -->
+                <section id="love-interests-section" class="admin-section">
+                    <div class="section-header">
+                        <h2>Manage Love Interests</h2>
+                        <button class="btn-primary" onclick="openLoveInterestForm()">+ New Love Interest</button>
+                    </div>
+                    <div id="love-interests-admin-list" class="admin-list">
                         <!-- Loaded via JS -->
                     </div>
                 </section>
@@ -340,6 +352,7 @@
         </div>
     </div>
 
+    <!-- Edit Relationship Modal -->
     <div id="edit-relationship-modal" class="modal">
         <div class="modal-overlay"></div>
         <div class="modal-content">
@@ -388,6 +401,57 @@
                 <div class="form-actions">
                     <button type="button" class="btn-secondary" onclick="closeModal('edit-relationship-modal')">Cancel</button>
                     <button type="submit" class="btn-primary">Update Relationship</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Love Interest Modal -->
+    <div id="love-interest-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content wide">
+            <button class="modal-close">×</button>
+            <h2 id="love-interest-form-title">Add Love Interest</h2>
+            <form id="love-interest-form" class="admin-form">
+                <input type="hidden" name="id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Character 1 *</label>
+                        <select name="character_one_id" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Character 2 *</label>
+                        <select name="character_two_id" required></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select name="category" required>
+                        <option value="canon">💑 Canon Darlings</option>
+                        <option value="once_dated">📜 Once Dated</option>
+                        <option value="implied">🤔 Implied Fondness</option>
+                        <option value="unrequited">💔 Unrequited Crush</option>
+                        <option value="au_lovers">💞 Lovers In Another Life</option>
+                        <option value="au_exes">❤️‍🩹 Exes In Another Life</option>
+                    </select>
+                </div>
+
+                <div class="form-section">
+                    <h3>Descriptions (from each character's POV)</h3>
+                    <div class="form-group">
+                        <label for="description_one_to_two">How Character 1 sees Character 2</label>
+                        <textarea name="description_one_to_two" rows="3" placeholder="e.g., The love of their life."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="description_two_to_one">How Character 2 sees Character 1</label>
+                        <textarea name="description_two_to_one" rows="3" placeholder="e.g., A trusted partner and confidant."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeLoveInterestForm()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Love Interest</button>
                 </div>
             </form>
         </div>
