@@ -154,7 +154,7 @@
     transition: all var(--transition-medium);
     cursor: pointer;
     position: relative;
-    overflow: hidden;
+    overflow: hidden
 }
 
 .activity-card::before {
@@ -164,19 +164,21 @@
     left: 0;
     width: 4px;
     height: 100%;
-    background: var(--accent);
+    background: var(--gradient-primary);
     transform: scaleY(0);
-    transition: transform var(--transition-medium);
+    transform-origin: bottom;
+    transition: transform var(--transition-medium)
 }
 
 .activity-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
-    border-color: var(--accent);
+    border-color: var(--accent)
 }
 
 .activity-card:hover::before {
     transform: scaleY(1);
+    transform-origin: top
 }
 
 .activity-header {
@@ -385,10 +387,8 @@
 }
 
 @media (max-width:327px){
-    .hero-subtitle::before{
-        transform:translateX(-5px)
-    }
+    .hero-subtitle::before,
     .hero-subtitle::after{
-        transform:translateX(5px)
+        display:none
     }
 }
