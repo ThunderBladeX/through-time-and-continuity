@@ -175,7 +175,7 @@ function switchTab(tabName) {
             case 'relationships':
                 loadRelationships();
                 break;
-            case 'love-interests': 
+            case 'love-interests':
                 loadLoveInterests();
                 break;
             case 'gallery':
@@ -305,44 +305,76 @@ async function loadRelationships() {
 }
 
 async function loadLoveInterests() {
-    const container = document.getElementById('love-interests-list');
+    const desktopContainer = document.getElementById('love-interests-tab');
     const mobileContainer = document.getElementById('mobile-love-interests');
-    if (!container || !mobileContainer) return;
+    if (!desktopContainer || !mobileContainer) return;
 
     try {
         const interests = await fetchAPI(`/characters/${characterId}/love-interests`);
 
-        let contentHTML = '<p class="empty-state">No love interests recorded.</p>';
-        if (interests && interests.length > 0) {
-            contentHTML = interests.map(item => {
-                const partner = item.love_interest;
-                const partnerName = partner.full_name || partner.name || 'Unknown';
-                const partnerImage = partner.profile_image || '/static/images/default-avatar.jpg';
-                const statusText = item.status ? item.status.charAt(0).toUpperCase() + item.status.slice(1) : 'Complicated';
+        if (!interests || interests.length === 0) {
+            const emptyHTML = '<p class="empty-state">No love interests defined yet.</p>';
+            desktopContainer.innerHTML = emptyHTML;
+            mobileContainer.innerHTML = emptyHTML;
+            return;
+        }
 
-                return `
-                    <div class="love-interest-card" data-status="${item.status}">
-                        <img src="${partnerImage}" alt="${partnerName}" class="love-interest-avatar" onerror="this.src='/static/images/default-avatar.jpg'">
-                        <div class="love-interest-details">
-                            <h3 class="love-interest-name">
-                                <a href="/profile/${partner.id}">${partnerName}</a>
-                            </h3>
-                            <p class="love-interest-status">${statusText}</p>
+        const grouped = interests.reduce((acc, item) => {
+            (acc[item.category] = acc[item.category] || []).push(item);
+            return acc;
+        }, {});
+
+        const categoryTitles = {
+            'canon': '💑 Canon Darlings',
+            'once_dated': '📜 Once Dated',
+            'implied': '🤔 Implied Fondness',
+            'unrequited': '💔 Unrequited Crush',
+            'au_lovers': '💞 Lovers In Another Life',
+            'au_exes': '❤️‍🩹 Exes In Another Life'
+        };
+
+        const categoryOrder = ['canon', 'once_dated', 'implied', 'unrequited', 'au_lovers', 'au_exes'];
+
+        let contentHTML = '';
+        for (const category of categoryOrder) {
+            if (grouped[category]) {
+                contentHTML += `
+                    <div class="love-interest-section">
+                        <h2 class="section-header">${categoryTitles[category]}</h2>
+                        <div class="love-interest-grid">
+                            ${grouped[category].map(createLoveInterestCard).join('')}
                         </div>
                     </div>
                 `;
-            }).join('');
+            }
         }
 
-        container.innerHTML = contentHTML;
+        desktopContainer.innerHTML = contentHTML;
         mobileContainer.innerHTML = contentHTML;
 
     } catch (error) {
         console.error('Error loading love interests:', error);
         const errorHTML = '<p class="error-state">Failed to load love interests.</p>';
-        container.innerHTML = errorHTML;
+        desktopContainer.innerHTML = errorHTML;
         mobileContainer.innerHTML = errorHTML;
     }
+}
+
+function createLoveInterestCard(interest) {
+    const partner = interest.partner;
+    const partnerName = partner.name || 'Unknown';
+    const partnerImage = partner.profile_image || '/static/images/default-avatar.jpg';
+    const partnerId = partner.id;
+
+    return `
+        <div class="love-interest-card">
+            <img src="${partnerImage}" alt="${partnerName}" class="love-interest-pfp" onerror="this.src='/static/images/default-avatar.jpg'">
+            <div class="love-interest-details">
+                <a href="/profile/${partnerId}" class="love-interest-name">${partnerName}</a>
+                ${interest.description ? `<p class="love-interest-desc">${interest.description}</p>` : ''}
+            </div>
+        </div>
+    `;
 }
 
 function loadGallery() {
