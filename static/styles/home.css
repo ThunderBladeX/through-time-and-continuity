@@ -52,21 +52,30 @@
     letter-spacing: -2px;
     line-height: 0.95;
     margin-bottom: var(--spacing-lg);
-    background: linear-gradient(135deg, #ffffff 0%, #3b82f6 50%, #8b5cf6 100%);
+    background: linear-gradient(
+        135deg, 
+        #ffffff 0%, 
+        #60a5fa 30%,
+        #3b82f6 50%, 
+        #8b5cf6 70%,
+        #a78bfa 100%
+    );
+    background-size: 200% 200%
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-shadow: 0 0 80px rgba(59, 130, 246, 0.5);
-    animation: titleGlow 3s ease-in-out infinite alternate;
+    animation: titleGlow 8s ease-in-out infinite, titleMove 20s ease-in-out infinite;
     filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.4))
 }
 
 @keyframes titleGlow {
-    from {
-        filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));
+    0%, 100% {
+        filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.4)),
+                drop-shadow(0 0 40px rgba(59, 130, 246, 0.2))
     }
-    to {
-        filter: drop-shadow(0 0 40px rgba(139, 92, 246, 0.7));
+    50% {
+        filter: drop-shadow(0 0 40px rgba(139, 92, 246, 0.6)),
+                drop-shadow(0 0 60px rgba(139, 92, 246, 0.3))
     }
 }
 
@@ -455,6 +464,7 @@
     }
     .hero-title{
         font-size:clamp(2rem,12vw,4rem)
+        background: linear-gradient(135deg, #ffffff 0%, #3b82f6 50%, #8b5cf6 100%)
     }
     .hero-subtitle{
         font-size:.6rem
