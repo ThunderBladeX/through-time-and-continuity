@@ -276,10 +276,10 @@
         margin-bottom:var(--spacing-xl)
     }
     .search-wrapper{
-        padding:0.65rem 1rem
+        padding:.65rem 1rem
     }
     #character-search{
-        font-size:0.95rem
+        font-size:.95rem
     }
     .character-grid {
         grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
@@ -315,7 +315,7 @@
         grid-template-columns:repeat(2,1fr)
     }
     .search-wrapper{
-        padding:0.6rem 0.85rem
+        padding:.6rem .85rem
     }
     .search-icon{
         width:18px;
