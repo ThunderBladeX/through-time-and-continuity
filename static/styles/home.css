@@ -386,9 +386,9 @@
 
 @media (max-width:327px){
     .hero-subtitle::before{
-        left:-5px
+        transform:translateX(-5px)
     }
     .hero-subtitle::after{
-        right:-5px
+        transform:translateX(5px)
     }
 }
