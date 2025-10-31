@@ -410,7 +410,7 @@ p {
 .back-btn {
     position: fixed;
     top: 0;
-    transform: translate(2rem, 2rem);
+    transform: translate(2rem, 3rem);
     left: 0;
     z-index: 100;
     padding: 0.5rem 1rem;
