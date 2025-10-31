@@ -383,3 +383,12 @@
         padding:var(--spacing-md)
     }
 }
+
+@media (max-width:327px){
+    .hero-subtitle::before{
+        left:5px
+    }
+    .hero-subtitle::after{
+        right:5px
+    }
+}
