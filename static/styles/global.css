@@ -410,8 +410,8 @@ p {
 .back-btn {
     position: fixed;
     top: 0;
-    transform: translateY(60px);
-    left: var(--spacing-lg);
+    transform: translate(2rem);
+    left: 0;
     z-index: 100;
     padding: 0.5rem 1rem;
     background: var(--bg-secondary);
@@ -473,8 +473,7 @@ p {
     }
     
     .back-btn {
-        transform: translateY(20px);
-        left: var(--spacing-md);
+        transform: translate(1rem);
         font-size: 0.9rem;
     }
 
