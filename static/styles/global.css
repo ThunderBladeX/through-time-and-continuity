@@ -409,7 +409,8 @@ p {
 
 .back-btn {
     position: fixed;
-    top: 60px;
+    top: 0;
+    transform: translateY(60px);
     left: var(--spacing-lg);
     z-index: 100;
     padding: 0.5rem 1rem;
