@@ -398,7 +398,6 @@
 }
 
 .relationship-avatar {
-    margin-right: var(--spacing-lg);
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -422,11 +421,13 @@
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 0.25rem;
+    margin-left: var(--spacing-md);
     letter-spacing: -0.2px
 }
 
 .relationship-status {
     color: var(--text-secondary);
+    margin-left: var(--spacing-md);
     font-size: 0.9rem
 }
 
