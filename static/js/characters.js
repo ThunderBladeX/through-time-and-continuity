@@ -1,16 +1,13 @@
 let allCharacters = [];
-let currentFilter = 'all';
 
-// Load all characters
 async function loadCharacters() {
     const grid = document.getElementById('character-grid');
     if (!grid) return;
-    
+
     try {
-        // Backend returns array directly, not wrapped in object
         const characters = await fetchAPI('/characters');
         allCharacters = characters || [];
-        
+
         if (allCharacters.length === 0) {
             grid.innerHTML = `
                 <div class="empty-state">
@@ -20,9 +17,9 @@ async function loadCharacters() {
             `;
             return;
         }
-        
+
         renderCharacters(allCharacters);
-        
+
     } catch (error) {
         console.error('Error loading characters:', error);
         grid.innerHTML = `
@@ -34,42 +31,37 @@ async function loadCharacters() {
     }
 }
 
-// Render character cards
 function renderCharacters(characters) {
     const grid = document.getElementById('character-grid');
     grid.innerHTML = '';
-    
+
     if (characters.length === 0) {
         grid.innerHTML = `
             <div class="empty-state">
                 <h3>No Characters Found</h3>
-                <p>Try a different filter.</p>
+                <p>Try a different search term.</p>
             </div>
         `;
         return;
     }
-    
+
     characters.forEach(character => {
         const card = createCharacterCard(character);
         grid.appendChild(card);
     });
 }
 
-// Create character card
 function createCharacterCard(character) {
     const card = document.createElement('div');
     card.className = 'character-card';
     card.onclick = () => {
-        // Use path params, not query params, and no .html extension
         window.location.href = `/profile/${character.id}`;
     };
-    
-    // Use correct field names from database
+
     const displayName = character.name || character.full_name || 'Unknown';
     const imageSrc = character.profile_image || '/static/images/default-avatar.jpg';
-    // Use the nested family name, with a fallback to the slug
     const familyName = (character.family && character.family.name) || 'Unknown';
-    
+
     card.innerHTML = `
         <img src="${imageSrc}" 
              alt="${displayName}" 
@@ -84,93 +76,55 @@ function createCharacterCard(character) {
             <span class="character-card-family">${familyName || 'Other'}</span>
         </div>
     `;
-    
+
     return card;
 }
 
-async function buildFilterBar() {
-    const filterBar = document.querySelector('.filter-bar');
-    if (!filterBar) return;
+function setupSearch() {
+    const searchInput = document.getElementById('character-search');
+    const clearBtn = document.getElementById('clear-search');
 
-    try {
-        const families = await fetchAPI('/families');
-        const familyButtons = families.map(family => 
-            `<button class="filter-btn" data-family="${family.slug}">${family.name}</button>`
-        ).join('');
+    if (!searchInput) return;
 
-        filterBar.innerHTML = `
-            <button class="filter-btn active" data-family="all">All</button>
-            ${familyButtons}
-        `;
+    searchInput.addEventListener('input', debounce((e) => {
+        const query = e.target.value.toLowerCase().trim();
 
-        // Now that the buttons exist, set up their click listeners
-        setupFilterListeners();
-    } catch (error) {
-        console.error("Failed to build filter bar:", error);
-    }
-}
+        if (clearBtn) {
+            clearBtn.classList.toggle('visible', query.length > 0);
+        }
 
-// Setup filter buttons
-function setupFilterListeners() {
-    const filterButtons = document.querySelectorAll('.filter-bar .filter-btn');
+        if (query) {
+            const filtered = allCharacters.filter(char => 
+                (char.full_name && char.full_name.toLowerCase().includes(query)) ||
+                (char.name && char.name.toLowerCase().includes(query)) ||
+                (char.nickname && char.nickname.toLowerCase().includes(query)) ||
+                (char.family && char.family.name && char.family.name.toLowerCase().includes(query))
+            );
+            renderCharacters(filtered);
+        } else {
+            renderCharacters(allCharacters);
+        }
+    }, 300));
 
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Update active state
-            filterButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            // Get filter value
-            const family = btn.dataset.family;
-            currentFilter = family;
-            
-            // Filter and render
-            filterCharacters(family);
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            clearBtn.classList.remove('visible');
+            renderCharacters(allCharacters);
+            searchInput.focus();
         });
+    }
+
+    searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            searchInput.value = '';
+            if (clearBtn) clearBtn.classList.remove('visible');
+            renderCharacters(allCharacters);
+        }
     });
 }
 
-// Filter characters by family
-function filterCharacters(family) {
-    if (family === 'all') {
-        renderCharacters(allCharacters);
-    } else {
-        const filtered = allCharacters.filter(char => char.family && char.family.slug === family);
-        renderCharacters(filtered);
-    }
-}
-
-// Search functionality (if added later)
-function setupSearch() {
-    const searchInput = document.getElementById('character-search');
-    if (!searchInput) return;
-    
-    searchInput.addEventListener('input', debounce((e) => {
-        const query = e.target.value.toLowerCase();
-        
-        let filtered = allCharacters;
-        
-        // Apply family filter
-        if (currentFilter !== 'all') {
-            filtered = filtered.filter(char => char.family === currentFilter);
-        }
-        
-        // Apply search - use correct field names
-        if (query) {
-            filtered = filtered.filter(char => 
-                (char.full_name && char.full_name.toLowerCase().includes(query)) ||
-                (char.name && char.name.toLowerCase().includes(query)) ||
-                (char.nickname && char.nickname.toLowerCase().includes(query))
-            );
-        }
-        
-        renderCharacters(filtered);
-    }, 300));
-}
-
-// Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    buildFilterBar();
     setupSearch();
     loadCharacters();
 });
