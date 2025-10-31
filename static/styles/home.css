@@ -382,10 +382,26 @@
 }
 
 .disclaimer {
-    background: var(--bg-tertiary);
+    background: linear-gradient(
+        135deg,
+        rgba(59, 130, 246, 0.05) 0%,
+        rgba(139, 92, 246, 0.05) 100%
+    );
     border-left: 4px solid var(--accent);
     padding: var(--spacing-lg);
     border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.disclaimer::before {
+    content: '⚠';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 2rem;
+    opacity: 0.1;
 }
 
 .disclaimer h3 {
@@ -420,7 +436,11 @@
         backdrop-filter:none
     }
     .character-tag:hover{
-        box-shadow: 0 4px 6px rgba(59,130,246,.4)
+        box-shadow:0 4px 6px rgba(59,130,246,.4)
+    }
+    .disclaimer{
+        box-shadow:0 4px 6px rgba(0, 0, 0, 0.3);
+        background: var(--bg-tertiary);
     }
 }
 
@@ -441,21 +461,30 @@
     .hero-subtitle::after{
         right:35px
     }
-    .activity-card{
-        background:var(--bg-secondary);
-        border-background:var(--border)
+    .activity-card:hover {
+        transform: translateY(-3px)
     }
     .activity-list{
         grid-template-columns:1fr
-    }
-    .era-card {
-        background: var(--bg-secondary);
     }
     .era-explanations{
         grid-template-columns:1fr
     }
     .about-content{
         padding:var(--spacing-md)
+    }
+}
+
+@media (max-width:480px){
+    .activity-card,.era-card{
+        background:var(--bg-secondary);
+        border-background:var(--border)
+    }
+    .character-tag:hover,
+    .disclaimer,
+    .era-card:hover,
+    .activity-card:hover{
+        box-shadow:none
     }
 }
 
