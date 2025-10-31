@@ -457,7 +457,9 @@ p {
 
     .site-title {
         background:var(--gradient-primary);
-        animation:none
+        animation:none;
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent
     }
 
     body::before {
