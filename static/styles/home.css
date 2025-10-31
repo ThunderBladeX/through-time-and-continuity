@@ -251,7 +251,8 @@
 
 .character-tag {
     padding: 0.35rem 0.75rem;
-    background: var(--bg-tertiary);
+    background: rgba(42, 42, 42, 0.8);
+    border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: 6px;
     font-size: 0.85rem;
     color: var(--text-secondary);
@@ -260,8 +261,11 @@
 }
 
 .character-tag:hover {
-    background: var(--accent);
+    background: var(--gradient-primary);
     color: white;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4)
 }
 
 /* About Page Specific */
@@ -373,6 +377,9 @@
     }
     .activity-card,.character-tag{
         backdrop-filter:none
+    }
+    .character-tag:hover{
+        box-shadow: 0 4px 6px rgba(59,130,246,.4)
     }
 }
 
