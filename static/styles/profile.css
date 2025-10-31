@@ -14,7 +14,6 @@
     display: none;
 }
 
-/* Desktop Two-Column Layout */
 .desktop-view {
     display: grid;
     grid-template-columns: 350px 1fr;
@@ -22,7 +21,6 @@
     align-items: start;
 }
 
-/* Left Sidebar */
 .profile-sidebar {
     position: sticky;
     top: 110px;
@@ -73,7 +71,6 @@
     letter-spacing: -0.5px;
 }
 
-/* Profile Navigation - Modern Tab Design */
 .profile-nav {
     display: flex;
     flex-direction: column;
@@ -128,7 +125,6 @@
     transform: scaleY(1);
 }
 
-/* Right Content Area */
 .profile-content {
     min-height: 600px;
 }
@@ -153,7 +149,6 @@
     }
 }
 
-/* Overview Tab - Enhanced */
 .bio-section {
     margin-bottom: var(--spacing-2xl);
 }
@@ -241,7 +236,6 @@
     font-weight: 600;
 }
 
-/* Timeline Tab - Enhanced */
 .timeline-container {
     position: relative;
     padding: var(--spacing-lg) 0;
@@ -366,7 +360,6 @@
     line-height: 1.65;
 }
 
-/* Relationships Tab - Enhanced */
 .relationships-grid {
     display: flex;
     flex-direction: column;
@@ -440,7 +433,6 @@
     font-size: 0.9rem;
 }
 
-/* Relationship Type Border Colors */
 .relationship-card[data-type="romantic"] {
     border-left: 4px solid #ec4899;
 }
@@ -465,7 +457,6 @@
     border-left: 4px solid #ef4444;
 }
 
-/* Gallery Tab - Enhanced */
 .masonry-grid {
     column-count: 3;
     column-gap: var(--spacing-md);
@@ -509,7 +500,6 @@
     display: flex;
 }
 
-/* Modal Content */
 .modal-header {
     margin-bottom: var(--spacing-lg);
     padding-bottom: var(--spacing-md);
@@ -554,7 +544,6 @@
     margin-top: var(--spacing-lg);
 }
 
-/* Tooltip */
 .tooltip {
     position: fixed;
     background: var(--bg-tertiary);
@@ -575,7 +564,6 @@
     opacity: 1;
 }
 
-/* Responsive for smaller desktops */
 @media (max-width: 1024px) {
     .desktop-view {
         grid-template-columns: 300px 1fr;
