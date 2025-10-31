@@ -450,7 +450,9 @@ p {
     .modal-close,
     .back-btn,
     .btn-secondary,
-    .modal-content {
+    .modal-content,
+    .modal-overlay,
+    .main-nav {
         backdrop-filter:none
     }
 
@@ -508,11 +510,6 @@ p {
     .back-btn {
         transform:translate(1rem, 1rem);
         font-size:.9rem
-    }
-
-    .modal-overlay,
-    .main-nav {
-        backdrop-filter:none
     }
 
     :root {
