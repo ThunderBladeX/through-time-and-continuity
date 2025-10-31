@@ -101,6 +101,11 @@
     animation-delay: 1.5s
 }
 
+@keyframes float {
+    0%, 100% { transform: translateY(-50%) translateX(0); }
+    50% { transform: translateY(-50%) translateX(5px); }
+}
+
 /* Activity Feed Section */
 .activity-feed {
     padding: var(--spacing-2xl) 0;
@@ -333,7 +338,7 @@
     }
     
     .hero-subtitle{
-        font-size:1rem
+        font-size:.9rem
     }
     
     .activity-list{
