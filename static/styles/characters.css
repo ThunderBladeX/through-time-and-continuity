@@ -266,6 +266,9 @@
     .character-card::after{
         display:none
     }
+    .character-card::before{
+        background:linear-gradient(135deg,transparent 0%,rgba(59,130,246,.2) 100%)
+    }
     .character-card:hover{
         box-shadow:0 12px 18px rgba(0,0,0,.6)
     }
@@ -285,6 +288,7 @@
     }
     .character-card-family{
         box-shadow:0 2px 3px rgba(0,0,0,.3);
+        background:rgba(59,130,246,.2)
     }
     .character-card:hover .character-card-family{
         box-shadow:0 4px 6px rgba(59,130,246,.3)
@@ -318,7 +322,8 @@
         transform:translateY(-8px) scale(1.02)
     }
     .character-card-overlay{
-        padding:var(--spacing-md)
+        padding:var(--spacing-md);
+        background:linear-gradient(to top,rgba(0,0,0,.95),transparent)
     }
     .character-card:hover .character-card-overlay{
         padding-bottom:var(--spacing-md)
@@ -333,6 +338,7 @@
         grid-template-columns:repeat(2,1fr)
     }
     .search-wrapper{
+        background: var(--bg-secondary);
         padding:.6rem .85rem
     }
     .search-icon{
@@ -344,7 +350,8 @@
         font-size:.9rem
     }
     .character-card{
-        border-radius:12px
+        border-radius:12px;
+        background: var(--bg-secondary)
     }
     .character-card:hover{
         transform:translateY(-4px)
