@@ -1,7 +1,7 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box
 }
 
 :root {
@@ -37,7 +37,7 @@
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.5);
-    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.6);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.6)
 }
 
 body {
@@ -46,7 +46,7 @@ body {
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
-    position: relative;
+    position: relative
 }
 
 body::before {
@@ -61,12 +61,12 @@ body::before {
         radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
-    animation: backgroundPulse 15s ease-in-out infinite alternate;
+    animation: backgroundPulse 15s ease-in-out infinite alternate
 }
 
 @keyframes backgroundPulse {
-    0% { opacity: 0.3; }
-    100% { opacity: 0.6; }
+    0% { opacity: 0.3 }
+    100% { opacity: 0.6 }
 }
 
 .main-nav {
@@ -76,7 +76,7 @@ body::before {
     background: var(--bg-primary);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(59, 130, 246, 0.1);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3)
 }
 
 .nav-container {
@@ -87,7 +87,7 @@ body::before {
     justify-content: space-between;
     align-items: center;
     height: 70px;
-    position: relative;
+    position: relative
 }
 
 .site-title {
@@ -95,25 +95,25 @@ body::before {
     font-size: 1.8rem;
     font-weight: 700;
     letter-spacing: 0.5px;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #3b82f6);
     background-size: 200% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-top: 1rem;
     animation: gradientShift 8s ease infinite;
-    position: relative;
+    position: relative
 }
 
 @keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    0%, 100% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
 }
 
 .nav-links {
     display: flex;
     gap: var(--spacing-xl);
-    list-style: none;
+    list-style: none
 }
 
 .nav-links a {
@@ -122,7 +122,7 @@ body::before {
     font-weight: 500;
     letter-spacing: 0.5px;
     transition: color var(--transition-fast);
-    position: relative;
+    position: relative
 }
 
 .nav-links a::after {
@@ -134,18 +134,18 @@ body::before {
     height: 2px;
     background: var(--accent);
     transition: width var(--transition-medium);
-    box-shadow: 0 0 10px var(--glow);
+    box-shadow: 0 0 10px var(--glow)
 }
 
 .nav-links a:hover,
 .nav-links a.active {
     color: var(--text-primary);
-    text-shadow: 0 0 20px var(--glow);
+    text-shadow: 0 0 20px var(--glow)
 }
 
 .nav-links a:hover::after,
 .nav-links a.active::after {
-    width: 100%;
+    width: 100%
 }
 
 .container {
@@ -153,7 +153,7 @@ body::before {
     margin: 0 auto;
     padding: 0 var(--spacing-lg);
     position: relative;
-    z-index: 1;
+    z-index: 1
 }
 
 .btn-primary,
@@ -168,13 +168,13 @@ body::before {
     display: inline-block;
     font-size: 1rem;
     position: relative;
-    overflow: hidden;
+    overflow: hidden
 }
 
 .btn-primary {
     background: linear-gradient(135deg, #3b82f6, #8b5cf6);
     color: white;
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3)
 }
 
 .btn-primary::before {
@@ -187,29 +187,29 @@ body::before {
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.2);
     transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
+    transition: width 0.6s, height 0.6s
 }
 
 .btn-primary:hover::before {
     width: 300px;
-    height: 300px;
+    height: 300px
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-lg)
 }
 
 .btn-secondary {
     background: var(--gradient-glass);
     color: var(--text-primary);
     border: 1px solid var(--border);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px)
 }
 
 .btn-secondary:hover {
     background: var(--bg-secondary);
-    border-color: var(--accent);
+    border-color: var(--accent)
 }
 
 .spinner {
@@ -219,11 +219,11 @@ body::before {
     border-top-color: var(--accent);
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    box-shadow: 0 0 20px var(--glow);
+    box-shadow: 0 0 20px var(--glow)
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to { transform: rotate(360deg) }
 }
 
 .loading-state {
@@ -232,7 +232,7 @@ body::before {
     align-items: center;
     justify-content: center;
     padding: var(--spacing-2xl);
-    gap: var(--spacing-md);
+    gap: var(--spacing-md)
 }
 
 .skeleton-card {
@@ -241,12 +241,12 @@ body::before {
     animation: shimmer 1.5s infinite;
     border-radius: 12px;
     height: 200px;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md)
 }
 
 @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0% { background-position: -200% 0 }
+    100% { background-position: 200% 0 }
 }
 
 .modal {
@@ -257,18 +257,18 @@ body::before {
     height: 100%;
     z-index: 2000;
     display: none;
-    animation: fadeIn 0.3s ease;
+    animation: fadeIn 0.3s ease
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from { opacity: 0 }
+    to { opacity: 1 }
 }
 
 .modal.active {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center
 }
 
 .modal-overlay {
@@ -278,7 +278,7 @@ body::before {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px)
 }
 
 .modal-content {
@@ -295,22 +295,22 @@ body::before {
     overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
                 0 0 1px rgba(59, 130, 246, 0.5);
-    animation: modalSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: modalSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)
 }
 
 @keyframes modalSlideUp {
     from {
         opacity: 0;
-        transform: translateY(30px) scale(0.95);
+        transform: translateY(30px) scale(0.95)
     }
     to {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0) scale(1)
     }
 }
 
 .modal-content.wide {
-    max-width: 900px;
+    max-width: 900px
 }
 
 .modal-close {
@@ -329,82 +329,82 @@ body::before {
     justify-content: center;
     border-radius: 50%;
     transition: all var(--transition-fast);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px)
 }
 
 .modal-close:hover {
     background: var(--bg-tertiary);
     color: var(--text-primary);
     transform: rotate(90deg);
-    box-shadow: 0 0 20px var(--glow);
+    box-shadow: 0 0 20px var(--glow)
 }
 
 #bio-edit-form {
-    margin-top: 1rem;
+    margin-top: 1rem
 }
 
 .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1rem
 }
 
 .form-control {
     width: 100%;
     padding: 0.75rem;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #ccc
 }
 
 .new-value-label {
     display: block;
     margin-bottom: 0.5rem;
-    font-weight: 600;
+    font-weight: 600
 }
 
 .form-actions {
     margin-top: 1.5rem;
-    text-align: right;
+    text-align: right
 }
 
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 12px
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--bg-primary);
+    background: var(--bg-primary)
 }
 
 ::-webkit-scrollbar-thumb {
     background: linear-gradient(180deg, var(--bg-tertiary), var(--border));
     border-radius: 6px;
-    border: 2px solid var(--bg-primary);
+    border: 2px solid var(--bg-primary)
 }
 
 ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(180deg, var(--accent-dark), var(--accent));
-    box-shadow: 0 0 10px var(--glow);
+    box-shadow: 0 0 10px var(--glow)
 }
 
 h1 {
     font-family: var(--font-heading);
     font-size: 2.5rem;
     line-height: 1.2;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md)
 }
 
 h2 {
     font-family: var(--font-heading);
     font-size: 2rem;
     line-height: 1.3;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md)
 }
 
 h3 {
     font-size: 1.5rem;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm)
 }
 
 p {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md)
 }
 
 .back-btn {
@@ -421,13 +421,13 @@ p {
     text-decoration: none;
     font-weight: 500;
     transition: all var(--transition-medium);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px)
 }
 
 .back-btn:hover {
     background: var(--bg-tertiary);
     color: var(--text-primary);
-    border-color: var(--accent);
+    border-color: var(--accent)
 }
 
 @media (max-width: 1024px){
@@ -435,57 +435,71 @@ p {
     .spinner,.modal-close:hover,
     ::-webkit-scrollbar-thumb:hover,
     .btn-primary {box-shadow:none}
+
     .nav-links a:hover,.nav-links a.active {text-shadow:none}
-    .btn-primary::before,body::before {display:none}
-    .modal-close,.back-btn,.btn-secondary,.modal-content {backdrop-filter:none}
-    .site-title {animation:none}
+
+    .btn-primary::before {display:none}
+
+    .modal-close,.back-btn,
+    .btn-secondary,.modal-content {backdrop-filter:none}
+
+    .site-title {
+        background: var(--gradient-primary);
+        animation:none
+    }
+
+    body::before {
+        animation: none;
+        opacity: 0.4
+    }
+
     .modal-content {
         background: var(--bg-secondary);
         border: 1px solid var(--border);
-        box-shadow: var(--shadow-xl);
+        box-shadow: var(--shadow-xl)
     }
 }
 
 @media (max-width: 768px) {
     .nav-container {
         padding: 0 var(--spacing-md);
-        height: 60px;
+        height: 60px
     }
     
     .site-title {
-        font-size: 1.2rem;
+        font-size: 1.2rem
     }
     
     .nav-links {
-        gap: var(--spacing-md);
+        gap: var(--spacing-md)
     }
     
     .nav-links a {
-        font-size: 0.9rem;
+        font-size: 0.9rem
     }
     
     h1 {
-        font-size: 2rem;
+        font-size: 2rem
     }
     
     h2 {
-        font-size: 1.5rem;
+        font-size: 1.5rem
     }
     
     .back-btn {
         transform: translate(1rem, 1rem);
-        font-size: 0.9rem;
+        font-size: 0.9rem
     }
 
     .modal-overlay,.main-nav {
-        backdrop-filter: none;
+        backdrop-filter: none
     }
 
     :root {
         --shadow-sm: 0 1px 1.5px rgba(0, 0, 0, 0.3);
         --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
         --shadow-lg: 0 8px 12px rgba(0, 0, 0, 0.5);
-        --shadow-xl: 0 16px 24px rgba(0, 0, 0, 0.6);
+        --shadow-xl: 0 16px 24px rgba(0, 0, 0, 0.6)
     }
 }
 
