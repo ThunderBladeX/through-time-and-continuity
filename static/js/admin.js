@@ -1,23 +1,22 @@
-// Counter for dynamically generated markdown editors to ensure unique IDs
 let bioSectionCounter = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Check for login token first, then setup page
+
     if (localStorage.getItem('admin_token')) {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         setupDashboard();
-        handleUrlParameters(); // Handle deep links for editing
+        handleUrlParameters(); 
         setupCharacterForm();
         setupEventForm();
         setupRelationshipForm();
         setupEditRelationshipForm();
+        setupLoveInterestForm(); 
     } else {
         setupLogin();
     }
 });
 
-// Handle direct links to edit items from profile pages
 function handleUrlParameters() {
     const params = new URLSearchParams(window.location.search);
     const editType = params.get('edit');
@@ -49,16 +48,15 @@ function handleUrlParameters() {
     }
 }
 
-// Helper to handle API responses and show proper errors
 async function handleFormSubmitResponse(response) {
     if (response.ok || (response.status >= 200 && response.status < 300)) {
         try {
             return await response.json();
         } catch (e) {
-            return {}; // Handle cases with no JSON body (e.g., 204 No Content)
+            return {}; 
         }
     }
-    // If response is not OK, try to get a meaningful error message
+
     const contentType = response.headers.get('content-type');
     let error;
     if (contentType && contentType.includes('application/json')) {
@@ -73,20 +71,20 @@ async function handleFormSubmitResponse(response) {
 
 function setupLogin() {
     const loginForm = document.getElementById('login-form');
-    
+
     loginForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         const errorMsg = document.getElementById('login-error');
-        
+
         try {
             const result = await fetchAPI('/login', {
                 method: 'POST',
-                body: JSON.stringify({ username, password })
+                body: { username, password }
             });
-            
+
             if (result.access_token) {
                 localStorage.setItem('admin_token', result.access_token);
                 document.getElementById('login-screen').style.display = 'none';
@@ -103,26 +101,26 @@ function setupLogin() {
 
 function setupDashboard() {
     const logoutBtn = document.getElementById('logout-btn');
-    
+
     logoutBtn?.addEventListener('click', async () => {
         localStorage.removeItem('admin_token');
         location.reload();
     });
-    
+
     const sidebarBtns = document.querySelectorAll('.sidebar-btn');
     sidebarBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             sidebarBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
+
             const section = btn.dataset.section;
             document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
             document.getElementById(`${section}-section`).classList.add('active');
-            
+
             loadSection(section);
         });
     });
-    // Load default section
+
     loadSection('pending');
 }
 
@@ -132,6 +130,7 @@ async function loadSection(section) {
         case 'characters': await loadCharactersAdmin(); break;
         case 'timeline': await loadTimelineAdmin(); break;
         case 'relationships': await loadRelationshipsAdmin(); break;
+        case 'love-interests': await loadLoveInterestsAdmin(); break;
         case 'gallery': await loadGalleryAdmin(); break;
     }
 }
@@ -140,7 +139,7 @@ async function loadPendingEdits() {
     const list = document.getElementById('pending-list');
     if (!list) return;
     list.innerHTML = '<div class="loading-state"><div class="spinner"></div></div>';
-    
+
     try {
         const edits = await fetchAPI('/admin/pending-edits');
         if (!edits || edits.length === 0) {
@@ -171,7 +170,7 @@ async function loadCharactersAdmin() {
     const list = document.getElementById('characters-list');
     if (!list) return;
     list.innerHTML = '<div class="loading-state"><div class="spinner"></div></div>';
-    
+
     try {
         const characters = await fetchAPI('/characters');
         if (!characters || characters.length === 0) {
@@ -201,7 +200,7 @@ async function loadTimelineAdmin() {
     const list = document.getElementById('events-list');
     if (!list) return;
     list.innerHTML = '<div class="loading-state"><div class="spinner"></div></div>';
-    
+
     try {
         const events = await fetchAPI('/events?limit=20');
         if (!events || events.length === 0) {
@@ -231,7 +230,7 @@ async function loadRelationshipsAdmin() {
     const list = document.getElementById('relationships-admin-list');
     if (!list) return;
     list.innerHTML = '<div class="loading-state"><div class="spinner"></div></div>';
-    
+
     try {
         const relationships = await fetchAPI('/admin/relationships');
         if (!relationships || relationships.length === 0) {
@@ -264,11 +263,126 @@ async function loadRelationshipsAdmin() {
     }
 }
 
+async function loadLoveInterestsAdmin() {
+    const list = document.getElementById('love-interests-admin-list');
+    if (!list) return;
+    list.innerHTML = '<div class="loading-state"><div class="spinner"></div></div>';
+
+    const categoryTitles = {
+        'canon': '💑 Canon',
+        'once_dated': '📜 Once Dated',
+        'implied': '🤔 Implied',
+        'unrequited': '💔 Unrequited',
+        'au_lovers': '💞 AU Lovers',
+        'au_exes': '❤️‍🩹 AU Exes'
+    };
+
+    try {
+        const interests = await fetchAPI('/admin/love-interests');
+        if (!interests || interests.length === 0) {
+            list.innerHTML = '<p class="empty-state">No love interests yet</p>';
+            return;
+        }
+        list.innerHTML = interests.map(item => `
+            <div class="admin-item">
+                <div class="admin-item-info">
+                    <h4>${item.character_one.name} & ${item.character_two.name}</h4>
+                    <p><strong>Category:</strong> ${categoryTitles[item.category] || item.category}</p>
+                </div>
+                <div class="admin-item-actions">
+                    <button onclick="editLoveInterest(${item.id})" class="btn-secondary btn-sm">Edit</button>
+                    <button onclick="deleteLoveInterest(${item.id})" class="btn-danger btn-sm">Delete</button>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Error loading love interests:', error);
+        list.innerHTML = '<p class="error-state">Failed to load love interests</p>';
+    }
+}
+
+async function editLoveInterest(id) {
+    try {
+        const interest = await fetchAPI(`/admin/love-interests/${id}`);
+        const form = document.getElementById('love-interest-form');
+        populateForm(form, interest);
+        document.getElementById('love-interest-form-title').textContent = 'Edit Love Interest';
+        openLoveInterestForm();
+    } catch (error) {
+        showNotification('Could not load love interest data.', 'error');
+    }
+}
+
+async function deleteLoveInterest(id) {
+    if (confirm('Are you sure you want to delete this love interest?')) {
+        try {
+            await fetchAPI(`/admin/love-interests/${id}`, { method: 'DELETE' });
+            showNotification('Love interest deleted successfully', 'success');
+            loadLoveInterestsAdmin();
+        } catch (error) {
+            showNotification('Failed to delete love interest', 'error');
+        }
+    }
+}
+
+function openLoveInterestForm() {
+    openModal('love-interest-modal');
+}
+function closeLoveInterestForm() {
+    const form = document.getElementById('love-interest-form');
+    form?.reset();
+    form.querySelector('input[name="id"]')?.remove();
+    document.getElementById('love-interest-form-title').textContent = 'Add Love Interest';
+    closeModal('love-interest-modal');
+}
+
+async function setupLoveInterestForm() {
+    const form = document.getElementById('love-interest-form');
+    if (!form) return;
+
+    const char1Select = form.querySelector('select[name="character_one_id"]');
+    const char2Select = form.querySelector('select[name="character_two_id"]');
+    try {
+        const characters = await fetchAPI('/characters');
+        const options = characters.map(c => `<option value="${c.id}">${c.full_name}</option>`).join('');
+        char1Select.innerHTML = options;
+        char2Select.innerHTML = options;
+    } catch (e) {
+        console.error('Failed to load characters for love interest form');
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        const id = data.id;
+
+        if (data.character_one_id === data.character_two_id) {
+            showNotification('A character cannot be in a relationship with themselves.', 'error');
+            return;
+        }
+
+        if (!id) delete data.id;
+
+        const url = id ? `/admin/love-interests/${id}` : '/admin/love-interests';
+        const method = id ? 'PUT' : 'POST';
+
+        try {
+            await fetchAPI(url, { method, body: data });
+            showNotification(`Love interest ${id ? 'updated' : 'created'} successfully!`, 'success');
+            closeLoveInterestForm();
+            loadLoveInterestsAdmin();
+        } catch (error) {
+            showNotification(error.message, 'error');
+        }
+    });
+}
+
 async function loadGalleryAdmin() {
     const list = document.getElementById('gallery-admin-list');
     if (!list) return;
     list.innerHTML = '<div class="loading-state"><div class="spinner"></div></div>';
-    
+
     try {
         const images = await fetchAPI('/admin/gallery');
         if (!images || images.length === 0) {
@@ -309,7 +423,6 @@ async function populateFamilyDropdown() {
     }
 }
 
-// Edit/Delete/Approve/Deny functions
 async function editCharacter(id) {
     try {
         const character = await fetchAPI(`/characters/${id}`);
@@ -317,10 +430,10 @@ async function editCharacter(id) {
         form.querySelector('input[name="id"]')?.remove();
         form.insertAdjacentHTML('beforeend', `<input type="hidden" name="id" value="${id}">`);
         populateForm(form, character);
-        
+
         const bioContainer = document.getElementById('bio-sections-container');
         bioContainer.innerHTML = '';
-        bioSectionCounter = 0; // Reset counter before adding sections for editing
+        bioSectionCounter = 0; 
         if (character.bio_sections) {
             character.bio_sections.sort((a,b) => a.display_order - b.display_order);
             character.bio_sections.forEach(section => addBioSectionRow(section));
@@ -353,12 +466,11 @@ async function editEvent(id) {
         form.querySelector('input[name="id"]')?.remove();
         form.insertAdjacentHTML('beforeend', `<input type="hidden" name="id" value="${id}">`);
         populateForm(form, event);
-        
+
         const charSelect = document.getElementById('event-characters');
         const charIds = event.event_characters?.map(ec => ec.characters.id.toString()) || [];
         Array.from(charSelect.options).forEach(opt => opt.selected = charIds.includes(opt.value));
-        
-        // Trigger input event for markdown preview to update
+
         document.getElementById('event-description')?.dispatchEvent(new Event('input'));
 
         document.getElementById('event-form-title').textContent = 'Edit Event';
@@ -383,7 +495,7 @@ async function deleteEvent(id) {
 
 async function approveEdit(id) {
     try {
-        await fetchAPI(`/admin/pending-edits/${id}`, { method: 'PATCH', body: JSON.stringify({ action: 'approve' }) });
+        await fetchAPI(`/admin/pending-edits/${id}`, { method: 'PATCH', body: { action: 'approve' } });
         showNotification('Edit approved', 'success');
         loadPendingEdits();
     } catch (error) {
@@ -393,7 +505,7 @@ async function approveEdit(id) {
 
 async function denyEdit(id) {
     try {
-        await fetchAPI(`/admin/pending-edits/${id}`, { method: 'PATCH', body: JSON.stringify({ action: 'deny' }) });
+        await fetchAPI(`/admin/pending-edits/${id}`, { method: 'PATCH', body: { action: 'deny' } });
         showNotification('Edit denied', 'success');
         loadPendingEdits();
     } catch (error) {
@@ -401,7 +513,6 @@ async function denyEdit(id) {
     }
 }
 
-// Form handling functions
 function openCharacterForm() { openModal('character-modal'); }
 function closeCharacterForm() {
     const form = document.getElementById('character-form');
@@ -409,7 +520,7 @@ function closeCharacterForm() {
     form?.querySelector('input[name="id"]')?.remove();
     document.getElementById('bio-sections-container').innerHTML = '';
     document.getElementById('character-form-title').textContent = 'Add New Character';
-    bioSectionCounter = 0; // Reset counter for the next time the form is opened
+    bioSectionCounter = 0; 
     closeModal('character-modal');
 }
 
@@ -419,7 +530,7 @@ function closeEventForm() {
     form?.reset();
     form?.querySelector('input[name="id"]')?.remove();
     document.getElementById('event-form-title').textContent = 'Add New Event';
-    // Manually trigger input on markdown fields to clear previews
+
     document.getElementById('event-description')?.dispatchEvent(new Event('input'));
     closeModal('event-modal');
 }
@@ -429,12 +540,11 @@ function closeUploadForm() { closeModal('upload-modal'); }
 
 function addBioSectionRow(section = {}) {
     const container = document.getElementById('bio-sections-container');
-    const uniqueId = bioSectionCounter++; // Use counter to ensure unique IDs
+    const uniqueId = bioSectionCounter++; 
 
     const div = document.createElement('div');
     div.className = 'form-row bio-section-row';
-    
-    // Create unique IDs for the markdown editor, toolbar, and preview
+
     const textareaId = `bio-section-content-${uniqueId}`;
     const toolbarId = `bio-section-toolbar-${uniqueId}`;
     const previewId = `bio-section-preview-${uniqueId}`;
@@ -456,7 +566,6 @@ function addBioSectionRow(section = {}) {
     div.querySelector('.remove-bio-section-btn').addEventListener('click', () => div.remove());
     container.appendChild(div);
 
-    // Setup markdown editor for the new section
     if (typeof setupMarkdownToolbar === 'function' && typeof setupMarkdownPreview === 'function') {
         setupMarkdownToolbar(textareaId, toolbarId);
         setupMarkdownPreview(textareaId, previewId);
@@ -489,7 +598,7 @@ function setupCharacterForm() {
         const url = id ? `/admin/characters/${id}` : '/admin/characters';
         const method = id ? 'PUT' : 'POST';
         try {
-            const result = await fetchAPI(url, {
+            await fetchAPI(url, {
                 method,
                 body: formData,
                 isFormData: true
@@ -507,8 +616,6 @@ async function setupEventForm() {
     const form = document.getElementById('event-form');
     if (!form) return;
 
-    // Setup markdown editor for the event description field.
-    // This assumes the HTML contains <textarea id="event-description"> and related elements.
     if (document.getElementById('event-description') && typeof setupMarkdownToolbar === 'function') {
         setupMarkdownToolbar('event-description', 'event-description-toolbar');
         setupMarkdownPreview('event-description', 'event-description-preview');
@@ -519,7 +626,7 @@ async function setupEventForm() {
         const characters = await fetchAPI('/characters');
         charSelect.innerHTML = characters.map(c => `<option value="${c.id}">${c.full_name}</option>`).join('');
     } catch (e) { console.error('Failed to load characters for event form'); }
-    
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(form);
@@ -550,7 +657,7 @@ function populateForm(form, data) {
             if (field.type === 'checkbox') field.checked = !!data[key];
             else if (field.type !== 'file') field.value = data[key] || '';
         } else if (key === 'family' && data[key]) {
-            // Handle nested family object
+
             const familyField = form.elements['family'];
             if (familyField) familyField.value = data[key].slug;
         }
@@ -579,7 +686,7 @@ async function setupRelationshipForm() {
             return;
         }
         try {
-            const response = await fetchAPI('/admin/relationships', { method: 'POST', body: data });
+            await fetchAPI('/admin/relationships', { method: 'POST', body: data });
             showNotification('Relationship created successfully!', 'success');
             closeRelationshipForm();
             form.reset();
