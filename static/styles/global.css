@@ -408,7 +408,7 @@ p {
 }
 
 .back-btn {
-    position: relative;
+    position: fixed;
     top: 0;
     transform: translate(2rem, 4rem);
     left: 0;
@@ -475,7 +475,6 @@ p {
     .back-btn {
         transform: translate(1rem, 1rem);
         font-size: 0.9rem;
-        position: fixed;
     }
 
     .modal-overlay,.main-nav {
