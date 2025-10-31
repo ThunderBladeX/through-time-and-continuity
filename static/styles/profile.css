@@ -560,6 +560,169 @@
     opacity: 1
 }
 
+.love-interest-section {
+    margin-bottom: var(--spacing-2xl)
+}
+
+.love-interest-section .section-header {
+    font-size: 1.75rem;
+    font-family: var(--font-heading);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--border);
+    position: relative;
+    letter-spacing: -0.3px
+}
+
+.love-interest-section .section-header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    animation: slideRight 0.6s ease
+}
+
+.love-interest-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-lg)
+}
+
+.love-interest-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(var(--accent-rgb), 0.02) 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+    transition: all var(--transition-medium);
+    position: relative;
+    overflow: hidden;
+    will-change: transform, box-shadow
+}
+
+.love-interest-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1));
+    transition: left var(--transition-medium)
+}
+
+.love-interest-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent)
+}
+
+.love-interest-card:hover::before {
+    left: 100%
+}
+
+.love-interest-pfp {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid var(--border);
+    transition: transform var(--transition-medium);
+    will-change: transform
+}
+
+.love-interest-card:hover .love-interest-pfp {
+    transform: scale(1.1);
+    border-color: var(--accent)
+}
+
+.love-interest-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs)
+}
+
+.love-interest-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+    letter-spacing: -0.2px;
+    transition: color var(--transition-fast);
+    position: relative;
+    display: inline-block;
+    width: fit-content
+}
+
+.love-interest-name::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width var(--transition-medium)
+}
+
+.love-interest-name:hover {
+    color: var(--accent)
+}
+
+.love-interest-name:hover::after {
+    width: 100%
+}
+
+.love-interest-desc {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--text-muted);
+    padding: var(--spacing-2xl);
+    font-size: 1.1rem
+}
+
+.error-state {
+    text-align: center;
+    color: #ef4444;
+    padding: var(--spacing-2xl);
+    font-size: 1.1rem
+}
+
+@media (prefers-color-scheme:dark){
+    .love-interest-card{
+        background:linear-gradient(135deg,rgba(26,26,26,.95) 0%,rgba(var(--accent-rgb),.03) 100%);
+    }
+}
+
+@media (prefers-reduced-motion:reduce){
+    .love-interest-card,
+    .love-interest-pfp,
+    .love-interest-name::after,
+    .love-interest-card::before{
+        animation:none;
+        transition:none
+    }
+    .love-interest-card:hover{
+        transform:none
+    }
+    .love-interest-card:hover .love-interest-pfp{
+        transform:none
+    }
+}
+
 @media (max-width:1024px){
     .desktop-view{
         grid-template-columns:300px 1fr;
@@ -592,5 +755,23 @@
     }
     .profile-image-container:hover{
         box-shadow:0 30px 45px rgba(0,0,0,.25)
+    }
+    .love-interest-grid{
+        grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+        gap:var(--spacing-md)
+    }
+    .love-interest-card{
+        padding:var(--spacing-md)
+    }
+    .love-interest-pfp{
+        width:60px;
+        height:60px
+    }
+    .love-interest-card:hover{
+        box-shadow:0 12px 18px rgba(0,0,0,.1)
+    }
+    .love-interest-card::before,
+    .love-interest-name:hover::after{
+        display:none
     }
 }
