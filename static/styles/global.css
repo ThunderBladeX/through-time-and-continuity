@@ -174,7 +174,7 @@ body::before {
 .btn-primary {
     background: linear-gradient(135deg, #3b82f6, #8b5cf6);
     color: white;
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3)
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1)
 }
 
 .btn-primary::before {
