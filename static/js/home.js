@@ -51,10 +51,12 @@ function createActivityCard(event) {
                      onerror="this.src='/static/images/default-avatar.jpg'">
             ` : ''}
             <div class="activity-meta">
-                <span class="activity-era-badge era-badge" data-era="${event.era}">
-                    ${event.era_display || getEraName(event.era)}
-                </span>
-                <h3>${event.title}</h3>
+                <h3>
+                    <span class="activity-era-badge era-badge" data-era="${event.era}">
+                        ${event.era_display || getEraName(event.era)}
+                    </span>
+                    ${event.title}
+                </h3>
                 <p class="activity-date">${formatDate(event.event_date)}</p>
             </div>
         </div>
