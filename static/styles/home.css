@@ -88,8 +88,7 @@
     top: 50%;
     transform: translateY(-50%);
     color: var(--accent);
-    opacity: 0.6;
-    animation: float 3s ease-in-out infinite
+    opacity: 0.6
 }
 
 .hero-subtitle::before {
@@ -98,12 +97,6 @@
 
 .hero-subtitle::after {
     right: -30px;
-    animation-delay: 1.5s
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(-50%) translateX(0); }
-    50% { transform: translateY(-50%) translateX(5px); }
 }
 
 /* Activity Feed Section */
@@ -338,7 +331,7 @@
     }
     
     .hero-subtitle{
-        font-size:.9rem
+        font-size:.6rem
     }
     
     .activity-list{
