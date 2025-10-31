@@ -360,11 +360,11 @@
     }
 
     .hero-subtitle::before{
-        left:-10px
+        left:10px
     }
 
     .hero-subtitle::after{
-        right:-10px
+        right:10px
     }
 
     .activity-card{
