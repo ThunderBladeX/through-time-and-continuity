@@ -102,17 +102,16 @@ def api_character_relationships(character_id):
         })
     return jsonify(formatted)
 
-@app.route('/api/characters/<int:character_id>/love-interests')
-def api_character_love_interests(character_id):
-    interests = db.get_character_love_interests(character_id)
-
-    return jsonify(interests)
-
 @app.route('/api/characters/<int:character_id>/gallery')
 def api_character_gallery(character_id):
     images = db.get_character_gallery(character_id)
     formatted = [{'url': img['image_url'], 'alt': img.get('alt_text', '')} for img in images]
     return jsonify(formatted)
+
+@app.route('/api/characters/<int:character_id>/love-interests')
+def api_character_love_interests(character_id):
+    interests = db.get_character_love_interests(character_id)
+    return jsonify(interests)
 
 @app.route('/api/events')
 def api_events():
@@ -176,7 +175,7 @@ def api_login():
 @app.route('/api/logout', methods=['POST'])
 @jwt_required()
 def api_logout():
-    logout_user()
+
     return jsonify({'success': True})
 
 @app.route('/api/admin/pending-edits', methods=['GET'])
@@ -258,38 +257,6 @@ def api_manage_relationship_pair(char1_id, char2_id):
         if success:
             return jsonify({'success': True}), 200
         return jsonify({'error': 'Failed to delete relationship'}), 500
-
-@app.route('/api/admin/love-interests', methods=['GET', 'POST'])
-@jwt_required()
-def api_manage_love_interests():
-    if request.method == 'GET':
-        return jsonify(db.get_all_love_interests())
-
-    if request.method == 'POST':
-        data = request.get_json()
-        if not data or 'character_id' not in data or 'love_interest_id' not in data:
-            return jsonify({'error': 'Missing required fields'}), 400
-
-        result = db.create_love_interest(data)
-        if result:
-            return jsonify(result), 201
-        return jsonify({'error': 'Failed to create love interest'}), 500
-
-@app.route('/api/admin/love-interests/<int:relationship_id>', methods=['PUT', 'DELETE'])
-@jwt_required()
-def api_manage_love_interest_by_id(relationship_id):
-    if request.method == 'PUT':
-        data = request.get_json()
-        result = db.update_love_interest(relationship_id, data)
-        if result:
-            return jsonify(result), 200
-        return jsonify({'error': 'Failed to update love interest'}), 500
-
-    if request.method == 'DELETE':
-        success = db.delete_love_interest(relationship_id)
-        if success:
-            return jsonify({'success': True}), 200
-        return jsonify({'error': 'Failed to delete love interest'}), 500
 
 @app.route('/api/admin/gallery', methods=['GET'])
 @jwt_required()
@@ -437,6 +404,48 @@ def api_update_event(event_id):
 def api_delete_event(event_id):
     db.delete_event(event_id)
     return jsonify({'success': True}), 200
+
+@app.route('/api/admin/love-interests', methods=['GET'])
+@jwt_required()
+def api_get_all_love_interests():
+    return jsonify(db.get_all_love_interests())
+
+@app.route('/api/admin/love-interests/<int:interest_id>', methods=['GET'])
+@jwt_required()
+def api_get_love_interest(interest_id):
+    interest = db.get_love_interest_by_id(interest_id)
+    if not interest:
+        return jsonify({'error': 'Love interest not found'}), 404
+    return jsonify(interest)
+
+@app.route('/api/admin/love-interests', methods=['POST'])
+@jwt_required()
+def api_create_love_interest():
+    data = request.get_json()
+    if not data or 'character_one_id' not in data or 'character_two_id' not in data:
+        return jsonify({'error': 'Missing required fields'}), 400
+
+    interest = db.create_love_interest(data)
+    if interest:
+        return jsonify(interest), 201
+    return jsonify({'error': 'Failed to create love interest. The relationship may already exist or character IDs are invalid.'}), 500
+
+@app.route('/api/admin/love-interests/<int:interest_id>', methods=['PUT'])
+@jwt_required()
+def api_update_love_interest(interest_id):
+    data = request.get_json()
+    updated = db.update_love_interest(interest_id, data)
+    if updated:
+        return jsonify(updated), 200
+    return jsonify({'error': 'Failed to update love interest'}), 500
+
+@app.route('/api/admin/love-interests/<int:interest_id>', methods=['DELETE'])
+@jwt_required()
+def api_delete_love_interest(interest_id):
+    success = db.delete_love_interest(interest_id)
+    if success:
+        return jsonify({'success': True}), 200
+    return jsonify({'error': 'Failed to delete love interest'}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
