@@ -193,17 +193,28 @@
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid var(--border);
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    transition: all var(--transition-medium)
+}
+
+.activity-card:hover .activity-avatar {
+    border-color: var(--accent);
+    transform: scale(1.05)
 }
 
 .activity-meta h3 {
     font-size: 1.1rem;
     margin-bottom: 0.25rem;
+    transition: color var(--transition-fast)
+}
+
+.activity-card:hover .activity-meta h3 {
+    color: var(--accent-light)
 }
 
 .activity-date {
     font-size: 0.85rem;
-    color: var(--text-muted);
+    color: var(--text-muted)
 }
 
 .activity-era-badge {
@@ -215,19 +226,27 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: var(--spacing-sm);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    transition: all var(--transition-fast)
+}
+
+.activity-card:hover .activity-era-badge {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3));
+    border-color: var(--accent)
 }
 
 .activity-summary {
     color: var(--text-secondary);
     line-height: 1.6;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm)
 }
 
 .activity-characters {
     display: flex;
     flex-wrap: wrap;
     gap: var(--spacing-sm);
-    margin-top: var(--spacing-md);
+    margin-top: var(--spacing-md)
 }
 
 .character-tag {
@@ -237,6 +256,7 @@
     font-size: 0.85rem;
     color: var(--text-secondary);
     transition: all var(--transition-fast);
+    backdrop-filter: blur(10px)
 }
 
 .character-tag:hover {
@@ -351,6 +371,9 @@
     .hero-subtitle::after{
         right:5rem
     }
+    .activity-card,.character-tag{
+        backdrop-filter:none
+    }
 }
 
 @media (max-width:768px){
@@ -372,8 +395,7 @@
     }
     .activity-card{
         background:var(--bg-secondary);
-        backdrop-filter:none;
-        border-background:var(--border);
+        border-background:var(--border)
     }
     .activity-list{
         grid-template-columns:1fr
