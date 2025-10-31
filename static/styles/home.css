@@ -70,13 +70,18 @@
 
 @keyframes titleGlow {
     0%, 100% {
-        filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.4)),
+        filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.4))
                 drop-shadow(0 0 40px rgba(59, 130, 246, 0.2))
     }
     50% {
-        filter: drop-shadow(0 0 40px rgba(139, 92, 246, 0.6)),
+        filter: drop-shadow(0 0 40px rgba(139, 92, 246, 0.6))
                 drop-shadow(0 0 60px rgba(139, 92, 246, 0.3))
     }
+}
+
+@keyframes titleMove {
+    0%, 100% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
 }
 
 .hero-subtitle {
