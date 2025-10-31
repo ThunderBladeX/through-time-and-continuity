@@ -344,10 +344,10 @@
         filter:none
     }
     .hero-subtitle::before{
-        left:20px
+        left:5rem
     }
     .hero-subtitle::after{
-        right:20px
+        right:5rem
     }
 }
 
@@ -361,6 +361,12 @@
     }
     .hero-subtitle{
         font-size:.6rem
+    }
+    .hero-subtitle::before{
+        left:30px
+    }
+    .hero-subtitle::after{
+        right:30px
     }
     .activity-card{
         background:var(--bg-secondary);
