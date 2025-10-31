@@ -469,7 +469,8 @@
         -webkit-background-clip:text;
         -webkit-text-fill-color:transparent;
         background-clip:text;
-        animation: titleGlow 8s ease-in-out infinite
+        animation:none;
+        filter:none
     }
     .hero-subtitle{
         font-size:.6rem
@@ -505,10 +506,6 @@
     .era-card:hover,
     .activity-card:hover{
         box-shadow:none
-    }
-    .hero-title{
-        animation:none;
-        filter:none
     }
 }
 
