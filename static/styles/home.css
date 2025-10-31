@@ -203,8 +203,9 @@
 }
 
 .activity-meta h3 {
+    display: inline;
     font-size: 1.1rem;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0;
     transition: color var(--transition-fast)
 }
 
@@ -214,7 +215,8 @@
 
 .activity-date {
     font-size: 0.85rem;
-    color: var(--text-muted)
+    color: var(--text-muted);
+    margin-top: 0.25rem
 }
 
 .activity-era-badge {
@@ -225,7 +227,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: 0;
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
     border: 1px solid rgba(59, 130, 246, 0.3);
     transition: all var(--transition-fast)
