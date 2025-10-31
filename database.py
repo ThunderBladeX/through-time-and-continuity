@@ -167,12 +167,34 @@ class Database:
 
     @staticmethod
     def get_character_love_interests(character_id):
-        """Get all love interests for a character"""
-        params = {'character_id': f'eq.{character_id}'}
+        """Get all love interests for a character, formatted for display."""
+        params = {'or': f'(character_id_1.eq.{character_id},character_id_2.eq.{character_id})'}
 
-        select_query = '*,love_interest:love_interest_id(id,name,full_name,profile_image)'
-        love_interests = supabase.query('love_interests', params=params, select=select_query)
-        return love_interests
+        select_query = '*,character1:characters!character_id_1(id, name, profile_image),character2:characters!character_id_2(id, name, profile_image)'
+        interests = supabase.query('love_interests', params=params, select=select_query)
+
+        formatted = []
+        for item in interests:
+
+            if item['character_id_1'] == character_id:
+                other_char = item.get('character2', {})
+                description = item.get('description_2_to_1') 
+            else:
+                other_char = item.get('character1', {})
+                description = item.get('description_1_to_2') 
+
+            if not other_char:
+                continue
+
+            formatted.append({
+                'id': item['id'],
+                'category': item['category'],
+                'related_character_id': other_char.get('id'),
+                'related_character_name': other_char.get('name'),
+                'related_character_image': other_char.get('profile_image'),
+                'description': description
+            })
+        return formatted
 
     @staticmethod
     def get_character_gallery(character_id):
@@ -250,8 +272,7 @@ class Database:
         supabase.query('relationships', method='DELETE', params={'character_id': f'eq.{character_id}'})
         supabase.query('relationships', method='DELETE', params={'related_character_id': f'eq.{character_id}'})
 
-        supabase.query('love_interests', method='DELETE', params={'character_id': f'eq.{character_id}'})
-        supabase.query('love_interests', method='DELETE', params={'love_interest_id': f'eq.{character_id}'})
+        supabase.query('love_interests', method='DELETE', params={'or': f'(character_id_1.eq.{character_id},character_id_2.eq.{character_id})'})
 
         supabase.query('gallery_images', method='DELETE', params={'character_id': f'eq.{character_id}'})
         supabase.query('event_characters', method='DELETE', params={'character_id': f'eq.{character_id}'})
@@ -413,36 +434,6 @@ class Database:
         return updated_a[0] if updated_a else None
 
     @staticmethod
-    def get_all_love_interests():
-        """Get all love interest relationships for the admin panel."""
-        select_query = '*,character:character_id(id,name),love_interest:love_interest_id(id,name)'
-        return supabase.query('love_interests', params={'order': 'id'}, select=select_query)
-
-    @staticmethod
-    def create_love_interest(data):
-        """Create a new love interest relationship."""
-
-        if 'start_date' in data and not data['start_date']: data['start_date'] = None
-        if 'end_date' in data and not data['end_date']: data['end_date'] = None
-        result = supabase.query('love_interests', method='POST', data=data, select='*')
-        return result[0] if result else None
-
-    @staticmethod
-    def update_love_interest(relationship_id, data):
-        """Update a love interest relationship."""
-        if 'start_date' in data and not data['start_date']: data['start_date'] = None
-        if 'end_date' in data and not data['end_date']: data['end_date'] = None
-        params = {'id': f'eq.{relationship_id}'}
-        result = supabase.query('love_interests', method='PATCH', params=params, data=data)
-        return result[0] if result else None
-
-    @staticmethod
-    def delete_love_interest(relationship_id):
-        """Delete a love interest relationship."""
-        supabase.query('love_interests', method='DELETE', params={'id': f'eq.{relationship_id}'})
-        return True
-
-    @staticmethod
     def get_all_gallery_images():
         """Get all gallery images, populating character names"""
         images = supabase.query('gallery_images', select='*', params={'order': 'created_at.desc'})
@@ -474,4 +465,486 @@ class Database:
         """Get all family definitions from the database"""
         return supabase.query('families', params={'order': 'name'}, select='*')
 
-db = Database()
+    @staticmethod
+    def get_all_love_interests():
+        """Gets all love interests for the admin panel."""
+        select_query = '*,character1:characters!character_id_1(id,name),character2:characters!character_id_2(id,name)'
+        return supabase.query('love_interests', select=select_query, params={'order': 'id'})
+
+    @staticmethod
+    def create_love_interest(data):
+        """Creates a new love interest pair."""
+        result = supabase.query('love_interests', method='POST', data=data, select='*')
+        return result[0] if result else None
+
+    @staticmethod
+    def update_love_interest(interest_id, data):
+        """Updates a love interest pair."""
+        params = {'id': f'eq.{interest_id}'}
+        result = supabase.query('love_interests', method='PATCH', params=params, data=data)
+        return result[0] if result else None
+
+    @staticmethod
+    def delete_love_interest(interest_id):
+        """Deletes a love interest pair."""
+        params = {'id': f'eq.{interest_id}'}
+        supabase.query('love_interests', method='DELETE', params=params)
+        return True
+
+db = Database()```
+---
+
+I've added the new public and admin API endpoints for "Love Interests".
+
+```python
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask_jwt_extended import create_access_token, jwt_required, JWTManager
+from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
+import os
+import markdown as md
+from datetime import datetime, timedelta
+import json
+from database import db, Database
+import mimetypes
+
+app = Flask(__name__)
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET', 'secret-jwt-key')
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=8)
+app.config['SECRET_KEY'] = os.getenv('SESSION_SECRET', 'dev-secret-key')
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  
+
+jwt = JWTManager(app)
+
+ERA_NAMES = {}
+try:
+    with app.app_context():
+        ERA_NAMES = db.get_all_eras()
+except Exception as e:
+    print(f"Initial ERA_NAMES load from database failed: {e}")
+
+if not ERA_NAMES:
+    print("Warning: Could not load ERA_NAMES from database. Using fallback.")
+    ERA_NAMES = {
+        'pre-52': 'Classic',
+        'new-52': 'New 52',
+        'rebirth': 'Rebirth',
+        'infinite-frontier': 'Infinite Frontier',
+        'elseworlds': 'Elseworlds',
+        'post-crisis': 'Post-Crisis',
+        'future-state': 'Future State'
+    }
+
+def clean_form_data(data):
+    """Helper function to convert empty strings for specific fields to None."""
+    if 'birthday' in data and data['birthday'] == '':
+        data['birthday'] = None
+
+    return data
+
+print(f"DB: {db}.")
+print(f"Type: {type(db)}.")
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/characters')
+def characters():
+    return render_template('characters.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/profile/<int:character_id>')
+def profile(character_id):
+    return render_template('profile.html')
+
+@app.route('/admin')
+def admin():
+    return render_template('admin.html')
+
+@app.route('/api/characters')
+def api_characters():
+    family = request.args.get('family', 'all')
+    characters = db.get_all_characters(family)
+    return jsonify(characters)
+
+@app.route('/api/characters/<int:character_id>')
+def api_character_detail(character_id):
+    character = db.get_character_by_id(character_id)
+    if not character:
+        return jsonify({'error': 'Character not found'}), 404
+    return jsonify(character)
+
+@app.route('/api/characters/<int:character_id>/timeline')
+def api_character_timeline(character_id):
+    events = db.get_character_timeline(character_id)
+    for event in events:
+        event['era_display'] = ERA_NAMES.get(event.get('era', ''), event.get('era', ''))
+    return jsonify(events)
+
+@app.route('/api/characters/<int:character_id>/relationships')
+def api_character_relationships(character_id):
+    relationships = db.get_character_relationships(character_id)
+    formatted = []
+    for rel in relationships:
+        related = rel.get('related_character', {})
+        formatted.append({
+            'id': rel['id'],
+            'type': rel['type'],
+            'status': rel['status'],
+            'related_character_id': rel['related_character_id'],
+            'related_character_name': related.get('name', ''),
+            'related_character_image': related.get('profile_image', '/static/images/default-avatar.jpg')
+        })
+    return jsonify(formatted)
+
+@app.route('/api/characters/<int:character_id>/love-interests')
+def api_character_love_interests(character_id):
+    """NEW: Get love interests for a character."""
+    love_interests = db.get_character_love_interests(character_id)
+    return jsonify(love_interests)
+
+@app.route('/api/characters/<int:character_id>/gallery')
+def api_character_gallery(character_id):
+    images = db.get_character_gallery(character_id)
+    formatted = [{'url': img['image_url'], 'alt': img.get('alt_text', '')} for img in images]
+    return jsonify(formatted)
+
+@app.route('/api/events')
+def api_events():
+    limit = int(request.args.get('limit', 6))
+    events = db.get_recent_events(limit)
+    formatted = []
+    for event in events:
+        event_chars = event.get('event_characters', [])
+        first_char = event_chars[0]['characters'] if event_chars else {}
+        formatted.append({
+            'id': event['id'],
+            'title': event['title'],
+            'event_date': event['event_date'],
+            'era': event['era'],
+            'era_display': ERA_NAMES.get(event['era'], event['era']),
+            'summary': event['summary'],
+            'character_id': event_chars[0]['character_id'] if event_chars else None,
+            'character_name': first_char.get('name', ''),
+            'character_image': first_char.get('profile_image', '/static/images/default-avatar.jpg'),
+            'characters': [ec['characters']['name'] for ec in event_chars if 'characters' in ec]
+        })
+    return jsonify(formatted)
+
+@app.route('/api/events/<int:event_id>')
+def api_event_detail(event_id):
+    event = db.get_event_by_id(event_id)
+    if not event:
+        return jsonify({'error': 'Event not found'}), 404
+    event['era_display'] = ERA_NAMES.get(event.get('era', ''), event.get('era', ''))
+    if event.get('full_description'):
+        event['full_description'] = md.markdown(event['full_description'])
+    return jsonify(event)
+
+@app.route('/api/families')
+def api_families():
+    families = db.get_all_families()
+    return jsonify(families)
+
+@app.route('/api/login', methods=['POST'])
+def api_login():
+    data = request.get_json()
+    if isinstance(data, str):
+        try:
+            data = json.loads(data)
+        except json.JSONDecodeError:
+            return jsonify({"message": "Invalid JSON format"}), 400
+    if not data:
+        return jsonify({"message": "No input data provided"}), 400
+    username = data.get('username')
+    password = data.get('password')
+    admin_username = os.getenv('ADMIN_USERNAME', 'admin')
+    admin_password_hash = os.getenv('ADMIN_PASSWORD')
+    if not admin_password_hash:
+        admin_password_hash = 'pbkdf2:sha256:600000$QOlgUXyHBQdPQTyQ$a6f40e9034b4ff7744f08a2e7f106141c490e8119bab8fb63751a65a5f91eb6d'
+        print("WARNING: ADMIN_PASSWORD env var not set. Using insecure fallback.")
+    if username == admin_username and check_password_hash(admin_password_hash, password):
+        access_token = create_access_token(identity=username)
+        return jsonify(access_token=access_token)
+    return jsonify({"message": "Invalid username or password"}), 401
+
+@app.route('/api/logout', methods=['POST'])
+@jwt_required()
+def api_logout():
+    logout_user()
+    return jsonify({'success': True})
+
+@app.route('/api/admin/pending-edits', methods=['GET'])
+@jwt_required()
+def api_get_pending_edits():
+    return jsonify(db.get_pending_edits())
+
+@app.route('/api/admin/pending-edits/<int:edit_id>', methods=['PATCH'])
+@jwt_required()
+def api_update_pending_edit(edit_id):
+    action = request.json.get('action')
+    if action == 'approve':
+        edit = db.approve_edit(edit_id)
+        return jsonify(edit) if edit else (jsonify({'error': 'Failed to approve edit'}), 400)
+    elif action == 'deny':
+        edit = db.deny_edit(edit_id)
+        return jsonify(edit) if edit else (jsonify({'error': 'Failed to deny edit'}), 400)
+    return jsonify({'error': 'Invalid action'}), 400
+
+@app.route('/api/admin/relationships', methods=['GET'])
+@jwt_required()
+def api_get_all_relationships():
+    return jsonify(db.get_all_relationships())
+
+@app.route('/api/admin/relationships', methods=['POST', 'PATCH'])
+@jwt_required()
+def api_manage_relationships():
+    data = request.get_json()
+    if isinstance(data, str):
+        try:
+            data = json.loads(data)
+        except json.JSONDecodeError:
+            return jsonify({'error': 'Invalid JSON format in request body'}), 400
+    if not data or 'character_id' not in data or 'related_character_id' not in data:
+        return jsonify({'error': 'Missing required fields'}), 400
+
+    if request.method == 'POST':
+        char_id_a = data.get('character_id')
+        char_id_b = data.get('related_character_id')
+
+        data_a_to_b = {
+            'character_id': char_id_a,
+            'related_character_id': char_id_b,
+            'type': data.get('type'),
+            'status': data.get('status_a_to_b') or None
+        }
+        data_b_to_a = {
+            'character_id': char_id_b,
+            'related_character_id': char_id_a,
+            'type': data.get('type'),
+            'status': data.get('status_b_to_a') or None
+        }
+
+        relationship_a = db.create_relationship(data_a_to_b)
+        db.create_relationship(data_b_to_a)
+
+        if relationship_a:
+            return jsonify(relationship_a), 201
+        else:
+            return jsonify({'error': 'Failed to create relationship'}), 500
+
+    elif request.method == 'PATCH':
+        updated = db.update_relationship_pair(data)
+        if updated:
+            return jsonify(updated), 200
+        return jsonify({'error': 'Failed to update relationship'}), 500
+
+@app.route('/api/admin/relationships/<int:char1_id>/<int:char2_id>', methods=['GET', 'DELETE'])
+@jwt_required()
+def api_manage_relationship_pair(char1_id, char2_id):
+    if request.method == 'GET':
+        pair_data = db.get_relationship_pair(char1_id, char2_id)
+        if not pair_data:
+            return jsonify({'error': 'Relationship not found'}), 404
+        return jsonify(pair_data)
+
+    elif request.method == 'DELETE':
+        success = db.delete_relationship_pair(char1_id, char2_id)
+        if success:
+            return jsonify({'success': True}), 200
+        return jsonify({'error': 'Failed to delete relationship'}), 500
+
+@app.route('/api/admin/love-interests', methods=['GET'])
+@jwt_required()
+def api_get_all_love_interests():
+    """Admin endpoint to get all love interests."""
+    return jsonify(db.get_all_love_interests())
+
+@app.route('/api/admin/love-interests', methods=['POST'])
+@jwt_required()
+def api_create_love_interest():
+    """Admin endpoint to create a new love interest."""
+    data = request.get_json()
+    if not data or 'character_id_1' not in data or 'character_id_2' not in data or 'category' not in data:
+        return jsonify({'error': 'Missing required fields'}), 400
+
+    data['description_1_to_2'] = data.get('description_1_to_2') or None
+    data['description_2_to_1'] = data.get('description_2_to_1') or None
+
+    new_interest = db.create_love_interest(data)
+    return (jsonify(new_interest), 201) if new_interest else (jsonify({'error': 'Failed to create love interest'}), 500)
+
+@app.route('/api/admin/love-interests/<int:interest_id>', methods=['PUT'])
+@jwt_required()
+def api_update_love_interest(interest_id):
+    """Admin endpoint to update a love interest."""
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
+    data['description_1_to_2'] = data.get('description_1_to_2') or None
+    data['description_2_to_1'] = data.get('description_2_to_1') or None
+
+    updated = db.update_love_interest(interest_id, data)
+    return (jsonify(updated), 200) if updated else (jsonify({'error': 'Failed to update love interest'}), 500)
+
+@app.route('/api/admin/love-interests/<int:interest_id>', methods=['DELETE'])
+@jwt_required()
+def api_delete_love_interest(interest_id):
+    """Admin endpoint to delete a love interest."""
+    success = db.delete_love_interest(interest_id)
+    return (jsonify({'success': True}), 200) if success else (jsonify({'error': 'Failed to delete love interest'}), 500)
+
+@app.route('/api/admin/gallery', methods=['GET'])
+@jwt_required()
+def api_get_all_gallery_images():
+    return jsonify(db.get_all_gallery_images())
+
+@app.route('/api/admin/characters', methods=['POST'])
+@jwt_required()
+def api_create_character():
+    data = request.form.to_dict()
+    bio_sections_json = data.pop('bio_sections', None)
+    data = clean_form_data(data)
+
+    print(f"Attempting to create character with data: {data}")
+    if 'profile_image' in request.files:
+        file = request.files['profile_image']
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            unique_filename = f"profiles/{int(datetime.now().timestamp())}_{filename}"
+            content_type = file.mimetype or mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+            bucket_name = 'character-images' 
+            file_body = file.read()
+            public_url = db.supabase.upload_file(bucket_name, unique_filename, file_body, content_type)
+            if public_url:
+                data['profile_image'] = public_url
+            else:
+                return jsonify({'error': 'Failed to upload image to storage'}), 500
+
+    character = db.create_character(data)
+
+    if character:
+        if bio_sections_json:
+            try:
+                bio_sections_data = json.loads(bio_sections_json)
+                db.update_character_bio_sections(character['id'], bio_sections_data)
+            except json.JSONDecodeError:
+                print("Warning: Could not decode bio_sections JSON.")
+        return jsonify(character), 201
+    else:
+        print("db.create_character returned None. Character creation failed in database.py.")
+        return jsonify({'error': 'Failed to create character in database'}), 500
+
+@app.route('/api/admin/characters/<int:character_id>', methods=['PUT'])
+@jwt_required()
+def api_update_character(character_id):
+    data = request.form.to_dict()
+    bio_sections_json = data.pop('bio_sections', None)
+    data = clean_form_data(data)
+    print(f"Received data for updating character {character_id}: {data}")
+
+    if 'profile_image' in request.files:
+        file = request.files['profile_image']
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            unique_filename = f"profiles/{int(datetime.now().timestamp())}_{filename}"
+            content_type = file.mimetype or mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+            bucket_name = 'character-images'
+            file_body = file.read()
+            public_url = db.supabase.upload_file(bucket_name, unique_filename, file_body, content_type)
+            if public_url:
+                data['profile_image'] = public_url
+            else:
+                return jsonify({'error': 'Failed to upload image'}), 500
+
+    character = db.update_character(character_id, data)
+
+    if bio_sections_json is not None:
+        try:
+            bio_sections_data = json.loads(bio_sections_json)
+            db.update_character_bio_sections(character_id, bio_sections_data)
+        except json.JSONDecodeError:
+            print(f"Warning: Could not decode bio_sections JSON for character {character_id}.")
+
+    return (jsonify(character), 200) if character else (jsonify({'error': 'Failed to update character. Check for empty required fields.'}), 500)
+
+@app.route('/api/admin/characters/<int:character_id>', methods=['DELETE'])
+@jwt_required()
+def api_delete_character(character_id):
+    db.delete_character(character_id)
+    return jsonify({'success': True}), 200
+
+@app.route('/api/admin/events', methods=['POST'])
+@jwt_required()
+def api_create_event():
+    data = request.form.to_dict()
+    character_ids_str = data.pop('character_ids', '')
+    data.pop('character_ids_select', None)
+    event = db.create_event(data)
+    if not event:
+        return jsonify({'error': 'Failed to create event'}), 500
+    event_id = event['id']
+    if character_ids_str:
+        character_ids = [int(id) for id in character_ids_str.split(',') if id.isdigit()]
+        if character_ids:
+            db.link_event_to_characters(event_id, character_ids)
+    images = request.files.getlist('event_images')
+    image_urls = []
+    bucket_name = 'event-images'
+    for file in images:
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            unique_filename = f"{event_id}/{int(datetime.now().timestamp())}_{filename}"
+            content_type = file.mimetype or mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+            file_body = file.read()
+            public_url = db.supabase.upload_file(bucket_name, unique_filename, file_body, content_type)
+            if public_url:
+                image_urls.append({'event_id': event_id, 'image_url': public_url})
+    if image_urls:
+        db.create_event_images(image_urls)
+    return jsonify(event), 201
+
+@app.route('/api/admin/events/<int:event_id>', methods=['PUT'])
+@jwt_required()
+def api_update_event(event_id):
+    data = request.form.to_dict()
+    character_ids_str = data.pop('character_ids', '')
+    data.pop('character_ids_select', None)
+
+    event = db.update_event(event_id, data)
+    if not event:
+        return jsonify({'error': 'Failed to update event'}), 500
+
+    character_ids = [int(id) for id in character_ids_str.split(',') if id.isdigit()]
+    db.update_event_character_links(event_id, character_ids)
+
+    images = request.files.getlist('event_images')
+    image_urls = []
+    bucket_name = 'event-images'
+    for file in images:
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            unique_filename = f"{event_id}/{int(datetime.now().timestamp())}_{filename}"
+            content_type = file.mimetype or mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+            file_body = file.read()
+            public_url = db.supabase.upload_file(bucket_name, unique_filename, file_body, content_type)
+            if public_url:
+                image_urls.append({'event_id': event_id, 'image_url': public_url})
+    if image_urls:
+        db.create_event_images(image_urls)
+
+    return jsonify(event), 200
+
+@app.route('/api/admin/events/<int:event_id>', methods=['DELETE'])
+@jwt_required()
+def api_delete_event(event_id):
+    db.delete_event(event_id)
+    return jsonify({'success': True}), 200
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
