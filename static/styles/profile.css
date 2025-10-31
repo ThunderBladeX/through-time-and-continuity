@@ -1,30 +1,30 @@
 .profile-page {
     min-height: 100vh;
     padding-top: 90px;
-    background: var(--bg-primary);
+    background: var(--bg-primary)
 }
 
 .profile-container {
     max-width: 1600px;
     margin: 0 auto;
-    padding: var(--spacing-xl);
+    padding: var(--spacing-xl)
 }
 
 .mobile-view {
-    display: none;
+    display: none
 }
 
 .desktop-view {
     display: grid;
     grid-template-columns: 350px 1fr;
     gap: var(--spacing-2xl);
-    align-items: start;
+    align-items: start
 }
 
 .profile-sidebar {
     position: sticky;
     top: 110px;
-    z-index: 50;
+    z-index: 50
 }
 
 .profile-image-container {
@@ -34,11 +34,11 @@
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     transition: box-shadow var(--transition-medium);
-    will-change: box-shadow;
+    will-change: box-shadow
 }
 
 .profile-image-container:hover {
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25)
 }
 
 .profile-image {
@@ -47,11 +47,11 @@
     object-fit: cover;
     display: block;
     transition: transform var(--transition-slow);
-    will-change: transform;
+    will-change: transform
 }
 
 .profile-image-container:hover .profile-image {
-    transform: scale(1.02);
+    transform: scale(1.02)
 }
 
 .profile-name-overlay {
@@ -61,14 +61,14 @@
     width: 100%;
     padding: var(--spacing-lg);
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.7) 100%);
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px)
 }
 
 .profile-name-overlay h1 {
     font-size: 2rem;
     font-family: var(--font-heading);
     margin: 0;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.5px
 }
 
 .profile-nav {
@@ -80,7 +80,7 @@
     border-radius: 12px;
     padding: 0;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05)
 }
 
 .nav-tab {
@@ -94,7 +94,7 @@
     cursor: pointer;
     transition: all var(--transition-fast);
     position: relative;
-    overflow: hidden;
+    overflow: hidden
 }
 
 .nav-tab::before {
@@ -107,50 +107,50 @@
     background: var(--accent);
     transform: scaleY(0);
     transform-origin: top;
-    transition: transform var(--transition-medium);
+    transition: transform var(--transition-medium)
 }
 
 .nav-tab:hover {
     background: rgba(var(--accent-rgb), 0.05);
-    color: var(--text-primary);
+    color: var(--text-primary)
 }
 
 .nav-tab.active {
     background: rgba(var(--accent-rgb), 0.1);
     color: var(--accent);
-    font-weight: 600;
+    font-weight: 600
 }
 
 .nav-tab.active::before {
-    transform: scaleY(1);
+    transform: scaleY(1)
 }
 
 .profile-content {
-    min-height: 600px;
+    min-height: 600px
 }
 
 .tab-content {
     display: none;
-    animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)
 }
 
 .tab-content.active {
-    display: block;
+    display: block
 }
 
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(12px)
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0)
     }
 }
 
 .bio-section {
-    margin-bottom: var(--spacing-2xl);
+    margin-bottom: var(--spacing-2xl)
 }
 
 .section-header {
@@ -160,7 +160,7 @@
     padding-bottom: var(--spacing-md);
     border-bottom: 2px solid var(--border);
     position: relative;
-    letter-spacing: -0.3px;
+    letter-spacing: -0.3px
 }
 
 .section-header::after {
@@ -171,22 +171,18 @@
     width: 120px;
     height: 2px;
     background: linear-gradient(90deg, var(--accent), transparent);
-    animation: slideRight 0.6s ease;
+    animation: slideRight 0.6s ease
 }
 
 @keyframes slideRight {
-    from {
-        width: 0;
-    }
-    to {
-        width: 120px;
-    }
+    from { width: 0 }
+    to { width: 120px }
 }
 
 .bio-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-lg);
+    gap: var(--spacing-lg)
 }
 
 .bio-item {
@@ -197,7 +193,7 @@
     transition: all var(--transition-medium);
     position: relative;
     overflow: hidden;
-    will-change: transform, box-shadow;
+    will-change: transform, box-shadow
 }
 
 .bio-item::before {
@@ -208,17 +204,17 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1));
-    transition: right var(--transition-medium);
+    transition: right var(--transition-medium)
 }
 
 .bio-item:hover {
     transform: translateY(-6px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-    border-color: var(--accent);
+    border-color: var(--accent)
 }
 
 .bio-item:hover::before {
-    right: 100%;
+    right: 100%
 }
 
 .bio-label {
@@ -227,18 +223,18 @@
     letter-spacing: 1.2px;
     color: var(--text-muted);
     margin-bottom: var(--spacing-sm);
-    font-weight: 700;
+    font-weight: 700
 }
 
 .bio-value {
     font-size: 1.15rem;
     color: var(--text-primary);
-    font-weight: 600;
+    font-weight: 600
 }
 
 .timeline-container {
     position: relative;
-    padding: var(--spacing-lg) 0;
+    padding: var(--spacing-lg) 0
 }
 
 .timeline-container::before {
@@ -248,19 +244,19 @@
     top: 0;
     bottom: 0;
     width: 2px;
-    background: linear-gradient(180deg, var(--accent), var(--border) 50%, transparent);
+    background: linear-gradient(180deg, var(--accent), var(--border) 50%, transparent)
 }
 
 #timeline-list {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-lg)
 }
 
 .timeline-event {
     position: relative;
     padding-left: 70px;
-    transition: all var(--transition-medium);
+    transition: all var(--transition-medium)
 }
 
 .timeline-event::before {
@@ -276,12 +272,12 @@
     z-index: 2;
     transition: all var(--transition-medium);
     will-change: transform, box-shadow;
-    box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0);
+    box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0)
 }
 
 .timeline-event:hover::before {
     transform: scale(1.35);
-    box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.2);
+    box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.2)
 }
 
 .event-card {
@@ -293,7 +289,7 @@
     transition: all var(--transition-medium);
     position: relative;
     overflow: hidden;
-    will-change: transform, box-shadow;
+    will-change: transform, box-shadow
 }
 
 .event-card::before {
@@ -303,13 +299,13 @@
     left: 0;
     width: 4px;
     height: 100%;
-    background: var(--accent);
+    background: var(--accent)
 }
 
 .event-card:hover {
     transform: translateX(8px);
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
-    border-color: var(--accent);
+    border-color: var(--accent)
 }
 
 .event-header {
@@ -317,14 +313,14 @@
     justify-content: space-between;
     align-items: start;
     margin-bottom: var(--spacing-md);
-    gap: var(--spacing-md);
+    gap: var(--spacing-md)
 }
 
 .event-date {
     font-size: 0.85rem;
     color: var(--text-muted);
     font-weight: 600;
-    white-space: nowrap;
+    white-space: nowrap
 }
 
 .era-badge {
@@ -340,30 +336,30 @@
     border: 1px solid rgba(var(--accent-rgb), 0.3);
     transition: all var(--transition-fast);
     overflow: hidden;
-    position: relative;
+    position: relative
 }
 
 .era-badge:hover {
     background: rgba(var(--accent-rgb), 0.25);
-    border-color: var(--accent);
+    border-color: var(--accent)
 }
 
 .event-title {
     font-size: 1.25rem;
     margin-bottom: var(--spacing-sm);
     font-weight: 600;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.2px
 }
 
 .event-summary {
     color: var(--text-secondary);
-    line-height: 1.65;
+    line-height: 1.65
 }
 
 .relationships-grid {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: var(--spacing-md)
 }
 
 .relationship-card {
@@ -378,7 +374,7 @@
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    will-change: transform, box-shadow;
+    will-change: transform, box-shadow
 }
 
 .relationship-card::before {
@@ -389,16 +385,16 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1));
-    transition: left var(--transition-medium);
+    transition: left var(--transition-medium)
 }
 
 .relationship-card:hover {
     transform: translateX(6px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1)
 }
 
 .relationship-card:hover::before {
-    left: 100%;
+    left: 100%
 }
 
 .relationship-avatar {
@@ -409,57 +405,57 @@
     flex-shrink: 0;
     border: 2px solid var(--border);
     transition: transform var(--transition-medium);
-    will-change: transform;
+    will-change: transform
 }
 
 .relationship-card:hover .relationship-avatar {
-    transform: scale(1.1);
+    transform: scale(1.1)
 }
 
 .relationship-info {
     flex-grow: 1;
-    z-index: 1;
+    z-index: 1
 }
 
 .relationship-name {
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 0.25rem;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.2px
 }
 
 .relationship-status {
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 0.9rem
 }
 
 .relationship-card[data-type="romantic"] {
-    border-left: 4px solid #ec4899;
+    border-left: 4px solid #ec4899
 }
 
 .relationship-card[data-type="platonic"] {
-    border-left: 4px solid #10b981;
+    border-left: 4px solid #10b981
 }
 
 .relationship-card[data-type="familial"] {
-    border-left: 4px solid #f59e0b;
+    border-left: 4px solid #f59e0b
 }
 
 .relationship-card[data-type="professional"] {
-    border-left: 4px solid #3b82f6;
+    border-left: 4px solid #3b82f6
 }
 
 .relationship-card[data-type="complicated"] {
-    border-left: 4px solid #a444ef;
+    border-left: 4px solid #a444ef
 }
 
 .relationship-card[data-type="hate"] {
-    border-left: 4px solid #ef4444;
+    border-left: 4px solid #ef4444
 }
 
 .masonry-grid {
     column-count: 3;
-    column-gap: var(--spacing-md);
+    column-gap: var(--spacing-md)
 }
 
 .gallery-item {
@@ -470,12 +466,12 @@
     border-radius: 12px;
     cursor: pointer;
     transition: all var(--transition-medium);
-    will-change: transform, box-shadow;
+    will-change: transform, box-shadow
 }
 
 .gallery-item:hover {
     transform: translateY(-6px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15)
 }
 
 .gallery-item img {
@@ -483,65 +479,65 @@
     display: block;
     border-radius: 12px;
     transition: transform var(--transition-slow);
-    will-change: transform;
+    will-change: transform
 }
 
 .gallery-item:hover img {
-    transform: scale(1.06);
+    transform: scale(1.06)
 }
 
 .gallery-loader {
     display: none;
     justify-content: center;
-    padding: var(--spacing-xl);
+    padding: var(--spacing-xl)
 }
 
 .gallery-loader.active {
-    display: flex;
+    display: flex
 }
 
 .modal-header {
     margin-bottom: var(--spacing-lg);
     padding-bottom: var(--spacing-md);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border)
 }
 
 .modal-header h2 {
     margin-top: var(--spacing-sm);
-    letter-spacing: -0.3px;
+    letter-spacing: -0.3px
 }
 
 .modal-body {
     max-height: calc(90vh - 200px);
     overflow-y: auto;
-    padding-right: var(--spacing-sm);
+    padding-right: var(--spacing-sm)
 }
 
 .event-images {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg)
 }
 
 .event-images img {
     width: 100%;
     border-radius: 8px;
-    transition: transform var(--transition-medium);
+    transition: transform var(--transition-medium)
 }
 
 .event-images img:hover {
-    transform: scale(1.05);
+    transform: scale(1.05)
 }
 
 .event-description {
     color: var(--text-secondary);
-    line-height: 1.8;
+    line-height: 1.8
 }
 
 .event-description h3 {
     color: var(--text-primary);
-    margin-top: var(--spacing-lg);
+    margin-top: var(--spacing-lg)
 }
 
 .tooltip {
@@ -557,20 +553,44 @@
     opacity: 0;
     transition: opacity var(--transition-fast);
     max-width: 250px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15)
 }
 
 .tooltip.active {
-    opacity: 1;
+    opacity: 1
 }
 
-@media (max-width: 1024px) {
-    .desktop-view {
-        grid-template-columns: 300px 1fr;
-        gap: var(--spacing-xl);
+@media (max-width:1024px){
+    .desktop-view{
+        grid-template-columns:300px 1fr;
+        gap:var(--spacing-xl)
     }
-    
-    .masonry-grid {
-        column-count: 2;
+    .masonry-grid{
+        column-count:2
+    }
+    .tooltip{
+        box-shadow:0 8px 12px rgba(0,0,0,.15)
+    }
+    .gallery-item:hover{
+        box-shadow:0 20px 30px rgba(0,0,0,.15)
+    }
+    .relationship-card:hover,
+    .bio-item:hover{
+        box-shadow:0 12px 18px rgba(0,0,0,.1)
+    }
+    .event-card:hover{
+        box-shadow:0 16px 24px rgba(0,0,0,.12)
+    }
+    .profile-nav{
+        box-shadow:0 4px 6px rgba(0,0,0,.05)
+    }
+    .profile-name-overlay{
+        backdrop-filter:none
+    }
+    .profile-image-container{
+        box-shadow:0 20px 30px rgba(0,0,0,.15)
+    }
+    .profile-image-container:hover{
+        box-shadow:0 30px 45px rgba(0,0,0,.25)
     }
 }
