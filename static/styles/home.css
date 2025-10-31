@@ -344,10 +344,10 @@
         filter:none
     }
     .hero-subtitle::before{
-        left:7rem
+        left:5rem
     }
     .hero-subtitle::after{
-        right:7rem
+        right:5rem
     }
 }
 
