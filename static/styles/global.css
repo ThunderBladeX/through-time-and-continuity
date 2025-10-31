@@ -431,83 +431,108 @@ p {
 }
 
 @media (max-width: 1024px){
-    .main-nav,.nav-links a::after,
-    .spinner,.modal-close:hover,
-    ::-webkit-scrollbar-thumb:hover,
-    .btn-primary {box-shadow:none}
+    .main-nav {
+        box-shadow:0 4px 6px rgba(0,0,0,.3)
+    }
 
-    .nav-links a:hover,.nav-links a.active {text-shadow:none}
+    .nav-links a:hover,
+    .nav-links a.active {
+        text-shadow:none
+    }
 
-    .btn-primary::before {display:none}
+    .btn-primary {
+        box-shadow:0 4px 6px rgba(59, 130, 246, 0.3)
+    }
 
-    .modal-close,.back-btn,
-    .btn-secondary,.modal-content {backdrop-filter:none}
+    .btn-primary::before {
+        display:none
+    }
+
+    .modal-close,
+    .back-btn,
+    .btn-secondary,
+    .modal-content {
+        backdrop-filter:none
+    }
 
     .site-title {
-        background: var(--gradient-primary);
+        background:var(--gradient-primary);
         animation:none
     }
 
     body::before {
-        animation: none;
-        opacity: 0.4
+        animation:none;
+        opacity:.4
     }
 
     .modal-content {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border);
-        box-shadow: var(--shadow-xl)
+        background:var(--bg-secondary);
+        border:1px solid var(--border);
+        box-shadow:var(--shadow-xl)
     }
 }
 
 @media (max-width: 768px) {
+    ::-webkit-scrollbar-thumb:hover,
+    .modal-close:hover,
+    .spinner,
+    .nav-links a::after {
+        box-shadow:none
+    }
+
     .nav-container {
-        padding: 0 var(--spacing-md);
-        height: 60px
+        padding:0 var(--spacing-md);
+        height:60px
     }
     
     .site-title {
-        font-size: 1.2rem
+        font-size:1.2rem
     }
     
     .nav-links {
-        gap: var(--spacing-md)
+        gap:var(--spacing-md)
     }
     
     .nav-links a {
-        font-size: 0.9rem
+        font-size:.9rem
     }
     
     h1 {
-        font-size: 2rem
+        font-size:2rem
     }
     
     h2 {
-        font-size: 1.5rem
+        font-size:1.5rem
     }
     
     .back-btn {
-        transform: translate(1rem, 1rem);
-        font-size: 0.9rem
+        transform:translate(1rem, 1rem);
+        font-size:.9rem
     }
 
-    .modal-overlay,.main-nav {
-        backdrop-filter: none
+    .modal-overlay,
+    .main-nav {
+        backdrop-filter:none
     }
 
     :root {
-        --shadow-sm: 0 1px 1.5px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-        --shadow-lg: 0 8px 12px rgba(0, 0, 0, 0.5);
-        --shadow-xl: 0 16px 24px rgba(0, 0, 0, 0.6)
+        --shadow-sm:0 1px 1.5px rgba(0,0,0,.3);
+        --shadow-md:0 4px 6px rgba(0,0,0,.4);
+        --shadow-lg:0 8px 12px rgba(0,0,0,.5);
+        --shadow-xl:0 16px 24px rgba(0,0,0,.6)
     }
 }
 
 @media (max-width: 480px) {
+    .main-nav,
+    .btn-primary {
+        box-shadow:none
+    }
+
     :root {
-        --shadow-sm: 0 1px 0px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 2px 0px rgba(0, 0, 0, 0.4);
-        --shadow-lg: 0 4px 0px rgba(0, 0, 0, 0.5);
-        --shadow-xl: 0 8px 0px rgba(0, 0, 0, 0.6);
+        --shadow-sm:0 1px 0px rgba(0,0,0,.3);
+        --shadow-md:0 2px 0px rgba(0,0,0,.4);
+        --shadow-lg:0 4px 0px rgba(0,0,0,.5);
+        --shadow-xl:0 8px 0px rgba(0,0,0,.6)
     }
 }
