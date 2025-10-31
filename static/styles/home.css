@@ -493,6 +493,12 @@
     .about-content{
         padding:var(--spacing-md)
     }
+    .disclaimer p{
+        font-size:.9rem
+    }
+    .era-card p{
+        font-size:1.15rem
+    }
 }
 
 @media (max-width:480px){
