@@ -470,6 +470,8 @@
         -webkit-background-clip:text;
         -webkit-text-fill-color:transparent;
         background-clip:text;
+        filter:none;
+        animation:none
     }
     .hero-subtitle{
         font-size:.6rem
@@ -518,9 +520,5 @@
     .hero-subtitle::before,
     .hero-subtitle::after{
         display:none
-    }
-    .hero-title{
-        filter:none
-        animation:none
     }
 }
