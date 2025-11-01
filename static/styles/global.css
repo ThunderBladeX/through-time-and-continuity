@@ -245,9 +245,7 @@ body::before {
 }
 
 .activity-skeleton {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--spacing-lg);
+    display: contents;
     padding: var(--spacing-md) 0;
     width: 100%
 }
@@ -305,6 +303,17 @@ body::before {
     border-radius: 12px;
     will-change: opacity;
     animation: pulse 1.5s ease-in-out infinite
+}
+
+#activity-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+#activity-list:has(.activity-skeleton) {
+    display: grid;
+    flex-direction: unset;
 }
 
 .modal {
@@ -683,17 +692,17 @@ p {
     .form-control:invalid:not(:placeholder-shown):focus{
         box-shadow:0 0 0 3px rgba(239,68,68,.15),0 2px 3px rgba(0,0,0,.2) inset
     }
-    .activity-skeleton{
-        grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
-        gap:var(--spacing-md)
-    }
     .skeleton-card{
         min-height:340px
+    }
+    #activity-list{
+        grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+        gap:var(--spacing-md)
     }
 }
 
 @media (max-width:768px){
-    .activity-skeleton{
+    #activity-list{
         grid-template-columns:1fr;
         gap:var(--spacing-lg)
     }
