@@ -513,6 +513,73 @@ p {
     pointer-events: none
 }
 
+.form-feedback {
+    display: none;
+    margin-top: var(--spacing-sm);
+    font-size: 0.85rem;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 8px;
+    animation: slideDown 0.3s ease
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px)
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+
+.form-feedback.error {
+    display: block;
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2)
+}
+
+.form-feedback.success {
+    display: block;
+    color: #86efac;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2)
+}
+
+.char-counter {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: var(--spacing-xs);
+    font-variant-numeric: tabular-nums
+}
+
+.char-counter.warning {
+    color: #fbbf24
+}
+
+.char-counter.error {
+    color: #ef4444
+}
+
+@media (prefers-reduced-motion:reduce){
+    .modal,
+    .modal-content,
+    .form-control,
+    .btn-primary,
+    .btn-secondary,
+    .modal-close,
+    .form-feedback,
+    .modal-close:hover,
+    .btn-primary:hover,
+    .btn-secondary:hover{
+        transform:none;
+        animation:none;
+        transition:none
+    }
+}
+
 @media (max-width:1024px){
     .main-nav{
         box-shadow:0 4px 6px rgba(0,0,0,.3)
