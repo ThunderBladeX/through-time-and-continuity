@@ -492,7 +492,7 @@ function setupContributionButtons() {
 function addEditButton(element) {
     const editBtn = document.createElement('button');
     editBtn.className = 'edit-btn';
-    editBtn.innerHTML = '✎';
+    editBtn.innerHTML = '✒️';
     editBtn.title = 'Suggest an Edit';
     editBtn.onclick = (e) => {
         e.stopPropagation();
