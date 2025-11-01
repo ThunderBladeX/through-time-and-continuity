@@ -64,9 +64,9 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-shadow: var(--shadow-sm), 0 0 80px rgba(59,130,246,.5);
+    text-shadow: 0 0 80px rgba(59,130,246,.5);
     animation: titleGlow 8s ease-in-out infinite, titleMove 8s ease-in-out infinite;
-    filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.4))
+    filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.4)) drop-shadow(var(--shadow-sm))
 }
 
 @keyframes titleGlow {
