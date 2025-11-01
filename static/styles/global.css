@@ -79,7 +79,7 @@ body::before {
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgba(10, 10, 10, 0.9);
+    background: rgba(10, 10, 10, 0.85);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(59, 130, 246, 0.1);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3)
@@ -88,11 +88,11 @@ body::before {
 .nav-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 var(--spacing-lg) 0.5rem var(--spacing-lg);
+    padding: 0 var(--spacing-lg);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 60px;
+    height: 55px;
     position: relative
 }
 
@@ -791,6 +791,7 @@ p {
         box-shadow:none
     }
     .nav-container{
+        height: 60px;
         padding:0 var(--spacing-md)
     }
     .site-title{
