@@ -286,7 +286,7 @@
     color: white;
     border-color: transparent;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4)
+    box-shadow: 0 2px 12px rgba(59, 130, 246, 0.4)
 }
 
 .about-page {
@@ -453,11 +453,11 @@
         backdrop-filter:none
     }
     .character-tag:hover{
-        box-shadow:0 4px 6px rgba(59,130,246,.4)
+        box-shadow:0 2px 3px rgba(59,130,246,.3)
     }
     .disclaimer{
-        box-shadow:0 4px 6px rgba(0, 0, 0, 0.3);
-        background: var(--bg-tertiary);
+        box-shadow:0 4px 6px rgba(0,0,0,.3);
+        background:var(--bg-tertiary)
     }
 }
 
