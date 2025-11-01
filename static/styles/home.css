@@ -87,8 +87,8 @@
 
 .hero-subtitle {
     font-size: 1.2rem;
-    color: var(--text-secondary);
-    text-shadow: 0 0 3px rgba(0,0,0,.4);
+    color: var(--text-primary);
+    text-shadow: 0 .5px 6px rgba(0,0,0,.4);
     max-width: 600px;
     margin: 0 auto;
     letter-spacing: 1px;
@@ -104,7 +104,8 @@
     top: 50%;
     transform: translateY(-50%);
     color: var(--accent);
-    opacity: 0.6
+    opacity: 0.6;
+    text-shadow: 0 0 3px var(--glow)
 }
 
 .hero-subtitle::before {
