@@ -246,8 +246,7 @@ body::before {
 
 .activity-skeleton {
     display: contents;
-    padding: var(--spacing-md) 0;
-    width: 100%
+    padding: var(--spacing-md) 0
 }
 
 .skeleton-card {
@@ -266,6 +265,7 @@ body::before {
     position: relative;
     min-height: 380px;
     display: flex;
+    transition: transform var(--transition-medium);
     will-change: transform;
     transform: translateZ(0);
     backface-visibility: hidden;
@@ -306,13 +306,14 @@ body::before {
 
 #activity-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: var(--spacing-lg);
+    width: 100%
 }
 
 #activity-list:has(.activity-skeleton) {
     display: grid;
-    flex-direction: unset;
+    flex-direction: unset
 }
 
 .modal {
@@ -695,7 +696,7 @@ p {
         min-height:340px
     }
     #activity-list{
-        grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+        grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
         gap:var(--spacing-md)
     }
 }
@@ -704,9 +705,6 @@ p {
     #activity-list{
         grid-template-columns:1fr;
         gap:var(--spacing-lg)
-    }
-    .skeleton-card{
-        min-height:300px
     }
     ::-webkit-scrollbar-thumb:hover,
     .modal-close:hover,
@@ -757,8 +755,8 @@ p {
         top:var(--spacing-md);
         right:var(--spacing-md)
     }
-    .form-actions {
-        flex-direction: column-reverse
+    .form-actions{
+        flex-direction:column-reverse
     }
 }
 
@@ -785,9 +783,5 @@ p {
     }
     .form-group{
         margin-bottom:var(--spacing-lg)
-    }
-    .skeleton-card{
-        border-radius:12px;
-        min-height:280px
     }
 }
