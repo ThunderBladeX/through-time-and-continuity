@@ -492,7 +492,7 @@ function setupContributionButtons() {
 function addEditButton(element) {
     const editBtn = document.createElement('button');
     editBtn.className = 'edit-btn';
-    editBtn.innerHTML = '✏️';
+    editBtn.innerHTML = '✎';
     editBtn.title = 'Suggest an Edit';
     editBtn.onclick = (e) => {
         e.stopPropagation();
@@ -636,17 +636,3 @@ async function submitPendingEdit(editData) {
         body: JSON.stringify(editData)
     });
 }
-
-const editButtonStyles = document.createElement('style');
-editButtonStyles.textContent = `
-    .edit-btn { position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; background: transparent; border: none; border-radius: 6px; color: white; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 1; transition: all 0.2s ease; z-index: 10; }
-    .edit-btn:hover { text-shadow: 0 0 8px var(--glow); transform: scale(1.1); }
-    .relationship-card .edit-btn { top: 50%; transform: translateY(-50%); }
-    .inline-edit-input { width: 100%; padding: 0.5rem; background: var(--bg-tertiary); border: 2px solid var(--accent); border-radius: 6px; color: var(--text-primary); font-size: 1rem; font-weight: 500; }
-    .inline-edit-input:focus { outline: none; box-shadow: 0 0 0 3px var(--glow); }
-    .quick-edit-btn { width: 100%; padding: 0.75rem; margin-top: var(--spacing-lg); background: var(--glow); border: 1px solid var(--accent); border-radius: 8px; color: var(--accent); font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
-    .quick-edit-btn:hover { background: var(--accent); color: white; transform: translateY(-2px); box-shadow: 0 4px 12px var(--glow); }
-    @media (max-width: 768px) { .quick-edit-btn { margin-top: var(--spacing-md); font-size: 0.9rem; } }
-    .relationship-clickable-area { display: flex; align-items: center; width: 100%; text-decoration: none; color: inherit; }
-`;
-document.head.appendChild(editButtonStyles);
