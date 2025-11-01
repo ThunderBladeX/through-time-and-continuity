@@ -70,8 +70,8 @@
 }
 
 @keyframes titleGlow {
-    0%, 100% { filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5)) }
-    50% { filter: drop-shadow(0 0 40px rgba(139, 92, 246, 0.6)) }
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5)) drop-shadow(var(--shadow-sm)) }
+    50% { filter: drop-shadow(0 0 40px rgba(139, 92, 246, 0.6)) drop-shadow(var(--shadow-sm)) }
 }
 
 @keyframes titleMove {
