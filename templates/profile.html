@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Character Profile</title>
+    <!-- Favicons -->
     <link rel="icon" sizes="16x16" href="/static/images/favicon.ico">
     <link rel="icon" sizes="48x48" href="/static/images/favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/images/icon.png">
     <link rel="icon" sizes="512x512" href="/static/images/favicon.jpg">
+    <!-- Styles -->
     <link rel="stylesheet" href="/static/styles/global.css">
     <link rel="stylesheet" href="/static/styles/profile.css">
     <link rel="stylesheet" href="/static/styles/profile-mobile.css">
     <link rel="stylesheet" href="/static/styles/eras.css">
-    <!-- Character-specific theme loaded dynamically -->
+    <!-- Dynamically loaded theme -->
     <link id="character-theme" rel="stylesheet" href="">
+    <-- Preconnect -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 </head>
 <body class="profile-page" data-character-id="">
-    <!-- Three.js Background Canvas -->
-    <canvas id="bg-canvas"></canvas>
-
     <!-- Back Navigation -->
     <a href="/characters" class="back-btn">Back</a>
 
@@ -170,6 +172,13 @@
     <!-- Era Tooltip -->
     <div id="era-tooltip" class="tooltip"></div>
 
+    <!-- Lenis Smooth Scroll (v1.3.4+) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.13/lenis.min.js" 
+            integrity="sha512-0+qsEFZMOng/NJfMh9n/1TKcDEOAZhJPDX8YPrNSpFsCrXOXrMdV7F5B10d5F/0u75v3IspzMOKdGPaH8mf/hg==" 
+            crossorigin="anonymous" 
+            referrerpolicy="no-referrer"
+            async></script>
+
     <!-- Three.js from CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
@@ -179,7 +188,7 @@
     <script src="/static/js/gallery.js"></script>
     <script src="/static/js/markdown.js"></script>
     
-    <!-- NEW: Enhanced profile features -->
+    <!-- Enhanced profile features -->
     <script src="/static/js/profile-enhanced.js"></script>
 </body>
 </html>
