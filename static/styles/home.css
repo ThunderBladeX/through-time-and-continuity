@@ -64,6 +64,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    text-shadow:0 0 80px rgba(59,130,246,.5);
     animation: titleGlow 8s ease-in-out infinite, titleMove 20s ease-in-out infinite;
     filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.4))
 }
@@ -469,8 +470,6 @@
         -webkit-background-clip:text;
         -webkit-text-fill-color:transparent;
         background-clip:text;
-        animation:none;
-        filter:none
     }
     .hero-subtitle{
         font-size:.6rem
@@ -519,5 +518,9 @@
     .hero-subtitle::before,
     .hero-subtitle::after{
         display:none
+    }
+    .hero-title{
+        filter:none
+        animation:none
     }
 }
