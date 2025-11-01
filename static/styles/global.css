@@ -234,18 +234,77 @@ body::before {
     gap: var(--spacing-md)
 }
 
-.skeleton-card {
-    background: linear-gradient(90deg, var(--bg-secondary) 0%, var(--bg-tertiary) 50%, var(--bg-secondary) 100%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 12px;
-    height: 200px;
-    margin-bottom: var(--spacing-md)
+@keyframes shimmer {
+    0% { background-position: -1000px 0 }
+    100% { background-position: 1000px 0 }
 }
 
-@keyframes shimmer {
-    0% { background-position: -200% 0 }
-    100% { background-position: 200% 0 }
+@keyframes pulse {
+    0%, 100% { opacity: 1 }
+    50% { opacity: 0.6 }
+}
+
+.activity-skeleton {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    padding: var(--spacing-md) 0;
+    width: 100%
+}
+
+.skeleton-card {
+    background: linear-gradient(
+        90deg,
+        var(--bg-secondary) 0%,
+        rgba(59, 130, 246, 0.05) 20%,
+        var(--bg-secondary) 40%,
+        var(--bg-secondary) 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    min-height: 380px;
+    display: flex;
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    flex-direction: column
+}
+
+.skeleton-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: linear-gradient(
+        180deg,
+        rgba(59, 130, 246, 0.08) 0%,
+        rgba(42, 42, 42, 0.3) 100%
+    );
+    border-radius: 16px 16px 0 0
+}
+
+.skeleton-card::after {
+    content: '';
+    position: absolute;
+    top: var(--spacing-md);
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    height: 180px;
+    background: linear-gradient(
+        135deg,
+        rgba(59, 130, 246, 0.1) 0%,
+        rgba(42, 42, 42, 0.5) 100%
+    );
+    border-radius: 12px;
+    will-change: opacity;
+    animation: pulse 1.5s ease-in-out infinite
 }
 
 .modal {
@@ -573,7 +632,8 @@ p {
     .form-feedback,
     .modal-close:hover,
     .btn-primary:hover,
-    .btn-secondary:hover{
+    .btn-secondary:hover,
+    .skeleton-card{
         transform:none;
         animation:none;
         transition:none
@@ -623,9 +683,23 @@ p {
     .form-control:invalid:not(:placeholder-shown):focus{
         box-shadow:0 0 0 3px rgba(239,68,68,.15),0 2px 3px rgba(0,0,0,.2) inset
     }
+    .activity-skeleton{
+        grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
+        gap:var(--spacing-md)
+    }
+    .skeleton-card{
+        min-height:340px
+    }
 }
 
 @media (max-width:768px){
+    .activity-skeleton{
+        grid-template-columns:1fr;
+        gap:var(--spacing-lg)
+    }
+    .skeleton-card{
+        min-height:300px
+    }
     ::-webkit-scrollbar-thumb:hover,
     .modal-close:hover,
     .nav-links a::after{
