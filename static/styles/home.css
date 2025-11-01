@@ -60,7 +60,7 @@
         #8b5cf6 70%,
         #a78bfa 100%
     );
-    background-size: 200% 200%;
+    background-size: 175% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -75,8 +75,8 @@
 }
 
 @keyframes titleMove {
-    0%, 100% { background-position: 20% 50% }
-    50% { background-position: 80% 50% }
+    0%, 100% { background-position: 25% 50% }
+    50% { background-position: 75% 50% }
 }
 
 .hero-subtitle {
