@@ -235,8 +235,8 @@ body::before {
 }
 
 @keyframes shimmer {
-    0% { background-position: -1000px 0 }
-    100% { background-position: 1000px 0 }
+    0% { background-position: -200% 0 }
+    100% { background-position: 200% 0 }
 }
 
 @keyframes pulse {
@@ -254,14 +254,13 @@ body::before {
     background: linear-gradient(
         90deg,
         var(--bg-secondary) 0%,
-        rgba(59, 130, 246, 0.05) 20%,
-        var(--bg-secondary) 40%,
+        var(--bg-tertiary) 50%,
         var(--bg-secondary) 100%
     );
-    background-size: 1000px 100%;
-    animation: shimmer 2s infinite linear;
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 12px;
     padding: 0;
     overflow: hidden;
     position: relative;
@@ -784,7 +783,11 @@ p {
         border-radius:0;
         padding:var(--spacing-lg)
     }
-    .form-group {
-        margin-bottom: var(--spacing-lg);
+    .form-group{
+        margin-bottom:var(--spacing-lg)
+    }
+    .skeleton-card{
+        border-radius:12px;
+        min-height:280px
     }
 }
