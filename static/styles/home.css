@@ -65,7 +65,7 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-shadow:0 0 80px rgba(59,130,246,.5);
-    animation: titleGlow 8s ease-in-out infinite, titleMove 20s ease-in-out infinite;
+    animation: titleGlow 8s ease-in-out infinite, titleMove 10s ease-in-out infinite;
     filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.4))
 }
 
