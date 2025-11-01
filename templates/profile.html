@@ -16,6 +16,9 @@
     <link id="character-theme" rel="stylesheet" href="">
 </head>
 <body class="profile-page" data-character-id="">
+    <!-- Three.js Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
     <!-- Back Navigation -->
     <a href="/characters" class="back-btn">Back</a>
 
@@ -167,9 +170,16 @@
     <!-- Era Tooltip -->
     <div id="era-tooltip" class="tooltip"></div>
 
+    <!-- Three.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Existing scripts -->
     <script src="/static/js/main.js"></script>
     <script src="/static/js/profile.js"></script>
     <script src="/static/js/gallery.js"></script>
     <script src="/static/js/markdown.js"></script>
+    
+    <!-- NEW: Enhanced profile features -->
+    <script src="/static/js/profile-enhanced.js"></script>
 </body>
 </html>
