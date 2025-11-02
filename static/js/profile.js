@@ -16,6 +16,7 @@
         initSmoothScroll();
         init3DBackground();
         initRippleEffect();
+        initDraggableElements();
 
         await loadCharacter();
 
@@ -53,6 +54,40 @@
             });
         }
     });
+
+    function initDraggableElements() {
+        const avatars = document.querySelectorAll('.relationship-avatar, .love-avatar');
+
+        avatars.forEach(function(avatar) {
+            avatar.classList.add('draggable-rotate');
+            let isDragging = false;
+            let startX = 0;
+            let rotation = 0;
+
+            avatar.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                startX = e.clientX;
+                avatar.classList.add('dragging');
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                
+                const deltaX = e.clientX - startX;
+                rotation = deltaX * 0.5;
+                avatar.style.setProperty('--drag-rotation', rotation + 'deg');
+            });
+
+            document.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    avatar.classList.remove('dragging');
+                    avatar.style.setProperty('--drag-rotation', '0deg');
+                }
+            });
+        });
+    }
 
     function initRippleEffect() {
         const rippleContainers = document.querySelectorAll('.glass-card, .info-item, .timeline-card, .relationship-card, .love-card');
