@@ -15,6 +15,7 @@
 
         initSmoothScroll();
         init3DBackground();
+        initBubbleGenerator();
 
         await loadCharacter();
 
@@ -52,6 +53,32 @@
             });
         }
     });
+
+    function initBubbleGenerator() {
+        const heroSection = document.querySelector('.hero-section');
+        if (!heroSection) return;
+
+        heroSection.addEventListener('click', function(e) {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(function() {
+                    const bubble = document.createElement('div');
+                    bubble.className = 'bubble';
+                    
+                    const size = Math.random() * 60 + 20;
+                    bubble.style.width = size + 'px';
+                    bubble.style.height = size + 'px';
+                    bubble.style.left = e.clientX + (Math.random() - 0.5) * 100 + 'px';
+                    bubble.style.top = e.clientY + (Math.random() - 0.5) * 100 + 'px';
+
+                    document.body.appendChild(bubble);
+
+                    setTimeout(function() {
+                        bubble.remove();
+                    }, 2000);
+                }, i * 50);
+            }
+        });
+    }
 
     function initSmoothScroll() {
         if (typeof Lenis === 'undefined') {
