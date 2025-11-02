@@ -17,6 +17,7 @@
         init3DBackground();
         initBubbleGenerator();
         initGlitchEffect();
+        initDraggableElements();
 
         await loadCharacter();
 
