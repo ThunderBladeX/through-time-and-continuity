@@ -1,150 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" class="lenis lenis-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Character Profile</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/icon.png">
-    
+    <title>Character Profile - Periaphe</title>
     <link rel="stylesheet" href="/static/styles/global.css">
     <link rel="stylesheet" href="/static/styles/profile.css">
-    <link rel="stylesheet" href="/static/styles/profile-mobile.css">
-    <link rel="stylesheet" href="/static/styles/profile-enhanced.css">
-    <link rel="stylesheet" href="/static/styles/eras.css">
-    <link id="character-theme" rel="stylesheet" href="">
-</head>
-<body class="profile-page" data-character-id="">
-    <a href="/characters" class="back-btn">← Back</a>
 
-    <canvas id="bg-canvas"></canvas>
-
-    <div class="profile-container desktop-view">
-        <aside class="profile-sidebar">
-            <div class="profile-image-container">
-                <img id="profile-image" src="" alt="" class="profile-image">
-                <div class="profile-name-overlay">
-                    <h1 id="character-name"></h1>
-                </div>
-            </div>
-            
-            <nav class="profile-nav">
-                <button class="nav-tab active" data-tab="overview">Overview</button>
-                <button class="nav-tab" data-tab="timeline">Timeline</button>
-                <button class="nav-tab" data-tab="relationships">Relationships</button>
-                <button class="nav-tab" data-tab="love-interests">Love Interests</button>
-                <button class="nav-tab" data-tab="gallery">Gallery</button>
-            </nav>
-        </aside>
-
-        <main class="profile-content">
-            <div id="overview-tab" class="tab-content active">
-                <div class="bio-section">
-                    <h2 class="section-header">Identity</h2>
-                    <div id="bio-identity" class="bio-grid"></div>
-                </div>
-                <div id="additional-bio-sections"></div>
-            </div>
-
-            <div id="timeline-tab" class="tab-content">
-                <div class="timeline-container">
-                    <div id="timeline-list"></div>
-                </div>
-            </div>
-
-            <div id="relationships-tab" class="tab-content">
-                <div id="relationships-list" class="relationships-grid"></div>
-            </div>
-
-            <div id="love-interests-tab" class="tab-content"></div>
-
-            <div id="gallery-tab" class="tab-content">
-                <div id="gallery-masonry" class="masonry-grid"></div>
-                <div class="gallery-loader">
-                    <div class="spinner"></div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <div class="profile-container mobile-view">
-        <div class="mobile-header">
-            <img id="mobile-profile-image" src="" alt="" class="mobile-profile-image">
-            <div class="speech-bubble">
-                <p id="character-quote"></p>
-            </div>
-            <h1 id="mobile-character-name"></h1>
-        </div>
-
-        <nav class="mobile-nav">
-            <button class="mobile-nav-tab active" data-tab="overview">Overview</button>
-            <button class="mobile-nav-tab" data-tab="timeline">Timeline</button>
-            <button class="mobile-nav-tab" data-tab="relationships">Relationships</button>
-            <button class="mobile-nav-tab" data-tab="love-interests">Love Interests</button>
-            <button class="mobile-nav-tab" data-tab="gallery">Gallery</button>
-        </nav>
-
-        <div class="mobile-content">
-            <div id="mobile-overview" class="mobile-tab-content active"></div>
-            <div id="mobile-timeline" class="mobile-tab-content"></div>
-            <div id="mobile-relationships" class="mobile-tab-content"></div>
-            <div id="mobile-love-interests" class="mobile-tab-content"></div>
-            <div id="mobile-gallery" class="mobile-tab-content">
-                <div class="gallery-pagination">
-                    <button id="prev-page" class="page-btn">← Previous</button>
-                    <span id="page-info"></span>
-                    <button id="next-page" class="page-btn">Next →</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="bio-edit-modal" class="modal">
-        <div class="modal-overlay"></div>
-        <div class="modal-content">
-            <button class="modal-close">×</button>
-            <h2 id="bio-edit-modal-title">Suggest an Edit</h2>
-            <form id="bio-edit-form">
-                <input type="hidden" name="section_id">
-                <input type="hidden" name="old_value_title">
-                <input type="hidden" name="old_value_content">
-                <div class="form-group">
-                    <label for="new_value_title" class="new-value-label">Section Title</label>
-                    <input type="text" id="new_value_title" name="new_value_title" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="new_value_content" class="new-value-label">Content (Markdown supported)</label>
-                    <textarea id="new_value_content" name="new_value_content" rows="10" class="form-control"></textarea>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary">Submit for Approval</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="event-modal" class="modal">
-        <div class="modal-overlay"></div>
-        <div class="modal-content">
-            <button class="modal-close">×</button>
-            <div class="modal-header">
-                <span id="modal-era-badge" class="era-badge"></span>
-                <h2 id="modal-event-title"></h2>
-                <p id="modal-event-date" class="event-date"></p>
-            </div>
-            <div class="modal-body">
-                <div id="modal-event-images" class="event-images"></div>
-                <div id="modal-event-description" class="event-description"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="era-tooltip" class="tooltip"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollSmoother.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js"></script>
-    
     <script type="importmap">
     {
         "imports": {
@@ -153,11 +18,169 @@
         }
     }
     </script>
+</head>
+<body class="profile-page" data-character-id="">
+    <a href="/characters" class="back-btn">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M15 10H5M5 10L10 15M5 10L10 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back
+    </a>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <section class="hero-section">
+        <div class="hero-container">
+            <div class="hero-image-wrapper" data-scroll-speed="0.5">
+                <img id="hero-image" src="" alt="" class="hero-image">
+                <div class="hero-gradient"></div>
+            </div>
+            <div class="hero-content">
+                <h1 id="hero-name" class="hero-name" data-scroll-speed="0.3"></h1>
+                <p id="hero-quote" class="hero-quote" data-scroll-speed="0.4"></p>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-line"></div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <div class="profile-grid">
+        <aside class="sidebar-nav">
+            <div class="nav-wrapper">
+                <button class="nav-item active" data-tab="overview">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-label">Overview</span>
+                    <span class="nav-indicator"></span>
+                </button>
+                <button class="nav-item" data-tab="timeline">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-label">Timeline</span>
+                    <span class="nav-indicator"></span>
+                </button>
+                <button class="nav-item" data-tab="relationships">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-label">Relationships</span>
+                    <span class="nav-indicator"></span>
+                </button>
+                <button class="nav-item" data-tab="love-interests">
+                    <span class="nav-icon">💝</span>
+                    <span class="nav-label">Love Interests</span>
+                    <span class="nav-indicator"></span>
+                </button>
+                <button class="nav-item" data-tab="gallery">
+                    <span class="nav-icon">🖼️</span>
+                    <span class="nav-label">Gallery</span>
+                    <span class="nav-indicator"></span>
+                </button>
+            </div>
+            <div class="sidebar-footer">
+                <button id="admin-edit-btn" class="admin-btn" style="display: none;">
+                    <span>⚙️</span>
+                    Edit Character
+                </button>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <div id="overview-tab" class="tab-panel active">
+                <div class="identity-card glass-card">
+                    <h2 class="section-title">Identity</h2>
+                    <div id="identity-grid" class="info-grid">
+                        <!-- Loaded via JS -->
+                    </div>
+                </div>
+
+                <div id="bio-sections" class="bio-sections">
+                    <!-- Loaded via JS -->
+                </div>
+            </div>
+
+            <div id="timeline-tab" class="tab-panel">
+                <div class="timeline-header">
+                    <h2 class="section-title">Timeline</h2>
+                    <p class="section-subtitle">Journey through key moments</p>
+                </div>
+                <div id="timeline-container" class="timeline-track">
+                    <!-- Loaded via JS -->
+                </div>
+            </div>
+
+            <div id="relationships-tab" class="tab-panel">
+                <div class="relationships-header">
+                    <h2 class="section-title">Relationships</h2>
+                    <p class="section-subtitle">Connections that matter</p>
+                </div>
+                <div id="relationships-grid" class="relationships-grid">
+                    <!-- Loaded via JS -->
+                </div>
+            </div>
+
+            <div id="love-interests-tab" class="tab-panel">
+                <div id="love-interests-content">
+                    <!-- Loaded via JS -->
+                </div>
+            </div>
+
+            <div id="gallery-tab" class="tab-panel">
+                <div class="gallery-header">
+                    <h2 class="section-title">Gallery</h2>
+                    <p class="section-subtitle">Visual moments captured in time</p>
+                </div>
+                <div id="gallery-grid" class="gallery-grid">
+                    <!-- Loaded via JS -->
+                </div>
+                <div id="gallery-loader" class="gallery-loader">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="event-modal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-panel">
+            <button class="modal-close">×</button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span id="modal-era" class="era-badge"></span>
+                    <h2 id="modal-title"></h2>
+                    <time id="modal-date"></time>
+                </div>
+                <div id="modal-images" class="modal-images"></div>
+                <div id="modal-description" class="modal-description"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-modal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-panel">
+            <button class="modal-close">×</button>
+            <div class="modal-content">
+                <h2>Suggest an Edit</h2>
+                <form id="edit-form">
+                    <input type="hidden" name="section_id">
+                    <div class="form-group">
+                        <label>Section Title</label>
+                        <input type="text" name="title" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Content</label>
+                        <textarea name="content" rows="10" class="form-control"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary modal-close">Cancel</button>
+                        <button type="submit" class="btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="/static/js/main.js"></script>
     <script src="/static/js/profile.js"></script>
-    <script src="/static/js/profile-enhanced.js" type="module"></script>
-    <script src="/static/js/gallery.js"></script>
     <script src="/static/js/markdown.js"></script>
 </body>
 </html>
