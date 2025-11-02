@@ -139,17 +139,6 @@
             const mesh = new THREE.Mesh(geometry, material);
             scene.add(mesh);
 
-            const torusGeometry = new THREE.TorusGeometry(0.7, 0.2, 16, 100);
-            const torusMaterial = new THREE.MeshBasicMaterial({
-                color: 0x8b5cf6,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.05,
-            });
-            const torus = new THREE.Mesh(torusGeometry, torusMaterial);
-            torus.position.set(2, -1, -3);
-            scene.add(torus);
-
             let mouseX = 0;
             let mouseY = 0;
             document.addEventListener('mousemove', function(e) {
