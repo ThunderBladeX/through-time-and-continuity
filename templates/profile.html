@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Character Profile - Periaphe</title>
+    <title id="page-title">Character Profile - Periaphe</title>
     <link rel="stylesheet" href="/static/styles/global.css">
     <link rel="stylesheet" href="/static/styles/profile.css">
-    
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body class="profile-page" data-character-id="">
     <a href="/characters" class="back-btn">
@@ -112,6 +116,7 @@
                 </div>
             </div>
 
+
             <div id="gallery-tab" class="tab-panel">
                 <div class="gallery-header">
                     <h2 class="section-title">Gallery</h2>
@@ -143,44 +148,37 @@
         </div>
     </div>
 
-    <div id="edit-modal" class="modal">
+    <div id="bio-edit-modal" class="modal">
         <div class="modal-backdrop"></div>
         <div class="modal-panel">
             <button class="modal-close">×</button>
             <div class="modal-content">
                 <h2>Suggest an Edit</h2>
-                <form id="edit-form">
+                <form id="bio-edit-form">
                     <input type="hidden" name="section_id">
+                    <input type="hidden" name="old_value_title">
+                    <input type="hidden" name="old_value_content">
                     <div class="form-group">
-                        <label>Section Title</label>
-                        <input type="text" name="title" class="form-control">
+                        <label for="new_value_title" class="new-value-label">Section Title</label>
+                        <input type="text" id="new_value_title" name="new_value_title" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>Content</label>
-                        <textarea name="content" rows="10" class="form-control"></textarea>
+                        <label for="new_value_content" class="new-value-label">Content (Markdown supported)</label>
+                        <textarea id="new_value_content" name="new_value_content" rows="10" class="form-control"></textarea>
                     </div>
                     <div class="form-actions">
                         <button type="button" class="btn-secondary modal-close">Cancel</button>
-                        <button type="submit" class="btn-primary">Submit</button>
+                        <button type="submit" class="btn-primary">Submit for Approval</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
+    <div id="era-tooltip" class="tooltip"></div>
+
     <script src="/static/js/main.js"></script>
-    <script src="/static/js/profile.js"></script>
     <script src="/static/js/markdown.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js"></script>
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/"
-        }
-    }
-    </script>
+    <script src="/static/js/profile.js"></script>
 </body>
 </html>
