@@ -6,7 +6,6 @@
     <title id="page-title">Character Profile</title>
     <link rel="apple-touch-icon" sizes="180x180" href="/static/images/icon.png">
     
-    
     <link rel="stylesheet" href="/static/styles/global.css">
     <link rel="stylesheet" href="/static/styles/profile.css">
     <link rel="stylesheet" href="/static/styles/profile-mobile.css">
@@ -15,15 +14,11 @@
     <link id="character-theme" rel="stylesheet" href="">
 </head>
 <body class="profile-page" data-character-id="">
-    
     <a href="/characters" class="back-btn">← Back</a>
 
-    
     <canvas id="bg-canvas"></canvas>
 
-    
     <div class="profile-container desktop-view">
-        
         <aside class="profile-sidebar">
             <div class="profile-image-container">
                 <img id="profile-image" src="" alt="" class="profile-image">
@@ -41,48 +36,29 @@
             </nav>
         </aside>
 
-        
         <main class="profile-content">
-            
             <div id="overview-tab" class="tab-content active">
                 <div class="bio-section">
                     <h2 class="section-header">Identity</h2>
-                    <div id="bio-identity" class="bio-grid">
-                        
-                    </div>
+                    <div id="bio-identity" class="bio-grid"></div>
                 </div>
-                
-                <div id="additional-bio-sections">
-                    
-                </div>
+                <div id="additional-bio-sections"></div>
             </div>
 
-            
             <div id="timeline-tab" class="tab-content">
                 <div class="timeline-container">
-                    <div id="timeline-list">
-                        
-                    </div>
+                    <div id="timeline-list"></div>
                 </div>
             </div>
 
-            
             <div id="relationships-tab" class="tab-content">
-                <div id="relationships-list" class="relationships-grid">
-                    
-                </div>
+                <div id="relationships-list" class="relationships-grid"></div>
             </div>
 
-            
-            <div id="love-interests-tab" class="tab-content">
-                
-            </div>
+            <div id="love-interests-tab" class="tab-content"></div>
 
-            
             <div id="gallery-tab" class="tab-content">
-                <div id="gallery-masonry" class="masonry-grid">
-                    
-                </div>
+                <div id="gallery-masonry" class="masonry-grid"></div>
                 <div class="gallery-loader">
                     <div class="spinner"></div>
                 </div>
@@ -90,7 +66,6 @@
         </main>
     </div>
 
-    
     <div class="profile-container mobile-view">
         <div class="mobile-header">
             <img id="mobile-profile-image" src="" alt="" class="mobile-profile-image">
@@ -109,7 +84,6 @@
         </nav>
 
         <div class="mobile-content">
-            
             <div id="mobile-overview" class="mobile-tab-content active"></div>
             <div id="mobile-timeline" class="mobile-tab-content"></div>
             <div id="mobile-relationships" class="mobile-tab-content"></div>
@@ -124,7 +98,6 @@
         </div>
     </div>
 
-    
     <div id="bio-edit-modal" class="modal">
         <div class="modal-overlay"></div>
         <div class="modal-content">
@@ -149,7 +122,6 @@
         </div>
     </div>
 
-    
     <div id="event-modal" class="modal">
         <div class="modal-overlay"></div>
         <div class="modal-content">
@@ -166,15 +138,12 @@
         </div>
     </div>
 
-    
     <div id="era-tooltip" class="tooltip"></div>
 
-    
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollSmoother.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js"></script>
-    
     
     <script type="importmap">
     {
@@ -184,7 +153,7 @@
         }
     }
     </script>
-    
+
     <script src="/static/js/main.js"></script>
     <script src="/static/js/profile.js"></script>
     <script src="/static/js/profile-enhanced.js" type="module"></script>
