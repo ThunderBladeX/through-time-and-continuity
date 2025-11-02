@@ -3,11 +3,17 @@
 
     const pathParts = window.location.pathname.split('/');
     const characterId = pathParts[pathParts.length - 1];
+    const urlParams = new URLSearchParams(window.location.search);
+    const highlightEventId = urlParams.get('event');
+
     let currentCharacter = null;
+    let currentTab = 'overview';
     let lenis = null;
 
     document.addEventListener('DOMContentLoaded', async function() {
-        console.log('Profile page initializing...');
+        console.log('🚀 Profile page initializing...');
+
+        showPageLoader();
 
         initSmoothScroll();
 
@@ -17,10 +23,14 @@
 
         setupNavigation();
         setupModals();
+        setupContributionButtons();
+        setupEraTooltips();
+        setupScrollIndicator();
 
-        setTimeout(() => {
+        setTimeout(function() {
             setupScrollAnimations();
-        }, 500);
+            hidePageLoader();
+        }, 800);
 
         if (localStorage.getItem('admin_token')) {
             const adminBtn = document.getElementById('admin-edit-btn');
@@ -31,11 +41,42 @@
                 };
             }
         }
+
+        console.log('✅ Profile page initialized');
     });
+
+    function showPageLoader() {
+
+        const loader = document.createElement('div');
+        loader.id = 'page-loader';
+        loader.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        `;
+        loader.innerHTML = '<div class="spinner"></div>';
+        document.body.appendChild(loader);
+    }
+
+    function hidePageLoader() {
+        const loader = document.getElementById('page-loader');
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(function() { loader.remove(); }, 500);
+        }
+    }
 
     function initSmoothScroll() {
         if (typeof Lenis === 'undefined') {
-            console.warn('Lenis not loaded, skipping smooth scroll');
+            console.warn('⚠️ Lenis not loaded, skipping smooth scroll');
             return;
         }
 
@@ -65,11 +106,37 @@
             });
             gsap.ticker.lagSmoothing(0);
         }
+
+        console.log('✅ Smooth scroll initialized');
+    }
+
+    function setupScrollIndicator() {
+        const indicator = document.querySelector('.scroll-indicator');
+        if (!indicator) return;
+
+        indicator.addEventListener('click', function() {
+            const contentArea = document.querySelector('.profile-grid');
+            if (contentArea && lenis) {
+                lenis.scrollTo(contentArea, { offset: -50, duration: 1.2 });
+            } else if (contentArea) {
+                contentArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 200) {
+                indicator.style.opacity = '0';
+                indicator.style.pointerEvents = 'none';
+            } else {
+                indicator.style.opacity = '1';
+                indicator.style.pointerEvents = 'auto';
+            }
+        });
     }
 
     function init3DBackground() {
         if (typeof THREE === 'undefined') {
-            console.warn('THREE.js not loaded, skipping 3D background');
+            console.warn('⚠️ THREE.js not loaded, skipping 3D background');
             return;
         }
 
@@ -86,84 +153,109 @@
             camera.position.z = 5;
 
             const particlesGeometry = new THREE.BufferGeometry();
-            const particlesCount = 2000;
+            const particlesCount = 2500;
             const posArray = new Float32Array(particlesCount * 3);
 
             for (let i = 0; i < particlesCount * 3; i++) {
-                posArray[i] = (Math.random() - 0.5) * 15;
+                posArray[i] = (Math.random() - 0.5) * 18;
             }
 
             particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
 
             const particlesMaterial = new THREE.PointsMaterial({
-                size: 0.02,
+                size: 0.025,
                 color: 0x3b82f6,
                 transparent: true,
-                opacity: 0.6,
+                opacity: 0.7,
                 blending: THREE.AdditiveBlending,
             });
 
             const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
             scene.add(particlesMesh);
 
-            const geometry = new THREE.IcosahedronGeometry(1, 0);
-            const material = new THREE.MeshBasicMaterial({
-                color: 0x3b82f6,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.1,
+            const shapes = [];
+            const geometries = [
+                new THREE.IcosahedronGeometry(1, 0),
+                new THREE.OctahedronGeometry(0.8, 0),
+                new THREE.TetrahedronGeometry(0.6, 0)
+            ];
+
+            geometries.forEach(function(geometry, i) {
+                const material = new THREE.MeshBasicMaterial({
+                    color: 0x3b82f6,
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.08 + (i * 0.02),
+                });
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set((i - 1) * 2, 0, -i);
+                shapes.push(mesh);
+                scene.add(mesh);
             });
-            const mesh = new THREE.Mesh(geometry, material);
-            scene.add(mesh);
 
             let mouseX = 0;
             let mouseY = 0;
+            let targetX = 0;
+            let targetY = 0;
+
             document.addEventListener('mousemove', function(e) {
-                mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-                mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+                targetX = (e.clientX / window.innerWidth) * 2 - 1;
+                targetY = -(e.clientY / window.innerHeight) * 2 + 1;
             });
 
             function animate() {
                 requestAnimationFrame(animate);
 
-                particlesMesh.rotation.y += 0.0005;
-                particlesMesh.rotation.x += 0.0003;
+                mouseX += (targetX - mouseX) * 0.05;
+                mouseY += (targetY - mouseY) * 0.05;
 
-                mesh.rotation.x += 0.001;
-                mesh.rotation.y += 0.002;
+                particlesMesh.rotation.y += 0.0003;
+                particlesMesh.rotation.x += 0.0002;
 
-                camera.position.x = mouseX * 0.5;
-                camera.position.y = mouseY * 0.5;
+                shapes.forEach(function(mesh, i) {
+                    mesh.rotation.x += 0.001 * (i + 1);
+                    mesh.rotation.y += 0.002 * (i + 1);
+                    mesh.position.y = Math.sin(Date.now() * 0.0005 + i) * 0.3;
+                });
+
+                camera.position.x += (mouseX * 0.8 - camera.position.x) * 0.05;
+                camera.position.y += (mouseY * 0.8 - camera.position.y) * 0.05;
 
                 renderer.render(scene, camera);
             }
             animate();
+
+            canvas.classList.add('loaded');
 
             window.addEventListener('resize', function() {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
             });
+
+            console.log('✅ 3D background initialized');
         } catch (error) {
-            console.error('Error initializing 3D background:', error);
+            console.error('❌ Error initializing 3D background:', error);
         }
     }
 
     async function loadCharacter() {
         if (!characterId || isNaN(characterId)) {
-            console.error('Invalid character ID');
+            console.error('❌ Invalid character ID');
             window.location.href = '/characters';
             return;
         }
 
         try {
             currentCharacter = await fetchAPI(`/characters/${characterId}`);
-            console.log('Character loaded:', currentCharacter);
+            console.log('✅ Character loaded:', currentCharacter);
 
             const name = currentCharacter.name || currentCharacter.full_name || 'Unknown';
             document.title = `${name} - Periaphe`;
             const pageTitle = document.getElementById('page-title');
             if (pageTitle) pageTitle.textContent = `${name} - Periaphe`;
+
+            document.body.dataset.characterId = characterId;
 
             loadHeroSection();
             loadIdentitySection();
@@ -171,7 +263,7 @@
             applyCharacterTheme();
 
         } catch (error) {
-            console.error('Error loading character:', error);
+            console.error('❌ Error loading character:', error);
             showNotification('Failed to load character', 'error');
             setTimeout(function() { window.location.href = '/characters'; }, 2000);
         }
@@ -183,26 +275,28 @@
         const heroQuote = document.getElementById('hero-quote');
 
         if (!heroImage || !heroName || !heroQuote) {
-            console.error('Hero elements not found');
+            console.error('❌ Hero elements not found');
             return;
         }
 
         const imageSrc = currentCharacter.profile_image || '/static/images/default-avatar.jpg';
-        console.log('Loading hero image:', imageSrc);
+        console.log('🖼️ Loading hero image:', imageSrc);
 
         heroImage.src = imageSrc;
         heroImage.alt = currentCharacter.name || 'Character';
 
         heroImage.onerror = function() {
-            console.log('Hero image failed, trying default');
-            if (this.src !== '/static/images/default-avatar.jpg') {
+            console.log('⚠️ Hero image failed, trying default');
+            if (this.src.indexOf('default-avatar.jpg') === -1) {
                 this.src = '/static/images/default-avatar.jpg';
             } else {
-                console.log('Default image also failed, using gradient');
+                console.log('⚠️ Default image also failed, using gradient');
                 this.style.display = 'none';
                 const wrapper = document.querySelector('.hero-image-wrapper');
                 if (wrapper) {
-                    wrapper.style.background = 'linear-gradient(135deg, #1a1a1a 0%, #3b82f6 100%)';
+                    wrapper.style.background = 'linear-gradient(135deg, #1a1a1a 0%, #3b82f6 50%, #8b5cf6 100%)';
+                    wrapper.style.backgroundSize = '200% 200%';
+                    wrapper.style.animation = 'gradientShift 8s ease infinite';
                 }
             }
         };
@@ -210,39 +304,34 @@
         heroName.textContent = currentCharacter.name || currentCharacter.full_name || 'Unknown Character';
 
         if (currentCharacter.quote && currentCharacter.quote.trim()) {
-            heroQuote.textContent = `"${currentCharacter.quote}"`;
+            heroQuote.textContent = currentCharacter.quote;
             heroQuote.style.display = 'block';
         } else {
             heroQuote.style.display = 'none';
         }
 
         if (typeof gsap !== 'undefined' && gsap.to) {
-            heroImage.addEventListener('load', function() {
+            const initParallax = function() {
                 gsap.to('.hero-image-wrapper', {
-                    yPercent: 20,
+                    yPercent: 30,
                     ease: 'none',
                     scrollTrigger: {
                         trigger: '.hero-section',
                         start: 'top top',
                         end: 'bottom top',
-                        scrub: true,
+                        scrub: 1,
                     }
                 });
-            });
+            };
 
             if (heroImage.complete && heroImage.naturalHeight !== 0) {
-                gsap.to('.hero-image-wrapper', {
-                    yPercent: 20,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: '.hero-section',
-                        start: 'top top',
-                        end: 'bottom top',
-                        scrub: true,
-                    }
-                });
+                initParallax();
+            } else {
+                heroImage.addEventListener('load', initParallax);
             }
         }
+
+        console.log('✅ Hero section loaded');
     }
 
     function loadIdentitySection() {
@@ -266,6 +355,8 @@
                 </div>
             `;
         }).join('');
+
+        console.log('✅ Identity section loaded');
     }
 
     function loadBioSections() {
@@ -284,10 +375,10 @@
         bioContainer.innerHTML = sections.map(function(section) {
             const content = typeof parseMarkdown === 'function' 
                 ? parseMarkdown(section.content) 
-                : section.content.replace(/\n/g, '<br>');
+                : section.content.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
 
             return `
-                <div class="bio-section glass-card" data-section-id="${section.id}">
+                <div class="bio-section glass-card fade-in-up" data-section-id="${section.id}">
                     <h2 class="section-title">${section.section_title}</h2>
                     <div class="bio-content" data-raw-content="${encodeURIComponent(section.content)}">
                         ${content}
@@ -295,6 +386,8 @@
                 </div>
             `;
         }).join('');
+
+        console.log('✅ Bio sections loaded');
     }
 
     function setupNavigation() {
@@ -306,10 +399,13 @@
                 switchTab(tabName);
             });
         });
+
+        console.log('✅ Navigation setup complete');
     }
 
     function switchTab(tabName) {
-        console.log('Switching to tab:', tabName);
+        console.log('🔄 Switching to tab:', tabName);
+        currentTab = tabName;
 
         document.querySelectorAll('.nav-item').forEach(function(item) {
             if (item.dataset.tab === tabName) {
@@ -336,7 +432,10 @@
         if (lenis && lenis.scrollTo) {
             lenis.scrollTo('.content-area', { offset: -100, duration: 0.8 });
         } else {
-            window.scrollTo({ top: 500, behavior: 'smooth' });
+            const contentArea = document.querySelector('.content-area');
+            if (contentArea) {
+                contentArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
     }
 
@@ -357,7 +456,7 @@
                     break;
             }
         } catch (error) {
-            console.error(`Error loading ${tabName}:`, error);
+            console.error(`❌ Error loading ${tabName}:`, error);
             showNotification(`Failed to load ${tabName}`, 'error');
         }
     }
@@ -379,11 +478,11 @@
             });
 
             container.innerHTML = events.map(function(event) {
-                const eraDisplay = event.era_display || getEraName(event.era);
+                const eraDisplay = event.era_display || (typeof getEraName === 'function' ? getEraName(event.era) : event.era);
                 return `
                     <div class="timeline-item" data-event-id="${event.id}">
                         <div class="timeline-card">
-                            <div class="timeline-header">
+                            <div class="timeline-header-card">
                                 <span class="era-badge" data-era="${event.era}">${eraDisplay}</span>
                                 <time class="timeline-date">${formatDate(event.event_date)}</time>
                             </div>
@@ -402,11 +501,12 @@
             });
 
             if (typeof gsap !== 'undefined' && gsap.utils) {
-                gsap.utils.toArray('.timeline-item').forEach(function(item) {
+                gsap.utils.toArray('.timeline-item').forEach(function(item, index) {
                     gsap.to(item, {
                         opacity: 1,
                         x: 0,
                         duration: 0.8,
+                        delay: index * 0.1,
                         scrollTrigger: {
                             trigger: item,
                             start: 'top 85%',
@@ -415,6 +515,22 @@
                     });
                 });
             }
+
+            if (highlightEventId) {
+                setTimeout(function() {
+                    const eventCard = document.querySelector(`[data-event-id="${highlightEventId}"]`);
+                    if (eventCard) {
+                        if (lenis) {
+                            lenis.scrollTo(eventCard, { offset: -150, duration: 1.2 });
+                        } else {
+                            eventCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                        eventCard.style.animation = 'highlight 2s ease';
+                    }
+                }, 500);
+            }
+
+            console.log('✅ Timeline loaded');
 
         } catch (error) {
             container.innerHTML = '<p class="error-state">Failed to load timeline.</p>';
@@ -436,7 +552,9 @@
 
             container.innerHTML = relationships.map(function(rel) {
                 return `
-                    <div class="relationship-card" onclick="window.location.href='/profile/${rel.related_character_id}'">
+                    <div class="relationship-card" 
+                         data-type="${rel.type || ''}"
+                         onclick="window.location.href='/profile/${rel.related_character_id}'">
                         <img src="${rel.related_character_image || '/static/images/default-avatar.jpg'}" 
                              alt="${rel.related_character_name}"
                              class="relationship-avatar"
@@ -448,6 +566,8 @@
                     </div>
                 `;
             }).join('');
+
+            console.log('✅ Relationships loaded');
 
         } catch (error) {
             container.innerHTML = '<p class="error-state">Failed to load relationships.</p>';
@@ -488,7 +608,7 @@
             categoryOrder.forEach(function(category) {
                 if (grouped[category]) {
                     html += `
-                        <div class="love-category glass-card">
+                        <div class="love-category glass-card fade-in-up">
                             <h2 class="section-title">${categoryTitles[category]}</h2>
                             <div class="love-grid">
                                 ${grouped[category].map(function(interest) {
@@ -512,6 +632,7 @@
             });
 
             container.innerHTML = html;
+            console.log('✅ Love interests loaded');
 
         } catch (error) {
             container.innerHTML = '<p class="error-state">Failed to load love interests.</p>';
@@ -525,8 +646,10 @@
 
         if (typeof initGallery === 'function') {
             initGallery(characterId);
+            console.log('✅ Gallery initialized');
         } else {
             container.innerHTML = '<p class="empty-state">Gallery functionality not available.</p>';
+            console.warn('⚠️ Gallery function not found');
         }
     }
 
@@ -551,6 +674,8 @@
                 });
             }
         });
+
+        console.log('✅ Modals setup complete');
     }
 
     async function openEventModal(eventId) {
@@ -559,7 +684,7 @@
             const modal = document.getElementById('event-modal');
             if (!modal) return;
 
-            const eraDisplay = event.era_display || getEraName(event.era);
+            const eraDisplay = event.era_display || (typeof getEraName === 'function' ? getEraName(event.era) : event.era);
 
             modal.querySelector('#modal-era').textContent = eraDisplay;
             modal.querySelector('#modal-era').dataset.era = event.era;
@@ -569,7 +694,7 @@
             const imagesContainer = modal.querySelector('#modal-images');
             imagesContainer.innerHTML = (event.images && event.images.length > 0)
                 ? event.images.map(function(img) {
-                    return `<img src="${img}" alt="${event.title}" loading="lazy">`;
+                    return `<img src="${img}" alt="${event.title}" loading="lazy" onerror="this.style.display='none'">`;
                   }).join('')
                 : '';
 
@@ -579,24 +704,254 @@
             modal.classList.add('active');
 
         } catch (error) {
-            console.error('Error loading event:', error);
+            console.error('❌ Error loading event:', error);
             showNotification('Failed to load event details', 'error');
         }
     }
 
     window.openEventModal = openEventModal;
 
+    function setupContributionButtons() {
+        const editableSelectors = ['.info-item', '.bio-section'];
+
+        document.body.addEventListener('mouseover', function(e) {
+            const infoItem = e.target.closest('.info-item');
+            const bioSection = e.target.closest('.bio-section');
+
+            let targetElement = null;
+
+            if (infoItem) {
+                targetElement = infoItem;
+            } else if (bioSection) {
+                if (!bioSection.querySelector('#bio-identity')) {
+                    targetElement = bioSection;
+                }
+            }
+
+            if (targetElement && !targetElement.querySelector('.edit-btn')) {
+                addEditButton(targetElement);
+            }
+        });
+
+        console.log('✅ Contribution buttons setup complete');
+    }
+
+    function addEditButton(element) {
+        const editBtn = document.createElement('button');
+        editBtn.className = 'edit-btn';
+        editBtn.innerHTML = '✏️';
+        editBtn.title = 'Suggest an Edit';
+        editBtn.onclick = function(e) {
+            e.stopPropagation();
+            handleEdit(element);
+        };
+
+        element.style.position = 'relative';
+        element.appendChild(editBtn);
+
+        element.addEventListener('mouseleave', function(e) {
+            if (!element.contains(e.relatedTarget)) {
+                editBtn.remove();
+            }
+        }, { once: true });
+    }
+
+    function handleEdit(element) {
+        if (element.classList.contains('info-item')) {
+            editInfoItem(element);
+        } else if (element.classList.contains('bio-section')) {
+            const sectionId = element.dataset.sectionId;
+            editBioSection(element, sectionId);
+        }
+    }
+
+    function editInfoItem(element) {
+        const valueEl = element.querySelector('.info-value');
+        const currentValue = valueEl.textContent;
+        const label = element.querySelector('.info-label').textContent;
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = currentValue;
+        input.className = 'inline-edit-input';
+        input.style.cssText = `
+            width: 100%;
+            padding: 0.5rem;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+        `;
+
+        valueEl.innerHTML = '';
+        valueEl.appendChild(input);
+        input.focus();
+        input.select();
+
+        const save = async function() {
+            const newValue = input.value;
+            if (newValue !== currentValue && newValue.trim() !== '') {
+                try {
+                    await submitPendingEdit({
+                        type: 'character', 
+                        record_id: characterId,
+                        field: label.toLowerCase().replace(/\s+/g, '_'),
+                        old_value: currentValue,
+                        new_value: newValue
+                    });
+                    showNotification('Edit submitted for approval!', 'success');
+                } catch (error) {
+                    showNotification('Failed to submit edit', 'error');
+                }
+            }
+            valueEl.textContent = currentValue;
+        };
+
+        input.addEventListener('blur', save);
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                input.blur();
+            }
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                input.removeEventListener('blur', save);
+                valueEl.textContent = currentValue;
+            }
+        });
+    }
+
+    function editBioSection(element, sectionId) {
+        const modal = document.getElementById('bio-edit-modal');
+        const form = document.getElementById('bio-edit-form');
+        if (!modal || !form) return;
+
+        const currentTitle = element.querySelector('.section-title').textContent;
+        const contentDiv = element.querySelector('.bio-content');
+        const rawContent = contentDiv.dataset.rawContent ? decodeURIComponent(contentDiv.dataset.rawContent) : '';
+
+        form.elements['section_id'].value = sectionId;
+        form.elements['old_value_title'].value = currentTitle;
+        form.elements['old_value_content'].value = rawContent;
+        form.elements['new_value_title'].value = currentTitle;
+        form.elements['new_value_content'].value = rawContent;
+
+        const handleSubmit = async function(e) {
+            e.preventDefault();
+            const newTitle = form.elements['new_value_title'].value;
+            const newContent = form.elements['new_value_content'].value;
+            let editsSubmitted = 0;
+
+            if (newTitle.trim() && newTitle !== currentTitle) {
+                try {
+                    await submitPendingEdit({
+                        type: 'character_bio', 
+                        record_id: sectionId,
+                        field: 'section_title',
+                        old_value: currentTitle,
+                        new_value: newTitle
+                    });
+                    editsSubmitted++;
+                } catch (error) {
+                    showNotification('Failed to submit title edit', 'error');
+                }
+            }
+
+            if (newContent.trim() && newContent !== rawContent) {
+                try {
+                    await submitPendingEdit({
+                        type: 'character_bio', 
+                        record_id: sectionId,
+                        field: 'content',
+                        old_value: rawContent,
+                        new_value: newContent
+                    });
+                    editsSubmitted++;
+                } catch (error) {
+                    showNotification('Failed to submit content edit', 'error');
+                }
+            }
+
+            if (editsSubmitted > 0) {
+                showNotification('Edit(s) submitted for approval!', 'success');
+            } else {
+                showNotification('No changes were made.', 'info');
+            }
+            modal.classList.remove('active');
+        };
+
+        form.onsubmit = handleSubmit;
+        modal.classList.add('active');
+    }
+
+    async function submitPendingEdit(editData) {
+        return await fetchAPI('/admin/pending-edits', {
+            method: 'POST',
+            body: editData
+        });
+    }
+
+    function setupEraTooltips() {
+        const tooltip = document.getElementById('era-tooltip');
+        if (!tooltip) return;
+
+        const eraDescriptions = {
+            'pre-52': 'Classic: The original DC timeline before the 2011 reboot',
+            'new-52': 'New 52: DC Comics reboot starting in 2011',
+            'rebirth': 'Rebirth: Restoration of legacy and hope starting in 2016',
+            'infinite-frontier': 'Infinite Frontier: Omniverse storytelling post-2021',
+            'elseworlds': 'Elseworlds: Non-canon alternate reality stories',
+            'post-crisis': 'Post-Crisis: Following Crisis on Infinite Earths (1985-2011)',
+            'future-state': 'Future State: Dystopian future timeline'
+        };
+
+        document.addEventListener('mouseover', function(e) {
+            const badge = e.target.closest('.era-badge');
+            if (badge) {
+                const era = badge.dataset.era;
+                if (era && eraDescriptions[era]) {
+                    tooltip.textContent = eraDescriptions[era];
+                    tooltip.classList.add('active');
+                    updateTooltipPosition(e);
+                }
+            }
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (tooltip.classList.contains('active')) {
+                updateTooltipPosition(e);
+            }
+        });
+
+        document.addEventListener('mouseout', function(e) {
+            const badge = e.target.closest('.era-badge');
+            if (badge) {
+                tooltip.classList.remove('active');
+            }
+        });
+
+        function updateTooltipPosition(e) {
+            tooltip.style.left = e.pageX + 15 + 'px';
+            tooltip.style.top = e.pageY + 15 + 'px';
+        }
+
+        console.log('✅ Era tooltips setup complete');
+    }
+
     function setupScrollAnimations() {
         if (typeof gsap === 'undefined' || !gsap.utils) {
-            console.log('GSAP not available, skipping scroll animations');
+            console.log('⚠️ GSAP not available, skipping scroll animations');
             return;
         }
 
-        gsap.utils.toArray('.glass-card').forEach(function(card) {
+        gsap.utils.toArray('.glass-card').forEach(function(card, index) {
             gsap.from(card, {
                 opacity: 0,
-                y: 50,
+                y: 60,
                 duration: 1,
+                delay: index * 0.1,
                 scrollTrigger: {
                     trigger: card,
                     start: 'top 85%',
@@ -604,6 +959,35 @@
                 }
             });
         });
+
+        gsap.utils.toArray('.fade-in-up').forEach(function(element, index) {
+            gsap.to(element, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                delay: index * 0.1,
+                scrollTrigger: {
+                    trigger: element,
+                    start: 'top 90%',
+                    toggleClass: 'visible',
+                }
+            });
+        });
+
+        gsap.utils.toArray('.info-item').forEach(function(item, index) {
+            gsap.from(item, {
+                opacity: 0,
+                y: 30,
+                duration: 0.6,
+                delay: index * 0.1,
+                scrollTrigger: {
+                    trigger: item,
+                    start: 'top 85%',
+                }
+            });
+        });
+
+        console.log('✅ Scroll animations setup complete');
     }
 
     function applyCharacterTheme() {
@@ -617,7 +1001,140 @@
             const g = parseInt(hex.substr(2, 2), 16);
             const b = parseInt(hex.substr(4, 2), 16);
             root.style.setProperty('--accent-rgb', `${r}, ${g}, ${b}`);
+
+            console.log('🎨 Character theme applied:', currentCharacter.color_primary);
+        }
+
+        if (currentCharacter.theme_data) {
+            applyAdvancedTheme(currentCharacter.theme_data);
         }
     }
+
+    function applyAdvancedTheme(themeData) {
+        if (!themeData) return;
+
+        if (themeData.cursor) {
+            document.body.style.cursor = `url('${themeData.cursor}'), auto`;
+        }
+
+        if (themeData.background_pattern) {
+            document.body.style.backgroundImage = `url('${themeData.background_pattern}')`;
+        }
+
+        if (themeData.custom_css) {
+            const styleEl = document.createElement('style');
+            styleEl.textContent = themeData.custom_css;
+            document.head.appendChild(styleEl);
+        }
+
+        console.log('✅ Advanced theme applied');
+    }
+
+    function getEraName(eraId) {
+        const eraNames = {
+            'pre-52': 'Classic',
+            'new-52': 'New 52',
+            'rebirth': 'Rebirth',
+            'infinite-frontier': 'Infinite Frontier',
+            'elseworlds': 'Elseworlds',
+            'post-crisis': 'Post-Crisis',
+            'future-state': 'Future State'
+        };
+        return eraNames[eraId] || eraId;
+    }
+
+    window.getEraName = getEraName;
+
+    function setupLazyLoading() {
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img.lazy').forEach(function(img) {
+                imageObserver.observe(img);
+            });
+
+            console.log('✅ Lazy loading setup complete');
+        }
+    }
+
+    document.addEventListener('keydown', function(e) {
+
+        if (e.key >= '1' && e.key <= '5' && !e.ctrlKey && !e.metaKey) {
+            const target = document.activeElement;
+            if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') {
+                const tabs = ['overview', 'timeline', 'relationships', 'love-interests', 'gallery'];
+                const tabIndex = parseInt(e.key) - 1;
+                if (tabs[tabIndex]) {
+                    switchTab(tabs[tabIndex]);
+                    e.preventDefault();
+                }
+            }
+        }
+
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+
+        }
+    });
+
+    if (window.performance && window.performance.mark) {
+        window.addEventListener('load', function() {
+            performance.mark('page-loaded');
+
+            setTimeout(function() {
+                const perfData = performance.getEntriesByType('navigation')[0];
+                if (perfData) {
+                    console.log('⏱️ Performance Metrics:');
+                    console.log('  - DOM Content Loaded:', Math.round(perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart), 'ms');
+                    console.log('  - Load Complete:', Math.round(perfData.loadEventEnd - perfData.loadEventStart), 'ms');
+                    console.log('  - Total Load Time:', Math.round(perfData.loadEventEnd - perfData.fetchStart), 'ms');
+                }
+            }, 0);
+        });
+    }
+
+    window.addEventListener('error', function(e) {
+        console.error('❌ Global error:', e.error);
+
+    });
+
+    window.addEventListener('unhandledrejection', function(e) {
+        console.error('❌ Unhandled promise rejection:', e.reason);
+    });
+
+    const highlightStyle = document.createElement('style');
+    highlightStyle.textContent = `
+        @keyframes highlight {
+            0%, 100% { box-shadow: var(--shadow-lg); transform: scale(1); }
+            25% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); transform: scale(1.02); }
+            50% { box-shadow: 0 0 60px rgba(59, 130, 246, 1); transform: scale(1.03); }
+            75% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); transform: scale(1.02); }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+    `;
+    document.head.appendChild(highlightStyle);
+
+    window.profileDebug = {
+        character: function() { return currentCharacter; },
+        switchTab: switchTab,
+        reload: loadCharacter,
+        lenis: function() { return lenis; }
+    };
+
+    console.log('🎉 Profile modern JavaScript loaded successfully!');
+    console.log('💡 Use window.profileDebug for debugging utilities');
 
 })();
