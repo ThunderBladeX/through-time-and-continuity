@@ -13,10 +13,9 @@
     document.addEventListener('DOMContentLoaded', async function() {
         console.log('Profile page initializing...');
 
-        initMagneticElements();
-
         initSmoothScroll();
         init3DBackground();
+        initRippleEffect();
 
         await loadCharacter();
 
@@ -55,22 +54,30 @@
         }
     });
 
-    function initMagneticElements() {
-        const magnetics = document.querySelectorAll('.nav-item, .btn-primary, .admin-btn');
+    function initRippleEffect() {
+        const rippleContainers = document.querySelectorAll('.glass-card, .info-item, .timeline-card, .relationship-card, .love-card');
 
-        magnetics.forEach(function(element) {
-            element.classList.add('magnetic-item');
+        rippleContainers.forEach(function(container) {
+            container.classList.add('ripple-container');
 
-            element.addEventListener('mousemove', function(e) {
-                const rect = element.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
+            container.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                
+                const rect = container.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
 
-                element.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-            });
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
 
-            element.addEventListener('mouseleave', function() {
-                element.style.transform = 'translate(0, 0)';
+                container.appendChild(ripple);
+
+                setTimeout(function() {
+                    ripple.remove();
+                }, 600);
             });
         });
     }
