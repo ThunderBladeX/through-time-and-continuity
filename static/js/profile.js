@@ -155,9 +155,6 @@
                 mesh.rotation.x += 0.001;
                 mesh.rotation.y += 0.002;
 
-                torus.rotation.x += 0.003;
-                torus.rotation.y += 0.001;
-
                 camera.position.x = mouseX * 0.5;
                 camera.position.y = mouseY * 0.5;
 
