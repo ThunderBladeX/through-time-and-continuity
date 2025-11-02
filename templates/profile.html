@@ -6,157 +6,150 @@
     <title id="page-title">Character Profile</title>
     <link rel="apple-touch-icon" sizes="180x180" href="/static/images/icon.png">
     
-    <!-- CSS Files -->
+    
     <link rel="stylesheet" href="/static/styles/global.css">
-    <link rel="stylesheet" href="/static/styles/profile-redesign.css">
+    <link rel="stylesheet" href="/static/styles/profile.css">
     <link rel="stylesheet" href="/static/styles/profile-mobile.css">
+    <link rel="stylesheet" href="/static/styles/profile-enhanced.css">
     <link rel="stylesheet" href="/static/styles/eras.css">
     <link id="character-theme" rel="stylesheet" href="">
-    
-    <!-- Three.js r181 -->
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
-            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/"
-        }
-    }
-    </script>
 </head>
 <body class="profile-page" data-character-id="">
-    <!-- Back Navigation -->
+    
     <a href="/characters" class="back-btn">← Back</a>
 
-    <!-- 3D Background Canvas -->
+    
     <canvas id="bg-canvas"></canvas>
 
-    <!-- Main Container -->
-    <div id="smooth-wrapper">
-        <div id="smooth-content">
+    
+    <div class="profile-container desktop-view">
+        
+        <aside class="profile-sidebar">
+            <div class="profile-image-container">
+                <img id="profile-image" src="" alt="" class="profile-image">
+                <div class="profile-name-overlay">
+                    <h1 id="character-name"></h1>
+                </div>
+            </div>
             
-            <!-- Hero Section with Profile -->
-            <section class="hero-section" data-scroll-section>
-                <div class="hero-grid">
-                    <!-- Profile Image Column -->
-                    <div class="profile-visual" data-scroll data-scroll-speed="0.5">
-                        <div class="profile-image-wrapper">
-                            <div class="image-border"></div>
-                            <img id="profile-image" src="" alt="" class="profile-image">
-                            <div class="image-glow"></div>
-                        </div>
-                    </div>
+            <nav class="profile-nav">
+                <button class="nav-tab active" data-tab="overview">Overview</button>
+                <button class="nav-tab" data-tab="timeline">Timeline</button>
+                <button class="nav-tab" data-tab="relationships">Relationships</button>
+                <button class="nav-tab" data-tab="love-interests">Love Interests</button>
+                <button class="nav-tab" data-tab="gallery">Gallery</button>
+            </nav>
+        </aside>
 
-                    <!-- Info Column -->
-                    <div class="profile-header" data-scroll data-scroll-speed="0.3">
-                        <div class="header-content">
-                            <div class="name-wrapper">
-                                <h1 id="character-name" class="char-name">Loading...</h1>
-                                <div class="name-underline"></div>
-                            </div>
-                            <p id="character-quote" class="char-quote"></p>
-                            
-                            <!-- Quick Stats -->
-                            <div class="quick-stats" id="quick-stats">
-                                <!-- Loaded dynamically -->
-                            </div>
-                        </div>
+        
+        <main class="profile-content">
+            
+            <div id="overview-tab" class="tab-content active">
+                <div class="bio-section">
+                    <h2 class="section-header">Identity</h2>
+                    <div id="bio-identity" class="bio-grid">
+                        
                     </div>
                 </div>
-
-                <!-- Floating Navigation -->
-                <nav class="floating-nav">
-                    <button class="nav-pill active" data-section="biography">Biography</button>
-                    <button class="nav-pill" data-section="timeline">Timeline</button>
-                    <button class="nav-pill" data-section="relationships">Relationships</button>
-                    <button class="nav-pill" data-section="love-interests">Love Interests</button>
-                    <button class="nav-pill" data-section="gallery">Gallery</button>
-                </nav>
-            </section>
-
-            <!-- Biography Section -->
-            <section id="biography" class="content-section bio-section" data-scroll-section>
-                <div class="section-container">
-                    <h2 class="section-title" data-scroll data-scroll-speed="0.2">
-                        <span class="title-text">Biography</span>
-                        <span class="title-line"></span>
-                    </h2>
+                
+                <div id="additional-bio-sections">
                     
-                    <div class="bio-grid" id="bio-identity">
-                        <!-- Loaded via JS -->
-                    </div>
+                </div>
+            </div>
 
-                    <div id="additional-bio-sections" class="additional-bio">
-                        <!-- Additional sections loaded via JS -->
+            
+            <div id="timeline-tab" class="tab-content">
+                <div class="timeline-container">
+                    <div id="timeline-list">
+                        
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Timeline Section -->
-            <section id="timeline" class="content-section timeline-section" data-scroll-section>
-                <div class="section-container">
-                    <h2 class="section-title" data-scroll data-scroll-speed="0.2">
-                        <span class="title-text">Timeline</span>
-                        <span class="title-line"></span>
-                    </h2>
+            
+            <div id="relationships-tab" class="tab-content">
+                <div id="relationships-list" class="relationships-grid">
                     
-                    <div class="timeline-wrapper">
-                        <div class="timeline-line"></div>
-                        <div id="timeline-list" class="timeline-events">
-                            <!-- Timeline events loaded via JS -->
-                        </div>
-                    </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Relationships Section -->
-            <section id="relationships" class="content-section relationships-section" data-scroll-section>
-                <div class="section-container">
-                    <h2 class="section-title" data-scroll data-scroll-speed="0.2">
-                        <span class="title-text">Relationships</span>
-                        <span class="title-line"></span>
-                    </h2>
+            
+            <div id="love-interests-tab" class="tab-content">
+                
+            </div>
+
+            
+            <div id="gallery-tab" class="tab-content">
+                <div id="gallery-masonry" class="masonry-grid">
                     
-                    <div id="relationships-list" class="relationships-grid">
-                        <!-- Relationships loaded via JS -->
-                    </div>
                 </div>
-            </section>
-
-            <!-- Love Interests Section -->
-            <section id="love-interests" class="content-section love-section" data-scroll-section>
-                <div class="section-container">
-                    <h2 class="section-title" data-scroll data-scroll-speed="0.2">
-                        <span class="title-text">Love Interests</span>
-                        <span class="title-line"></span>
-                    </h2>
-                    
-                    <div id="love-interests-content">
-                        <!-- Love interests loaded via JS -->
-                    </div>
+                <div class="gallery-loader">
+                    <div class="spinner"></div>
                 </div>
-            </section>
+            </div>
+        </main>
+    </div>
 
-            <!-- Gallery Section -->
-            <section id="gallery" class="content-section gallery-section" data-scroll-section>
-                <div class="section-container">
-                    <h2 class="section-title" data-scroll data-scroll-speed="0.2">
-                        <span class="title-text">Gallery</span>
-                        <span class="title-line"></span>
-                    </h2>
-                    
-                    <div id="gallery-masonry" class="gallery-grid">
-                        <!-- Images loaded via JS -->
-                    </div>
-                    <div class="gallery-loader">
-                        <div class="spinner"></div>
-                    </div>
+    
+    <div class="profile-container mobile-view">
+        <div class="mobile-header">
+            <img id="mobile-profile-image" src="" alt="" class="mobile-profile-image">
+            <div class="speech-bubble">
+                <p id="character-quote"></p>
+            </div>
+            <h1 id="mobile-character-name"></h1>
+        </div>
+
+        <nav class="mobile-nav">
+            <button class="mobile-nav-tab active" data-tab="overview">Overview</button>
+            <button class="mobile-nav-tab" data-tab="timeline">Timeline</button>
+            <button class="mobile-nav-tab" data-tab="relationships">Relationships</button>
+            <button class="mobile-nav-tab" data-tab="love-interests">Love Interests</button>
+            <button class="mobile-nav-tab" data-tab="gallery">Gallery</button>
+        </nav>
+
+        <div class="mobile-content">
+            
+            <div id="mobile-overview" class="mobile-tab-content active"></div>
+            <div id="mobile-timeline" class="mobile-tab-content"></div>
+            <div id="mobile-relationships" class="mobile-tab-content"></div>
+            <div id="mobile-love-interests" class="mobile-tab-content"></div>
+            <div id="mobile-gallery" class="mobile-tab-content">
+                <div class="gallery-pagination">
+                    <button id="prev-page" class="page-btn">← Previous</button>
+                    <span id="page-info"></span>
+                    <button id="next-page" class="page-btn">Next →</button>
                 </div>
-            </section>
-
+            </div>
         </div>
     </div>
 
-    <!-- Timeline Event Modal -->
+    
+    <div id="bio-edit-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">×</button>
+            <h2 id="bio-edit-modal-title">Suggest an Edit</h2>
+            <form id="bio-edit-form">
+                <input type="hidden" name="section_id">
+                <input type="hidden" name="old_value_title">
+                <input type="hidden" name="old_value_content">
+                <div class="form-group">
+                    <label for="new_value_title" class="new-value-label">Section Title</label>
+                    <input type="text" id="new_value_title" name="new_value_title" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="new_value_content" class="new-value-label">Content (Markdown supported)</label>
+                    <textarea id="new_value_content" name="new_value_content" rows="10" class="form-control"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Submit for Approval</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
     <div id="event-modal" class="modal">
         <div class="modal-overlay"></div>
         <div class="modal-content">
@@ -173,39 +166,27 @@
         </div>
     </div>
 
-    <!-- Bio Edit Modal -->
-    <div id="bio-edit-modal" class="modal">
-        <div class="modal-overlay"></div>
-        <div class="modal-content">
-            <button class="modal-close">×</button>
-            <h2>Suggest an Edit</h2>
-            <form id="bio-edit-form">
-                <input type="hidden" name="section_id">
-                <input type="hidden" name="old_value_title">
-                <input type="hidden" name="old_value_content">
-                <div class="form-group">
-                    <label for="new_value_title">Section Title</label>
-                    <input type="text" id="new_value_title" name="new_value_title" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="new_value_content">Content (Markdown supported)</label>
-                    <textarea id="new_value_content" name="new_value_content" rows="10" class="form-control"></textarea>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary">Submit for Approval</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Era Tooltip -->
+    
     <div id="era-tooltip" class="tooltip"></div>
 
-    <!-- Scripts -->
+    
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollSmoother.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js"></script>
+    
+    
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/"
+        }
+    }
+    </script>
+    
     <script src="/static/js/main.js"></script>
+    <script src="/static/js/profile.js"></script>
     <script src="/static/js/profile-enhanced.js" type="module"></script>
     <script src="/static/js/gallery.js"></script>
     <script src="/static/js/markdown.js"></script>
