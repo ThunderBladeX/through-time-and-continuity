@@ -16,6 +16,8 @@
         initSmoothScroll();
         init3DBackground();
         initBubbleGenerator();
+        initShakeEffect();
+        initGlitchEffect();
 
         await loadCharacter();
 
@@ -53,6 +55,30 @@
             });
         }
     });
+
+    function initGlitchEffect() {
+        const glitchables = document.querySelectorAll('.hero-name, .section-title');
+        
+        glitchables.forEach(function(element) {
+            element.classList.add('glitch-text');
+            element.setAttribute('data-text', element.textContent);
+        });
+    }
+
+    function initShakeEffect() {
+        const shakeables = document.querySelectorAll('.info-item');
+        
+        shakeables.forEach(function(element) {
+            element.classList.add('shake-element');
+            
+            element.addEventListener('dblclick', function() {
+                this.classList.add('shaking');
+                setTimeout(() => {
+                    this.classList.remove('shaking');
+                }, 500);
+            });
+        });
+    }
 
     function initBubbleGenerator() {
         const heroSection = document.querySelector('.hero-section');
