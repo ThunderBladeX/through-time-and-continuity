@@ -3,6 +3,9 @@ html.lenis body {
     height: auto;
 }
 
+.mobile-view{display:none!important;visibility:hidden!important}
+.desktop-view{display:block!important;visibility:visible!important}
+
 .lenis.lenis-smooth {
     scroll-behavior: auto !important;
 }
