@@ -1462,6 +1462,11 @@ html.lenis, html.lenis body {
     will-change: transform;
 }
 
+.magnetic-item {
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    cursor: pointer;
+}
+
 @media (prefers-reduced-motion: no-preference) {
     .hero-content {
         animation-fill-mode: forwards;
