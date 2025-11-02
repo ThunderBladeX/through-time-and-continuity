@@ -13,8 +13,9 @@
     document.addEventListener('DOMContentLoaded', async function() {
         console.log('Profile page initializing...');
 
-        initSmoothScroll();
+        initMagneticElements();
 
+        initSmoothScroll();
         init3DBackground();
 
         await loadCharacter();
@@ -53,6 +54,26 @@
             });
         }
     });
+
+    function initMagneticElements() {
+        const magnetics = document.querySelectorAll('.nav-item, .btn-primary, .admin-btn');
+
+        magnetics.forEach(function(element) {
+            element.classList.add('magnetic-item');
+
+            element.addEventListener('mousemove', function(e) {
+                const rect = element.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+
+                element.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            });
+
+            element.addEventListener('mouseleave', function() {
+                element.style.transform = 'translate(0, 0)';
+            });
+        });
+    }
 
     function initSmoothScroll() {
         if (typeof Lenis === 'undefined') {
