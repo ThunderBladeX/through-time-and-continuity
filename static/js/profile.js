@@ -158,27 +158,45 @@ function loadHeroSection() {
 
     const imageSrc = currentCharacter.profile_image || '/static/images/default-avatar.jpg';
     heroImage.src = imageSrc;
-    heroImage.alt = currentCharacter.name;
-    heroImage.onerror = () => { heroImage.src = '/static/images/default-avatar.jpg'; };
+    heroImage.alt = currentCharacter.name || 'Character';
 
-    heroName.textContent = currentCharacter.name || 'Unknown';
+    heroImage.onerror = function() {
+        console.log('Hero image failed to load, using default');
+        this.src = '/static/images/default-avatar.jpg';
 
-    if (currentCharacter.quote) {
+        this.onerror = function() {
+            console.log('Default image also failed, using gradient');
+            this.style.display = 'none';
+            document.querySelector('.hero-image-wrapper').style.background = 
+                'linear-gradient(135deg, #1a1a1a 0%, #3b82f6 100%)';
+        };
+    };
+
+    heroName.textContent = currentCharacter.name || 'Unknown Character';
+
+    if (currentCharacter.quote && currentCharacter.quote.trim()) {
         heroQuote.textContent = `"${currentCharacter.quote}"`;
+        heroQuote.style.display = 'block';
     } else {
         heroQuote.style.display = 'none';
     }
 
-    gsap.to('.hero-image-wrapper', {
-        yPercent: 20,
-        ease: 'none',
-        scrollTrigger: {
-            trigger: '.hero-section',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-        }
-    });
+    heroImage.onload = function() {
+        gsap.to('.hero-image-wrapper', {
+            yPercent: 20,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.hero-section',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true,
+            }
+        });
+    };
+
+    if (heroImage.complete) {
+        heroImage.onload();
+    }
 }
 
 function loadIdentitySection() {
