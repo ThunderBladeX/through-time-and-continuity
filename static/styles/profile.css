@@ -3,8 +3,8 @@ html.lenis body {
     height: auto;
 }
 
-.mobile-view{display:none!important;visibility:hidden!important}
-.desktop-view{display:block!important;visibility:visible!important}
+.mobile-view{display:none;visibility:hidden}
+.desktop-view{display:block;visibility:visible}
 
 .lenis.lenis-smooth {
     scroll-behavior: auto !important;
