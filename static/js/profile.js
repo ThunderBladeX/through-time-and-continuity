@@ -15,8 +15,6 @@
 
         initSmoothScroll();
         init3DBackground();
-        initRippleEffect();
-        initDraggableElements();
 
         await loadCharacter();
 
@@ -54,68 +52,6 @@
             });
         }
     });
-
-    function initDraggableElements() {
-        const avatars = document.querySelectorAll('.relationship-avatar, .love-avatar');
-
-        avatars.forEach(function(avatar) {
-            avatar.classList.add('draggable-rotate');
-            let isDragging = false;
-            let startX = 0;
-            let rotation = 0;
-
-            avatar.addEventListener('mousedown', function(e) {
-                isDragging = true;
-                startX = e.clientX;
-                avatar.classList.add('dragging');
-                e.preventDefault();
-            });
-
-            document.addEventListener('mousemove', function(e) {
-                if (!isDragging) return;
-                
-                const deltaX = e.clientX - startX;
-                rotation = deltaX * 0.5;
-                avatar.style.setProperty('--drag-rotation', rotation + 'deg');
-            });
-
-            document.addEventListener('mouseup', function() {
-                if (isDragging) {
-                    isDragging = false;
-                    avatar.classList.remove('dragging');
-                    avatar.style.setProperty('--drag-rotation', '0deg');
-                }
-            });
-        });
-    }
-
-    function initRippleEffect() {
-        const rippleContainers = document.querySelectorAll('.glass-card, .info-item, .timeline-card, .relationship-card, .love-card');
-
-        rippleContainers.forEach(function(container) {
-            container.classList.add('ripple-container');
-
-            container.addEventListener('click', function(e) {
-                const ripple = document.createElement('span');
-                ripple.className = 'ripple';
-                
-                const rect = container.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = e.clientX - rect.left - size / 2;
-                const y = e.clientY - rect.top - size / 2;
-
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = x + 'px';
-                ripple.style.top = y + 'px';
-
-                container.appendChild(ripple);
-
-                setTimeout(function() {
-                    ripple.remove();
-                }, 600);
-            });
-        });
-    }
 
     function initSmoothScroll() {
         if (typeof Lenis === 'undefined') {
