@@ -1,10 +1,128 @@
+import * as THREE from 'three';
+
 const pathParts = window.location.pathname.split('/');
 const characterId = pathParts[pathParts.length - 1];
-const urlParams = new URLSearchParams(window.location.search);
-const highlightEventId = urlParams.get('event');
-
 let currentCharacter = null;
-let currentTab = 'overview';
+let lenis = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+    initSmoothScroll();
+
+    init3DBackground();
+
+    await loadCharacter();
+
+    setupNavigation();
+    setupModals();
+    setupScrollAnimations();
+
+    if (localStorage.getItem('admin_token')) {
+        document.getElementById('admin-edit-btn').style.display = 'flex';
+        document.getElementById('admin-edit-btn').onclick = () => {
+            window.location.href = `/admin?edit=character&id=${characterId}`;
+        };
+    }
+});
+
+function initSmoothScroll() {
+    lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+        infinite: false,
+    });
+
+    function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+}
+
+function init3DBackground() {
+    const canvas = document.getElementById('bg-canvas');
+    if (!canvas) return;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    camera.position.z = 5;
+
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 2000;
+    const posArray = new Float32Array(particlesCount * 3);
+
+    for (let i = 0; i < particlesCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 15;
+    }
+
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+    const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.02,
+        color: 0x3b82f6,
+        transparent: true,
+        opacity: 0.6,
+        blending: THREE.AdditiveBlending,
+    });
+
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+
+    const geometry = new THREE.IcosahedronGeometry(1, 0);
+    const material = new THREE.MeshBasicMaterial({
+        color: 0x3b82f6,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.1,
+    });
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    let mouseX = 0;
+    let mouseY = 0;
+    document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    function animate() {
+        requestAnimationFrame(animate);
+
+        particlesMesh.rotation.y += 0.0005;
+        particlesMesh.rotation.x += 0.0003;
+
+        mesh.rotation.x += 0.001;
+        mesh.rotation.y += 0.002;
+
+        camera.position.x = mouseX * 0.5;
+        camera.position.y = mouseY * 0.5;
+
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+}
 
 async function loadCharacter() {
     if (!characterId || isNaN(characterId)) {
@@ -13,99 +131,58 @@ async function loadCharacter() {
     }
 
     try {
+        currentCharacter = await fetchAPI(`/characters/${characterId}`);
 
-        const character = await fetchAPI(`/characters/${characterId}`);
-        currentCharacter = character;
+        const name = currentCharacter.name || 'Unknown';
+        document.title = `${name} - Periaphe`;
 
-        const charName = currentCharacter.full_name || currentCharacter.name || 'Unknown';
+        loadHeroSection();
 
-        if (document.getElementById('page-title')) {
-            document.getElementById('page-title').textContent = `${charName} - Periaphe`;
-        }
-        document.title = `${charName} - Periaphe`;
+        loadIdentitySection();
 
-        applyCharacterTheme(currentCharacter);
+        loadBioSections();
 
-        loadCharacterInfo();
-
-        loadBioSections(currentCharacter.bio_sections || []);
-
-        const desktopOverviewContent = document.getElementById('overview-tab').innerHTML;
-        const mobileOverviewContainer = document.getElementById('mobile-overview');
-        if (mobileOverviewContainer) {
-            mobileOverviewContainer.innerHTML = desktopOverviewContent;
-        }
-
-        setupTabs();
+        applyCharacterTheme();
 
     } catch (error) {
         console.error('Error loading character:', error);
         showNotification('Failed to load character', 'error');
-
         setTimeout(() => window.location.href = '/characters', 2000);
     }
 }
 
-function loadCharacterInfo() {
+function loadHeroSection() {
+    const heroImage = document.getElementById('hero-image');
+    const heroName = document.getElementById('hero-name');
+    const heroQuote = document.getElementById('hero-quote');
 
-    const charName = currentCharacter.name || 'Unknown';
     const imageSrc = currentCharacter.profile_image || '/static/images/default-avatar.jpg';
+    heroImage.src = imageSrc;
+    heroImage.alt = currentCharacter.name;
+    heroImage.onerror = () => { heroImage.src = '/static/images/default-avatar.jpg'; };
 
-    const profileImg = document.getElementById('profile-image');
-    if (profileImg) {
-        profileImg.src = imageSrc;
-        profileImg.alt = charName;
-        profileImg.onerror = function() { this.src = '/static/images/default-avatar.jpg'; };
+    heroName.textContent = currentCharacter.name || 'Unknown';
+
+    if (currentCharacter.quote) {
+        heroQuote.textContent = `"${currentCharacter.quote}"`;
+    } else {
+        heroQuote.style.display = 'none';
     }
 
-    const charNameEl = document.getElementById('character-name');
-    if (charNameEl) charNameEl.textContent = charName;
-
-    const mobileImg = document.getElementById('mobile-profile-image');
-    if (mobileImg) {
-        mobileImg.src = imageSrc;
-        mobileImg.alt = charName;
-        mobileImg.onerror = function() { this.src = '/static/images/default-avatar.jpg'; };
-    }
-
-    const mobileNameEl = document.getElementById('mobile-character-name');
-    if (mobileNameEl) mobileNameEl.textContent = charName;
-
-    const quoteEl = document.getElementById('character-quote');
-    if (currentCharacter.quote && quoteEl) {
-        quoteEl.textContent = currentCharacter.quote;
-    }
-
-    if (localStorage.getItem('admin_token')) {
-        addQuickEditButton();
-    }
+    gsap.to('.hero-image-wrapper', {
+        yPercent: 20,
+        ease: 'none',
+        scrollTrigger: {
+            trigger: '.hero-section',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+        }
+    });
 }
 
-function addQuickEditButton() {
-    const profileSidebar = document.querySelector('.profile-sidebar');
-    const mobileHeader = document.querySelector('.mobile-header');
-
-    const editButton = document.createElement('button');
-    editButton.className = 'quick-edit-btn';
-    editButton.innerHTML = '⚙️ Edit Character';
-    editButton.onclick = () => {
-        window.location.href = `/admin?edit=character&id=${characterId}`;
-    };
-
-    if (profileSidebar) {
-        profileSidebar.appendChild(editButton);
-    }
-
-    if (mobileHeader) {
-        const clonedButton = editButton.cloneNode(true);
-        clonedButton.onclick = editButton.onclick;
-        mobileHeader.appendChild(clonedButton);
-    }
-}
-
-function loadBioSections(sections) {
-    const identitySection = document.getElementById('bio-identity');
-    const additionalSections = document.getElementById('additional-bio-sections');
+function loadIdentitySection() {
+    const identityGrid = document.getElementById('identity-grid');
     const familyName = (currentCharacter.family && currentCharacter.family.name) || 'Unknown';
 
     const identityItems = [
@@ -115,207 +192,181 @@ function loadBioSections(sections) {
         { label: 'Family', value: familyName }
     ].filter(item => item.value);
 
-    identitySection.innerHTML = identityItems.map(item => `
-        <div class="bio-item">
-            <div class="bio-label">${item.label}</div>
-            <div class="bio-value">${item.value}</div>
+    identityGrid.innerHTML = identityItems.map(item => `
+        <div class="info-item">
+            <span class="info-label">${item.label}</span>
+            <span class="info-value">${item.value}</span>
         </div>
     `).join('');
-
-    if (sections && sections.length > 0) {
-
-        sections.sort((a, b) => a.display_order - b.display_order);
-
-        additionalSections.innerHTML = sections.map(section => `
-            <div class="bio-section" data-section-id="${section.id}">
-                <h2 class="section-header">${section.section_title}</h2>
-                <div class="bio-content" data-raw-content="${encodeURIComponent(section.content)}">
-                    ${parseMarkdown(section.content)}
-                </div>
-            </div>
-        `).join('');
-    } else {
-        additionalSections.innerHTML = '';
-    }
 }
 
-function setupTabs() {
-    const tabs = document.querySelectorAll('.nav-tab, .mobile-nav-tab');
+function loadBioSections() {
+    const bioContainer = document.getElementById('bio-sections');
+    const sections = currentCharacter.bio_sections || [];
 
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const tabName = tab.dataset.tab;
+    if (sections.length === 0) {
+        bioContainer.innerHTML = '<p class="empty-state">No additional information available.</p>';
+        return;
+    }
+
+    sections.sort((a, b) => a.display_order - b.display_order);
+
+    bioContainer.innerHTML = sections.map(section => `
+        <div class="bio-section glass-card" data-section-id="${section.id}">
+            <h2 class="section-title">${section.section_title}</h2>
+            <div class="bio-content">
+                ${parseMarkdown(section.content)}
+            </div>
+        </div>
+    `).join('');
+}
+
+function setupNavigation() {
+    const navItems = document.querySelectorAll('.nav-item');
+
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const tabName = item.dataset.tab;
             switchTab(tabName);
         });
     });
 }
 
 function switchTab(tabName) {
-    currentTab = tabName;
 
-    document.querySelectorAll('.nav-tab, .mobile-nav-tab').forEach(tab => {
-        tab.classList.toggle('active', tab.dataset.tab === tabName);
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.tab === tabName);
     });
 
-    document.querySelectorAll('.tab-content, .mobile-tab-content').forEach(content => {
-        content.classList.remove('active');
+    document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.remove('active');
     });
 
-    const desktopContent = document.getElementById(`${tabName}-tab`);
-    const mobileContent = document.getElementById(`mobile-${tabName}`);
+    const activePanel = document.getElementById(`${tabName}-tab`);
+    if (activePanel) {
+        activePanel.classList.add('active');
 
-    if (desktopContent) desktopContent.classList.add('active');
-    if (mobileContent) mobileContent.classList.add('active');
+        if (!activePanel.dataset.loaded) {
+            loadTabContent(tabName);
+            activePanel.dataset.loaded = 'true';
+        }
+    }
 
-    if (desktopContent && !desktopContent.dataset.loaded) {
+    lenis.scrollTo('.content-area', { offset: -100, duration: 0.8 });
+}
+
+async function loadTabContent(tabName) {
+    try {
         switch(tabName) {
             case 'timeline':
-                loadTimeline();
+                await loadTimeline();
                 break;
             case 'relationships':
-                loadRelationships();
+                await loadRelationships();
                 break;
             case 'love-interests':
-                loadLoveInterests();
+                await loadLoveInterests();
                 break;
             case 'gallery':
-                loadGallery();
+                await loadGallery();
                 break;
         }
-        desktopContent.dataset.loaded = 'true';
+    } catch (error) {
+        console.error(`Error loading ${tabName}:`, error);
+        showNotification(`Failed to load ${tabName}`, 'error');
     }
 }
 
 async function loadTimeline() {
-    const timelineList = document.getElementById('timeline-list');
-    const mobileTimelineContainer = document.getElementById('mobile-timeline');
-    if (!timelineList || !mobileTimelineContainer) return;
+    const container = document.getElementById('timeline-container');
 
     try {
         const events = await fetchAPI(`/characters/${characterId}/timeline`);
 
-        let contentHTML = '<p class="empty-state">No timeline events yet.</p>';
-        if (events && events.length > 0) {
-            events.sort((a, b) => new Date(b.event_date) - new Date(a.event_date));
-            contentHTML = events.map(event => createTimelineEvent(event)).join('');
+        if (!events || events.length === 0) {
+            container.innerHTML = '<p class="empty-state">No timeline events yet.</p>';
+            return;
         }
 
-        timelineList.innerHTML = contentHTML;
-        mobileTimelineContainer.innerHTML = contentHTML;
+        events.sort((a, b) => new Date(b.event_date) - new Date(a.event_date));
 
-        setupEventModals();
-
-        if (highlightEventId) {
-            const eventCard = document.querySelector(`[data-event-id="${highlightEventId}"]`);
-            if (eventCard) {
-                eventCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                eventCard.style.animation = 'highlight 2s ease';
-            }
-        }
-
-    } catch (error) {
-        console.error('Error loading timeline:', error);
-        const errorHTML = '<p class="error-state">Failed to load timeline.</p>';
-        timelineList.innerHTML = errorHTML;
-        mobileTimelineContainer.innerHTML = errorHTML;
-    }
-}
-
-function createTimelineEvent(event) {
-    const eraDisplay = event.era_display || getEraName(event.era);
-    return `
-        <div class="timeline-event" data-event-id="${event.id}">
-            <div class="event-card" data-era="${event.era}">
-                <div class="event-header">
-                    <span class="era-badge" data-era="${event.era}">${eraDisplay}</span>
-                    <span class="event-date">${formatDate(event.event_date)}</span>
+        container.innerHTML = events.map(event => `
+            <div class="timeline-item" data-event-id="${event.id}">
+                <div class="timeline-card">
+                    <div class="timeline-header">
+                        <span class="era-badge">${event.era_display || event.era}</span>
+                        <time class="timeline-date">${formatDate(event.event_date)}</time>
+                    </div>
+                    <h3 class="timeline-title">${event.title}</h3>
+                    <p class="timeline-summary">${event.summary || ''}</p>
                 </div>
-                <h3 class="event-title">${event.title}</h3>
-                <p class="event-summary">${event.summary || ''}</p>
             </div>
-        </div>
-    `;
-}
+        `).join('');
 
-async function openEventModal(eventId) {
-    try {
-        const event = await fetchAPI(`/events/${eventId}`);
-        const eraDisplay = event.era_display || getEraName(event.era);
+        document.querySelectorAll('.timeline-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const eventId = card.closest('.timeline-item').dataset.eventId;
+                openEventModal(eventId);
+            });
+        });
 
-        const modal = document.getElementById('event-modal');
-        if (!modal) return;
+        gsap.utils.toArray('.timeline-item').forEach(item => {
+            gsap.to(item, {
+                opacity: 1,
+                x: 0,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: item,
+                    start: 'top 85%',
+                    toggleClass: 'visible',
+                }
+            });
+        });
 
-        modal.querySelector('#modal-era-badge').dataset.era = event.era;
-        modal.querySelector('#modal-era-badge').textContent = eraDisplay;
-        modal.querySelector('#modal-event-title').textContent = event.title;
-        modal.querySelector('#modal-event-date').textContent = formatDate(event.event_date);
-
-        const imagesContainer = modal.querySelector('#modal-event-images');
-        imagesContainer.innerHTML = (event.images && event.images.length > 0)
-            ? event.images.map(imgUrl => `<img src="${imgUrl}" alt="${event.title}" loading="lazy" onerror="this.style.display='none'">`).join('')
-            : '';
-
-        const descContainer = modal.querySelector('#modal-event-description');
-        descContainer.innerHTML = event.full_description || `<p>${event.summary || ''}</p>`;
-
-        openModal('event-modal');
     } catch (error) {
-        console.error('Error loading event details:', error);
-        showNotification('Failed to load event details', 'error');
+        container.innerHTML = '<p class="error-state">Failed to load timeline.</p>';
+        throw error;
     }
 }
 
 async function loadRelationships() {
-    const relationshipsList = document.getElementById('relationships-list');
-    const mobileRelationshipsContainer = document.getElementById('mobile-relationships');
-    if (!relationshipsList || !mobileRelationshipsContainer) return;
+    const container = document.getElementById('relationships-grid');
 
     try {
         const relationships = await fetchAPI(`/characters/${characterId}/relationships`);
 
-        let contentHTML = '<p class="empty-state">No relationships defined yet.</p>';
-        if (relationships && relationships.length > 0) {
-            contentHTML = relationships.map(rel => `
-                <div class="relationship-card" 
-                     data-type="${rel.type || ''}"
-                     data-related-character-id="${rel.related_character_id}">
-                    <div class="relationship-clickable-area" onclick="window.location.href='/profile/${rel.related_character_id}'">
-                        <img src="${rel.related_character_image || '/static/images/default-avatar.jpg'}" 
-                             alt="${rel.related_character_name || 'Character'}"
-                             class="relationship-avatar"
-                             onerror="this.src='/static/images/default-avatar.jpg'">
-                        <div class="relationship-info">
-                            <div class="relationship-name">${rel.related_character_name || 'Unknown'}</div>
-                            <div class="relationship-status">${rel.status || ''}</div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+        if (!relationships || relationships.length === 0) {
+            container.innerHTML = '<p class="empty-state">No relationships defined yet.</p>';
+            return;
         }
 
-        relationshipsList.innerHTML = contentHTML;
-        mobileRelationshipsContainer.innerHTML = contentHTML;
+        container.innerHTML = relationships.map(rel => `
+            <div class="relationship-card" onclick="window.location.href='/profile/${rel.related_character_id}'">
+                <img src="${rel.related_character_image || '/static/images/default-avatar.jpg'}" 
+                     alt="${rel.related_character_name}"
+                     class="relationship-avatar"
+                     onerror="this.src='/static/images/default-avatar.jpg'">
+                <div class="relationship-info">
+                    <div class="relationship-name">${rel.related_character_name || 'Unknown'}</div>
+                    <div class="relationship-status">${rel.status || ''}</div>
+                </div>
+            </div>
+        `).join('');
 
     } catch (error) {
-        console.error('Error loading relationships:', error);
-        const errorHTML = '<p class="error-state">Failed to load relationships.</p>';
-        relationshipsList.innerHTML = errorHTML;
-        mobileRelationshipsContainer.innerHTML = errorHTML;
+        container.innerHTML = '<p class="error-state">Failed to load relationships.</p>';
+        throw error;
     }
 }
 
 async function loadLoveInterests() {
-    const desktopContainer = document.getElementById('love-interests-tab');
-    const mobileContainer = document.getElementById('mobile-love-interests');
-    if (!desktopContainer || !mobileContainer) return;
+    const container = document.getElementById('love-interests-content');
 
     try {
         const interests = await fetchAPI(`/characters/${characterId}/love-interests`);
 
         if (!interests || interests.length === 0) {
-            const emptyHTML = '<p class="empty-state">No love interests defined yet.</p>';
-            desktopContainer.innerHTML = emptyHTML;
-            mobileContainer.innerHTML = emptyHTML;
+            container.innerHTML = '<p class="empty-state">No love interests defined yet.</p>';
             return;
         }
 
@@ -325,314 +376,156 @@ async function loadLoveInterests() {
         }, {});
 
         const categoryTitles = {
-            'canon': '💑 Canon Darlings',
-            'once_dated': '📜 Once Dated',
-            'implied': '🤔 Implied Fondness',
-            'unrequited': '💔 Unrequited Crush',
-            'au_lovers': '💞 Lovers In Another Life',
-            'au_exes': '❤️‍🩹 Exes In Another Life'
+            'canon': 'Canon Darlings',
+            'once_dated': 'Once Dated',
+            'implied': 'Implied Fondness',
+            'unrequited': 'Unrequited Crush',
+            'au_lovers': 'Lovers In Another Life',
+            'au_exes': 'Exes In Another Life'
         };
 
         const categoryOrder = ['canon', 'once_dated', 'implied', 'unrequited', 'au_lovers', 'au_exes'];
 
-        let contentHTML = '';
+        let html = '';
         for (const category of categoryOrder) {
             if (grouped[category]) {
-                contentHTML += `
-                    <div class="love-interest-section">
-                        <h2 class="section-header">${categoryTitles[category]}</h2>
-                        <div class="love-interest-grid">
-                            ${grouped[category].map(createLoveInterestCard).join('')}
+                html += `
+                    <div class="love-category glass-card">
+                        <h2 class="section-title">${categoryTitles[category]}</h2>
+                        <div class="love-grid">
+                            ${grouped[category].map(interest => `
+                                <div class="love-card">
+                                    <img src="${interest.partner.profile_image || '/static/images/default-avatar.jpg'}" 
+                                         alt="${interest.partner.name}"
+                                         class="love-avatar"
+                                         onerror="this.src='/static/images/default-avatar.jpg'">
+                                    <div class="love-info">
+                                        <a href="/profile/${interest.partner.id}" class="love-name">${interest.partner.name}</a>
+                                        ${interest.description ? `<p class="love-description">${interest.description}</p>` : ''}
+                                    </div>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
                 `;
             }
         }
 
-        desktopContainer.innerHTML = contentHTML;
-        mobileContainer.innerHTML = contentHTML;
+        container.innerHTML = html;
 
     } catch (error) {
-        console.error('Error loading love interests:', error);
-        const errorHTML = '<p class="error-state">Failed to load love interests.</p>';
-        desktopContainer.innerHTML = errorHTML;
-        mobileContainer.innerHTML = errorHTML;
+        container.innerHTML = '<p class="error-state">Failed to load love interests.</p>';
+        throw error;
     }
 }
 
-function createLoveInterestCard(interest) {
-    const partner = interest.partner;
-    const partnerName = partner.name || 'Unknown';
-    const partnerImage = partner.profile_image || '/static/images/default-avatar.jpg';
-    const partnerId = partner.id;
+async function loadGallery() {
+    const container = document.getElementById('gallery-grid');
+    const loader = document.getElementById('gallery-loader');
 
-    return `
-        <div class="love-interest-card">
-            <img src="${partnerImage}" alt="${partnerName}" class="love-interest-pfp" onerror="this.src='/static/images/default-avatar.jpg'">
-            <div class="love-interest-details">
-                <a href="/profile/${partnerId}" class="love-interest-name">${partnerName}</a>
-                ${interest.description ? `<p class="love-interest-desc">${interest.description}</p>` : ''}
-            </div>
-        </div>
-    `;
-}
-
-function loadGallery() {
     if (typeof initGallery === 'function') {
         initGallery(characterId);
-    }
-}
-
-function setupEventModals() {
-    document.querySelectorAll('.event-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-            const eventId = card.closest('.timeline-event').dataset.eventId;
-            openEventModal(eventId);
-        });
-    });
-}
-
-async function applyCharacterTheme(character) {
-    document.body.dataset.characterId = character.id;
-    const charName = character.name || 'unknown';
-    const cssFileName = charName.toLowerCase().replace(/\s+/g, '-') + '.css';
-    const cssPath = `/static/styles/characters/${cssFileName}`;
-    document.body.dataset.character = charName.toLowerCase().replace(/\s+/g, '-');
-
-    const themeLink = document.getElementById('character-theme');
-    if (themeLink) {
-        const cssExists = await checkFileExists(cssPath);
-        if (cssExists) {
-            themeLink.href = cssPath;
-        } else {
-            applyDynamicTheme(character);
-        }
     } else {
-        applyDynamicTheme(character);
+        container.innerHTML = '<p class="empty-state">Gallery functionality not available.</p>';
     }
 }
 
-async function checkFileExists(url) {
+function setupModals() {
+
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+        backdrop.addEventListener('click', () => {
+            backdrop.closest('.modal').classList.remove('active');
+        });
+    });
+
+    document.querySelectorAll('.modal-close').forEach(btn => {
+        btn.addEventListener('click', () => {
+            btn.closest('.modal').classList.remove('active');
+        });
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal.active').forEach(modal => {
+                modal.classList.remove('active');
+            });
+        }
+    });
+}
+
+async function openEventModal(eventId) {
     try {
-        const response = await fetch(url, { method: 'HEAD' });
-        return response.ok;
+        const event = await fetchAPI(`/events/${eventId}`);
+        const modal = document.getElementById('event-modal');
+
+        modal.querySelector('#modal-era').textContent = event.era_display || event.era;
+        modal.querySelector('#modal-title').textContent = event.title;
+        modal.querySelector('#modal-date').textContent = formatDate(event.event_date);
+
+        const imagesContainer = modal.querySelector('#modal-images');
+        imagesContainer.innerHTML = (event.images && event.images.length > 0)
+            ? event.images.map(img => `<img src="${img}" alt="${event.title}" loading="lazy">`).join('')
+            : '';
+
+        const descContainer = modal.querySelector('#modal-description');
+        descContainer.innerHTML = event.full_description || `<p>${event.summary || ''}</p>`;
+
+        modal.classList.add('active');
+
     } catch (error) {
-        return false;
+        console.error('Error loading event:', error);
+        showNotification('Failed to load event details', 'error');
     }
 }
 
-function applyDynamicTheme(character) {
-    const root = document.documentElement;
-    if (character.color_primary) root.style.setProperty('--character-primary', character.color_primary);
-    if (character.color_secondary) root.style.setProperty('--character-secondary', character.color_secondary);
-    if (character.color_accent) root.style.setProperty('--character-accent', character.color_accent);
-    if (character.color_bg) root.style.setProperty('--character-bg', character.color_bg);
-    if (character.theme_data) applyAdvancedTheme(character.theme_data);
-}
+function setupScrollAnimations() {
 
-function applyAdvancedTheme(themeData) {
-    if (!themeData) return;
-    if (themeData.cursor) document.body.style.cursor = `url('${themeData.cursor}'), auto`;
-    if (themeData.background_pattern) document.body.style.backgroundImage = `url('${themeData.background_pattern}')`;
-    if (themeData.custom_css) {
-        const styleEl = document.createElement('style');
-        styleEl.textContent = themeData.custom_css;
-        document.head.appendChild(styleEl);
-    }
-}
-
-const highlightStyle = document.createElement('style');
-highlightStyle.textContent = `
-    @keyframes highlight { 0%, 100% { box-shadow: var(--shadow-lg); } 50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.8); } }
-`;
-document.head.appendChild(highlightStyle);
-
-document.addEventListener('DOMContentLoaded', () => {
-    loadCharacter();
-
-    setupContributionButtons();
-
-    document.addEventListener('touchstart', (e) => {
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            const parentElement = btn.parentElement;
-
-            if (parentElement && !parentElement.contains(e.target)) {
-                btn.remove();
+    gsap.utils.toArray('.glass-card').forEach(card => {
+        gsap.from(card, {
+            opacity: 0,
+            y: 50,
+            duration: 1,
+            scrollTrigger: {
+                trigger: card,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse',
             }
         });
-    }, { passive: true });
-});
-
-function setupContributionButtons() {
-
-    const editableSelectors = ['.bio-item', '.bio-section'];
-
-    document.body.addEventListener('mouseover', (e) => {
-
-        const bioItem = e.target.closest('.bio-item');
-        const bioSection = e.target.closest('.bio-section');
-
-        let targetElement = null;
-
-        if (bioItem) {
-            targetElement = bioItem;
-        } 
-
-        else if (bioSection) {
-            if (!bioSection.querySelector('#bio-identity')) {
-                targetElement = bioSection;
-            }
-        }
-        if (targetElement && !targetElement.querySelector('.edit-btn')) {
-            addEditButton(targetElement);
-        }
     });
 }
 
-function addEditButton(element) {
-    const editBtn = document.createElement('button');
-    editBtn.className = 'edit-btn';
-    editBtn.innerHTML = '✒️';
-    editBtn.title = 'Suggest an Edit';
-    editBtn.onclick = (e) => {
-        e.stopPropagation();
-        handleEdit(element);
-    };
+function applyCharacterTheme() {
+    const root = document.documentElement;
 
-    element.style.position = 'relative';
-    element.appendChild(editBtn);
+    if (currentCharacter.color_primary) {
+        root.style.setProperty('--accent', currentCharacter.color_primary);
 
-    element.addEventListener('mouseout', (e) => {
-        if (!element.contains(e.relatedTarget)) {
-            editBtn.remove();
-        }
-    }, { once: true });
-}
-
-function handleEdit(element) {
-    if (element.classList.contains('bio-item')) {
-        editBioItem(element);
-    } else if (element.classList.contains('bio-section')) {
-        const sectionId = element.dataset.sectionId;
-        editBioSection(element, sectionId);
+        const hex = currentCharacter.color_primary.replace('#', '');
+        const r = parseInt(hex.substr(0, 2), 16);
+        const g = parseInt(hex.substr(2, 2), 16);
+        const b = parseInt(hex.substr(4, 2), 16);
+        root.style.setProperty('--accent-rgb', `${r}, ${g}, ${b}`);
     }
 }
 
-function editBioItem(element) {
-    const valueEl = element.querySelector('.bio-value');
-    const currentValue = valueEl.textContent;
-    const label = element.querySelector('.bio-label').textContent;
-
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.value = currentValue;
-    input.className = 'inline-edit-input';
-
-    valueEl.innerHTML = '';
-    valueEl.appendChild(input);
-    input.focus();
-    input.select();
-
-    const save = async () => {
-        const newValue = input.value;
-        if (newValue !== currentValue && newValue.trim() !== '') {
-            try {
-                await submitPendingEdit({
-                    type: 'character', 
-                    record_id: characterId,
-                    field: label.toLowerCase().replace(/\s+/g, '_'),
-                    old_value: currentValue,
-                    new_value: newValue
-                });
-                showNotification('Edit submitted for approval', 'success');
-            } catch (error) {
-                showNotification('Failed to submit edit', 'error');
-            }
-        }
-        valueEl.textContent = currentValue; 
+if (typeof formatDate === 'undefined') {
+    window.formatDate = function(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
     };
-
-    input.addEventListener('blur', save);
-    input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            input.blur();
-        }
-        if (e.key === 'Escape') {
-            e.preventDefault();
-            input.removeEventListener('blur', save); 
-            valueEl.textContent = currentValue; 
-        }
-    });
 }
 
-function editBioSection(element, sectionId) {
-    const modal = document.getElementById('bio-edit-modal');
-    const form = document.getElementById('bio-edit-form');
-    if (!modal || !form) return;
+if (typeof parseMarkdown === 'undefined') {
+    window.parseMarkdown = function(content) {
 
-    const currentTitle = element.querySelector('.section-header').textContent;
-    const contentDiv = element.querySelector('.bio-content');
-    const rawContent = contentDiv.dataset.rawContent ? decodeURIComponent(contentDiv.dataset.rawContent) : '';
-
-    form.elements['section_id'].value = sectionId;
-    form.elements['old_value_title'].value = currentTitle;
-    form.elements['old_value_content'].value = rawContent;
-    form.elements['new_value_title'].value = currentTitle;
-    form.elements['new_value_content'].value = rawContent;
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const newTitle = form.elements['new_value_title'].value;
-        const newContent = form.elements['new_value_content'].value;
-        let editsSubmitted = 0;
-
-        if (newTitle.trim() && newTitle !== currentTitle) {
-            try {
-                await submitPendingEdit({
-                    type: 'character_bio', 
-                    record_id: sectionId,
-                    field: 'section_title',
-                    old_value: currentTitle,
-                    new_value: newTitle
-                });
-                editsSubmitted++;
-            } catch (error) {
-                showNotification('Failed to submit title edit', 'error');
-            }
-        }
-
-        if (newContent.trim() && newContent !== rawContent) {
-            try {
-                await submitPendingEdit({
-                    type: 'character_bio', 
-                    record_id: sectionId,
-                    field: 'content',
-                    old_value: rawContent,
-                    new_value: newContent
-                });
-                editsSubmitted++;
-            } catch (error) {
-                showNotification('Failed to submit content edit', 'error');
-            }
-        }
-
-        if (editsSubmitted > 0) {
-            showNotification('Edit(s) submitted for approval!', 'success');
-        } else {
-            showNotification('No changes were made.', 'info');
-        }
-        closeModal('bio-edit-modal');
+        return content
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/\n\n/g, '</p><p>')
+            .replace(/\n/g, '<br>');
     };
-
-    form.onsubmit = handleSubmit; 
-    openModal('bio-edit-modal');
-}
-
-async function submitPendingEdit(editData) {
-
-    return await fetchAPI('/admin/pending-edits', {
-        method: 'POST',
-        body: JSON.stringify(editData)
-    });
 }
