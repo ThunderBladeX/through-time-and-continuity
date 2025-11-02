@@ -16,8 +16,6 @@
         initSmoothScroll();
         init3DBackground();
         initBubbleGenerator();
-        initGlitchEffect();
-        initDraggableElements();
 
         await loadCharacter();
 
@@ -55,49 +53,6 @@
             });
         }
     });
-
-    function initDraggableElements() {
-        const avatars = document.querySelectorAll('.relationship-avatar, .love-avatar');
-
-        avatars.forEach(function(avatar) {
-            avatar.classList.add('draggable-rotate');
-            let isDragging = false;
-            let startX = 0;
-            let rotation = 0;
-
-            avatar.addEventListener('mousedown', function(e) {
-                isDragging = true;
-                startX = e.clientX;
-                avatar.classList.add('dragging');
-                e.preventDefault();
-            });
-
-            document.addEventListener('mousemove', function(e) {
-                if (!isDragging) return;
-                
-                const deltaX = e.clientX - startX;
-                rotation = deltaX * 0.5;
-                avatar.style.setProperty('--drag-rotation', rotation + 'deg');
-            });
-
-            document.addEventListener('mouseup', function() {
-                if (isDragging) {
-                    isDragging = false;
-                    avatar.classList.remove('dragging');
-                    avatar.style.setProperty('--drag-rotation', '0deg');
-                }
-            });
-        });
-    }
-
-    function initGlitchEffect() {
-        const glitchables = document.querySelectorAll('.hero-name, .section-title');
-        
-        glitchables.forEach(function(element) {
-            element.classList.add('glitch-text');
-            element.setAttribute('data-text', element.textContent);
-        });
-    }
 
     function initBubbleGenerator() {
         const heroSection = document.querySelector('.hero-section');
