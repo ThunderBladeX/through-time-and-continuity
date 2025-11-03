@@ -5,7 +5,6 @@
     const characterId = pathParts[pathParts.length - 1];
     const urlParams = new URLSearchParams(window.location.search);
     const highlightEventId = urlParams.get('event');
-    const parallaxStrength = 20;
 
     let currentCharacter = null;
     let currentTab = 'overview';
@@ -17,7 +16,6 @@
         initSmoothScroll();
         init3DBackground();
         initBubbleGenerator();
-        initImageParallax()
 
         await loadCharacter();
 
@@ -54,162 +52,7 @@
                 }
             });
         }
-        console.log('✨ Profile fully loaded!');
     });
-
-    function isElementInViewport(el) {
-        const rect = el.getBoundingClientRect();
-        return (
-            rect.bottom > 0 &&
-            rect.right > 0 &&
-            rect.top < (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.left < (window.innerWidth || document.documentElement.clientWidth)
-        );
-    }
-
-    function initImageParallax() {
-        if (typeof gsap === 'undefined') {
-            console.warn('GSAP not available. Skipping parallax effect.');
-            return;
-        }
-
-        const heroSection = document.querySelector('.hero-section');
-        const heroImage = document.querySelector('.hero-image');
-    
-        if (heroSection && heroImage) {
-            let bounds;
-
-            heroSection.addEventListener('mouseenter', function() {
-                bounds = heroSection.getBoundingClientRect();
-            });
-
-            heroSection.addEventListener('mousemove', function(e) {
-                if (!bounds) return;
-
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                const leftX = mouseX - bounds.x;
-                const topY = mouseY - bounds.y;
-                const centerX = leftX - bounds.width / 2;
-                const centerY = topY - bounds.height / 2;
-
-                const percentX = centerX / (bounds.width / 2);
-                const percentY = centerY / (bounds.height / 2);
-
-                const moveX = percentX * 20;
-                const moveY = percentY * 20;
-
-                gsap.set(heroImage, {
-                    x: moveX,
-                    y: moveY,
-                    scale: 1.05
-                });
-            });
-
-            heroSection.addEventListener('mouseleave', function() {
-                gsap.to(heroImage, {
-                    x: 0,
-                    y: 0,
-                    scale: 1,
-                    duration: 0.6,
-                    ease: "power3.out"
-                });
-            });
-        }
-
-        function setupHoverParallax(selector) {
-            const elements = document.querySelectorAll(selector);
-
-            elements.forEach(function(element) {
-                const container = element.closest('.relationship-card, .love-card, .gallery-item') || element.parentElement;
-                let bounds;
-
-                container.addEventListener('mouseenter', function() {
-                    bounds = element.getBoundingClientRect();
-                });
-
-                container.addEventListener('mousemove', function(e) {
-                    if (!bounds) return;
-
-                    const mouseX = e.clientX;
-                    const mouseY = e.clientY;
-                    const leftX = mouseX - bounds.x;
-                    const topY = mouseY - bounds.y;
-                    const centerX = leftX - bounds.width / 2;
-                    const centerY = topY - bounds.height / 2;
-
-                    const moveX = centerX * 0.2;
-                    const moveY = centerY * 0.2;
-
-                    gsap.set(element, {
-                        x: moveX,
-                        y: moveY,
-                        scale: 1.05
-                    });
-                });
-
-                container.addEventListener('mouseleave', function() {
-                    gsap.to(element, {
-                        x: 0,
-                        y: 0,
-                        scale: 1,
-                        duration: 0.5,
-                        ease: "power3.out"
-                    });
-                });
-            });
-        }
-        console.log('Image parallax engine initialized successfully.');
-    }
-
-    function addParallaxEffect(selector) {
-        if (typeof gsap === 'undefined') return;
-    
-        function setupHoverParallax(element) {
-            if (element.dataset.parallaxSetup === 'true') return;
-            element.dataset.parallaxSetup = 'true';
-        
-            const container = element.closest('.relationship-card, .love-card, .gallery-item') || element.parentElement;
-            let bounds;
-        
-            container.addEventListener('mouseenter', function() {
-                bounds = element.getBoundingClientRect();
-            });
-
-            container.addEventListener('mousemove', function(e) {
-                if (!bounds) return;
-
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                const leftX = mouseX - bounds.x;
-                const topY = mouseY - bounds.y;
-                const centerX = leftX - bounds.width / 2;
-                const centerY = topY - bounds.height / 2;
-
-                const moveX = centerX * 0.2;
-                const moveY = centerY * 0.2;
-
-                gsap.set(element, {
-                    x: moveX,
-                    y: moveY,
-                    scale: 1.05
-                });
-            });
-        
-            container.addEventListener('mouseleave', function() {
-                gsap.to(element, {
-                    x: 0,
-                    y: 0,
-                    scale: 1,
-                    duration: 0.5,
-                    ease: "power3.out"
-                });
-            });
-        }
-    
-        const elements = document.querySelectorAll(selector);
-        elements.forEach(setupHoverParallax);
-    }
 
     function initBubbleGenerator() {
         const heroSection = document.querySelector('.hero-section');
@@ -269,6 +112,7 @@
             });
             gsap.ticker.lagSmoothing(0);
         }
+
         console.log('Smooth scroll initialized');
     }
 
@@ -427,7 +271,28 @@
         } else {
             heroQuote.style.display = 'none';
         }
-        addParallaxEffect('.hero-image');
+
+        if (typeof gsap !== 'undefined' && gsap.to) {
+            const applyParallax = function() {
+                gsap.to('.hero-image-wrapper', {
+                    yPercent: 20,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: '.hero-section',
+                        start: 'top top',
+                        end: 'bottom top',
+                        scrub: true,
+                    }
+                });
+            };
+
+            heroImage.addEventListener('load', applyParallax);
+
+            if (heroImage.complete && heroImage.naturalHeight !== 0) {
+                applyParallax();
+            }
+        }
+
         console.log('Hero section loaded');
     }
 
@@ -452,6 +317,7 @@
                 </div>
             `;
         }).join('');
+
         console.log('Identity section loaded');
     }
 
@@ -482,6 +348,7 @@
                 </div>
             `;
         }).join('');
+
         console.log('Bio sections loaded:', sections.length);
     }
 
@@ -494,6 +361,7 @@
                 switchTab(tabName);
             });
         });
+
         console.log('Navigation setup complete');
     }
 
@@ -737,6 +605,7 @@
     }
 
     function setupModals() {
+
         document.querySelectorAll('.modal-backdrop').forEach(function(backdrop) {
             backdrop.addEventListener('click', function() {
                 this.closest('.modal').classList.remove('active');
@@ -794,6 +663,7 @@
     window.openEventModal = openEventModal;
 
     function setupScrollToTop() {
+
         let scrollBtn = document.querySelector('.scroll-to-top');
         if (!scrollBtn) {
             scrollBtn = document.createElement('button');
@@ -822,39 +692,41 @@
     }
 
     function setupEraTooltips() {
-        let tooltip = document.getElementById('era-tooltip');
+        const tooltip = document.getElementById('era-tooltip');
         if (!tooltip) {
-            tooltip = document.createElement('div');
-            tooltip.id = 'era-tooltip';
-            tooltip.className = 'tooltip';
-            document.body.appendChild(tooltip);
+
+            const newTooltip = document.createElement('div');
+            newTooltip.id = 'era-tooltip';
+            newTooltip.className = 'tooltip';
+            document.body.appendChild(newTooltip);
+            return setupEraTooltips(); 
         }
 
         const eraDescriptions = {
-            'pre-52': 'Classic: The original DC timeline',
+            'pre-52': 'Classic: The original DC timeline before the 2011 reboot',
             'new-52': 'New 52: DC Comics reboot starting in 2011',
-            'rebirth': 'Rebirth: Restoration of legacy and hope',
-            'infinite-frontier': 'Infinite Frontier: Omniverse storytelling',
+            'rebirth': 'Rebirth: Restoration of legacy and hope starting in 2016',
+            'infinite-frontier': 'Infinite Frontier: Omniverse storytelling post-2021',
             'elseworlds': 'Elseworlds: Non-canon alternate reality stories',
-            'post-crisis': 'Post-Crisis: Following Crisis on Infinite Earths',
+            'post-crisis': 'Post-Crisis: Following Crisis on Infinite Earths (1985-2011)',
             'future-state': 'Future State: Dystopian future timeline'
         };
 
         document.addEventListener('mouseover', function(e) {
             const badge = e.target.closest('.era-badge');
-            if (badge && badge.dataset.era) {
+            if (badge) {
                 const era = badge.dataset.era;
-                if (eraDescriptions[era]) {
+                if (era && eraDescriptions[era]) {
                     tooltip.textContent = eraDescriptions[era];
                     tooltip.classList.add('active');
+                    updateTooltipPosition(e);
                 }
             }
         });
 
         document.addEventListener('mousemove', function(e) {
             if (tooltip.classList.contains('active')) {
-                tooltip.style.left = e.pageX + 15 + 'px';
-                tooltip.style.top = e.pageY + 15 + 'px';
+                updateTooltipPosition(e);
             }
         });
 
@@ -864,6 +736,11 @@
                 tooltip.classList.remove('active');
             }
         });
+
+        function updateTooltipPosition(e) {
+            tooltip.style.left = e.pageX + 15 + 'px';
+            tooltip.style.top = e.pageY + 15 + 'px';
+        }
 
         console.log('Era tooltips setup');
     }
