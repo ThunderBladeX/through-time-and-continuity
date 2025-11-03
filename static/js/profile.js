@@ -81,7 +81,7 @@
             rect.left < (window.innerWidth || document.documentElement.clientWidth)
         );
     }
-
+    
     function initImageParallax() {
         if (typeof gsap === 'undefined' || typeof gsap.quickTo === 'undefined') {
             console.warn('GSAP or gsap.quickTo not available. Skipping parallax effect.');
@@ -92,7 +92,6 @@
         images.forEach(img => {
             img.quickToX = gsap.quickTo(img, "x", { duration: 0.6, ease: "power3" });
             img.quickToY = gsap.quickTo(img, "y", { duration: 0.6, ease: "power3" });
-            img.style.transition = 'transform 0.5s ease'; 
         });
         function onMouseMove(e) {
             const moveX = (e.clientX / window.innerWidth) * 2 - 1;
@@ -105,7 +104,7 @@
             });
         }
         function onMouseLeave() {
-            images.forEach(img => {
+           images.forEach(img => {
                 img.quickToX(0);
                 img.quickToY(0);
             });
