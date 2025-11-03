@@ -1249,7 +1249,7 @@ html.lenis, html.lenis body {
 }
 
 .tooltip {
-    position: fixed;
+    position: absolute;
     background: rgba(26, 26, 26, 0.95);
     backdrop-filter: blur(15px);
     border: 1px solid var(--glass-border);
@@ -1259,14 +1259,14 @@ html.lenis, html.lenis body {
     color: var(--text-secondary);
     pointer-events: none;
     z-index: 4000;
-    opacity: 0;
+    display: none;
     transition: opacity 0.2s ease;
     max-width: 280px;
     transform: translate(-10px, -10px);
 }
 
 .tooltip.active {
-    opacity: 1;
+    display: block;
 }
 
 .empty-state,
