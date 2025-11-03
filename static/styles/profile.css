@@ -1491,24 +1491,6 @@ html.lenis, html.lenis body {
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms;
-        animation-iteration-count: 1;
-        transition-duration: 0.01ms;
-    }
-
-    .hero-image {
-        animation: none;
-    }
-
-    .scroll-indicator {
-        animation: indicatorFade 0.3s ease forwards;
-    }
-}
-
 @media (max-width: 1400px) {
     .profile-grid {
         grid-template-columns: 280px 1fr;
@@ -1527,6 +1509,135 @@ html.lenis, html.lenis body {
 
     .gallery-grid {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-image,
+    .scroll-indicator,
+    .hero-name {
+        animation: none;
+    }
+
+    .nav-item,
+    .glass-card,
+    .info-item,
+    .timeline-card,
+    .relationship-card,
+    .love-card,
+    .gallery-item,
+    .admin-btn,
+    .edit-btn,
+    .scroll-to-top,
+    .timeline-item,
+    .timeline-item.visible,
+    .nav-item::before,
+    .nav-item::after,
+    .info-item::before,
+    .timeline-card::after,
+    .relationship-card::before,
+    .relationship-card::after,
+    .love-name::after,
+    .relationship-card:hover .relationship-avatar,
+    .love-card:hover::before {
+        transition: none;
+        transform: none;
+    }
+}
+
+@media (max-width: 1024px) {
+    .hero-name {
+        text-shadow: 0 0 20px rgba(var(--accent-rgb), 0.3);
+        filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.2));
+        animation: heroGlow 2.5s ease-in-out infinite alternate, gradientFlow 6s linear infinite;
+    }
+
+    @keyframes heroGlow {
+        0% { filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.2)); }
+        100% { filter: drop-shadow(0 0 30px rgba(var(--accent-rgb), 0.4)); }
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-backdrop,
+    .nav-wrapper,
+    .glass-card {
+        backdrop-filter: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+        padding: var(--spacing-xl);
+    }
+
+    .sidebar-nav {
+        position: static;
+        top: auto;
+        animation: none;
+        opacity: 1;
+    }
+
+    .content-area {
+        animation: none;
+        opacity: 1;
+    }
+
+    .hero-image {
+        animation: none;
+    }
+
+    .hero-name {
+        font-size: clamp(2.5rem, 12vw, 4rem);
+        filter: none;
+        animation: none;
+    }
+
+    .hero-quote {
+        font-size: 1.2rem;
+        padding: 0 1rem;
+    }
+
+    .glass-card,
+    .relationship-card,
+    .love-card {
+        filter: none;
+    }
+
+    .scroll-indicator {
+        bottom: 30px;
+    }
+
+    .timeline-track {
+        padding-left: 50px;
+    }
+
+    .timeline-track::before {
+        left: 15px;
+    }
+
+    .timeline-item::before {
+        left: -35px;
+        width: 16px;
+        height: 16px;
+        border-width: 3px;
+    }
+
+    .relationships-grid,
+    .love-grid,
+    .gallery-grid,
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .relationship-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .relationship-avatar {
+        margin-bottom: var(--spacing-sm);
     }
 }
 
