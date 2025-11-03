@@ -84,16 +84,51 @@
 
     function initImageParallax() {
         const images = document.querySelectorAll('.hero-image, .relationship-avatar, .love-avatar, .gallery-item img');
-        
-        document.addEventListener('mousemove', function(e) {
-            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
-            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-            
+        const parallaxStrength = 15;
+
+        let animationFrameId = null;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+
+        function updateParallax(e) {
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            animationFrameId = requestAnimationFrame(animate);
+        }
+
+        function animate() {
+            const moveX = (lastMouseX - window.innerWidth / 2) / (window.innerWidth / 2) * parallaxStrength;
+            const moveY = (lastMouseY - window.innerHeight / 2) / (window.innerHeight / 2) * parallaxStrength;
+
             images.forEach(function(img) {
                 if (isElementInViewport(img)) {
+                    img.style.transition = 'transform 0.3s ease-out';
                     img.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
                 }
             });
+        }
+
+        function resetParallax() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            animationFrameId = requestAnimationFrame(() => {
+                images.forEach(function(img) {
+                    img.style.transition = 'transform 0.6s ease-in-out';
+                    img.style.transform = 'translate(0, 0) scale(1)';
+                });
+            });
+        }
+
+        document.addEventListener('mousemove', updateParallax);
+        window.addEventListener('mouseout', (e) => {
+            if (!e.relatedTarget || e.relatedTarget.nodeName === 'HTML') {
+                resetParallax();
+            }
         });
         console.log('Image parallax initialized');
     }
