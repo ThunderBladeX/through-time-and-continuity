@@ -16,7 +16,7 @@
         initSmoothScroll();
         init3DBackground();
         initBubbleGenerator();
-        initHeroParallax()
+        initHeroParallax();
 
         await loadCharacter();
 
