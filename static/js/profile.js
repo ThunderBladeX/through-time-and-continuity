@@ -83,54 +83,36 @@
     }
 
     function initImageParallax() {
-        const images = document.querySelectorAll('.hero-image, .relationship-avatar, .love-avatar, .gallery-item img');
-        const parallaxStrength = 15;
-
-        let animationFrameId = null;
-        let lastMouseX = 0;
-        let lastMouseY = 0;
-
-        function updateParallax(e) {
-            lastMouseX = e.clientX;
-            lastMouseY = e.clientY;
-
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-            }
-            animationFrameId = requestAnimationFrame(animate);
+        if (typeof gsap === 'undefined' || typeof gsap.quickTo === 'undefined') {
+            console.warn('GSAP or gsap.quickTo not available. Skipping parallax effect.');
+            return;
         }
-
-        function animate() {
-            const moveX = (lastMouseX - window.innerWidth / 2) / (window.innerWidth / 2) * parallaxStrength;
-            const moveY = (lastMouseY - window.innerHeight / 2) / (window.innerHeight / 2) * parallaxStrength;
-
-            images.forEach(function(img) {
+        const images = gsap.utils.toArray('.hero-image, .relationship-avatar, .love-avatar, .gallery-item img');
+        const parallaxStrength = 20; 
+        images.forEach(img => {
+            img.quickToX = gsap.quickTo(img, "x", { duration: 0.6, ease: "power3" });
+            img.quickToY = gsap.quickTo(img, "y", { duration: 0.6, ease: "power3" });
+            img.style.transition = 'transform 0.5s ease'; 
+        });
+        function onMouseMove(e) {
+            const moveX = (e.clientX / window.innerWidth) * 2 - 1;
+            const moveY = (e.clientY / window.innerHeight) * 2 - 1;
+            images.forEach(img => {
                 if (isElementInViewport(img)) {
-                    img.style.transition = 'transform 0.3s ease-out';
-                    img.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+                    img.quickToX(moveX * parallaxStrength);
+                    img.quickToY(moveY * parallaxStrength);
                 }
             });
         }
-
-        function resetParallax() {
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-            }
-            animationFrameId = requestAnimationFrame(() => {
-                images.forEach(function(img) {
-                    img.style.transition = 'transform 0.6s ease-in-out';
-                    img.style.transform = 'translate(0, 0) scale(1)';
-                });
+        function onMouseLeave() {
+            images.forEach(img => {
+                img.quickToX(0);
+                img.quickToY(0);
             });
         }
-
-        document.addEventListener('mousemove', updateParallax);
-        window.addEventListener('mouseout', (e) => {
-            if (!e.relatedTarget || e.relatedTarget.nodeName === 'HTML') {
-                resetParallax();
-            }
-        });
-        console.log('Image parallax initialized');
+        window.addEventListener('mousemove', onMouseMove);
+        document.body.addEventListener('mouseleave', onMouseLeave);
+        console.log('Image parallax initialized successfully.');
     }
 
     function initBubbleGenerator() {
