@@ -16,6 +16,7 @@
         initSmoothScroll();
         init3DBackground();
         initBubbleGenerator();
+        initHeroParallax()
 
         await loadCharacter();
 
@@ -258,29 +259,50 @@
         } else {
             heroQuote.style.display = 'none';
         }
-
-        if (typeof gsap !== 'undefined' && gsap.to) {
-            const applyParallax = function() {
-                gsap.to('.hero-image-wrapper', {
-                    yPercent: 20,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: '.hero-section',
-                        start: 'top top',
-                        end: 'bottom top',
-                        scrub: true,
-                    }
-                });
-            };
-
-            heroImage.addEventListener('load', applyParallax);
-
-            if (heroImage.complete && heroImage.naturalHeight !== 0) {
-                applyParallax();
-            }
-        }
-
         console.log('Hero section loaded');
+    }
+
+    function initHeroParallax() {
+        if (isReducedMotion) return;
+
+        const heroImageWrapper = document.querySelector('.hero-image-wrapper');
+        const heroImage = document.getElementById('hero-image');
+        const heroContent = document.querySelector('.hero-content');
+    
+        if (!heroImageWrapper || !heroImage) return;
+
+        heroImageWrapper.addEventListener('mousemove', function(e) {
+            const rect = heroImageWrapper.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const percentX = (x - centerX) / centerX;
+            const percentY = (y - centerY) / centerY;
+
+            const moveX = percentX * 15;
+            const moveY = percentY * 15;
+
+            heroImage.style.transform = `scale(1.08) translate(${moveX}px, ${moveY}px)`;
+            heroImage.style.transition = 'transform 0.1s ease-out';
+        
+            if (heroContent) {
+                heroContent.style.transform = `translateZ(15px) translate(${moveX * 0.3}px, ${moveY * 0.3}px)`;
+                heroContent.style.transition = 'transform 0.1s ease-out';
+            }
+        });
+
+        heroImageWrapper.addEventListener('mouseleave', function() {
+            heroImage.style.transform = 'scale(1.02)';
+            heroImage.style.transition = 'transform 0.4s ease';
+        
+            if (heroContent) {
+                heroContent.style.transform = 'translateZ(10px)';
+                heroContent.style.transition = 'transform 0.4s ease';
+            }
+        });
     }
 
     function loadIdentitySection() {
