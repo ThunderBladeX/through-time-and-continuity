@@ -9,24 +9,7 @@
 
     let currentCharacter = null;
     let currentTab = 'overview';
-    let parallaxImages = []; 
     let lenis = null;
-    let mouseX = 0;
-    let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
-
-    document.addEventListener('mousemove', function(e) {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
-
-    function updateCursor() {
-        cursorX += (mouseX - cursorX) * 0.1;
-        cursorY += (mouseY - cursorY) * 0.1;
-        requestAnimationFrame(updateCursor);
-    }
-    updateCursor();
 
     document.addEventListener('DOMContentLoaded', async function() {
         console.log('Profile page initializing...');
@@ -85,50 +68,8 @@
             rect.left < (window.innerWidth || document.documentElement.clientWidth)
         );
     }
+
     
-    function initImageParallax() {
-        if (typeof gsap === 'undefined' || typeof gsap.quickTo === 'undefined') {
-            console.warn('GSAP or gsap.quickTo not available. Skipping parallax effect.');
-            return;
-        }
-
-        function onMouseMove(e) {
-            const moveX = (e.clientX / window.innerWidth) * 2 - 1;
-            const moveY = (e.clientY / window.innerHeight) * 2 - 1;
-            parallaxImages.forEach(img => {
-                if (document.body.contains(img) && isElementInViewport(img)) {
-                    img.quickToX(moveX * parallaxStrength);
-                    img.quickToY(moveY * parallaxStrength);
-                }
-            });
-        }
-
-        function onMouseLeave() {
-            parallaxImages.forEach(img => {
-                if (document.body.contains(img)) {
-                    img.quickToX(0);
-                    img.quickToY(0);
-                }
-            });
-        }
-
-        window.addEventListener('mousemove', onMouseMove);
-        document.body.addEventListener('mouseleave', onMouseLeave);
-        console.log('Image parallax engine initialized successfully.');
-    }
-
-    function addParallaxEffect(selector) {
-        if (typeof gsap === 'undefined') return;
-
-        const newImages = gsap.utils.toArray(selector);
-        newImages.forEach(img => {
-            if (!img.quickToX) {
-                img.quickToX = gsap.quickTo(img, "x", { duration: 0.6, ease: "power3" });
-                img.quickToY = gsap.quickTo(img, "y", { duration: 0.6, ease: "power3" });
-                parallaxImages.push(img);
-            }
-        });
-    }
 
     function initBubbleGenerator() {
         const heroSection = document.querySelector('.hero-section');
