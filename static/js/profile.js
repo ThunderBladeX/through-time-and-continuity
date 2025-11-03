@@ -119,6 +119,8 @@
     }
 
     function init3DBackground() {
+        if (isReducedMotion) return;
+
         if (typeof THREE === 'undefined') {
             console.warn('THREE.js not loaded, skipping 3D background');
             return;
@@ -1018,7 +1020,6 @@
 
             console.log('Character theme applied:', currentCharacter.color_primary);
         }
-
         applyCharacterCSSFile();
     }
 
@@ -1187,7 +1188,7 @@
     console.log('Keyboard shortcuts:');
     console.log('- Alt + 1-5: Switch tabs');
     console.log('- Alt + T: Scroll to top');
-    console.log('- Hover over elements to edit (if logged in)');
+    console.log('- Hover over elements to edit');
 
 })();
 
