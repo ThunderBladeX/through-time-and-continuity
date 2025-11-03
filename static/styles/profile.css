@@ -65,7 +65,6 @@ html.lenis, html.lenis body {
     left: -5%;
     width: 110%;
     height: 120%;
-    will-change: transform;
     overflow: hidden;
 }
 
@@ -87,13 +86,6 @@ html.lenis, html.lenis body {
     object-fit: cover;
     object-position: center;
     filter: brightness(0.6) contrast(1.2) saturate(1.1);
-    animation: heroZoom 20s ease-in-out infinite alternate;
-    transform-origin: center center;
-}
-
-@keyframes heroZoom {
-    0% { transform: scale(1.05); }
-    100% { transform: scale(1.15); }
 }
 
 .hero-gradient {
@@ -1452,17 +1444,6 @@ html.lenis, html.lenis body {
     background: rgba(var(--accent-rgb), 0.7);
 }
 
-.hero-image,
-.hero-name,
-.nav-item,
-.glass-card,
-.timeline-item,
-.relationship-avatar,
-.love-avatar,
-.gallery-item img {
-    will-change: transform;
-}
-
 .bubble {
     position: absolute;
     background: radial-gradient(circle, rgba(var(--accent-rgb), 0.4), transparent);
@@ -1514,12 +1495,8 @@ html.lenis, html.lenis body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .hero-image,
     .scroll-indicator,
-    .hero-name {
-        animation: none;
-    }
-
+    .hero-name,
     .nav-item,
     .glass-card,
     .info-item,
@@ -1543,6 +1520,7 @@ html.lenis, html.lenis body {
     .love-card:hover::before {
         transition: none;
         transform: none;
+        animation: none;
     }
 }
 
