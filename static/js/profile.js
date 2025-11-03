@@ -5,9 +5,11 @@
     const characterId = pathParts[pathParts.length - 1];
     const urlParams = new URLSearchParams(window.location.search);
     const highlightEventId = urlParams.get('event');
+    const parallaxStrength = 20;
 
     let currentCharacter = null;
     let currentTab = 'overview';
+    let parallaxImages = []; 
     let lenis = null;
     let mouseX = 0;
     let mouseY = 0;
@@ -41,6 +43,8 @@
         setupScrollToTop();
         setupEraTooltips();
         setupContributionButtons();
+
+        addParallaxEffect('.hero-image');
 
         setTimeout(function() {
             setupScrollAnimations();
@@ -87,31 +91,43 @@
             console.warn('GSAP or gsap.quickTo not available. Skipping parallax effect.');
             return;
         }
-        const images = gsap.utils.toArray('.hero-image, .relationship-avatar, .love-avatar, .gallery-item img');
-        const parallaxStrength = 20; 
-        images.forEach(img => {
-            img.quickToX = gsap.quickTo(img, "x", { duration: 0.6, ease: "power3" });
-            img.quickToY = gsap.quickTo(img, "y", { duration: 0.6, ease: "power3" });
-        });
+
         function onMouseMove(e) {
             const moveX = (e.clientX / window.innerWidth) * 2 - 1;
             const moveY = (e.clientY / window.innerHeight) * 2 - 1;
-            images.forEach(img => {
-                if (isElementInViewport(img)) {
+            parallaxImages.forEach(img => {
+                if (document.body.contains(img) && isElementInViewport(img)) {
                     img.quickToX(moveX * parallaxStrength);
                     img.quickToY(moveY * parallaxStrength);
                 }
             });
         }
+
         function onMouseLeave() {
-           images.forEach(img => {
-                img.quickToX(0);
-                img.quickToY(0);
+            parallaxImages.forEach(img => {
+                if (document.body.contains(img)) {
+                    img.quickToX(0);
+                    img.quickToY(0);
+                }
             });
         }
+
         window.addEventListener('mousemove', onMouseMove);
         document.body.addEventListener('mouseleave', onMouseLeave);
-        console.log('Image parallax initialized successfully.');
+        console.log('Image parallax engine initialized successfully.');
+    }
+
+    function addParallaxEffect(selector) {
+        if (typeof gsap === 'undefined') return;
+
+        const newImages = gsap.utils.toArray(selector);
+        newImages.forEach(img => {
+            if (!img.quickToX) {
+                img.quickToX = gsap.quickTo(img, "x", { duration: 0.6, ease: "power3" });
+                img.quickToY = gsap.quickTo(img, "y", { duration: 0.6, ease: "power3" });
+                parallaxImages.push(img);
+            }
+        });
     }
 
     function initBubbleGenerator() {
@@ -555,6 +571,7 @@
                 `;
             }).join('');
 
+            addParallaxEffect('#relationships-grid .relationship-avatar');
             console.log('Relationships loaded:', relationships.length);
         } catch (error) {
             container.innerHTML = '<p class="error-state">Failed to load relationships.</p>';
@@ -619,6 +636,7 @@
             });
 
             container.innerHTML = html;
+            addParallaxEffect('#love-interests-content .love-avatar');
             console.log('Love interests loaded');
         } catch (error) {
             container.innerHTML = '<p class="error-state">Failed to load love interests.</p>';
@@ -632,6 +650,7 @@
 
         if (typeof initGallery === 'function') {
             initGallery(characterId);
+            setTimeout(() => addParallaxEffect('#gallery-grid .gallery-item img'), 100);
             console.log('Gallery initialized');
         } else {
             container.innerHTML = '<p class="empty-state">Gallery functionality not available.</p>';
