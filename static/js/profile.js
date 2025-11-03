@@ -79,66 +79,82 @@
         const heroImage = document.querySelector('.hero-image');
     
         if (heroSection && heroImage) {
+            let bounds;
+
+            heroSection.addEventListener('mouseenter', function() {
+                bounds = heroSection.getBoundingClientRect();
+            });
+
             heroSection.addEventListener('mousemove', function(e) {
-                const rect = heroSection.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width;
-                const y = (e.clientY - rect.top) / rect.height;
+                if (!bounds) return;
 
-                const moveX = (x - 0.5) * 2;
-                const moveY = (y - 0.5) * 2;
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+                const leftX = mouseX - bounds.x;
+                const topY = mouseY - bounds.y;
+                const centerX = leftX - bounds.width / 2;
+                const centerY = topY - bounds.height / 2;
 
-                gsap.to(heroImage, {
-                    rotateY: moveX * 5,
-                    rotateX: -moveY * 5,
-                    transformPerspective: 1000,
-                    duration: 0.5,
-                    ease: "power2.out"
+                const percentX = centerX / (bounds.width / 2);
+                const percentY = centerY / (bounds.height / 2);
+
+                const moveX = percentX * 20;
+                const moveY = percentY * 20;
+
+                gsap.set(heroImage, {
+                    x: moveX,
+                    y: moveY,
+                    scale: 1.05
                 });
             });
-        
+
             heroSection.addEventListener('mouseleave', function() {
                 gsap.to(heroImage, {
-                    rotateY: 0,
-                    rotateX: 0,
-                    duration: 0.8,
-                    ease: "power2.out"
+                    x: 0,
+                    y: 0,
+                    scale: 1,
+                    duration: 0.6,
+                    ease: "power3.out"
                 });
             });
         }
 
         function setupHoverParallax(selector) {
             const elements = document.querySelectorAll(selector);
-        
+
             elements.forEach(function(element) {
                 const container = element.closest('.relationship-card, .love-card, .gallery-item') || element.parentElement;
-            
+                let bounds;
+
                 container.addEventListener('mouseenter', function() {
-                    element.dataset.parallaxActive = 'true';
+                    bounds = element.getBoundingClientRect();
                 });
-            
+
                 container.addEventListener('mousemove', function(e) {
-                    if (element.dataset.parallaxActive !== 'true') return;
-                
-                    const rect = container.getBoundingClientRect();
-                    const x = (e.clientX - rect.left) / rect.width;
-                    const y = (e.clientY - rect.top) / rect.height;
-                
-                    const moveX = (x - 0.5) * 30;
-                    const moveY = (y - 0.5) * 30;
-                
-                    gsap.to(element, {
+                    if (!bounds) return;
+
+                    const mouseX = e.clientX;
+                    const mouseY = e.clientY;
+                    const leftX = mouseX - bounds.x;
+                    const topY = mouseY - bounds.y;
+                    const centerX = leftX - bounds.width / 2;
+                    const centerY = topY - bounds.height / 2;
+
+                    const moveX = centerX * 0.2;
+                    const moveY = centerY * 0.2;
+
+                    gsap.set(element, {
                         x: moveX,
                         y: moveY,
-                        duration: 0.3,
-                        ease: "power2.out"
+                        scale: 1.05
                     });
                 });
-            
+
                 container.addEventListener('mouseleave', function() {
-                    element.dataset.parallaxActive = 'false';
                     gsap.to(element, {
                         x: 0,
                         y: 0,
+                        scale: 1,
                         duration: 0.5,
                         ease: "power3.out"
                     });
@@ -149,52 +165,55 @@
         setupHoverParallax('.relationship-avatar');
         setupHoverParallax('.love-avatar');
         setupHoverParallax('.gallery-item img');
-    
+
         console.log('Image parallax engine initialized successfully.');
     }
 
     function addParallaxEffect(selector) {
         if (typeof gsap === 'undefined') return;
-
+    
         function setupHoverParallax(element) {
             if (element.dataset.parallaxSetup === 'true') return;
             element.dataset.parallaxSetup = 'true';
         
             const container = element.closest('.relationship-card, .love-card, .gallery-item') || element.parentElement;
+            let bounds;
         
             container.addEventListener('mouseenter', function() {
-                element.dataset.parallaxActive = 'true';
+                bounds = element.getBoundingClientRect();
             });
-        
+
             container.addEventListener('mousemove', function(e) {
-                if (element.dataset.parallaxActive !== 'true') return;
-            
-                const rect = container.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width;
-                const y = (e.clientY - rect.top) / rect.height;
+                if (!bounds) return;
 
-                const moveX = (x - 0.5) * 30;
-                const moveY = (y - 0.5) * 30;
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+                const leftX = mouseX - bounds.x;
+                const topY = mouseY - bounds.y;
+                const centerX = leftX - bounds.width / 2;
+                const centerY = topY - bounds.height / 2;
 
-                gsap.to(element, {
+                const moveX = centerX * 0.2;
+                const moveY = centerY * 0.2;
+
+                gsap.set(element, {
                     x: moveX,
                     y: moveY,
-                    duration: 0.3,
-                    ease: "power2.out"
+                    scale: 1.05
                 });
             });
-
+        
             container.addEventListener('mouseleave', function() {
-                element.dataset.parallaxActive = 'false';
                 gsap.to(element, {
                     x: 0,
                     y: 0,
+                    scale: 1,
                     duration: 0.5,
                     ease: "power3.out"
                 });
             });
         }
-
+    
         const elements = document.querySelectorAll(selector);
         elements.forEach(setupHoverParallax);
     }
