@@ -9,6 +9,22 @@
     let currentCharacter = null;
     let currentTab = 'overview';
     let lenis = null;
+    let mouseX = 0;
+    let mouseY = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+
+    document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    function updateCursor() {
+        cursorX += (mouseX - cursorX) * 0.1;
+        cursorY += (mouseY - cursorY) * 0.1;
+        requestAnimationFrame(updateCursor);
+    }
+    updateCursor();
 
     document.addEventListener('DOMContentLoaded', async function() {
         console.log('Profile page initializing...');
@@ -52,7 +68,18 @@
                 }
             });
         }
+        console.log('✨ Profile fully loaded!');
     });
+
+    function isElementInViewport(el) {
+        const rect = el.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
 
     function initBubbleGenerator() {
         const heroSection = document.querySelector('.hero-section');
@@ -694,7 +721,6 @@
     function setupEraTooltips() {
         const tooltip = document.getElementById('era-tooltip');
         if (!tooltip) {
-
             const newTooltip = document.createElement('div');
             newTooltip.id = 'era-tooltip';
             newTooltip.className = 'tooltip';
@@ -703,12 +729,12 @@
         }
 
         const eraDescriptions = {
-            'pre-52': 'Classic: The original DC timeline before the 2011 reboot',
+            'pre-52': 'Classic: The original DC timeline',
             'new-52': 'New 52: DC Comics reboot starting in 2011',
-            'rebirth': 'Rebirth: Restoration of legacy and hope starting in 2016',
-            'infinite-frontier': 'Infinite Frontier: Omniverse storytelling post-2021',
+            'rebirth': 'Rebirth: Restoration of legacy and hope',
+            'infinite-frontier': 'Infinite Frontier: Omniverse storytelling',
             'elseworlds': 'Elseworlds: Non-canon alternate reality stories',
-            'post-crisis': 'Post-Crisis: Following Crisis on Infinite Earths (1985-2011)',
+            'post-crisis': 'Post-Crisis: Following Crisis on Infinite Earths',
             'future-state': 'Future State: Dystopian future timeline'
         };
 
