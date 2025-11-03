@@ -632,7 +632,6 @@
     }
 
     function setupModals() {
-
         document.querySelectorAll('.modal-backdrop').forEach(function(backdrop) {
             backdrop.addEventListener('click', function() {
                 this.closest('.modal').classList.remove('active');
@@ -690,7 +689,6 @@
     window.openEventModal = openEventModal;
 
     function setupScrollToTop() {
-
         let scrollBtn = document.querySelector('.scroll-to-top');
         if (!scrollBtn) {
             scrollBtn = document.createElement('button');
@@ -719,13 +717,12 @@
     }
 
     function setupEraTooltips() {
-        const tooltip = document.getElementById('era-tooltip');
+        let tooltip = document.getElementById('era-tooltip');
         if (!tooltip) {
-            const newTooltip = document.createElement('div');
-            newTooltip.id = 'era-tooltip';
-            newTooltip.className = 'tooltip';
-            document.body.appendChild(newTooltip);
-            return setupEraTooltips(); 
+            tooltip = document.createElement('div');
+            tooltip.id = 'era-tooltip';
+            tooltip.className = 'tooltip';
+            document.body.appendChild(tooltip);
         }
 
         const eraDescriptions = {
@@ -740,19 +737,19 @@
 
         document.addEventListener('mouseover', function(e) {
             const badge = e.target.closest('.era-badge');
-            if (badge) {
+            if (badge && badge.dataset.era) {
                 const era = badge.dataset.era;
-                if (era && eraDescriptions[era]) {
+                if (eraDescriptions[era]) {
                     tooltip.textContent = eraDescriptions[era];
                     tooltip.classList.add('active');
-                    updateTooltipPosition(e);
                 }
             }
         });
 
         document.addEventListener('mousemove', function(e) {
             if (tooltip.classList.contains('active')) {
-                updateTooltipPosition(e);
+                tooltip.style.left = e.pageX + 15 + 'px';
+                tooltip.style.top = e.pageY + 15 + 'px';
             }
         });
 
@@ -762,11 +759,6 @@
                 tooltip.classList.remove('active');
             }
         });
-
-        function updateTooltipPosition(e) {
-            tooltip.style.left = e.pageX + 15 + 'px';
-            tooltip.style.top = e.pageY + 15 + 'px';
-        }
 
         console.log('Era tooltips setup');
     }
