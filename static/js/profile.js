@@ -69,7 +69,135 @@
         );
     }
 
+    function initImageParallax() {
+        if (typeof gsap === 'undefined') {
+            console.warn('GSAP not available. Skipping parallax effect.');
+            return;
+        }
+
+        const heroSection = document.querySelector('.hero-section');
+        const heroImage = document.querySelector('.hero-image');
     
+        if (heroSection && heroImage) {
+            heroSection.addEventListener('mousemove', function(e) {
+                const rect = heroSection.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width;
+                const y = (e.clientY - rect.top) / rect.height;
+
+                const moveX = (x - 0.5) * 2;
+                const moveY = (y - 0.5) * 2;
+
+                gsap.to(heroImage, {
+                    rotateY: moveX * 5,
+                    rotateX: -moveY * 5,
+                    transformPerspective: 1000,
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            });
+        
+            heroSection.addEventListener('mouseleave', function() {
+                gsap.to(heroImage, {
+                    rotateY: 0,
+                    rotateX: 0,
+                    duration: 0.8,
+                    ease: "power2.out"
+                });
+            });
+        }
+
+        function setupHoverParallax(selector) {
+            const elements = document.querySelectorAll(selector);
+        
+            elements.forEach(function(element) {
+                const container = element.closest('.relationship-card, .love-card, .gallery-item') || element.parentElement;
+            
+                container.addEventListener('mouseenter', function() {
+                    element.dataset.parallaxActive = 'true';
+                });
+            
+                container.addEventListener('mousemove', function(e) {
+                    if (element.dataset.parallaxActive !== 'true') return;
+                
+                    const rect = container.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) / rect.width;
+                    const y = (e.clientY - rect.top) / rect.height;
+                
+                    const moveX = (x - 0.5) * 30;
+                    const moveY = (y - 0.5) * 30;
+                
+                    gsap.to(element, {
+                        x: moveX,
+                        y: moveY,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+            
+                container.addEventListener('mouseleave', function() {
+                    element.dataset.parallaxActive = 'false';
+                    gsap.to(element, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.5,
+                        ease: "power3.out"
+                    });
+                });
+            });
+        }
+
+        setupHoverParallax('.relationship-avatar');
+        setupHoverParallax('.love-avatar');
+        setupHoverParallax('.gallery-item img');
+    
+        console.log('Image parallax engine initialized successfully.');
+    }
+
+    function addParallaxEffect(selector) {
+        if (typeof gsap === 'undefined') return;
+
+        function setupHoverParallax(element) {
+            if (element.dataset.parallaxSetup === 'true') return;
+            element.dataset.parallaxSetup = 'true';
+        
+            const container = element.closest('.relationship-card, .love-card, .gallery-item') || element.parentElement;
+        
+            container.addEventListener('mouseenter', function() {
+                element.dataset.parallaxActive = 'true';
+            });
+        
+            container.addEventListener('mousemove', function(e) {
+                if (element.dataset.parallaxActive !== 'true') return;
+            
+                const rect = container.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width;
+                const y = (e.clientY - rect.top) / rect.height;
+
+                const moveX = (x - 0.5) * 30;
+                const moveY = (y - 0.5) * 30;
+
+                gsap.to(element, {
+                    x: moveX,
+                    y: moveY,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+
+            container.addEventListener('mouseleave', function() {
+                element.dataset.parallaxActive = 'false';
+                gsap.to(element, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.5,
+                    ease: "power3.out"
+                });
+            });
+        }
+
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(setupHoverParallax);
+    }
 
     function initBubbleGenerator() {
         const heroSection = document.querySelector('.hero-section');
