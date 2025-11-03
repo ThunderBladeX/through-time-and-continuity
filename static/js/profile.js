@@ -32,6 +32,7 @@
         initSmoothScroll();
         init3DBackground();
         initBubbleGenerator();
+        initImageParallax()
 
         await loadCharacter();
 
@@ -79,6 +80,22 @@
             rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
             rect.right <= (window.innerWidth || document.documentElement.clientWidth)
         );
+    }
+
+    function initImageParallax() {
+        const images = document.querySelectorAll('.hero-image, .relationship-avatar, .love-avatar, .gallery-item img');
+        
+        document.addEventListener('mousemove', function(e) {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            
+            images.forEach(function(img) {
+                if (isElementInViewport(img)) {
+                    img.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+                }
+            });
+        });
+        console.log('Image parallax initialized');
     }
 
     function initBubbleGenerator() {
@@ -139,7 +156,6 @@
             });
             gsap.ticker.lagSmoothing(0);
         }
-
         console.log('Smooth scroll initialized');
     }
 
@@ -298,28 +314,6 @@
         } else {
             heroQuote.style.display = 'none';
         }
-
-        if (typeof gsap !== 'undefined' && gsap.to) {
-            const applyParallax = function() {
-                gsap.to('.hero-image-wrapper', {
-                    yPercent: 20,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: '.hero-section',
-                        start: 'top top',
-                        end: 'bottom top',
-                        scrub: true,
-                    }
-                });
-            };
-
-            heroImage.addEventListener('load', applyParallax);
-
-            if (heroImage.complete && heroImage.naturalHeight !== 0) {
-                applyParallax();
-            }
-        }
-
         console.log('Hero section loaded');
     }
 
@@ -344,7 +338,6 @@
                 </div>
             `;
         }).join('');
-
         console.log('Identity section loaded');
     }
 
@@ -375,7 +368,6 @@
                 </div>
             `;
         }).join('');
-
         console.log('Bio sections loaded:', sections.length);
     }
 
@@ -388,7 +380,6 @@
                 switchTab(tabName);
             });
         });
-
         console.log('Navigation setup complete');
     }
 
