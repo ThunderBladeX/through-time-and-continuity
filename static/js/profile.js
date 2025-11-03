@@ -27,8 +27,6 @@
         setupEraTooltips();
         setupContributionButtons();
 
-        addParallaxEffect('.hero-image');
-
         setTimeout(function() {
             setupScrollAnimations();
         }, 500);
@@ -161,11 +159,6 @@
                 });
             });
         }
-
-        setupHoverParallax('.relationship-avatar');
-        setupHoverParallax('.love-avatar');
-        setupHoverParallax('.gallery-item img');
-
         console.log('Image parallax engine initialized successfully.');
     }
 
@@ -434,6 +427,7 @@
         } else {
             heroQuote.style.display = 'none';
         }
+        addParallaxEffect('.hero-image');
         console.log('Hero section loaded');
     }
 
@@ -659,7 +653,6 @@
                 `;
             }).join('');
 
-            addParallaxEffect('#relationships-grid .relationship-avatar');
             console.log('Relationships loaded:', relationships.length);
         } catch (error) {
             container.innerHTML = '<p class="error-state">Failed to load relationships.</p>';
@@ -724,7 +717,6 @@
             });
 
             container.innerHTML = html;
-            addParallaxEffect('#love-interests-content .love-avatar');
             console.log('Love interests loaded');
         } catch (error) {
             container.innerHTML = '<p class="error-state">Failed to load love interests.</p>';
@@ -738,7 +730,6 @@
 
         if (typeof initGallery === 'function') {
             initGallery(characterId);
-            setTimeout(() => addParallaxEffect('#gallery-grid .gallery-item img'), 100);
             console.log('Gallery initialized');
         } else {
             container.innerHTML = '<p class="empty-state">Gallery functionality not available.</p>';
