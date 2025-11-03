@@ -6,6 +6,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const highlightEventId = urlParams.get('event');
 
+    let isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let currentCharacter = null;
     let currentTab = 'overview';
     let lenis = null;
