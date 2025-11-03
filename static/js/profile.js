@@ -155,16 +155,6 @@
             const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
             scene.add(particlesMesh);
 
-            const geometry = new THREE.IcosahedronGeometry(1, 0);
-            const material = new THREE.MeshBasicMaterial({
-                color: 0x3b82f6,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.1,
-            });
-            const mesh = new THREE.Mesh(geometry, material);
-            scene.add(mesh);
-
             let mouseX = 0;
             let mouseY = 0;
             document.addEventListener('mousemove', function(e) {
@@ -177,9 +167,6 @@
 
                 particlesMesh.rotation.y += 0.0005;
                 particlesMesh.rotation.x += 0.0003;
-
-                mesh.rotation.x += 0.001;
-                mesh.rotation.y += 0.002;
 
                 camera.position.x = mouseX * 0.5;
                 camera.position.y = mouseY * 0.5;
