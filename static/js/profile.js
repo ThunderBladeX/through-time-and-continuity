@@ -266,22 +266,15 @@
     function initHeroParallax() {
         if (isReducedMotion) return;
 
+        const heroSection = document.querySelector('.hero-section');
         const heroImageWrapper = document.querySelector('.hero-image-wrapper');
         const heroImage = document.getElementById('hero-image');
         const heroContent = document.querySelector('.hero-content');
     
-        if (!heroImageWrapper || !heroImage) return;
+        if (!heroSection || !heroImageWrapper || !heroImage) return;
 
-        heroImage.style.transform = 'scale(1.02)';
-        heroImage.style.transition = 'transform 0.4s ease';
-
-        if (heroContent) {
-            heroContent.style.transform = 'translateZ(10px)';
-            heroContent.style.transition = 'transform 0.4s ease';
-        }
-
-        heroImageWrapper.addEventListener('mousemove', function(e) {
-            const rect = heroImageWrapper.getBoundingClientRect();
+        heroSection.addEventListener('mousemove', function(e) {
+            const rect = heroSection.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
@@ -291,24 +284,24 @@
             const percentX = (x - centerX) / centerX;
             const percentY = (y - centerY) / centerY;
 
-            const moveX = percentX * 15;
-            const moveY = percentY * 15;
+            const moveX = percentX * -40;
+            const moveY = percentY * -40;
 
-            heroImage.style.transform = `scale(1.08) translate(${moveX}px, ${moveY}px)`;
+            heroImage.style.transform = `translate(${moveX}px, ${moveY}px)`;
             heroImage.style.transition = 'transform 0.1s ease-out';
         
             if (heroContent) {
-                heroContent.style.transform = `translateZ(15px) translate(${moveX * 0.3}px, ${moveY * 0.3}px)`;
+                heroContent.style.transform = `translate(${moveX * 0.3}px, ${moveY * 0.3}px)`;
                 heroContent.style.transition = 'transform 0.1s ease-out';
             }
         });
 
-        heroImageWrapper.addEventListener('mouseleave', function() {
-            heroImage.style.transform = 'scale(1.02)';
+        heroSection.addEventListener('mouseleave', function() {
+            heroImage.style.transform = 'translate(0, 0)';
             heroImage.style.transition = 'transform 0.4s ease';
         
             if (heroContent) {
-                heroContent.style.transform = 'translateZ(10px)';
+                heroContent.style.transform = 'translate(0, 0)';
                 heroContent.style.transition = 'transform 0.4s ease';
             }
         });
