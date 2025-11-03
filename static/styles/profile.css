@@ -1262,6 +1262,7 @@ html.lenis, html.lenis body {
     opacity: 0;
     transition: opacity 0.2s ease;
     max-width: 280px;
+    transform: translate(-10px, -10px);
 }
 
 .tooltip.active {
