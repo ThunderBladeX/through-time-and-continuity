@@ -271,6 +271,14 @@
     
         if (!heroImageWrapper || !heroImage) return;
 
+        heroImage.style.transform = 'scale(1.02)';
+        heroImage.style.transition = 'transform 0.4s ease';
+
+        if (heroContent) {
+            heroContent.style.transform = 'translateZ(10px)';
+            heroContent.style.transition = 'transform 0.4s ease';
+        }
+
         heroImageWrapper.addEventListener('mousemove', function(e) {
             const rect = heroImageWrapper.getBoundingClientRect();
             const x = e.clientX - rect.left;
