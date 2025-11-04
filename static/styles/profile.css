@@ -1537,6 +1537,10 @@ html.lenis, html.lenis body {
         0% { filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.2)); }
         100% { filter: drop-shadow(0 0 30px rgba(var(--accent-rgb), 0.4)); }
     }
+
+    :root {
+        --shadow-glow: 0 0 20px rgba(var(--accent-rgb), 0.15)
+    }
 }
 
 @media (max-width: 768px) {
