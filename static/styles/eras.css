@@ -770,15 +770,6 @@ transform: none !important;
 border-width: 1px;
 }
 }
-@media (prefers-reduced-motion: reduce) {
-*,
-*::before,
-*::after {
-animation-duration: 0.01ms !important;
-animation-iteration-count: 1 !important;
-transition-duration: 0.01ms !important;
-}
-}
 @media (prefers-contrast: high) {
 .timeline-card[data-era] {
 border-width: 2px;
