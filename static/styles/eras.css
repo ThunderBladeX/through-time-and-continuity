@@ -1,333 +1,808 @@
-/* Pre-New 52: Smoke, worn newspaper, yellow tint */
+@layer base, effects, animations, responsive;
+@layer base {
+:root {
+--pre-52-primary: oklch(0.52 0.08 45);
+--pre-52-secondary: oklch(0.42 0.06 40);
+--pre-52-accent: oklch(0.48 0.07 42);
+--pre-52-glow: oklch(0.52 0.08 45 / 0.25);
+--new-52-primary: oklch(0.58 0.24 25);
+--new-52-secondary: oklch(0.42 0.21 22);
+--new-52-accent: oklch(0.65 0.26 28);
+--new-52-glow: oklch(0.58 0.24 25 / 0.35);
+--rebirth-primary: oklch(0.62 0.19 250);
+--rebirth-secondary: oklch(0.48 0.16 245);
+--rebirth-accent: oklch(0.70 0.22 255);
+--rebirth-glow: oklch(0.62 0.19 250 / 0.4);
+--infinite-frontier-primary: oklch(0.60 0.21 290);
+--infinite-frontier-secondary: oklch(0.45 0.19 285);
+--infinite-frontier-accent: oklch(0.68 0.24 295);
+--infinite-frontier-glow: oklch(0.60 0.21 290 / 0.38);
+--elseworlds-primary: oklch(0.72 0.15 70);
+--elseworlds-secondary: oklch(0.62 0.13 65);
+--elseworlds-accent: oklch(0.78 0.17 75);
+--elseworlds-glow: oklch(0.72 0.15 70 / 0.28);
+--post-crisis-primary: oklch(0.52 0.02 260);
+--post-crisis-secondary: oklch(0.40 0.01 255);
+--post-crisis-accent: oklch(0.45 0.08 35);
+--post-crisis-glow: oklch(0.52 0.02 260 / 0.32);
+--future-state-primary: oklch(0.68 0.15 210);
+--future-state-secondary: oklch(0.54 0.13 205);
+--future-state-accent: oklch(0.72 0.18 330);
+--future-state-glow: oklch(0.68 0.15 210 / 0.45);
+--ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+--ease-dramatic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+--ease-gentle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+}
+@layer base {
 .era-badge[data-era="pre-52"],
 .event-card[data-era="pre-52"]::before {
-    background: linear-gradient(135deg, #8b7355, #6b5644);
-    box-shadow: 0 2px 8px rgba(139, 115, 85, 0.3);
+background: linear-gradient(
+135deg in oklch,
+var(--pre-52-primary),
+var(--pre-52-secondary)
+);
+box-shadow:
+0 2px 8px var(--pre-52-glow),
+0 1px 3px oklch(0 0 0 / 0.1);
 }
-
 .event-card[data-era="pre-52"] {
-    border-color: #8b7355;
-    background: linear-gradient(to bottom, rgba(139, 115, 85, 0.05), transparent);
-    position: relative;
+border: 1px solid var(--pre-52-primary);
+background:
+linear-gradient(
+to bottom in oklch,
+color-mix(in oklch, var(--pre-52-primary) 8%, transparent),
+transparent
+);
+position: relative;
+container-type: inline-size;
 }
-
+}
+@layer effects {
 .event-card[data-era="pre-52"]::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 2px,
-            rgba(139, 115, 85, 0.03) 2px,
-            rgba(139, 115, 85, 0.03) 4px
-        );
-    pointer-events: none;
-    opacity: 0.5;
+content: '';
+position: absolute;
+inset: 0;
+background-image:
+repeating-linear-gradient(
+0deg,
+transparent,
+transparent 2px,
+color-mix(in oklch, var(--pre-52-primary) 5%, transparent) 2px,
+color-mix(in oklch, var(--pre-52-primary) 5%, transparent) 4px
+),
+repeating-linear-gradient(
+90deg,
+transparent,
+transparent 3px,
+color-mix(in oklch, var(--pre-52-accent) 3%, transparent) 3px,
+color-mix(in oklch, var(--pre-52-accent) 3%, transparent) 6px
+);
+pointer-events: none;
+opacity: 0.5;
+mix-blend-mode: multiply;
 }
-
-/* New 52: Static, blueprint, 3D depth, brutalism with red */
+.event-card[data-era="pre-52"]::before {
+content: '';
+position: absolute;
+inset: 0;
+background:
+radial-gradient(
+circle at 15% 20%,
+color-mix(in oklch, var(--pre-52-secondary) 12%, transparent),
+transparent 40%
+),
+radial-gradient(
+circle at 85% 80%,
+color-mix(in oklch, var(--pre-52-accent) 10%, transparent),
+transparent 35%
+);
+pointer-events: none;
+opacity: 0.6;
+}
+}
+@layer animations {
+@media (prefers-reduced-motion: no-preference) {
+.event-card[data-era="pre-52"]:hover {
+animation: vintage-flutter 0.6s var(--ease-gentle);
+box-shadow:
+0 8px 24px color-mix(in oklch, var(--pre-52-primary) 20%, transparent),
+0 4px 12px color-mix(in oklch, var(--pre-52-glow) 40%, transparent);
+}
+@keyframes vintage-flutter {
+0%, 100% { transform: translateY(0) rotate(0deg); }
+25% { transform: translateY(-2px) rotate(-0.3deg); }
+75% { transform: translateY(-1px) rotate(0.2deg); }
+}
+}
+}
+@layer base {
 .era-badge[data-era="new-52"],
 .event-card[data-era="new-52"]::before {
-    background: linear-gradient(135deg, #dc2626, #991b1b);
-    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+background: linear-gradient(
+135deg in oklch,
+var(--new-52-primary),
+var(--new-52-secondary)
+);
+box-shadow:
+0 2px 8px var(--new-52-glow),
+0 4px 16px color-mix(in oklch, var(--new-52-primary) 30%, transparent);
 }
-
 .event-card[data-era="new-52"] {
-    border-color: #dc2626;
-    background: 
-        repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            rgba(220, 38, 38, 0.02) 10px,
-            rgba(220, 38, 38, 0.02) 20px
-        );
-    box-shadow: 
-        2px 2px 0 rgba(220, 38, 38, 0.1),
-        4px 4px 0 rgba(220, 38, 38, 0.05);
+border: 2px solid var(--new-52-primary);
+background:
+repeating-linear-gradient(
+45deg in oklch,
+transparent,
+transparent 10px,
+color-mix(in oklch, var(--new-52-primary) 4%, transparent) 10px,
+color-mix(in oklch, var(--new-52-primary) 4%, transparent) 20px
+);
+box-shadow:
+3px 3px 0 color-mix(in oklch, var(--new-52-primary) 15%, transparent),
+6px 6px 0 color-mix(in oklch, var(--new-52-secondary) 8%, transparent);
+position: relative;
+container-type: inline-size;
 }
-
+}
+@layer effects {
 .event-card[data-era="new-52"]::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        radial-gradient(circle, rgba(220, 38, 38, 0.03) 1px, transparent 1px);
-    background-size: 20px 20px;
-    pointer-events: none;
-    animation: staticNoise 0.5s steps(4) infinite;
+content: '';
+position: absolute;
+inset: 0;
+background-image:
+radial-gradient(
+circle,
+color-mix(in oklch, var(--new-52-primary) 6%, transparent) 1px,
+transparent 1px
+),
+repeating-linear-gradient(
+0deg,
+transparent,
+transparent 1px,
+color-mix(in oklch, var(--new-52-primary) 3%, transparent) 1px,
+color-mix(in oklch, var(--new-52-primary) 3%, transparent) 2px
+);
+background-size: 20px 20px, 100% 100%;
+pointer-events: none;
+mix-blend-mode: overlay;
 }
-
-@keyframes staticNoise {
-    0%, 100% { opacity: 0.1; }
-    50% { opacity: 0.2; }
+.event-card[data-era="new-52"]::before {
+content: '';
+position: absolute;
+inset: 0;
+background-image:
+repeating-linear-gradient(
+0deg,
+transparent,
+transparent 19px,
+color-mix(in oklch, var(--new-52-accent) 8%, transparent) 19px,
+color-mix(in oklch, var(--new-52-accent) 8%, transparent) 20px
+),
+repeating-linear-gradient(
+90deg,
+transparent,
+transparent 19px,
+color-mix(in oklch, var(--new-52-accent) 8%, transparent) 19px,
+color-mix(in oklch, var(--new-52-accent) 8%, transparent) 20px
+);
+pointer-events: none;
+opacity: 0.4;
 }
-
-/* Rebirth: Dawn, glass, constellation, halo effect */
+}
+@layer animations {
+@media (prefers-reduced-motion: no-preference) {
+.event-card[data-era="new-52"]::after {
+animation: static-pulse 0.5s steps(4) infinite;
+}
+@keyframes static-pulse {
+0%, 100% { opacity: 0.15; }
+50% { opacity: 0.3; }
+}
+.event-card[data-era="new-52"]:hover {
+transform: translateY(-4px);
+box-shadow:
+4px 4px 0 color-mix(in oklch, var(--new-52-primary) 20%, transparent),
+8px 8px 0 color-mix(in oklch, var(--new-52-secondary) 12%, transparent),
+0 12px 32px var(--new-52-glow);
+transition: all 0.3s var(--ease-dramatic);
+}
+}
+}
+@layer base {
 .era-badge[data-era="rebirth"],
 .event-card[data-era="rebirth"]::before {
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+background: linear-gradient(
+135deg in oklch,
+var(--rebirth-primary),
+var(--rebirth-secondary)
+);
+box-shadow:
+0 2px 8px var(--rebirth-glow),
+0 0 20px color-mix(in oklch, var(--rebirth-primary) 25%, transparent);
 }
-
 .event-card[data-era="rebirth"] {
-    border-color: #3b82f6;
-    background: 
-        radial-gradient(circle at top left, rgba(59, 130, 246, 0.08), transparent 50%),
-        radial-gradient(circle at bottom right, rgba(29, 78, 216, 0.05), transparent 50%);
+border: 1px solid var(--rebirth-primary);
+background:
+radial-gradient(
+circle at top left in oklch,
+color-mix(in oklch, var(--rebirth-primary) 12%, transparent),
+transparent 50%
+),
+radial-gradient(
+circle at bottom right in oklch,
+color-mix(in oklch, var(--rebirth-secondary) 8%, transparent),
+transparent 50%
+);
+position: relative;
+container-type: inline-size;
+backdrop-filter: blur(0px);
+transition: backdrop-filter 0.4s var(--ease-smooth);
 }
-
+}
+@layer effects {
 .event-card[data-era="rebirth"]::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        radial-gradient(circle, rgba(255, 255, 255, 0.4) 1px, transparent 1px),
-        radial-gradient(circle, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
-    background-size: 50px 50px, 80px 80px;
-    background-position: 0 0, 25px 25px;
-    pointer-events: none;
-    opacity: 0.3;
+content: '';
+position: absolute;
+inset: 0;
+background-image:
+radial-gradient(
+circle,
+oklch(1 0 0 / 0.6) 1px,
+transparent 1px
+),
+radial-gradient(
+circle,
+oklch(1 0 0 / 0.4) 1.5px,
+transparent 1.5px
+),
+radial-gradient(
+circle,
+oklch(1 0 0 / 0.3) 1px,
+transparent 1px
+);
+background-size: 50px 50px, 80px 80px, 35px 35px;
+background-position: 0 0, 25px 25px, 40px 15px;
+pointer-events: none;
+opacity: 0.25;
 }
-
-.event-card[data-era="rebirth"]:hover::after {
-    opacity: 0.5;
-    animation: constellation 20s linear infinite;
+.event-card[data-era="rebirth"]::before {
+content: '';
+position: absolute;
+inset: 0;
+background:
+linear-gradient(
+120deg in oklch,
+transparent 0%,
+color-mix(in oklch, var(--rebirth-accent) 15%, transparent) 45%,
+transparent 55%,
+color-mix(in oklch, var(--rebirth-primary) 10%, transparent) 100%
+);
+pointer-events: none;
+opacity: 0;
+transition: opacity 0.5s var(--ease-smooth);
 }
-
-@keyframes constellation {
-    from { transform: translate(0, 0); }
-    to { transform: translate(50px, 50px); }
 }
-
+@layer animations {
+@media (prefers-reduced-motion: no-preference) {
+.event-card[data-era="rebirth"]::after {
+animation: constellation-drift 25s linear infinite;
+}
+@keyframes constellation-drift {
+from { transform: translate(0, 0); }
+to { transform: translate(50px, 50px); }
+}
 .event-card[data-era="rebirth"]:hover {
-    box-shadow: 
-        var(--shadow-lg),
-        0 0 30px rgba(59, 130, 246, 0.3);
+backdrop-filter: blur(8px) brightness(1.05);
+box-shadow:
+0 8px 32px var(--rebirth-glow),
+0 0 40px color-mix(in oklch, var(--rebirth-primary) 35%, transparent),
+inset 0 1px 1px oklch(1 0 0 / 0.1);
+transition: all 0.4s var(--ease-smooth);
 }
-
-/* Infinite Frontier: Planetary rings, comet trails */
+.event-card[data-era="rebirth"]:hover::before {
+opacity: 1;
+animation: glass-shimmer 2s var(--ease-smooth) infinite;
+}
+.event-card[data-era="rebirth"]:hover::after {
+opacity: 0.5;
+}
+@keyframes glass-shimmer {
+0%, 100% { transform: translateX(-100%); }
+50% { transform: translateX(100%); }
+}
+}
+}
+@layer base {
 .era-badge[data-era="infinite-frontier"],
 .event-card[data-era="infinite-frontier"]::before {
-    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+background: linear-gradient(
+135deg in oklch,
+var(--infinite-frontier-primary),
+var(--infinite-frontier-secondary)
+);
+box-shadow:
+0 2px 8px var(--infinite-frontier-glow),
+0 0 16px color-mix(in oklch, var(--infinite-frontier-primary) 28%, transparent);
 }
-
 .event-card[data-era="infinite-frontier"] {
-    border-color: #8b5cf6;
-    background: 
-        conic-gradient(from 45deg at 50% 50%, 
-            transparent 0deg, 
-            rgba(139, 92, 246, 0.1) 90deg, 
-            transparent 180deg,
-            rgba(109, 40, 217, 0.1) 270deg,
-            transparent 360deg
-        );
+border: 1px solid var(--infinite-frontier-primary);
+background:
+conic-gradient(
+from 45deg at 50% 50% in oklch,
+transparent 0deg,
+color-mix(in oklch, var(--infinite-frontier-primary) 12%, transparent) 90deg,
+transparent 180deg,
+color-mix(in oklch, var(--infinite-frontier-secondary) 10%, transparent) 270deg,
+transparent 360deg
+);
+position: relative;
+container-type: inline-size;
 }
-
+}
+@layer effects {
 .event-card[data-era="infinite-frontier"]::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: 
-        linear-gradient(90deg, transparent 0%, rgba(139, 92, 246, 0.2) 50%, transparent 100%);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity var(--transition-slow);
+content: '';
+position: absolute;
+top: -50%;
+left: -50%;
+width: 200%;
+height: 200%;
+background:
+linear-gradient(
+90deg in oklch,
+transparent 0%,
+color-mix(in oklch, var(--infinite-frontier-primary) 30%, transparent) 50%,
+transparent 100%
+);
+pointer-events: none;
+opacity: 0;
+transition: opacity 0.3s var(--ease-smooth);
 }
-
+.event-card[data-era="infinite-frontier"]::before {
+content: '';
+position: absolute;
+inset: 0;
+background:
+radial-gradient(
+ellipse 80% 30% at 50% 50%,
+transparent 49%,
+color-mix(in oklch, var(--infinite-frontier-accent) 15%, transparent) 50%,
+transparent 51%
+),
+radial-gradient(
+ellipse 60% 20% at 50% 50%,
+transparent 48%,
+color-mix(in oklch, var(--infinite-frontier-primary) 10%, transparent) 50%,
+transparent 52%
+);
+pointer-events: none;
+opacity: 0.3;
+animation: orbital-rotation 20s linear infinite;
+}
+@keyframes orbital-rotation {
+from { transform: rotate(0deg); }
+to { transform: rotate(360deg); }
+}
+}
+@layer animations {
+@media (prefers-reduced-motion: no-preference) {
 .event-card[data-era="infinite-frontier"]:hover::after {
-    opacity: 1;
-    animation: cometTrail 2s ease-out;
+opacity: 1;
+animation: comet-trail 1.8s var(--ease-dramatic);
 }
-
-@keyframes cometTrail {
-    from {
-        transform: translateX(-100%) rotate(-45deg);
-    }
-    to {
-        transform: translateX(100%) rotate(-45deg);
-    }
+@keyframes comet-trail {
+from {
+transform: translate(-100%, -100%) rotate(-45deg);
+opacity: 0;
 }
-
-/* Elseworlds: Notebook, collage, smudged paint */
+20% {
+opacity: 1;
+}
+to {
+transform: translate(100%, 100%) rotate(-45deg);
+opacity: 0;
+}
+}
+.event-card[data-era="infinite-frontier"]:hover {
+box-shadow:
+0 8px 32px var(--infinite-frontier-glow),
+0 0 48px color-mix(in oklch, var(--infinite-frontier-primary) 40%, transparent),
+inset 0 0 20px color-mix(in oklch, var(--infinite-frontier-accent) 8%, transparent);
+transform: translateY(-3px) scale(1.01);
+transition: all 0.4s var(--ease-smooth);
+}
+}
+}
+@layer base {
 .era-badge[data-era="elseworlds"],
 .event-card[data-era="elseworlds"]::before {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+background: linear-gradient(
+135deg in oklch,
+var(--elseworlds-primary),
+var(--elseworlds-secondary)
+);
+box-shadow:
+0 2px 8px var(--elseworlds-glow),
+2px 2px 4px oklch(0 0 0 / 0.15);
 }
-
 .event-card[data-era="elseworlds"] {
-    border-color: #f59e0b;
-    background: 
-        linear-gradient(to bottom, 
-            rgba(245, 158, 11, 0.03),
-            rgba(217, 119, 6, 0.03)
-        );
-    position: relative;
+border: 1px solid var(--elseworlds-primary);
+background:
+linear-gradient(
+to bottom in oklch,
+color-mix(in oklch, var(--elseworlds-primary) 5%, transparent),
+color-mix(in oklch, var(--elseworlds-secondary) 5%, transparent)
+);
+position: relative;
+container-type: inline-size;
 }
-
+}
+@layer effects {
 .event-card[data-era="elseworlds"]::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 25px,
-            rgba(245, 158, 11, 0.1) 25px,
-            rgba(245, 158, 11, 0.1) 26px
-        );
-    pointer-events: none;
+content: '';
+position: absolute;
+inset: 0;
+background-image:
+repeating-linear-gradient(
+0deg,
+transparent,
+transparent 24px,
+color-mix(in oklch, var(--elseworlds-primary) 12%, transparent) 24px,
+color-mix(in oklch, var(--elseworlds-primary) 12%, transparent) 25px
+),
+linear-gradient(
+90deg,
+transparent 0,
+transparent 40px,
+color-mix(in oklch, var(--elseworlds-accent) 20%, transparent) 40px,
+color-mix(in oklch, var(--elseworlds-accent) 20%, transparent) 42px,
+transparent 42px
+);
+pointer-events: none;
+opacity: 0.7;
 }
-
+.event-card[data-era="elseworlds"]::before {
+content: '';
+position: absolute;
+inset: 0;
+background:
+radial-gradient(
+ellipse at 25% 30%,
+color-mix(in oklch, var(--elseworlds-secondary) 8%, transparent),
+transparent 40%
+),
+radial-gradient(
+ellipse at 75% 70%,
+color-mix(in oklch, var(--elseworlds-accent) 6%, transparent),
+transparent 35%
+),
+linear-gradient(
+95deg,
+transparent 0%,
+color-mix(in oklch, var(--elseworlds-primary) 4%, transparent) 50%,
+transparent 100%
+);
+pointer-events: none;
+opacity: 0.5;
+}
+}
+@layer animations {
+@media (prefers-reduced-motion: no-preference) {
 .event-card[data-era="elseworlds"]:hover {
-    transform: translateX(8px) rotate(0.5deg);
+transform: translateX(6px) translateY(-2px) rotate(0.8deg);
+box-shadow:
+-3px 3px 8px color-mix(in oklch, var(--elseworlds-primary) 20%, transparent),
+-6px 6px 16px var(--elseworlds-glow);
+transition: all 0.3s var(--ease-dramatic);
 }
-
-/* Post-Crisis: Charcoal, steel, rust, burn marks */
+.event-card[data-era="elseworlds"]::after {
+animation: paper-flutter 3s var(--ease-gentle) infinite;
+}
+@keyframes paper-flutter {
+0%, 100% { opacity: 0.7; }
+50% { opacity: 0.85; }
+}
+}
+}
+@layer base {
 .era-badge[data-era="post-crisis"],
 .event-card[data-era="post-crisis"]::before {
-    background: linear-gradient(135deg, #6b7280, #4b5563);
-    box-shadow: 0 2px 8px rgba(107, 114, 128, 0.4);
+background: linear-gradient(
+135deg in oklch,
+var(--post-crisis-primary),
+var(--post-crisis-secondary)
+);
+box-shadow:
+0 2px 8px var(--post-crisis-glow),
+0 4px 12px oklch(0 0 0 / 0.25);
 }
-
 .event-card[data-era="post-crisis"] {
-    border-color: #6b7280;
-    background: 
-        linear-gradient(135deg, 
-            rgba(107, 114, 128, 0.05) 0%,
-            transparent 50%,
-            rgba(139, 69, 19, 0.05) 100%
-        );
+border: 1px solid var(--post-crisis-primary);
+background:
+linear-gradient(
+135deg in oklch,
+color-mix(in oklch, var(--post-crisis-primary) 8%, transparent) 0%,
+transparent 50%,
+color-mix(in oklch, var(--post-crisis-accent) 8%, transparent) 100%
+);
+position: relative;
+container-type: inline-size;
 }
-
+}
+@layer effects {
 .event-card[data-era="post-crisis"]::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        radial-gradient(ellipse at 20% 30%, rgba(139, 69, 19, 0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 70%, rgba(75, 85, 99, 0.15) 0%, transparent 50%);
-    pointer-events: none;
+content: '';
+position: absolute;
+inset: 0;
+background-image:
+radial-gradient(
+ellipse at 20% 30%,
+color-mix(in oklch, var(--post-crisis-accent) 22%, transparent) 0%,
+transparent 40%
+),
+radial-gradient(
+ellipse at 80% 70%,
+color-mix(in oklch, var(--post-crisis-secondary) 20%, transparent) 0%,
+transparent 35%
+),
+radial-gradient(
+circle at 50% 50%,
+color-mix(in oklch, var(--post-crisis-accent) 12%, transparent) 0%,
+transparent 60%
+);
+pointer-events: none;
+opacity: 0.7;
+mix-blend-mode: multiply;
 }
-
-/* Future State: Cyberpunk, pixel art, neon */
+.event-card[data-era="post-crisis"]::before {
+content: '';
+position: absolute;
+inset: 0;
+background-image:
+repeating-linear-gradient(
+85deg,
+transparent,
+transparent 2px,
+color-mix(in oklch, var(--post-crisis-primary) 6%, transparent) 2px,
+color-mix(in oklch, var(--post-crisis-primary) 6%, transparent) 3px
+),
+linear-gradient(
+180deg,
+color-mix(in oklch, var(--post-crisis-secondary) 4%, transparent),
+transparent 50%,
+color-mix(in oklch, var(--post-crisis-primary) 4%, transparent)
+);
+pointer-events: none;
+opacity: 0.6;
+}
+}
+@layer animations {
+@media (prefers-reduced-motion: no-preference) {
+.event-card[data-era="post-crisis"]:hover {
+box-shadow:
+0 6px 24px var(--post-crisis-glow),
+0 8px 32px oklch(0 0 0 / 0.3),
+inset 0 0 15px color-mix(in oklch, var(--post-crisis-secondary) 10%, transparent);
+transform: translateY(-2px);
+transition: all 0.35s var(--ease-smooth);
+}
+}
+}
+@layer base {
 .era-badge[data-era="future-state"],
 .event-card[data-era="future-state"]::before {
-    background: linear-gradient(135deg, #06b6d4, #0891b2);
-    box-shadow: 0 2px 8px rgba(6, 182, 212, 0.5);
+background: linear-gradient(
+135deg in oklch,
+var(--future-state-primary),
+var(--future-state-secondary)
+);
+box-shadow:
+0 2px 8px var(--future-state-glow),
+0 0 24px color-mix(in oklch, var(--future-state-primary) 40%, transparent);
 }
-
 .event-card[data-era="future-state"] {
-    border-color: #06b6d4;
-    background: 
-        linear-gradient(135deg, 
-            rgba(6, 182, 212, 0.08) 0%,
-            transparent 50%,
-            rgba(236, 72, 153, 0.05) 100%
-        );
-    box-shadow: 
-        inset 0 0 20px rgba(6, 182, 212, 0.1);
+border: 1px solid var(--future-state-primary);
+background:
+linear-gradient(
+135deg in oklch,
+color-mix(in oklch, var(--future-state-primary) 10%, transparent) 0%,
+transparent 50%,
+color-mix(in oklch, var(--future-state-accent) 8%, transparent) 100%
+);
+box-shadow:
+inset 0 0 20px color-mix(in oklch, var(--future-state-primary) 12%, transparent);
+position: relative;
+container-type: inline-size;
 }
-
+}
+@layer effects {
 .event-card[data-era="future-state"]::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 2px,
-            rgba(6, 182, 212, 0.1) 2px,
-            rgba(6, 182, 212, 0.1) 4px
-        ),
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 2px,
-            rgba(6, 182, 212, 0.1) 2px,
-            rgba(6, 182, 212, 0.1) 4px
-        );
-    background-size: 4px 4px;
-    pointer-events: none;
-    animation: pixelScan 4s linear infinite;
+content: '';
+position: absolute;
+inset: 0;
+background-image:
+repeating-linear-gradient(
+0deg,
+transparent,
+transparent 2px,
+color-mix(in oklch, var(--future-state-primary) 12%, transparent) 2px,
+color-mix(in oklch, var(--future-state-primary) 12%, transparent) 4px
+),
+repeating-linear-gradient(
+90deg,
+transparent,
+transparent 2px,
+color-mix(in oklch, var(--future-state-primary) 12%, transparent) 2px,
+color-mix(in oklch, var(--future-state-primary) 12%, transparent) 4px
+);
+background-size: 4px 4px;
+pointer-events: none;
 }
-
-@keyframes pixelScan {
-    0% { opacity: 0.2; }
-    50% { opacity: 0.4; }
-    100% { opacity: 0.2; }
+.event-card[data-era="future-state"]::before {
+content: '';
+position: absolute;
+inset: 0;
+background:
+linear-gradient(
+45deg in oklch,
+color-mix(in oklch, var(--future-state-primary) 8%, transparent) 0%,
+transparent 30%,
+color-mix(in oklch, var(--future-state-accent) 6%, transparent) 70%,
+transparent 100%
+);
+pointer-events: none;
+opacity: 0;
+transition: opacity 0.3s var(--ease-smooth);
 }
-
+}
+@layer animations {
+@media (prefers-reduced-motion: no-preference) {
+.event-card[data-era="future-state"]::after {
+animation: pixel-scan 4s linear infinite;
+}
+@keyframes pixel-scan {
+0% { opacity: 0.25; }
+50% { opacity: 0.45; }
+100% { opacity: 0.25; }
+}
 .event-card[data-era="future-state"]:hover {
-    box-shadow: 
-        var(--shadow-lg),
-        0 0 30px rgba(6, 182, 212, 0.4),
-        inset 0 0 20px rgba(6, 182, 212, 0.2);
+box-shadow:
+0 8px 32px var(--future-state-glow),
+0 0 48px color-mix(in oklch, var(--future-state-primary) 50%, transparent),
+inset 0 0 24px color-mix(in oklch, var(--future-state-primary) 18%, transparent);
+transform: translateY(-3px) scale(1.005);
+transition: all 0.35s var(--ease-smooth);
 }
-
-/* Activity Feed Era Badges */
+.event-card[data-era="future-state"]:hover::before {
+opacity: 1;
+animation: holographic-glitch 0.8s var(--ease-dramatic) infinite;
+}
+@keyframes holographic-glitch {
+0%, 100% {
+transform: translateX(0);
+opacity: 0.4;
+}
+25% {
+transform: translateX(-2px);
+opacity: 0.7;
+}
+75% {
+transform: translateX(2px);
+opacity: 0.5;
+}
+}
+}
+}
+@layer base {
+.activity-era-badge {
+padding: 0.25rem 0.75rem;
+border-radius: 9999px;
+font-size: 0.75rem;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.05em;
+color: oklch(1 0 0);
+position: relative;
+overflow: hidden;
+transition: all 0.3s var(--ease-smooth);
+}
 .activity-era-badge[data-era="pre-52"] {
-    background: linear-gradient(135deg, #8b7355, #6b5644);
+background: linear-gradient(135deg in oklch, var(--pre-52-primary), var(--pre-52-secondary));
 }
-
 .activity-era-badge[data-era="new-52"] {
-    background: linear-gradient(135deg, #dc2626, #991b1b);
+background: linear-gradient(135deg in oklch, var(--new-52-primary), var(--new-52-secondary));
 }
-
 .activity-era-badge[data-era="rebirth"] {
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+background: linear-gradient(135deg in oklch, var(--rebirth-primary), var(--rebirth-secondary));
 }
-
 .activity-era-badge[data-era="infinite-frontier"] {
-    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+background: linear-gradient(135deg in oklch, var(--infinite-frontier-primary), var(--infinite-frontier-secondary));
 }
-
 .activity-era-badge[data-era="elseworlds"] {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+background: linear-gradient(135deg in oklch, var(--elseworlds-primary), var(--elseworlds-secondary));
 }
-
 .activity-era-badge[data-era="post-crisis"] {
-    background: linear-gradient(135deg, #6b7280, #4b5563);
+background: linear-gradient(135deg in oklch, var(--post-crisis-primary), var(--post-crisis-secondary));
 }
-
 .activity-era-badge[data-era="future-state"] {
-    background: linear-gradient(135deg, #06b6d4, #0891b2);
+background: linear-gradient(135deg in oklch, var(--future-state-primary), var(--future-state-secondary));
 }
-
-/* Reduce animations on mobile */
+}
+@layer effects {
+.activity-era-badge::before {
+content: '';
+position: absolute;
+inset: 0;
+background: linear-gradient(
+120deg,
+transparent 0%,
+oklch(1 0 0 / 0.2) 50%,
+transparent 100%
+);
+transform: translateX(-100%);
+transition: transform 0.6s var(--ease-smooth);
+}
+}
+@layer animations {
+@media (prefers-reduced-motion: no-preference) {
+.activity-era-badge:hover::before {
+transform: translateX(100%);
+}
+.activity-era-badge:hover {
+transform: scale(1.05);
+filter: brightness(1.1);
+}
+}
+}
+@layer responsive {
 @media (max-width: 768px) {
-    .event-card[data-era]::after {
-        animation: none !important;
-    }
-    
-    .event-card:hover {
-        transform: none !important;
-    }
+.event-card[data-era]::after,
+.event-card[data-era]::before {
+animation: none !important;
+}
+.event-card:hover {
+transform: none !important;
+}
+}
+@container (max-width: 400px) {
+.event-card[data-era] {
+border-width: 1px;
+}
+}
+@media (prefers-reduced-motion: reduce) {
+*,
+*::before,
+*::after {
+animation-duration: 0.01ms !important;
+animation-iteration-count: 1 !important;
+transition-duration: 0.01ms !important;
+}
+}
+@media (prefers-contrast: high) {
+.event-card[data-era] {
+border-width: 2px;
+}
+.era-badge[data-era],
+.activity-era-badge[data-era] {
+outline: 2px solid currentColor;
+outline-offset: 2px;
+}
+}
+@media (prefers-color-scheme: dark) {
+.event-card[data-era]::before,
+.event-card[data-era]::after {
+opacity: 0.8;
+}
+}
+}
+@media print {
+.event-card[data-era]::before,
+.event-card[data-era]::after {
+display: none;
+}
+.event-card[data-era] {
+background: none !important;
+box-shadow: none !important;
+}
 }
