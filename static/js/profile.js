@@ -269,6 +269,7 @@
 
     function initHeroParallax() {
         if (isReducedMotion) return;
+        if (window.innerWidth < 768) return;
 
         const heroSection = document.querySelector('.hero-section');
         const heroImageWrapper = document.querySelector('.hero-image-wrapper');
