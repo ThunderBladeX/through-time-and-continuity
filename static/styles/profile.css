@@ -279,13 +279,13 @@ html.lenis, html.lenis body {
 
 .sidebar-nav {
     position: sticky;
-    top: 100px;
     height: fit-content;
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
     animation: slideInLeft 0.8s ease-out forwards;
     opacity: 0;
+    top: var(--spacing-2xl);
 }
 
 @keyframes slideInLeft {
