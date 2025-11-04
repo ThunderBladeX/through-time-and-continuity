@@ -792,6 +792,7 @@
         editBtn.className = 'edit-btn';
         editBtn.innerHTML = '✎';
         editBtn.title = 'Suggest an Edit';
+        editBtn.setAttribute('aria-label', 'Suggest an Edit');
         editBtn.onclick = function(e) {
             e.stopPropagation();
             handleEdit(element);
@@ -935,6 +936,8 @@
     }
 
     function setupScrollAnimations() {
+        if (isReducedMotion) return;
+
         if (typeof gsap === 'undefined' || !gsap.utils) {
             console.log('GSAP not available, skipping scroll animations');
             return;
