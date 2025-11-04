@@ -1,105 +1,106 @@
 @layer base, effects, animations, responsive;
 @layer base {
-:root {
---pre-52-primary: oklch(0.52 0.08 45);
---pre-52-secondary: oklch(0.42 0.06 40);
---pre-52-accent: oklch(0.48 0.07 42);
---pre-52-glow: oklch(0.52 0.08 45 / 0.25);
---new-52-primary: oklch(0.58 0.24 25);
---new-52-secondary: oklch(0.42 0.21 22);
---new-52-accent: oklch(0.65 0.26 28);
---new-52-glow: oklch(0.58 0.24 25 / 0.35);
---rebirth-primary: oklch(0.62 0.19 250);
---rebirth-secondary: oklch(0.48 0.16 245);
---rebirth-accent: oklch(0.70 0.22 255);
---rebirth-glow: oklch(0.62 0.19 250 / 0.4);
---infinite-frontier-primary: oklch(0.60 0.21 290);
---infinite-frontier-secondary: oklch(0.45 0.19 285);
---infinite-frontier-accent: oklch(0.68 0.24 295);
---infinite-frontier-glow: oklch(0.60 0.21 290 / 0.38);
---elseworlds-primary: oklch(0.72 0.15 70);
---elseworlds-secondary: oklch(0.62 0.13 65);
---elseworlds-accent: oklch(0.78 0.17 75);
---elseworlds-glow: oklch(0.72 0.15 70 / 0.28);
---post-crisis-primary: oklch(0.52 0.02 260);
---post-crisis-secondary: oklch(0.40 0.01 255);
---post-crisis-accent: oklch(0.45 0.08 35);
---post-crisis-glow: oklch(0.52 0.02 260 / 0.32);
---future-state-primary: oklch(0.68 0.15 210);
---future-state-secondary: oklch(0.54 0.13 205);
---future-state-accent: oklch(0.72 0.18 330);
---future-state-glow: oklch(0.68 0.15 210 / 0.45);
---ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
---ease-dramatic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
---ease-gentle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
+  :root {
+    --pre-52-primary: oklch(0.52 0.08 45);
+    --pre-52-secondary: oklch(0.42 0.06 40);
+    --pre-52-accent: oklch(0.48 0.07 42);
+    --pre-52-glow: oklch(0.52 0.08 45 / 0.25);
+    --new-52-primary: oklch(0.58 0.24 25);
+    --new-52-secondary: oklch(0.42 0.21 22);
+    --new-52-accent: oklch(0.65 0.26 28);
+    --new-52-glow: oklch(0.58 0.24 25 / 0.35);
+    --rebirth-primary: oklch(0.62 0.19 250);
+    --rebirth-secondary: oklch(0.48 0.16 245);
+    --rebirth-accent: oklch(0.70 0.22 255);
+    --rebirth-glow: oklch(0.62 0.19 250 / 0.4);
+    --infinite-frontier-primary: oklch(0.60 0.21 290);
+    --infinite-frontier-secondary: oklch(0.45 0.19 285);
+    --infinite-frontier-accent: oklch(0.68 0.24 295);
+    --infinite-frontier-glow: oklch(0.60 0.21 290 / 0.38);
+    --elseworlds-primary: oklch(0.72 0.15 70);
+    --elseworlds-secondary: oklch(0.62 0.13 65);
+    --elseworlds-accent: oklch(0.78 0.17 75);
+    --elseworlds-glow: oklch(0.72 0.15 70 / 0.28);
+    --post-crisis-primary: oklch(0.52 0.02 260);
+    --post-crisis-secondary: oklch(0.40 0.01 255);
+    --post-crisis-accent: oklch(0.45 0.08 35);
+    --post-crisis-glow: oklch(0.52 0.02 260 / 0.32);
+    --future-state-primary: oklch(0.68 0.15 210);
+    --future-state-secondary: oklch(0.54 0.13 205);
+    --future-state-accent: oklch(0.72 0.18 330);
+    --future-state-glow: oklch(0.68 0.15 210 / 0.45);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-dramatic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --ease-gentle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
 }
 @layer base {
-.era-badge[data-era="pre-52"],
-.timeline-card[data-era="pre-52"]::before {
-background: linear-gradient(
-135deg in oklch,
-var(--pre-52-primary),
-var(--pre-52-secondary)
-);
-box-shadow:
-0 2px 8px var(--pre-52-glow),
-0 1px 3px oklch(0 0 0 / 0.1);
-}
-.timeline-card[data-era="pre-52"] {
-border: 1px solid var(--pre-52-primary);
-background:
-linear-gradient(
-to bottom in oklch,
-color-mix(in oklch, var(--pre-52-primary) 8%, transparent),
-transparent
-);
-position: relative;
-container-type: inline-size;
-}
+  .era-badge[data-era="pre-52"],
+  .timeline-card[data-era="pre-52"]::before {
+    background:
+      linear-gradient(
+        135deg in oklch,
+        var(--pre-52-primary),
+        var(--pre-52-secondary)
+      ) !important;
+    box-shadow:
+      0 2px 8px var(--pre-52-glow),
+      0 1px 3px oklch(0 0 0 / 0.1) !important;
+  }
+  .timeline-card[data-era="pre-52"] {
+    border: 1px solid var(--pre-52-primary) !important;
+    background:
+      linear-gradient(
+        to bottom in oklch,
+        color-mix(in oklch, var(--pre-52-primary) 8%, transparent),
+        transparent
+      ) !important;
+    position: relative !important;
+    container-type: inline-size !important;
+  }
 }
 @layer effects {
-.timeline-card[data-era="pre-52"]::after {
-content: '';
-position: absolute;
-inset: 0;
-background-image:
-repeating-linear-gradient(
-0deg,
-transparent,
-transparent 2px,
-color-mix(in oklch, var(--pre-52-primary) 5%, transparent) 2px,
-color-mix(in oklch, var(--pre-52-primary) 5%, transparent) 4px
-),
-repeating-linear-gradient(
-90deg,
-transparent,
-transparent 3px,
-color-mix(in oklch, var(--pre-52-accent) 3%, transparent) 3px,
-color-mix(in oklch, var(--pre-52-accent) 3%, transparent) 6px
-);
-pointer-events: none;
-opacity: 0.5;
-mix-blend-mode: multiply;
-}
-.timeline-card[data-era="pre-52"]::before {
-content: '';
-position: absolute;
-inset: 0;
-background:
-radial-gradient(
-circle at 15% 20%,
-color-mix(in oklch, var(--pre-52-secondary) 12%, transparent),
-transparent 40%
-),
-radial-gradient(
-circle at 85% 80%,
-color-mix(in oklch, var(--pre-52-accent) 10%, transparent),
-transparent 35%
-);
-pointer-events: none;
-opacity: 0.6;
-}
+  .timeline-card[data-era="pre-52"]::after {
+    content: ''!important;
+    position: absolute!important;
+    inset: 0!important;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        color-mix(in oklch, var(--pre-52-primary) 5%, transparent) 2px,
+        color-mix(in oklch, var(--pre-52-primary) 5%, transparent) 4px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 3px,
+        color-mix(in oklch, var(--pre-52-accent) 3%, transparent) 3px,
+        color-mix(in oklch, var(--pre-52-accent) 3%, transparent) 6px
+      ) !important;
+    pointer-events: none !important;
+    opacity: 0.5 !important;
+    mix-blend-mode: multiply !important;
+  }
+  .timeline-card[data-era="pre-52"]::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background:
+      radial-gradient(
+        circle at 15% 20%,
+        color-mix(in oklch, var(--pre-52-secondary) 12%, transparent),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 85% 80%,
+        color-mix(in oklch, var(--pre-52-accent) 10%, transparent),
+        transparent 35%
+      ) !important;
+    pointer-events: none !important;
+    opacity: 0.6 !important;
+  }
 }
 @layer animations {
 @media (prefers-reduced-motion: no-preference) {
