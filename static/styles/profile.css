@@ -285,7 +285,7 @@ html.lenis, html.lenis body {
     gap: var(--spacing-lg);
     animation: slideInLeft 0.8s ease-out forwards;
     opacity: 0;
-    top: var(--spacing-2xl);
+    top: 6rem;
 }
 
 @keyframes slideInLeft {
