@@ -85,7 +85,7 @@ html.lenis, html.lenis body {
     height: 100%;
     object-fit: cover;
     object-position: center;
-    filter: brightness(0.3) contrast(1.2) saturate(1.1);
+    filter: brightness(0.8) contrast(1.2) saturate(1.1);
 }
 
 .hero-gradient {
