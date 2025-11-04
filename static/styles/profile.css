@@ -97,8 +97,8 @@ html.lenis, html.lenis body {
     background: linear-gradient(
         to top,
         var(--bg-primary) 0%,
-        rgba(10, 10, 10, 0.95) 20%,
-        rgba(10, 10, 10, 0.7) 50%,
+        rgba(10, 10, 10, 0.75) 20%,
+        rgba(10, 10, 10, 0.5) 50%,
         transparent 100%
     );
     pointer-events: none;
