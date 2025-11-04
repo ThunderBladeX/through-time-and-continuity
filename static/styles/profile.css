@@ -1537,10 +1537,6 @@ html.lenis, html.lenis body {
         0% { filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.2)); }
         100% { filter: drop-shadow(0 0 30px rgba(var(--accent-rgb), 0.4)); }
     }
-
-    .hero-image {
-        transform: none !important;
-    }
 }
 
 @media (max-width: 768px) {
@@ -1551,6 +1547,22 @@ html.lenis, html.lenis body {
     }
 
     .hero-image-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .hero-section {
+        height: 100vh; 
+        min-height: 600px;
+    }
+
+    .hero-image {
+        transform: none !important;
+        position: absolute;
         top: 0;
         left: 0;
         width: 100%;
