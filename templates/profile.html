@@ -141,44 +141,40 @@
 
     <div id="event-modal" class="modal">
         <div class="modal-overlay"></div>
-        <div class="modal-panel">
+        <div class="modal-content">
             <button class="modal-close">×</button>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span id="modal-era" class="era-badge"></span>
-                    <h2 id="modal-title"></h2>
-                    <time id="modal-date"></time>
-                </div>
-                <div id="modal-images" class="modal-images"></div>
-                <div id="modal-description" class="modal-description"></div>
+            <div class="modal-header">
+                <span id="modal-era" class="era-badge"></span>
+                <h2 id="modal-title"></h2>
+                <time id="modal-date"></time>
             </div>
+            <div id="modal-images" class="modal-images"></div>
+            <div id="modal-description" class="modal-description"></div>
         </div>
     </div>
 
     <div id="bio-edit-modal" class="modal">
         <div class="modal-overlay"></div>
-        <div class="modal-panel">
+        <div class="modal-content">
             <button class="modal-close">×</button>
-            <div class="modal-content">
-                <h2>Suggest an Edit</h2>
-                <form id="bio-edit-form">
-                    <input type="hidden" name="section_id">
-                    <input type="hidden" name="old_value_title">
-                    <input type="hidden" name="old_value_content">
-                    <div class="form-group">
-                        <label for="new_value_title" class="new-value-label">Section Title</label>
-                        <input type="text" id="new_value_title" name="new_value_title" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="new_value_content" class="new-value-label">Content (Markdown supported)</label>
-                        <textarea id="new_value_content" name="new_value_content" rows="10" class="form-control"></textarea>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn-secondary modal-close">Cancel</button>
-                        <button type="submit" class="btn-primary">Submit for Approval</button>
-                    </div>
-                </form>
-            </div>
+            <h2>Suggest an Edit</h2>
+            <form id="bio-edit-form">
+                <input type="hidden" name="section_id">
+                <input type="hidden" name="old_value_title">
+                <input type="hidden" name="old_value_content">
+                <div class="form-group">
+                    <label for="new_value_title" class="new-value-label">Section Title</label>
+                    <input type="text" id="new_value_title" name="new_value_title" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="new_value_content" class="new-value-label">Content (Markdown supported)</label>
+                    <textarea id="new_value_content" name="new_value_content" rows="10" class="form-control"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary modal-close">Cancel</button>
+                    <button type="submit" class="btn-primary">Submit for Approval</button>
+                </div>
+            </form>
         </div>
     </div>
 
