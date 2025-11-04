@@ -57,6 +57,8 @@
     });
 
     function initBubbleGenerator() {
+        if (isReducedMotion) return;
+
         const heroSection = document.querySelector('.hero-section');
         if (!heroSection) return;
 
