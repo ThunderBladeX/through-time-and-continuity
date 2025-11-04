@@ -85,6 +85,8 @@
     }
 
     function initSmoothScroll() {
+        if (window.innerWidth < 1024) return;
+
         if (typeof Lenis === 'undefined') {
             console.warn('Lenis not loaded, skipping smooth scroll');
             return;
@@ -679,7 +681,6 @@
     window.openEventModal = openEventModal;
 
     function setupScrollToTop() {
-
         let scrollBtn = document.querySelector('.scroll-to-top');
         if (!scrollBtn) {
             scrollBtn = document.createElement('button');
@@ -703,7 +704,6 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });
-
         console.log('Scroll to top button setup');
     }
 
