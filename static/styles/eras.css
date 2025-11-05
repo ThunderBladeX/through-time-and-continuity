@@ -1,152 +1,146 @@
-@layer base, effects, animations, responsive;
-@layer base {
-  :root {
-    --pre-52-primary: oklch(0.52 0.08 45);
-    --pre-52-secondary: oklch(0.42 0.06 40);
-    --pre-52-accent: oklch(0.48 0.07 42);
-    --pre-52-glow: oklch(0.52 0.08 45 / 0.25);
-    --new-52-primary: oklch(0.58 0.24 25);
-    --new-52-secondary: oklch(0.42 0.21 22);
-    --new-52-accent: oklch(0.65 0.26 28);
-    --new-52-glow: oklch(0.58 0.24 25 / 0.35);
-    --rebirth-primary: oklch(0.62 0.19 250);
-    --rebirth-secondary: oklch(0.48 0.16 245);
-    --rebirth-accent: oklch(0.70 0.22 255);
-    --rebirth-glow: oklch(0.62 0.19 250 / 0.4);
-    --infinite-frontier-primary: oklch(0.60 0.21 290);
-    --infinite-frontier-secondary: oklch(0.45 0.19 285);
-    --infinite-frontier-accent: oklch(0.68 0.24 295);
-    --infinite-frontier-glow: oklch(0.60 0.21 290 / 0.38);
-    --elseworlds-primary: oklch(0.72 0.15 70);
-    --elseworlds-secondary: oklch(0.62 0.13 65);
-    --elseworlds-accent: oklch(0.78 0.17 75);
-    --elseworlds-glow: oklch(0.72 0.15 70 / 0.28);
-    --post-crisis-primary: oklch(0.52 0.02 260);
-    --post-crisis-secondary: oklch(0.40 0.01 255);
-    --post-crisis-accent: oklch(0.45 0.08 35);
-    --post-crisis-glow: oklch(0.52 0.02 260 / 0.32);
-    --future-state-primary: oklch(0.68 0.15 210);
-    --future-state-secondary: oklch(0.54 0.13 205);
-    --future-state-accent: oklch(0.72 0.18 330);
-    --future-state-glow: oklch(0.68 0.15 210 / 0.45);
-    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-    --ease-dramatic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    --ease-gentle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
+:root {
+  --pre-52-primary: oklch(0.52 0.08 45);
+  --pre-52-secondary: oklch(0.42 0.06 40);
+  --pre-52-accent: oklch(0.48 0.07 42);
+  --pre-52-glow: oklch(0.52 0.08 45 / 0.25);
+  --new-52-primary: oklch(0.58 0.24 25);
+  --new-52-secondary: oklch(0.42 0.21 22);
+  --new-52-accent: oklch(0.65 0.26 28);
+  --new-52-glow: oklch(0.58 0.24 25 / 0.35);
+  --rebirth-primary: oklch(0.62 0.19 250);
+  --rebirth-secondary: oklch(0.48 0.16 245);
+  --rebirth-accent: oklch(0.70 0.22 255);
+  --rebirth-glow: oklch(0.62 0.19 250 / 0.4);
+  --infinite-frontier-primary: oklch(0.60 0.21 290);
+  --infinite-frontier-secondary: oklch(0.45 0.19 285);
+  --infinite-frontier-accent: oklch(0.68 0.24 295);
+  --infinite-frontier-glow: oklch(0.60 0.21 290 / 0.38);
+  --elseworlds-primary: oklch(0.72 0.15 70);
+  --elseworlds-secondary: oklch(0.62 0.13 65);
+  --elseworlds-accent: oklch(0.78 0.17 75);
+  --elseworlds-glow: oklch(0.72 0.15 70 / 0.28);
+  --post-crisis-primary: oklch(0.52 0.02 260);
+  --post-crisis-secondary: oklch(0.40 0.01 255);
+  --post-crisis-accent: oklch(0.45 0.08 35);
+  --post-crisis-glow: oklch(0.52 0.02 260 / 0.32);
+  --future-state-primary: oklch(0.68 0.15 210);
+  --future-state-secondary: oklch(0.54 0.13 205);
+  --future-state-accent: oklch(0.72 0.18 330);
+  --future-state-glow: oklch(0.68 0.15 210 / 0.45);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-dramatic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-gentle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-@layer base {
-  .era-badge[data-era="pre-52"],
-  .timeline-card[data-era="pre-52"]::before {
-    background:
-      linear-gradient(
-        135deg in oklch,
-        var(--pre-52-primary),
-        var(--pre-52-secondary)
-      ) !important;
+
+.era-badge[data-era="pre-52"],
+.timeline-card[data-era="pre-52"]::before {
+  background:
+    linear-gradient(
+      135deg in oklch,
+      var(--pre-52-primary),
+      var(--pre-52-secondary)
+    ) !important;
+  box-shadow:
+    0 2px 8px var(--pre-52-glow),
+    0 1px 3px oklch(0 0 0 / 0.1) !important;
+}
+.timeline-card[data-era="pre-52"] {
+  border: 1px solid var(--pre-52-primary) !important;
+  background:
+    linear-gradient(
+      to bottom in oklch,
+      color-mix(in oklch, var(--pre-52-primary) 8%, transparent),
+      transparent
+    ) !important;
+  position: relative !important;
+  container-type: inline-size !important;
+}
+
+.timeline-card[data-era="pre-52"]::after {
+  content: ''!important;
+  position: absolute!important;
+  inset: 0!important;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      color-mix(in oklch, var(--pre-52-primary) 5%, transparent) 2px,
+      color-mix(in oklch, var(--pre-52-primary) 5%, transparent) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 3px,
+      color-mix(in oklch, var(--pre-52-accent) 3%, transparent) 3px,
+      color-mix(in oklch, var(--pre-52-accent) 3%, transparent) 6px
+    ) !important;
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+  mix-blend-mode: multiply !important;
+}
+.timeline-card[data-era="pre-52"]::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      color-mix(in oklch, var(--pre-52-secondary) 12%, transparent),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      color-mix(in oklch, var(--pre-52-accent) 10%, transparent),
+      transparent 35%
+    ) !important;
+  pointer-events: none !important;
+  opacity: 0.6 !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .timeline-card[data-era="pre-52"]:hover {
+    animation: vintage-flutter 0.6s var(--ease-gentle) !important;
     box-shadow:
-      0 2px 8px var(--pre-52-glow),
-      0 1px 3px oklch(0 0 0 / 0.1) !important;
+      0 8px 24px color-mix(in oklch, var(--pre-52-primary) 20%, transparent),
+      0 4px 12px color-mix(in oklch, var(--pre-52-glow) 40%, transparent) !important;
   }
-  .timeline-card[data-era="pre-52"] {
-    border: 1px solid var(--pre-52-primary) !important;
-    background:
-      linear-gradient(
-        to bottom in oklch,
-        color-mix(in oklch, var(--pre-52-primary) 8%, transparent),
-        transparent
-      ) !important;
-    position: relative !important;
-    container-type: inline-size !important;
+  @keyframes vintage-flutter {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-2px) rotate(-0.3deg); }
+    75% { transform: translateY(-1px) rotate(0.2deg); }
   }
 }
-@layer effects {
-  .timeline-card[data-era="pre-52"]::after {
-    content: ''!important;
-    position: absolute!important;
-    inset: 0!important;
-    background-image:
-      repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        color-mix(in oklch, var(--pre-52-primary) 5%, transparent) 2px,
-        color-mix(in oklch, var(--pre-52-primary) 5%, transparent) 4px
-      ),
-      repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 3px,
-        color-mix(in oklch, var(--pre-52-accent) 3%, transparent) 3px,
-        color-mix(in oklch, var(--pre-52-accent) 3%, transparent) 6px
-      ) !important;
-    pointer-events: none !important;
-    opacity: 0.5 !important;
-    mix-blend-mode: multiply !important;
-  }
-  .timeline-card[data-era="pre-52"]::before {
-    content: '' !important;
-    position: absolute !important;
-    inset: 0 !important;
-    background:
-      radial-gradient(
-        circle at 15% 20%,
-        color-mix(in oklch, var(--pre-52-secondary) 12%, transparent),
-        transparent 40%
-      ),
-      radial-gradient(
-        circle at 85% 80%,
-        color-mix(in oklch, var(--pre-52-accent) 10%, transparent),
-        transparent 35%
-      ) !important;
-    pointer-events: none !important;
-    opacity: 0.6 !important;
-  }
+
+.era-badge[data-era="new-52"],
+.timeline-card[data-era="new-52"]::before {
+  background:
+    linear-gradient(
+      135deg in oklch,
+      var(--new-52-primary),
+      var(--new-52-secondary)
+    ) !important;
+  box-shadow:
+    0 2px 8px var(--new-52-glow),
+    0 4px 16px color-mix(in oklch, var(--new-52-primary) 30%, transparent) !important;
 }
-@layer animations {
-  @media (prefers-reduced-motion: no-preference) {
-    .timeline-card[data-era="pre-52"]:hover {
-      animation: vintage-flutter 0.6s var(--ease-gentle) !important;
-      box-shadow:
-        0 8px 24px color-mix(in oklch, var(--pre-52-primary) 20%, transparent),
-        0 4px 12px color-mix(in oklch, var(--pre-52-glow) 40%, transparent) !important;
-    }
-    @keyframes vintage-flutter {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      25% { transform: translateY(-2px) rotate(-0.3deg); }
-      75% { transform: translateY(-1px) rotate(0.2deg); }
-    }
-  }
+.timeline-card[data-era="new-52"] {
+  border: 2px solid var(--new-52-primary) !important;
+  background:
+    repeating-linear-gradient(
+      45deg in oklch,
+      transparent,
+      transparent 10px,
+      color-mix(in oklch, var(--new-52-primary) 4%, transparent) 10px,
+      color-mix(in oklch, var(--new-52-primary) 4%, transparent) 20px
+    ) !important;
+  box-shadow:
+    3px 3px 0 color-mix(in oklch, var(--new-52-primary) 15%, transparent),
+    6px 6px 0 color-mix(in oklch, var(--new-52-secondary) 8%, transparent) !important;
+  position: relative !important;
+  container-type: inline-size !important;
 }
-@layer base {
-  .era-badge[data-era="new-52"],
-  .timeline-card[data-era="new-52"]::before {
-    background:
-      linear-gradient(
-        135deg in oklch,
-        var(--new-52-primary),
-        var(--new-52-secondary)
-      ) !important;
-    box-shadow:
-      0 2px 8px var(--new-52-glow),
-      0 4px 16px color-mix(in oklch, var(--new-52-primary) 30%, transparent) !important;
-  }
-  .timeline-card[data-era="new-52"] {
-    border: 2px solid var(--new-52-primary) !important;
-    background:
-      repeating-linear-gradient(
-        45deg in oklch,
-        transparent,
-        transparent 10px,
-        color-mix(in oklch, var(--new-52-primary) 4%, transparent) 10px,
-        color-mix(in oklch, var(--new-52-primary) 4%, transparent) 20px
-      ) !important;
-    box-shadow:
-      3px 3px 0 color-mix(in oklch, var(--new-52-primary) 15%, transparent),
-      6px 6px 0 color-mix(in oklch, var(--new-52-secondary) 8%, transparent) !important;
-    position: relative !important;
-    container-type: inline-size !important;
-  }
-}
+
 @layer effects {
   .timeline-card[data-era="new-52"]::after {
     content: '' !important;
@@ -344,51 +338,51 @@
     container-type: inline-size !important;
   }
 }
-@layer effects {
-  .timeline-card[data-era="infinite-frontier"]::after {
-    content: '' !important;
-    position: absolute !important;
-    top: -50% !important;
-    left: -50% !important;
-    width: 200% !important;
-    height: 200% !important;
-    background:
-      linear-gradient(
-        90deg in oklch,
-        transparent 0%,
-        color-mix(in oklch, var(--infinite-frontier-primary) 30%, transparent) 50%,
-        transparent 100%
-      ) !important;
-    pointer-events: none !important;
-    opacity: 0 !important;
-    transition: opacity 0.3s var(--ease-smooth) !important;
-  }
-  .timeline-card[data-era="infinite-frontier"]::before {
-    content: '' !important;
-    position: absolute !important;
-    inset: 0 !important;
-    background:
-      radial-gradient(
-        ellipse 80% 30% at 50% 50%,
-        transparent 49%,
-        color-mix(in oklch, var(--infinite-frontier-accent) 15%, transparent) 50%,
-        transparent 51%
-      ),
-      radial-gradient(
-        ellipse 60% 20% at 50% 50%,
-        transparent 48%,
-        color-mix(in oklch, var(--infinite-frontier-primary) 10%, transparent) 50%,
-        transparent 52%
-      ) !important;
-    pointer-events: none !important;
-    opacity: 0.3 !important;
-    animation: orbital-rotation 20s linear infinite !important;
-  }
-  @keyframes orbital-rotation {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
+
+.timeline-card[data-era="infinite-frontier"]::after {
+  content: '' !important;
+  position: absolute !important;
+  top: -50% !important;
+  left: -50% !important;
+  width: 200% !important;
+  height: 200% !important;
+  background:
+    linear-gradient(
+      90deg in oklch,
+      transparent 0%,
+      color-mix(in oklch, var(--infinite-frontier-primary) 30%, transparent) 50%,
+      transparent 100%
+    ) !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transition: opacity 0.3s var(--ease-smooth) !important;
 }
+.timeline-card[data-era="infinite-frontier"]::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    radial-gradient(
+      ellipse 80% 30% at 50% 50%,
+      transparent 49%,
+      color-mix(in oklch, var(--infinite-frontier-accent) 15%, transparent) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      ellipse 60% 20% at 50% 50%,
+      transparent 48%,
+      color-mix(in oklch, var(--infinite-frontier-primary) 10%, transparent) 50%,
+      transparent 52%
+    ) !important;
+  pointer-events: none !important;
+  opacity: 0.3 !important;
+  animation: orbital-rotation 20s linear infinite !important;
+}
+@keyframes orbital-rotation {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 @layer animations {
 @media (prefers-reduced-motion: no-preference) {
 .timeline-card[data-era="infinite-frontier"]:hover::after {
@@ -581,216 +575,208 @@ pointer-events: none;
 opacity: 0.6;
 }
 }
-@layer animations {
-  @media (prefers-reduced-motion: no-preference) {
-    .timeline-card[data-era="post-crisis"]:hover {
-      box-shadow:
-        0 6px 24px var(--post-crisis-glow),
-        0 8px 32px oklch(0 0 0 / 0.3),
-        inset 0 0 15px color-mix(in oklch, var(--post-crisis-secondary) 10%, transparent) !important;
-      transform: translateY(-2px) !important;
-      transition: all 0.35s var(--ease-smooth) !important;
-    }
+
+@media (prefers-reduced-motion: no-preference) {
+  .timeline-card[data-era="post-crisis"]:hover {
+    box-shadow:
+      0 6px 24px var(--post-crisis-glow),
+      0 8px 32px oklch(0 0 0 / 0.3),
+      inset 0 0 15px color-mix(in oklch, var(--post-crisis-secondary) 10%, transparent) !important;
+    transform: translateY(-2px) !important;
+    transition: all 0.35s var(--ease-smooth) !important;
   }
 }
-@layer base {
-  .era-badge[data-era="future-state"],
-  .timeline-card[data-era="future-state"]::before {
-    background:
-      linear-gradient(
-        135deg in oklch,
-        var(--future-state-primary),
-        var(--future-state-secondary)
-      ) !important;
-    box-shadow:
-      0 2px 8px var(--future-state-glow),
-      0 0 24px color-mix(in oklch, var(--future-state-primary) 40%, transparent) !important;
-  }
-  .timeline-card[data-era="future-state"] {
-    border: 1px solid var(--future-state-primary) !important;
-    background:
-      linear-gradient(
-        135deg in oklch,
-        color-mix(in oklch, var(--future-state-primary) 10%, transparent) 0%,
-        transparent 50%,
-        color-mix(in oklch, var(--future-state-accent) 8%, transparent) 100%
-      ) !important;
-    box-shadow:
-      inset 0 0 20px color-mix(in oklch, var(--future-state-primary) 12%, transparent) !important;
-    position: relative !important;
-    container-type: inline-size !important;
-  }
+
+.era-badge[data-era="future-state"],
+.timeline-card[data-era="future-state"]::before {
+  background:
+    linear-gradient(
+      135deg in oklch,
+      var(--future-state-primary),
+      var(--future-state-secondary)
+    ) !important;
+  box-shadow:
+    0 2px 8px var(--future-state-glow),
+    0 0 24px color-mix(in oklch, var(--future-state-primary) 40%, transparent) !important;
 }
-@layer effects {
+.timeline-card[data-era="future-state"] {
+  border: 1px solid var(--future-state-primary) !important;
+  background:
+    linear-gradient(
+      135deg in oklch,
+      color-mix(in oklch, var(--future-state-primary) 10%, transparent) 0%,
+      transparent 50%,
+      color-mix(in oklch, var(--future-state-accent) 8%, transparent) 100%
+    ) !important;
+  box-shadow:
+    inset 0 0 20px color-mix(in oklch, var(--future-state-primary) 12%, transparent) !important;
+  position: relative !important;
+  container-type: inline-size !important;
+}
+
+.timeline-card[data-era="future-state"]::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      color-mix(in oklch, var(--future-state-primary) 12%, transparent) 2px,
+      color-mix(in oklch, var(--future-state-primary) 12%, transparent) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      color-mix(in oklch, var(--future-state-primary) 12%, transparent) 2px,
+      color-mix(in oklch, var(--future-state-primary) 12%, transparent) 4px
+    ) !important;
+  background-size: 4px 4px !important;
+  pointer-events: none !important;
+}
+.timeline-card[data-era="future-state"]::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    linear-gradient(
+      45deg in oklch,
+      color-mix(in oklch, var(--future-state-primary) 8%, transparent) 0%,
+      transparent 30%,
+      color-mix(in oklch, var(--future-state-accent) 6%, transparent) 70%,
+      transparent 100%
+    ) !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transition: opacity 0.3s var(--ease-smooth) !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
   .timeline-card[data-era="future-state"]::after {
-    content: '' !important;
-    position: absolute !important;
-    inset: 0 !important;
-    background-image:
-      repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        color-mix(in oklch, var(--future-state-primary) 12%, transparent) 2px,
-        color-mix(in oklch, var(--future-state-primary) 12%, transparent) 4px
-      ),
-      repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 2px,
-        color-mix(in oklch, var(--future-state-primary) 12%, transparent) 2px,
-        color-mix(in oklch, var(--future-state-primary) 12%, transparent) 4px
-      ) !important;
-    background-size: 4px 4px !important;
-    pointer-events: none !important;
+    animation: pixel-scan 4s linear infinite !important;
   }
-  .timeline-card[data-era="future-state"]::before {
-    content: '' !important;
-    position: absolute !important;
-    inset: 0 !important;
-    background:
-      linear-gradient(
-        45deg in oklch,
-        color-mix(in oklch, var(--future-state-primary) 8%, transparent) 0%,
-        transparent 30%,
-        color-mix(in oklch, var(--future-state-accent) 6%, transparent) 70%,
-        transparent 100%
-      ) !important;
-    pointer-events: none !important;
-    opacity: 0 !important;
-    transition: opacity 0.3s var(--ease-smooth) !important;
+  @keyframes pixel-scan {
+    0% { opacity: 0.25; }
+    50% { opacity: 0.45; }
+    100% { opacity: 0.25; }
   }
-}
-@layer animations {
-  @media (prefers-reduced-motion: no-preference) {
-    .timeline-card[data-era="future-state"]::after {
-      animation: pixel-scan 4s linear infinite !important;
+  .timeline-card[data-era="future-state"]:hover {
+    box-shadow:
+      0 8px 32px var(--future-state-glow),
+      0 0 48px color-mix(in oklch, var(--future-state-primary) 50%, transparent),
+      inset 0 0 24px color-mix(in oklch, var(--future-state-primary) 18%, transparent) !important;
+    transform: translateY(-3px) scale(1.005) !important;
+    transition: all 0.35s var(--ease-smooth) !important;
+  }
+  .timeline-card[data-era="future-state"]:hover::before {
+    opacity: 1 !important;
+    animation: holographic-glitch 0.8s var(--ease-dramatic) infinite !important;
+  }
+  @keyframes holographic-glitch {
+    0%, 100% {
+      transform: translateX(0);
+      opacity: 0.4;
     }
-    @keyframes pixel-scan {
-      0% { opacity: 0.25; }
-      50% { opacity: 0.45; }
-      100% { opacity: 0.25; }
+    25% {
+      transform: translateX(-2px);
+      opacity: 0.7;
     }
-    .timeline-card[data-era="future-state"]:hover {
-      box-shadow:
-        0 8px 32px var(--future-state-glow),
-        0 0 48px color-mix(in oklch, var(--future-state-primary) 50%, transparent),
-        inset 0 0 24px color-mix(in oklch, var(--future-state-primary) 18%, transparent) !important;
-      transform: translateY(-3px) scale(1.005) !important;
-      transition: all 0.35s var(--ease-smooth) !important;
-    }
-    .timeline-card[data-era="future-state"]:hover::before {
-      opacity: 1 !important;
-      animation: holographic-glitch 0.8s var(--ease-dramatic) infinite !important;
-    }
-    @keyframes holographic-glitch {
-      0%, 100% {
-        transform: translateX(0);
-        opacity: 0.4;
-      }
-      25% {
-        transform: translateX(-2px);
-        opacity: 0.7;
-      }
-      75% {
-        transform: translateX(2px);
-        opacity: 0.5;
-      }
+    75% {
+      transform: translateX(2px);
+      opacity: 0.5;
     }
   }
 }
-@layer base {
-  .activity-era-badge {
-    padding: 0.25rem 0.75rem !important;
-    border-radius: 9999px !important;
-    font-size: 0.75rem !important;
-    font-weight: 600 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-    color: oklch(1 0 0) !important;
-    position: relative !important;
-    overflow: hidden !important;
-    transition: all 0.3s var(--ease-smooth) !important;
+
+.activity-era-badge {
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 9999px !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: oklch(1 0 0) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s var(--ease-smooth) !important;
+}
+.activity-era-badge[data-era="pre-52"] {
+  background: linear-gradient(135deg in oklch, var(--pre-52-primary), var(--pre-52-secondary)) !important;
+}
+.activity-era-badge[data-era="new-52"] {
+  background: linear-gradient(135deg in oklch, var(--new-52-primary), var(--new-52-secondary)) !important;
+}
+.activity-era-badge[data-era="rebirth"] {
+  background: linear-gradient(135deg in oklch, var(--rebirth-primary), var(--rebirth-secondary)) !important;
+}
+.activity-era-badge[data-era="infinite-frontier"] {
+  background: linear-gradient(135deg in oklch, var(--infinite-frontier-primary), var(--infinite-frontier-secondary)) !important;
+}
+.activity-era-badge[data-era="elseworlds"] {
+  background: linear-gradient(135deg in oklch, var(--elseworlds-primary), var(--elseworlds-secondary)) !important;
+}
+.activity-era-badge[data-era="post-crisis"] {
+  background: linear-gradient(135deg in oklch, var(--post-crisis-primary), var(--post-crisis-secondary)) !important;
+}
+.activity-era-badge[data-era="future-state"] {
+  background: linear-gradient(135deg in oklch, var(--future-state-primary), var(--future-state-secondary)) !important;
+}
+
+.activity-era-badge::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    linear-gradient(
+      120deg,
+      transparent 0%,
+      oklch(1 0 0 / 0.2) 50%,
+      transparent 100%
+    ) !important;
+  transform: translateX(-100%) !important;
+  transition: transform 0.6s var(--ease-smooth) !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .activity-era-badge:hover::before {
+    transform: translateX(100%) !important;
   }
-  .activity-era-badge[data-era="pre-52"] {
-    background: linear-gradient(135deg in oklch, var(--pre-52-primary), var(--pre-52-secondary)) !important;
-  }
-  .activity-era-badge[data-era="new-52"] {
-    background: linear-gradient(135deg in oklch, var(--new-52-primary), var(--new-52-secondary)) !important;
-  }
-  .activity-era-badge[data-era="rebirth"] {
-    background: linear-gradient(135deg in oklch, var(--rebirth-primary), var(--rebirth-secondary)) !important;
-  }
-  .activity-era-badge[data-era="infinite-frontier"] {
-    background: linear-gradient(135deg in oklch, var(--infinite-frontier-primary), var(--infinite-frontier-secondary)) !important;
-  }
-  .activity-era-badge[data-era="elseworlds"] {
-    background: linear-gradient(135deg in oklch, var(--elseworlds-primary), var(--elseworlds-secondary)) !important;
-  }
-  .activity-era-badge[data-era="post-crisis"] {
-    background: linear-gradient(135deg in oklch, var(--post-crisis-primary), var(--post-crisis-secondary)) !important;
-  }
-  .activity-era-badge[data-era="future-state"] {
-    background: linear-gradient(135deg in oklch, var(--future-state-primary), var(--future-state-secondary)) !important;
+  .activity-era-badge:hover {
+    transform: scale(1.05) !important;
+    filter: brightness(1.1) !important;
   }
 }
-@layer effects {
-  .activity-era-badge::before {
-    content: '' !important;
-    position: absolute !important;
-    inset: 0 !important;
-    background:
-      linear-gradient(
-        120deg,
-        transparent 0%,
-        oklch(1 0 0 / 0.2) 50%,
-        transparent 100%
-      ) !important;
-    transform: translateX(-100%) !important;
-    transition: transform 0.6s var(--ease-smooth) !important;
+
+@media (max-width: 768px) {
+  .timeline-card[data-era]::after,
+  .timeline-card[data-era]::before {
+    animation: none !important;
+  }
+  .timeline-card:hover {
+    transform: none !important;
   }
 }
-@layer animations {
-  @media (prefers-reduced-motion: no-preference) {
-    .activity-era-badge:hover::before {
-      transform: translateX(100%) !important;
-    }
-    .activity-era-badge:hover {
-      transform: scale(1.05) !important;
-      filter: brightness(1.1) !important;
-    }
+@container (max-width: 400px) {
+  .timeline-card[data-era] {
+    border-width: 1px !important;
   }
 }
-@layer responsive {
-  @media (max-width: 768px) {
-    .timeline-card[data-era]::after,
-    .timeline-card[data-era]::before {
-      animation: none !important;
-    }
-    .timeline-card:hover {
-      transform: none !important;
-    }
+@media (prefers-contrast: high) {
+  .timeline-card[data-era] {
+    border-width: 2px !important;
   }
-  @container (max-width: 400px) {
-    .timeline-card[data-era] {
-      border-width: 1px !important;
-    }
+  .era-badge[data-era],
+  .activity-era-badge[data-era] {
+    outline: 2px solid currentColor !important;
+    outline-offset: 2px !important;
   }
-  @media (prefers-contrast: high) {
-    .timeline-card[data-era] {
-      border-width: 2px !important;
-    }
-    .era-badge[data-era],
-    .activity-era-badge[data-era] {
-      outline: 2px solid currentColor !important;
-      outline-offset: 2px !important;
-    }
-  }
-  @media (prefers-color-scheme: dark) {
-    .timeline-card[data-era]::before,
-    .timeline-card[data-era]::after {
-      opacity: 0.8!important;
-    }
+}
+@media (prefers-color-scheme: dark) {
+  .timeline-card[data-era]::before,
+  .timeline-card[data-era]::after {
+    opacity: 0.8!important;
   }
 }
 @media print {
