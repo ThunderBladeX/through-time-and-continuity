@@ -293,10 +293,9 @@ body::before {
     top: 1rem;
     height: 180px;
     background: linear-gradient(
-        90deg,
-        var(--bg-secondary) 0%,
-        var(--bg-tertiary) 50%,
-        var(--bg-secondary) 100%
+        180deg,
+        rgba(59, 130, 246, 0.08) 0%,
+        rgba(42, 42, 42, 0.3) 100%
     );
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite linear;
