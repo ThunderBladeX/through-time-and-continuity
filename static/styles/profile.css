@@ -1354,6 +1354,8 @@ html.lenis, html.lenis body {
     }
 }
 
+.back-btn{background:linear-gradient(135deg,rgba(var(--accent-rgb),.12) 0%,rgba(var(--accent-rgb),.04) 100%)!important}
+
 @media (prefers-reduced-motion:no-preference){
     .hero-content{animation-fill-mode:forwards}
 }
