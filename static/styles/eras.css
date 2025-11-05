@@ -765,7 +765,7 @@ opacity: 0.6 !important;
 @media (prefers-color-scheme: dark) {
   .timeline-card[data-era]::before,
   .timeline-card[data-era]::after {
-    opacity: 0.8!important;
+    opacity: 0.8 !important;
   }
 }
 @media print {
