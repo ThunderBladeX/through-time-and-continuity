@@ -141,102 +141,99 @@
   container-type: inline-size !important;
 }
 
-@layer effects {
+.timeline-card[data-era="new-52"]::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image:
+    radial-gradient(
+      circle,
+      color-mix(in oklch, var(--new-52-primary) 6%, transparent) 1px,
+      transparent 1px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      color-mix(in oklch, var(--new-52-primary) 3%, transparent) 1px,
+      color-mix(in oklch, var(--new-52-primary) 3%, transparent) 2px
+    ) !important;
+  background-size: 20px 20px, 100% 100% !important;
+  pointer-events: none !important;
+  mix-blend-mode: overlay !important;
+}
+.timeline-card[data-era="new-52"]::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 19px,
+      color-mix(in oklch, var(--new-52-accent) 8%, transparent) 19px,
+      color-mix(in oklch, var(--new-52-accent) 8%, transparent) 20px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 19px,
+      color-mix(in oklch, var(--new-52-accent) 8%, transparent) 19px,
+      color-mix(in oklch, var(--new-52-accent) 8%, transparent) 20px
+    ) !important;
+  pointer-events: none !important;
+  opacity: 0.4 !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
   .timeline-card[data-era="new-52"]::after {
-    content: '' !important;
-    position: absolute !important;
-    inset: 0 !important;
-    background-image:
-      radial-gradient(
-        circle,
-        color-mix(in oklch, var(--new-52-primary) 6%, transparent) 1px,
-        transparent 1px
-      ),
-      repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 1px,
-        color-mix(in oklch, var(--new-52-primary) 3%, transparent) 1px,
-        color-mix(in oklch, var(--new-52-primary) 3%, transparent) 2px
-      ) !important;
-    background-size: 20px 20px, 100% 100% !important;
-    pointer-events: none !important;
-    mix-blend-mode: overlay !important;
+    animation: static-pulse 0.5s steps(4) infinite !important;
   }
-  .timeline-card[data-era="new-52"]::before {
-    content: '' !important;
-    position: absolute !important;
-    inset: 0 !important;
-    background-image:
-      repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 19px,
-        color-mix(in oklch, var(--new-52-accent) 8%, transparent) 19px,
-        color-mix(in oklch, var(--new-52-accent) 8%, transparent) 20px
-      ),
-      repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 19px,
-        color-mix(in oklch, var(--new-52-accent) 8%, transparent) 19px,
-        color-mix(in oklch, var(--new-52-accent) 8%, transparent) 20px
-      ) !important;
-    pointer-events: none !important;
-    opacity: 0.4 !important;
+  @keyframes static-pulse {
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 0.3; }
   }
-}
-@layer animations {
-  @media (prefers-reduced-motion: no-preference) {
-    .timeline-card[data-era="new-52"]::after {
-      animation: static-pulse 0.5s steps(4) infinite !important;
-    }
-    @keyframes static-pulse {
-      0%, 100% { opacity: 0.15; }
-      50% { opacity: 0.3; }
-    }
-    .timeline-card[data-era="new-52"]:hover {
-      transform: translateY(-4px) !important;
-      box-shadow:
-        4px 4px 0 color-mix(in oklch, var(--new-52-primary) 20%, transparent),
-        8px 8px 0 color-mix(in oklch, var(--new-52-secondary) 12%, transparent),
-        0 12px 32px var(--new-52-glow) !important;
-      transition: all 0.3s var(--ease-dramatic) !important;
-    }
-  }
-}
-@layer base {
-  .era-badge[data-era="rebirth"],
-  .timeline-card[data-era="rebirth"]::before {
-    background:
-      linear-gradient(
-        135deg in oklch,
-        var(--rebirth-primary),
-        var(--rebirth-secondary)
-      ) !important;
+  .timeline-card[data-era="new-52"]:hover {
+    transform: translateY(-4px) !important;
     box-shadow:
-      0 2px 8px var(--rebirth-glow),
-      0 0 20px color-mix(in oklch, var(--rebirth-primary) 25%, transparent) !important;
-  }
-  .timeline-card[data-era="rebirth"] {
-    border: 1px solid var(--rebirth-primary) !important;
-    background:
-      radial-gradient(
-        circle at top left in oklch,
-        color-mix(in oklch, var(--rebirth-primary) 12%, transparent),
-        transparent 50%
-      ),
-      radial-gradient(
-        circle at bottom right in oklch,
-        color-mix(in oklch, var(--rebirth-secondary) 8%, transparent),
-        transparent 50%
-      ) !important;
-    position: relative !important;
-    container-type: inline-size !important;
-    backdrop-filter: blur(0px) !important;
-    transition: backdrop-filter 0.4s var(--ease-smooth) !important;
+      4px 4px 0 color-mix(in oklch, var(--new-52-primary) 20%, transparent),
+      8px 8px 0 color-mix(in oklch, var(--new-52-secondary) 12%, transparent),
+      0 12px 32px var(--new-52-glow) !important;
+    transition: all 0.3s var(--ease-dramatic) !important;
   }
 }
+
+.era-badge[data-era="rebirth"],
+.timeline-card[data-era="rebirth"]::before {
+  background:
+    linear-gradient(
+      135deg in oklch,
+      var(--rebirth-primary),
+      var(--rebirth-secondary)
+    ) !important;
+  box-shadow:
+    0 2px 8px var(--rebirth-glow),
+    0 0 20px color-mix(in oklch, var(--rebirth-primary) 25%, transparent) !important;
+}
+.timeline-card[data-era="rebirth"] {
+  border: 1px solid var(--rebirth-primary) !important;
+  background:
+    radial-gradient(
+      circle at top left in oklch,
+      color-mix(in oklch, var(--rebirth-primary) 12%, transparent),
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at bottom right in oklch,
+      color-mix(in oklch, var(--rebirth-secondary) 8%, transparent),
+      transparent 50%
+    ) !important;
+  position: relative !important;
+  container-type: inline-size !important;
+  backdrop-filter: blur(0px) !important;
+  transition: backdrop-filter 0.4s var(--ease-smooth) !important;
+}
+
 @layer effects {
   .timeline-card[data-era="rebirth"]::after {
     content: '' !important;
