@@ -460,7 +460,7 @@
                 const eraDisplay = event.era_display || getEraName(event.era);
                 return `
                     <div class="timeline-item" data-event-id="${event.id}">
-                        <div class="timeline-card">
+                        <div class="timeline-card" data-era="${event.era}">
                             <div class="timeline-header-card">
                                 <span class="era-badge" data-era="${event.era}">${eraDisplay}</span>
                                 <time class="timeline-date">${formatDate(event.event_date)}</time>
