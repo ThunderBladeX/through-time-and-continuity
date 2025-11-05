@@ -462,8 +462,8 @@
                     <div class="timeline-item" data-event-id="${event.id}">
                         <div class="timeline-card" data-era="${event.era}">
                             <div class="timeline-header-card">
-                                <div class="era-badge" data-era="${event.era}">
-                                    <span class="activity-era-badge" data-era="${event.era}">${eraDisplay}</span>
+                                <div class="activity-era-badge" data-era="${event.era}">
+                                    <span class="era-badge" data-era="${event.era}">${eraDisplay}</span>
                                 </div>
                                 <time class="timeline-date">${formatDate(event.event_date)}</time>
                             </div>
