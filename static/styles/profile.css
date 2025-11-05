@@ -869,20 +869,43 @@ html.lenis, html.lenis body {
 .relationship-card[data-type="romantic"] {
     border-left: 5px solid #ec4899;
 }
+.relationship-avatar[data-type="romantic"] {
+    border: 3px solid #ec4899;
+}
+
 .relationship-card[data-type="platonic"] {
     border-left: 5px solid #f59e0b;
 }
+.relationship-avatar[data-type="platonic"] {
+    border: 3px solid #f59e0b;
+}
+
 .relationship-card[data-type="familial"] {
     border-left: 5px solid #10b981;
 }
+.relationship-avatar[data-type="familial"] {
+    border: 3px solid #10b981;
+}
+
 .relationship-card[data-type="professional"] {
     border-left: 5px solid #3b82f6;
 }
+.relationship-avatar[data-type="professional"] {
+    border: 3px solid #3b82f6;
+}
+
 .relationship-card[data-type="complicated"] {
     border-left: 5px solid #a444ef;
 }
+.relationship-avatar[data-type="complicated"] {
+    border: 3px solid #a444ef;
+}
+
 .relationship-card[data-type="hate"] {
     border-left: 5px solid #ef4444;
+}
+.relationship-avatar[data-type="hate"] {
+    border: 3px solid #ef4444;
 }
 
 .love-category {
