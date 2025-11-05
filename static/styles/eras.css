@@ -287,34 +287,34 @@
   }
 }
 @layer animations {
-@media (prefers-reduced-motion: no-preference) {
-.timeline-card[data-era="rebirth"]::after {
-animation: constellation-drift 25s linear infinite;
-}
-@keyframes constellation-drift {
-from { transform: translate(0, 0); }
-to { transform: translate(50px, 50px); }
-}
-.timeline-card[data-era="rebirth"]:hover {
-backdrop-filter: blur(8px) brightness(1.05);
-box-shadow:
-0 8px 32px var(--rebirth-glow),
-0 0 40px color-mix(in oklch, var(--rebirth-primary) 35%, transparent),
-inset 0 1px 1px oklch(1 0 0 / 0.1);
-transition: all 0.4s var(--ease-smooth);
-}
-.timeline-card[data-era="rebirth"]:hover::before {
-opacity: 1;
-animation: glass-shimmer 2s var(--ease-smooth) infinite;
-}
-.timeline-card[data-era="rebirth"]:hover::after {
-opacity: 0.5;
-}
-@keyframes glass-shimmer {
-0%, 100% { transform: translateX(-100%); }
-50% { transform: translateX(100%); }
-}
-}
+  @media (prefers-reduced-motion: no-preference) {
+    .timeline-card[data-era="rebirth"]::after {
+      animation: constellation-drift 25s linear infinite !important;
+    }
+    @keyframes constellation-drift {
+      from { transform: translate(0, 0); }
+      to { transform: translate(50px, 50px); }
+    }
+    .timeline-card[data-era="rebirth"]:hover {
+      backdrop-filter: blur(8px) brightness(1.05) !important;
+      box-shadow:
+        0 8px 32px var(--rebirth-glow),
+        0 0 40px color-mix(in oklch, var(--rebirth-primary) 35%, transparent),
+        inset 0 1px 1px oklch(1 0 0 / 0.1) !important;
+      transition: all 0.4s var(--ease-smooth) !important;
+    }
+    .timeline-card[data-era="rebirth"]:hover::before {
+      opacity: 1 !important;
+      animation: glass-shimmer 2s var(--ease-smooth) infinite !important;
+    }
+    .timeline-card[data-era="rebirth"]:hover::after {
+      opacity: 0.5 !important;
+    }
+    @keyframes glass-shimmer {
+      0%, 100% { transform: translateX(-100%); }
+      50% { transform: translateX(100%); }
+    }
+  }
 }
 @layer base {
 .era-badge[data-era="infinite-frontier"],
@@ -581,83 +581,84 @@ opacity: 0.6;
 }
 }
 @layer animations {
-@media (prefers-reduced-motion: no-preference) {
-.timeline-card[data-era="post-crisis"]:hover {
-box-shadow:
-0 6px 24px var(--post-crisis-glow),
-0 8px 32px oklch(0 0 0 / 0.3),
-inset 0 0 15px color-mix(in oklch, var(--post-crisis-secondary) 10%, transparent);
-transform: translateY(-2px);
-transition: all 0.35s var(--ease-smooth);
-}
-}
+  @media (prefers-reduced-motion: no-preference) {
+    .timeline-card[data-era="post-crisis"]:hover {
+      box-shadow:
+        0 6px 24px var(--post-crisis-glow),
+        0 8px 32px oklch(0 0 0 / 0.3),
+        inset 0 0 15px color-mix(in oklch, var(--post-crisis-secondary) 10%, transparent) !important;
+      transform: translateY(-2px) !important;
+      transition: all 0.35s var(--ease-smooth) !important;
+    }
+  }
 }
 @layer base {
-.era-badge[data-era="future-state"],
-.timeline-card[data-era="future-state"]::before {
-background: linear-gradient(
-135deg in oklch,
-var(--future-state-primary),
-var(--future-state-secondary)
-);
-box-shadow:
-0 2px 8px var(--future-state-glow),
-0 0 24px color-mix(in oklch, var(--future-state-primary) 40%, transparent);
-}
-.timeline-card[data-era="future-state"] {
-border: 1px solid var(--future-state-primary);
-background:
-linear-gradient(
-135deg in oklch,
-color-mix(in oklch, var(--future-state-primary) 10%, transparent) 0%,
-transparent 50%,
-color-mix(in oklch, var(--future-state-accent) 8%, transparent) 100%
-);
-box-shadow:
-inset 0 0 20px color-mix(in oklch, var(--future-state-primary) 12%, transparent);
-position: relative;
-container-type: inline-size;
-}
+  .era-badge[data-era="future-state"],
+  .timeline-card[data-era="future-state"]::before {
+    background:
+      linear-gradient(
+        135deg in oklch,
+        var(--future-state-primary),
+        var(--future-state-secondary)
+      ) !important;
+    box-shadow:
+      0 2px 8px var(--future-state-glow),
+      0 0 24px color-mix(in oklch, var(--future-state-primary) 40%, transparent) !important;
+  }
+  .timeline-card[data-era="future-state"] {
+    border: 1px solid var(--future-state-primary) !important;
+    background:
+      linear-gradient(
+        135deg in oklch,
+        color-mix(in oklch, var(--future-state-primary) 10%, transparent) 0%,
+        transparent 50%,
+        color-mix(in oklch, var(--future-state-accent) 8%, transparent) 100%
+      ) !important;
+    box-shadow:
+      inset 0 0 20px color-mix(in oklch, var(--future-state-primary) 12%, transparent) !important;
+    position: relative !important;
+    container-type: inline-size !important;
+  }
 }
 @layer effects {
-.timeline-card[data-era="future-state"]::after {
-content: '';
-position: absolute;
-inset: 0;
-background-image:
-repeating-linear-gradient(
-0deg,
-transparent,
-transparent 2px,
-color-mix(in oklch, var(--future-state-primary) 12%, transparent) 2px,
-color-mix(in oklch, var(--future-state-primary) 12%, transparent) 4px
-),
-repeating-linear-gradient(
-90deg,
-transparent,
-transparent 2px,
-color-mix(in oklch, var(--future-state-primary) 12%, transparent) 2px,
-color-mix(in oklch, var(--future-state-primary) 12%, transparent) 4px
-);
-background-size: 4px 4px;
-pointer-events: none;
-}
-.timeline-card[data-era="future-state"]::before {
-content: '';
-position: absolute;
-inset: 0;
-background:
-linear-gradient(
-45deg in oklch,
-color-mix(in oklch, var(--future-state-primary) 8%, transparent) 0%,
-transparent 30%,
-color-mix(in oklch, var(--future-state-accent) 6%, transparent) 70%,
-transparent 100%
-);
-pointer-events: none;
-opacity: 0;
-transition: opacity 0.3s var(--ease-smooth);
-}
+  .timeline-card[data-era="future-state"]::after {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        color-mix(in oklch, var(--future-state-primary) 12%, transparent) 2px,
+        color-mix(in oklch, var(--future-state-primary) 12%, transparent) 4px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        color-mix(in oklch, var(--future-state-primary) 12%, transparent) 2px,
+        color-mix(in oklch, var(--future-state-primary) 12%, transparent) 4px
+      ) !important;
+    background-size: 4px 4px !important;
+    pointer-events: none !important;
+  }
+  .timeline-card[data-era="future-state"]::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background:
+      linear-gradient(
+        45deg in oklch,
+        color-mix(in oklch, var(--future-state-primary) 8%, transparent) 0%,
+        transparent 30%,
+        color-mix(in oklch, var(--future-state-accent) 6%, transparent) 70%,
+        transparent 100%
+      ) !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s var(--ease-smooth) !important;
+  }
 }
 @layer animations {
   @media (prefers-reduced-motion: no-preference) {
