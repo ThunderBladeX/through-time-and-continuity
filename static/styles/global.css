@@ -812,7 +812,8 @@ p {
         font-size:1.5rem
     }
     .back-btn{
-        position:absolute
+        position:absolute;
+        transform:translate(1rem,1rem)
     }
     :root{
         --shadow-sm:0 1px 1.5px rgba(0,0,0,.3);
