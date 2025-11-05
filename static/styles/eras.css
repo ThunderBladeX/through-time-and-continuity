@@ -234,106 +234,103 @@
   transition: backdrop-filter 0.4s var(--ease-smooth) !important;
 }
 
-@layer effects {
+.timeline-card[data-era="rebirth"]::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image:
+    radial-gradient(
+      circle,
+      oklch(1 0 0 / 0.6) 1px,
+      transparent 1px
+    ),
+    radial-gradient(
+      circle,
+      oklch(1 0 0 / 0.4) 1.5px,
+      transparent 1.5px
+    ),
+    radial-gradient(
+      circle,
+      oklch(1 0 0 / 0.3) 1px,
+      transparent 1px
+    ) !important;
+  background-size: 50px 50px, 80px 80px, 35px 35px !important;
+  background-position: 0 0, 25px 25px, 40px 15px !important;
+  pointer-events: none !important;
+  opacity: 0.25 !important;
+}
+.timeline-card[data-era="rebirth"]::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    linear-gradient(
+      120deg in oklch,
+      transparent 0%,
+      color-mix(in oklch, var(--rebirth-accent) 15%, transparent) 45%,
+      transparent 55%,
+      color-mix(in oklch, var(--rebirth-primary) 10%, transparent) 100%
+    ) !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transition: opacity 0.5s var(--ease-smooth) !important;
+}
+
+
+@media (prefers-reduced-motion: no-preference) {
   .timeline-card[data-era="rebirth"]::after {
-    content: '' !important;
-    position: absolute !important;
-    inset: 0 !important;
-    background-image:
-      radial-gradient(
-        circle,
-        oklch(1 0 0 / 0.6) 1px,
-        transparent 1px
-      ),
-      radial-gradient(
-        circle,
-        oklch(1 0 0 / 0.4) 1.5px,
-        transparent 1.5px
-      ),
-      radial-gradient(
-        circle,
-        oklch(1 0 0 / 0.3) 1px,
-        transparent 1px
-      ) !important;
-    background-size: 50px 50px, 80px 80px, 35px 35px !important;
-    background-position: 0 0, 25px 25px, 40px 15px !important;
-    pointer-events: none !important;
-    opacity: 0.25 !important;
+    animation: constellation-drift 25s linear infinite !important;
   }
-  .timeline-card[data-era="rebirth"]::before {
-    content: '' !important;
-    position: absolute !important;
-    inset: 0 !important;
-    background:
-      linear-gradient(
-        120deg in oklch,
-        transparent 0%,
-        color-mix(in oklch, var(--rebirth-accent) 15%, transparent) 45%,
-        transparent 55%,
-        color-mix(in oklch, var(--rebirth-primary) 10%, transparent) 100%
-      ) !important;
-    pointer-events: none !important;
-    opacity: 0 !important;
-    transition: opacity 0.5s var(--ease-smooth) !important;
+  @keyframes constellation-drift {
+    from { transform: translate(0, 0); }
+    to { transform: translate(50px, 50px); }
   }
-}
-@layer animations {
-  @media (prefers-reduced-motion: no-preference) {
-    .timeline-card[data-era="rebirth"]::after {
-      animation: constellation-drift 25s linear infinite !important;
-    }
-    @keyframes constellation-drift {
-      from { transform: translate(0, 0); }
-      to { transform: translate(50px, 50px); }
-    }
-    .timeline-card[data-era="rebirth"]:hover {
-      backdrop-filter: blur(8px) brightness(1.05) !important;
-      box-shadow:
-        0 8px 32px var(--rebirth-glow),
-        0 0 40px color-mix(in oklch, var(--rebirth-primary) 35%, transparent),
-        inset 0 1px 1px oklch(1 0 0 / 0.1) !important;
-      transition: all 0.4s var(--ease-smooth) !important;
-    }
-    .timeline-card[data-era="rebirth"]:hover::before {
-      opacity: 1 !important;
-      animation: glass-shimmer 2s var(--ease-smooth) infinite !important;
-    }
-    .timeline-card[data-era="rebirth"]:hover::after {
-      opacity: 0.5 !important;
-    }
-    @keyframes glass-shimmer {
-      0%, 100% { transform: translateX(-100%); }
-      50% { transform: translateX(100%); }
-    }
-  }
-}
-@layer base {
-  .era-badge[data-era="infinite-frontier"],
-  .timeline-card[data-era="infinite-frontier"]::before {
-    background:
-      linear-gradient(
-        135deg in oklch,
-        var(--infinite-frontier-primary),
-        var(--infinite-frontier-secondary)
-      ) !important;
+  .timeline-card[data-era="rebirth"]:hover {
+    backdrop-filter: blur(8px) brightness(1.05) !important;
     box-shadow:
-      0 2px 8px var(--infinite-frontier-glow),
-      0 0 16px color-mix(in oklch, var(--infinite-frontier-primary) 28%, transparent) !important;
+      0 8px 32px var(--rebirth-glow),
+      0 0 40px color-mix(in oklch, var(--rebirth-primary) 35%, transparent),
+      inset 0 1px 1px oklch(1 0 0 / 0.1) !important;
+    transition: all 0.4s var(--ease-smooth) !important;
   }
-  .timeline-card[data-era="infinite-frontier"] {
-    border: 1px solid var(--infinite-frontier-primary) !important;
-    background:
-      conic-gradient(
-        from 45deg at 50% 50% in oklch,
-        transparent 0deg,
-        color-mix(in oklch, var(--infinite-frontier-primary) 12%, transparent) 90deg,
-        transparent 180deg,
-        color-mix(in oklch, var(--infinite-frontier-secondary) 10%, transparent) 270deg,
-        transparent 360deg
-      ) !important;
-    position: relative !important;
-    container-type: inline-size !important;
+  .timeline-card[data-era="rebirth"]:hover::before {
+    opacity: 1 !important;
+    animation: glass-shimmer 2s var(--ease-smooth) infinite !important;
   }
+  .timeline-card[data-era="rebirth"]:hover::after {
+    opacity: 0.5 !important;
+  }
+  @keyframes glass-shimmer {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+  }
+}
+
+.era-badge[data-era="infinite-frontier"],
+.timeline-card[data-era="infinite-frontier"]::before {
+  background:
+    linear-gradient(
+      135deg in oklch,
+      var(--infinite-frontier-primary),
+      var(--infinite-frontier-secondary)
+    ) !important;
+  box-shadow:
+    0 2px 8px var(--infinite-frontier-glow),
+    0 0 16px color-mix(in oklch, var(--infinite-frontier-primary) 28%, transparent) !important;
+}
+.timeline-card[data-era="infinite-frontier"] {
+  border: 1px solid var(--infinite-frontier-primary) !important;
+  background:
+    conic-gradient(
+      from 45deg at 50% 50% in oklch,
+      transparent 0deg,
+      color-mix(in oklch, var(--infinite-frontier-primary) 12%, transparent) 90deg,
+      transparent 180deg,
+      color-mix(in oklch, var(--infinite-frontier-secondary) 10%, transparent) 270deg,
+      transparent 360deg
+    ) !important;
+  position: relative !important;
+  container-type: inline-size !important;
 }
 
 .timeline-card[data-era="infinite-frontier"]::after {
@@ -380,7 +377,6 @@
   to { transform: rotate(360deg); }
 }
 
-@layer animations {
 @media (prefers-reduced-motion: no-preference) {
 .timeline-card[data-era="infinite-frontier"]:hover::after {
 opacity: 1;
@@ -408,8 +404,7 @@ transform: translateY(-3px) scale(1.01);
 transition: all 0.4s var(--ease-smooth);
 }
 }
-}
-@layer base {
+
 .era-badge[data-era="elseworlds"],
 .timeline-card[data-era="elseworlds"]::before {
 background: linear-gradient(
@@ -432,8 +427,7 @@ color-mix(in oklch, var(--elseworlds-secondary) 5%, transparent)
 position: relative;
 container-type: inline-size;
 }
-}
-@layer effects {
+
 .timeline-card[data-era="elseworlds"]::after {
 content: '';
 position: absolute;
@@ -481,8 +475,7 @@ transparent 100%
 pointer-events: none;
 opacity: 0.5;
 }
-}
-@layer animations {
+
 @media (prefers-reduced-motion: no-preference) {
 .timeline-card[data-era="elseworlds"]:hover {
 transform: translateX(6px) translateY(-2px) rotate(0.8deg);
@@ -499,8 +492,7 @@ animation: paper-flutter 3s var(--ease-gentle) infinite;
 50% { opacity: 0.85; }
 }
 }
-}
-@layer base {
+
 .era-badge[data-era="post-crisis"],
 .timeline-card[data-era="post-crisis"]::before {
 background: linear-gradient(
@@ -524,8 +516,7 @@ color-mix(in oklch, var(--post-crisis-accent) 8%, transparent) 100%
 position: relative;
 container-type: inline-size;
 }
-}
-@layer effects {
+
 .timeline-card[data-era="post-crisis"]::after {
 content: '';
 position: absolute;
@@ -570,7 +561,6 @@ color-mix(in oklch, var(--post-crisis-primary) 4%, transparent)
 );
 pointer-events: none;
 opacity: 0.6;
-}
 }
 
 @media (prefers-reduced-motion: no-preference) {
