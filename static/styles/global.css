@@ -820,8 +820,8 @@ p {
     .modal-content{
         padding:var(--spacing-xl);
         border-radius:16px;
-        max-width:95%
-        max-height:85%
+        max-width:95%;
+        max-height:80%
     }
     .modal-header h2{
         font-size:1.5rem
