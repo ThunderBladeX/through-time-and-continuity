@@ -756,16 +756,11 @@ html.lenis, html.lenis body {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1.2px;
-    background: rgba(var(--accent-rgb), 0.25);
-    border: 2px solid rgba(var(--accent-rgb), 0.5);
-    color: var(--text-primary);
     white-space: nowrap;
     transition: all 0.3s ease;
 }
 
 .era-badge:hover {
-    background: rgba(var(--accent-rgb), 0.35);
-    border-color: var(--accent);
     transform: scale(1.05);
 }
 
@@ -1501,7 +1496,7 @@ html.lenis, html.lenis body {
         left:15px
     }
     .timeline-item::before{
-        left:-15px;
+        left:-45px;
         width:16px;
         height:16px;
         border-width:3px
