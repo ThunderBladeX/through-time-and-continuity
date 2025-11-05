@@ -695,7 +695,7 @@ html.lenis, html.lenis body {
 .timeline-item::before {
     content: '';
     position: absolute;
-    left: -82px;
+    left: -65px;
     top: 12px;
     width: 19px;
     height: 19px;
