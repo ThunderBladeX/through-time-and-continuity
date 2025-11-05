@@ -530,6 +530,7 @@
                         <img src="${rel.related_character_image || '/static/images/default-avatar.jpg'}" 
                              alt="${rel.related_character_name}"
                              class="relationship-avatar"
+                             data-type="${dataType}"
                              onerror="this.src='/static/images/default-avatar.jpg'">
                         <div class="relationship-info">
                             <div class="relationship-name">${rel.related_character_name || 'Unknown'}</div>
