@@ -844,7 +844,6 @@ html.lenis, html.lenis body {
 
 .relationship-card:hover .relationship-avatar {
     transform: scale(1.15) rotate(5deg);
-    border-color: var(--accent);
 }
 
 .relationship-info {
@@ -1502,7 +1501,6 @@ html.lenis, html.lenis body {
         left:15px
     }
     .timeline-item::before{
-        left:-35px;
         width:16px;
         height:16px;
         border-width:3px
