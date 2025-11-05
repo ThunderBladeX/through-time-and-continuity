@@ -317,76 +317,77 @@
   }
 }
 @layer base {
-.era-badge[data-era="infinite-frontier"],
-.timeline-card[data-era="infinite-frontier"]::before {
-background: linear-gradient(
-135deg in oklch,
-var(--infinite-frontier-primary),
-var(--infinite-frontier-secondary)
-);
-box-shadow:
-0 2px 8px var(--infinite-frontier-glow),
-0 0 16px color-mix(in oklch, var(--infinite-frontier-primary) 28%, transparent);
-}
-.timeline-card[data-era="infinite-frontier"] {
-border: 1px solid var(--infinite-frontier-primary);
-background:
-conic-gradient(
-from 45deg at 50% 50% in oklch,
-transparent 0deg,
-color-mix(in oklch, var(--infinite-frontier-primary) 12%, transparent) 90deg,
-transparent 180deg,
-color-mix(in oklch, var(--infinite-frontier-secondary) 10%, transparent) 270deg,
-transparent 360deg
-);
-position: relative;
-container-type: inline-size;
-}
+  .era-badge[data-era="infinite-frontier"],
+  .timeline-card[data-era="infinite-frontier"]::before {
+    background:
+      linear-gradient(
+        135deg in oklch,
+        var(--infinite-frontier-primary),
+        var(--infinite-frontier-secondary)
+      ) !important;
+    box-shadow:
+      0 2px 8px var(--infinite-frontier-glow),
+      0 0 16px color-mix(in oklch, var(--infinite-frontier-primary) 28%, transparent) !important;
+  }
+  .timeline-card[data-era="infinite-frontier"] {
+    border: 1px solid var(--infinite-frontier-primary) !important;
+    background:
+      conic-gradient(
+        from 45deg at 50% 50% in oklch,
+        transparent 0deg,
+        color-mix(in oklch, var(--infinite-frontier-primary) 12%, transparent) 90deg,
+        transparent 180deg,
+        color-mix(in oklch, var(--infinite-frontier-secondary) 10%, transparent) 270deg,
+        transparent 360deg
+      ) !important;
+    position: relative !important;
+    container-type: inline-size !important;
+  }
 }
 @layer effects {
-.timeline-card[data-era="infinite-frontier"]::after {
-content: '';
-position: absolute;
-top: -50%;
-left: -50%;
-width: 200%;
-height: 200%;
-background:
-linear-gradient(
-90deg in oklch,
-transparent 0%,
-color-mix(in oklch, var(--infinite-frontier-primary) 30%, transparent) 50%,
-transparent 100%
-);
-pointer-events: none;
-opacity: 0;
-transition: opacity 0.3s var(--ease-smooth);
-}
-.timeline-card[data-era="infinite-frontier"]::before {
-content: '';
-position: absolute;
-inset: 0;
-background:
-radial-gradient(
-ellipse 80% 30% at 50% 50%,
-transparent 49%,
-color-mix(in oklch, var(--infinite-frontier-accent) 15%, transparent) 50%,
-transparent 51%
-),
-radial-gradient(
-ellipse 60% 20% at 50% 50%,
-transparent 48%,
-color-mix(in oklch, var(--infinite-frontier-primary) 10%, transparent) 50%,
-transparent 52%
-);
-pointer-events: none;
-opacity: 0.3;
-animation: orbital-rotation 20s linear infinite;
-}
-@keyframes orbital-rotation {
-from { transform: rotate(0deg); }
-to { transform: rotate(360deg); }
-}
+  .timeline-card[data-era="infinite-frontier"]::after {
+    content: '' !important;
+    position: absolute !important;
+    top: -50% !important;
+    left: -50% !important;
+    width: 200% !important;
+    height: 200% !important;
+    background:
+      linear-gradient(
+        90deg in oklch,
+        transparent 0%,
+        color-mix(in oklch, var(--infinite-frontier-primary) 30%, transparent) 50%,
+        transparent 100%
+      ) !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s var(--ease-smooth) !important;
+  }
+  .timeline-card[data-era="infinite-frontier"]::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background:
+      radial-gradient(
+        ellipse 80% 30% at 50% 50%,
+        transparent 49%,
+        color-mix(in oklch, var(--infinite-frontier-accent) 15%, transparent) 50%,
+        transparent 51%
+      ),
+      radial-gradient(
+        ellipse 60% 20% at 50% 50%,
+        transparent 48%,
+        color-mix(in oklch, var(--infinite-frontier-primary) 10%, transparent) 50%,
+        transparent 52%
+      ) !important;
+    pointer-events: none !important;
+    opacity: 0.3 !important;
+    animation: orbital-rotation 20s linear infinite !important;
+  }
+  @keyframes orbital-rotation {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
 }
 @layer animations {
 @media (prefers-reduced-motion: no-preference) {
