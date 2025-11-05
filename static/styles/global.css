@@ -812,7 +812,6 @@ p {
         font-size:1.5rem
     }
     .back-btn{
-        position:absolute;
         transform:translate(1rem,1rem)
     }
     :root{
