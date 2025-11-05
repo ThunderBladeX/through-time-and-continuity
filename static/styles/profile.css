@@ -1376,34 +1376,30 @@ html.lenis, html.lenis body {
     }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .hero-content {
-        animation-fill-mode: forwards;
+@media (prefers-reduced-motion:no-preference){
+    .hero-content{animation-fill-mode:forwards}
+}
+
+@media (max-width:1400px){
+    .profile-grid{
+        grid-template-columns:280px 1fr;
+        gap:var(--spacing-xl)
+    }
+    .hero-name{
+        font-size:clamp(3rem,8vw,6rem)
     }
 }
 
-@media (max-width: 1400px) {
-    .profile-grid {
-        grid-template-columns: 280px 1fr;
-        gap: var(--spacing-xl);
+@media (max-width:1200px){
+    .profile-grid{
+        grid-template-columns:260px 1fr
     }
-
-    .hero-name {
-        font-size: clamp(3rem, 8vw, 6rem);
+    .gallery-grid{
+        grid-template-columns:repeat(auto-fill,minmax(240px,1fr))
     }
 }
 
-@media (max-width: 1200px) {
-    .profile-grid {
-        grid-template-columns: 260px 1fr;
-    }
-
-    .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion:reduce){
     .scroll-indicator,
     .hero-name,
     .nav-item,
@@ -1426,138 +1422,119 @@ html.lenis, html.lenis body {
     .relationship-card::after,
     .love-name::after,
     .relationship-card:hover .relationship-avatar,
-    .love-card:hover::before {
-        transition: none;
-        transform: none;
-        animation: none;
+    .love-card:hover::before{
+        transition:none;
+        transform:none;
+        animation:none
     }
 }
 
 @media (max-width: 1024px) {
-    .hero-name {
-        text-shadow: 0 0 20px rgba(var(--accent-rgb), 0.3);
-        filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.2));
-        animation: heroGlow 2.5s ease-in-out infinite alternate, gradientFlow 6s linear infinite;
+    .hero-name{
+        text-shadow:0 0 20px rgba(var(--accent-rgb),.3);
+        filter:drop-shadow(0 0 10px rgba(var(--accent-rgb),.2));
+        animation:heroGlow 2.5s ease-in-out infinite alternate,gradientFlow 6s linear infinite
     }
-
-    @keyframes heroGlow {
-        0% { filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.2)); }
-        100% { filter: drop-shadow(0 0 30px rgba(var(--accent-rgb), 0.4)); }
+    @keyframes heroGlow{
+        0%{filter:drop-shadow(0 0 10px rgba(var(--accent-rgb),.2))}
+        100%{filter:drop-shadow(0 0 30px rgba(var(--accent-rgb),.4))}
     }
-
-    :root {
-        --shadow-glow: 0 0 20px rgba(var(--accent-rgb), 0.15)
+    :root{
+        --shadow-glow:0 0 20px rgba(var(--accent-rgb),.15)
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width:768px){
     .modal-backdrop,
     .nav-wrapper,
-    .glass-card {
-        backdrop-filter: none;
+    .glass-card{
+        backdrop-filter:none
     }
-
-    .hero-image-wrapper {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
+    .hero-image-wrapper{
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        overflow:hidden
     }
-
-    .hero-section {
-        height: 100vh; 
-        min-height: 600px;
+    .hero-section{
+        height:100vh; 
+        min-height:600px
     }
-
-    .hero-image {
-        transform: none !important;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        filter: brightness(1) contrast(1.2) saturate(1.1);
+    .hero-image{
+        transform:none;
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        filter:brightness(1) contrast(1.2) saturate(1.1)
     }
-
-    .timeline-title {
-        font-size: 1.35rem;
+    .timeline-title{
+        font-size:1.35rem
     }
-
-    .timeline-summary {
-        font-size: 0.95rem;
+    .timeline-summary{
+        font-size:.95rem
     }
 }
 
-@media (max-width: 480px) {
-    .profile-grid {
-        grid-template-columns: 1fr;
-        padding: var(--spacing-xl);
+@media (max-width:480px){
+    .profile-grid{
+        grid-template-columns:1fr;
+        padding:var(--spacing-xl)
     }
-
-    .sidebar-nav {
-        position: static;
-        top: auto;
-        animation: none;
-        opacity: 1;
+    .sidebar-nav{
+        position:static;
+        top:auto;
+        animation:none;
+        opacity:1
     }
-
-    .content-area {
-        animation: none;
-        opacity: 1;
+    .content-area{
+        animation:none;
+        opacity:1
     }
-
-    .hero-name {
-        font-size: clamp(2.5rem, 12vw, 4rem);
-        filter: none;
-        animation: none;
+    .hero-name{
+        font-size:clamp(2.5rem,12vw,4rem);
+        filter:none;
+        animation:none
     }
-
-    .hero-quote {
-        font-size: 1.2rem;
-        padding: 0 1rem;
+    .hero-quote{
+        font-size:1.2rem;
+        padding:0 1rem
     }
-
     .glass-card,
     .relationship-card,
-    .love-card {
-        filter: none;
+    .love-card{
+        filter:none
     }
-
-    .scroll-indicator {
-        bottom: 30px;
+    .scroll-indicator{
+        bottom:30px
     }
-
-    .timeline-track {
-        padding-left: 50px;
+    .timeline-track{
+        padding-left:50px
     }
-
-    .timeline-track::before {
-        left: 15px;
+    .timeline-track::before{
+        left:15px
     }
-
-    .timeline-item::before {
-        left: -35px;
-        width: 16px;
-        height: 16px;
-        border-width: 3px;
+    .timeline-item::before{
+        left:-35px;
+        width:16px;
+        height:16px;
+        border-width:3px
     }
-
     .relationships-grid,
     .love-grid,
     .gallery-grid,
-    .info-grid {
-        grid-template-columns: 1fr;
+    .info-grid{
+        grid-template-columns:1fr
     }
-
-    .relationship-card {
-        flex-direction: column;
-        text-align: center;
+    .relationship-card{
+        flex-direction:column;
+        text-align:center
     }
-
-    .relationship-avatar {
-        margin-bottom: var(--spacing-sm);
+    .relationship-avatar{
+        margin-bottom:var(--spacing-sm)
     }
 }
 
@@ -1567,15 +1544,13 @@ html.lenis, html.lenis body {
     .scroll-to-top,
     .admin-btn,
     .edit-btn,
-    #bg-canvas {
-        display: none;
+    #bg-canvas{
+        display:none
     }
-
-    .profile-grid {
-        display: block;
+    .profile-grid{
+        display:block
     }
-
-    .glass-card {
-        page-break-inside: avoid;
+    .glass-card{
+        page-break-inside:avoid
     }
 }
