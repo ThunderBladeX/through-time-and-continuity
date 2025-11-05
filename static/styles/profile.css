@@ -812,18 +812,6 @@ html.lenis, html.lenis body {
     overflow: hidden;
 }
 
-.relationship-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 5px;
-    height: 100%;
-    background: var(--accent);
-    transform: scaleY(0);
-    transition: transform 0.4s ease;
-}
-
 .relationship-card::after {
     content: '';
     position: absolute;
@@ -833,10 +821,6 @@ html.lenis, html.lenis body {
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
     transition: left 0.6s ease;
-}
-
-.relationship-card:hover::before {
-    transform: scaleY(1);
 }
 
 .relationship-card:hover::after {
@@ -885,43 +869,20 @@ html.lenis, html.lenis body {
 .relationship-card[data-type="romantic"] {
     border-left: 5px solid #ec4899;
 }
-.relationship-card[data-type="romantic"]:hover::before {
-    background: #ec4899;
-}
-
 .relationship-card[data-type="platonic"] {
-    border-left: 5px solid #10b981;
-}
-.relationship-card[data-type="platonic"]:hover::before {
-    background: #10b981;
-}
-
-.relationship-card[data-type="familial"] {
     border-left: 5px solid #f59e0b;
 }
-.relationship-card[data-type="familial"]:hover::before {
-    background: #f59e0b;
+.relationship-card[data-type="familial"] {
+    border-left: 5px solid #10b981;
 }
-
 .relationship-card[data-type="professional"] {
     border-left: 5px solid #3b82f6;
 }
-.relationship-card[data-type="professional"]:hover::before {
-    background: #3b82f6;
-}
-
 .relationship-card[data-type="complicated"] {
     border-left: 5px solid #a444ef;
 }
-.relationship-card[data-type="complicated"]:hover::before {
-    background: #a444ef;
-}
-
 .relationship-card[data-type="hate"] {
     border-left: 5px solid #ef4444;
-}
-.relationship-card[data-type="hate"]:hover::before {
-    background: #ef4444;
 }
 
 .love-category {
