@@ -1487,11 +1487,11 @@ html.lenis, html.lenis body {
     }
 
     .timeline-title {
-        font-size: 1.05rem;
+        font-size: 1rem;
     }
 
     .timeline-summary {
-        font-size: 0.95rem;
+        font-size: 1rem;
     }
 }
 
