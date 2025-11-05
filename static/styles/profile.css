@@ -1485,6 +1485,14 @@ html.lenis, html.lenis body {
         height: 100%;
         filter: brightness(1) contrast(1.2) saturate(1.1);
     }
+
+    .timeline-title {
+        font-size: 1.25rem;
+    }
+
+    .timeline-summary {
+        font-size: 0.8rem;
+    }
 }
 
 @media (max-width: 480px) {
