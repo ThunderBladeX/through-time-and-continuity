@@ -860,7 +860,6 @@ p {
     .modal-content{
         max-width:100%;
         max-height:100vh;
-        border-radius:0;
         padding:var(--spacing-lg)
     }
     .form-group{
