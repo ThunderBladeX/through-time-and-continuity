@@ -625,7 +625,6 @@ p {
 }
 
 .back-btn:hover {
-    background: var(--bg-tertiary);
     color: var(--text-primary);
     border-color: var(--accent)
 }
@@ -813,7 +812,7 @@ p {
         font-size:1.5rem
     }
     .back-btn{
-        position:relative
+        position:absolute
     }
     :root{
         --shadow-sm:0 1px 1.5px rgba(0,0,0,.3);
