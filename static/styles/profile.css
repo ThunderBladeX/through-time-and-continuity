@@ -1501,6 +1501,7 @@ html.lenis, html.lenis body {
         left:15px
     }
     .timeline-item::before{
+        left:-15px;
         width:16px;
         height:16px;
         border-width:3px
