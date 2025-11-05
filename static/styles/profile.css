@@ -85,7 +85,7 @@ html.lenis, html.lenis body {
     height: 100%;
     object-fit: cover;
     object-position: center;
-    filter: brightness(0.8) contrast(1.2) saturate(1.1);
+    filter: brightness(0.75) contrast(1.2) saturate(1.1);
 }
 
 .hero-gradient {
@@ -97,8 +97,8 @@ html.lenis, html.lenis body {
     background: linear-gradient(
         to top,
         var(--bg-primary) 0%,
-        rgba(10, 10, 10, 0.75) 20%,
-        rgba(10, 10, 10, 0.5) 50%,
+        rgba(10, 10, 10, 0.8) 20%,
+        rgba(10, 10, 10, 0.4) 50%,
         transparent 100%
     );
     pointer-events: none;
