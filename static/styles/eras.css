@@ -477,90 +477,91 @@ opacity: 0.5;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-.timeline-card[data-era="elseworlds"]:hover {
-transform: translateX(6px) translateY(-2px) rotate(0.8deg);
-box-shadow:
--3px 3px 8px color-mix(in oklch, var(--elseworlds-primary) 20%, transparent),
--6px 6px 16px var(--elseworlds-glow);
-transition: all 0.3s var(--ease-dramatic);
-}
-.timeline-card[data-era="elseworlds"]::after {
-animation: paper-flutter 3s var(--ease-gentle) infinite;
-}
-@keyframes paper-flutter {
-0%, 100% { opacity: 0.7; }
-50% { opacity: 0.85; }
-}
+  .timeline-card[data-era="elseworlds"]:hover {
+    transform: translateX(6px) translateY(-2px) rotate(0.8deg) !important;
+    box-shadow:
+      -3px 3px 8px color-mix(in oklch, var(--elseworlds-primary) 20%, transparent),
+      -6px 6px 16px var(--elseworlds-glow) !important;
+    transition: all 0.3s var(--ease-dramatic) !important;
+  }
+  .timeline-card[data-era="elseworlds"]::after {
+    animation: paper-flutter 3s var(--ease-gentle) infinite !important;
+  }
+  @keyframes paper-flutter {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 0.85; }
+  }
 }
 
 .era-badge[data-era="post-crisis"],
 .timeline-card[data-era="post-crisis"]::before {
-background: linear-gradient(
-135deg in oklch,
-var(--post-crisis-primary),
-var(--post-crisis-secondary)
-);
-box-shadow:
-0 2px 8px var(--post-crisis-glow),
-0 4px 12px oklch(0 0 0 / 0.25);
+  background:
+    linear-gradient(
+      135deg in oklch,
+      var(--post-crisis-primary),
+      var(--post-crisis-secondary)
+    ) !important;
+  box-shadow:
+    0 2px 8px var(--post-crisis-glow),
+    0 4px 12px oklch(0 0 0 / 0.25) !important;
 }
 .timeline-card[data-era="post-crisis"] {
-border: 1px solid var(--post-crisis-primary);
-background:
-linear-gradient(
-135deg in oklch,
-color-mix(in oklch, var(--post-crisis-primary) 8%, transparent) 0%,
-transparent 50%,
-color-mix(in oklch, var(--post-crisis-accent) 8%, transparent) 100%
-);
-position: relative;
-container-type: inline-size;
+  border: 1px solid var(--post-crisis-primary) !important;
+  background:
+    linear-gradient(
+      135deg in oklch,
+      color-mix(in oklch, var(--post-crisis-primary) 8%, transparent) 0%,
+      transparent 50%,
+      color-mix(in oklch, var(--post-crisis-accent) 8%, transparent) 100%
+    ) !important;
+  position: relative !important;
+  container-type: inline-size !important;
 }
 
 .timeline-card[data-era="post-crisis"]::after {
-content: '';
-position: absolute;
-inset: 0;
-background-image:
-radial-gradient(
-ellipse at 20% 30%,
-color-mix(in oklch, var(--post-crisis-accent) 22%, transparent) 0%,
-transparent 40%
-),
-radial-gradient(
-ellipse at 80% 70%,
-color-mix(in oklch, var(--post-crisis-secondary) 20%, transparent) 0%,
-transparent 35%
-),
-radial-gradient(
-circle at 50% 50%,
-color-mix(in oklch, var(--post-crisis-accent) 12%, transparent) 0%,
-transparent 60%
-);
-pointer-events: none;
-opacity: 0.7;
-mix-blend-mode: multiply;
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image:
+    radial-gradient(
+      ellipse at 20% 30%,
+      color-mix(in oklch, var(--post-crisis-accent) 22%, transparent) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 80% 70%,
+      color-mix(in oklch, var(--post-crisis-secondary) 20%, transparent) 0%,
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      color-mix(in oklch, var(--post-crisis-accent) 12%, transparent) 0%,
+      transparent 60%
+    ) !important;
+  pointer-events: none !important;
+  opacity: 0.7 !important;
+  mix-blend-mode: multiply !important;
 }
 .timeline-card[data-era="post-crisis"]::before {
-content: '';
-position: absolute;
-inset: 0;
+content: '' !important;
+position: absolute !important;
+inset: 0 !important;
 background-image:
-repeating-linear-gradient(
-85deg,
-transparent,
-transparent 2px,
-color-mix(in oklch, var(--post-crisis-primary) 6%, transparent) 2px,
-color-mix(in oklch, var(--post-crisis-primary) 6%, transparent) 3px
-),
-linear-gradient(
-180deg,
-color-mix(in oklch, var(--post-crisis-secondary) 4%, transparent),
-transparent 50%,
-color-mix(in oklch, var(--post-crisis-primary) 4%, transparent)
-);
-pointer-events: none;
-opacity: 0.6;
+    repeating-linear-gradient(
+    85deg,
+    transparent,
+    transparent 2px,
+    color-mix(in oklch, var(--post-crisis-primary) 6%, transparent) 2px,
+    color-mix(in oklch, var(--post-crisis-primary) 6%, transparent) 3px
+    ),
+    linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--post-crisis-secondary) 4%, transparent),
+    transparent 50%,
+    color-mix(in oklch, var(--post-crisis-primary) 4%, transparent)
+    ) !important;
+pointer-events: none !important;
+opacity: 0.6 !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
