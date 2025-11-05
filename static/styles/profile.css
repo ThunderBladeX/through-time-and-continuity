@@ -1354,8 +1354,6 @@ html.lenis, html.lenis body {
     }
 }
 
-.back-button:hover{background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.08) 0%, rgba(var(--accent-rgb), 0.02) 100%)}
-
 @media (prefers-reduced-motion:no-preference){
     .hero-content{animation-fill-mode:forwards}
 }
