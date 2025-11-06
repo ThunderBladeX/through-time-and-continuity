@@ -104,14 +104,14 @@ function setupOrbitalEasterEgg() {
     let resetTimeout;
 
     const planetTooltips = {
-        'sun': 'The Center ⭐ (Click to start)',
+        'sun': 'The Center ⭐',
         'perihelion': 'Perihelion: Closest Point 🔴',
         'aphelion': 'Aphelion: Farthest Point 🔵',
         'wanderer': 'The Wanderer: Always Moving 💜'
     };
     
     function showTooltip(element, text) {
-        if (window.innerWidth <= 480) return; // Skip on mobile
+        if (window.innerWidth <= 480) return;
         
         const rect = element.getBoundingClientRect();
         tooltip.textContent = text;
