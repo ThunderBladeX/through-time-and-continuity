@@ -1032,8 +1032,14 @@
 
     async function applyCharacterCSSFile() {
         const charName = currentCharacter.name || 'unknown';
-        const cssFileName = charName.toLowerCase().replace(/\s+/g, '-') + '.css';
+        const cssChar = charName.toLowerCase().replace(/\s+/g, '-');
+        const cssFileName = cssChar + '.css';
         const cssPath = '/static/styles/characters/' + cssFileName;
+        const charElement = document.querySelector('#pfp');
+
+        if (charElement) {
+            charElement.dataset.character = cssChar;
+        }
 
         try {
             const response = await fetch(cssPath, { method: 'HEAD' });
@@ -1045,7 +1051,6 @@
                 console.log('Character CSS loaded:', cssPath);
             }
         } catch (error) {
-
             console.log('No character-specific CSS found');
         }
     }
