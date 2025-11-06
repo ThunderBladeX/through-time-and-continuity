@@ -1,3 +1,7 @@
+.main-nav {
+    background: rgba(10, 10, 10, 0.7) !important
+}
+
 .hero {
     position: relative;
     height: 100vh;
