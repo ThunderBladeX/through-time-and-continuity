@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/static/styles/home.css">
 </head>
 <body>
-    <!-- Sticky Navigation -->
+
     <nav class="main-nav">
         <div class="nav-container">
             <h1 class="site-title">Periaphe Archive</h1>
@@ -27,32 +27,35 @@
         </div>
     </nav>
 
-    <!-- Hero Section with Background Image -->
     <section class="hero">
         <div class="hero-overlay"></div>
+
         <div class="orbital-system" id="orbital-system">
             <div class="sun" id="sun" title="Click me!"></div>
-            <div class="orbit orbit-1"></div>
-            <div class="orbit orbit-2"></div>
-            <div class="orbit orbit-3"></div>
-            <div class="planet perihelion" id="perihelion" title="Perihelion: Closest point to the sun"></div>
-            <div class="planet aphelion" id="aphelion" title="Aphelion: Farthest point from the sun"></div>
-            <div class="planet wanderer" id="wanderer" title="The Wanderer"></div>
+            <div class="orbit orbit-1">
+                <div class="planet perihelion" id="perihelion" title="Perihelion: Closest point to the sun"></div>
+            </div>
+            <div class="orbit orbit-2">
+                <div class="planet aphelion" id="aphelion" title="Aphelion: Farthest point from the sun"></div>
+            </div>
+            <div class="orbit orbit-3">
+                <div class="planet wanderer" id="wanderer" title="The Wanderer"></div>
+            </div>
             <div class="comet"></div>
         </div>
         <div class="orbit-tooltip" id="orbit-tooltip"></div>
+
         <div class="hero-content">
             <h2 class="hero-title">THROUGH TIME<br>AND CONTINUITY</h2>
             <p class="hero-subtitle">Tracking legends across every era</p>
         </div>
     </section>
 
-    <!-- Recent Activity Feed -->
     <section class="activity-feed">
         <div class="container">
             <h2 class="section-title">Recent Updates</h2>
             <div id="activity-list" class="activity-list">
-                <!-- Activity items loaded via JS -->
+                <!-- Loaded via JS -->
                 <div class="activity-skeleton">
                     <div class="skeleton-card"></div>
                     <div class="skeleton-card"></div>
