@@ -112,8 +112,8 @@
 
 .orbital-system {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 20%;
+    left: 20%;
     transform: translate(-50%, -50%);
     width: 600px;
     height: 600px;
