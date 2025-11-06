@@ -110,6 +110,292 @@
     right: -30px
 }
 
+.orbital-system {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6
+}
+
+.sun {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    margin: -30px 0 0 -30px;
+    background: radial-gradient(circle, #ffd700 0%, #ff8c00 60%, rgba(255, 140, 0, 0.2) 100%);
+    border-radius: 50%;
+    box-shadow: 
+        0 0 40px rgba(255, 215, 0, 0.8),
+        0 0 80px rgba(255, 140, 0, 0.5),
+        inset 0 0 20px rgba(255, 100, 0, 0.6);
+    pointer-events: all;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: sunPulse 4s ease-in-out infinite
+}
+
+@keyframes sunPulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 
+            0 0 40px rgba(255, 215, 0, 0.8),
+            0 0 80px rgba(255, 140, 0, 0.5),
+            inset 0 0 20px rgba(255, 100, 0, 0.6)
+    }
+    50% { 
+        transform: scale(1.1);
+        box-shadow: 
+            0 0 60px rgba(255, 215, 0, 1),
+            0 0 100px rgba(255, 140, 0, 0.7),
+            inset 0 0 25px rgba(255, 100, 0, 0.8)
+    }
+}
+
+.sun:hover {
+    transform: scale(1.15);
+    box-shadow: 
+        0 0 60px rgba(255, 215, 0, 1),
+        0 0 120px rgba(255, 140, 0, 0.8),
+        inset 0 0 30px rgba(255, 255, 0, 0.9)
+}
+
+.orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: orbitGlow 8s ease-in-out infinite
+}
+
+@keyframes orbitGlow {
+    0%, 100% { border-color: rgba(59, 130, 246, 0.15) }
+    50% { border-color: rgba(139, 92, 246, 0.25) }
+}
+
+.orbit-1 {
+    width: 200px;
+    height: 200px;
+    animation-delay: 0s
+}
+
+.orbit-2 {
+    width: 350px;
+    height: 350px;
+    animation-delay: 1s
+}
+
+.orbit-3 {
+    width: 500px;
+    height: 500px;
+    animation-delay: 2s
+}
+
+.planet {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: all;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 0 15px currentColor
+}
+
+.planet::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    width: 40%;
+    height: 40%;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    filter: blur(3px)
+}
+
+.planet:hover {
+    transform: scale(1.3);
+    filter: brightness(1.4);
+    box-shadow: 0 0 30px currentColor
+}
+
+.perihelion {
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #ef4444;
+    top: 50%;
+    left: 0;
+    margin: -10px 0 0 -10px;
+    animation: orbitPerihelion 12s linear infinite
+}
+
+@keyframes orbitPerihelion {
+    from { transform: rotate(0deg) translateX(100px) rotate(0deg) }
+    to { transform: rotate(360deg) translateX(100px) rotate(-360deg) }
+}
+
+.aphelion {
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: #3b82f6;
+    top: 50%;
+    left: 0;
+    margin: -8px 0 0 -8px;
+    animation: orbitAphelion 20s linear infinite reverse
+}
+
+@keyframes orbitAphelion {
+    from { transform: rotate(0deg) translateX(175px) rotate(0deg) }
+    to { transform: rotate(360deg) translateX(175px) rotate(-360deg) }
+}
+
+.wanderer {
+    width: 14px;
+    height: 14px;
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    color: #8b5cf6;
+    top: 50%;
+    left: 0;
+    margin: -7px 0 0 -7px;
+    animation: orbitWanderer 30s linear infinite
+}
+
+@keyframes orbitWanderer {
+    from { transform: rotate(0deg) translateX(250px) rotate(0deg) }
+    to { transform: rotate(360deg) translateX(250px) rotate(-360deg) }
+}
+
+.orbital-system.easter-egg-active {
+    opacity: 1;
+    animation: systemExpand 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards
+}
+
+@keyframes systemExpand {
+    0% { transform: translate(-50%, -50%) scale(1) rotate(0deg) }
+    50% { transform: translate(-50%, -50%) scale(1.3) rotate(180deg) }
+    100% { transform: translate(-50%, -50%) scale(1) rotate(360deg) }
+}
+
+.orbital-system.easter-egg-active .sun {
+    animation: sunExplode 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards
+}
+
+@keyframes sunExplode {
+    0% { transform: scale(1) }
+    50% { 
+        transform: scale(2);
+        box-shadow: 
+            0 0 100px rgba(255, 215, 0, 1),
+            0 0 200px rgba(255, 140, 0, 1),
+            inset 0 0 40px rgba(255, 255, 0, 1)
+    }
+    100% { 
+        transform: scale(1);
+        box-shadow: 
+            0 0 40px rgba(255, 215, 0, 0.8),
+            0 0 80px rgba(255, 140, 0, 0.5),
+            inset 0 0 20px rgba(255, 100, 0, 0.6)
+    }
+}
+
+.orbital-system.easter-egg-active .orbit {
+    border-width: 2px;
+    animation: orbitPulse 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards
+}
+
+@keyframes orbitPulse {
+    0%, 100% { 
+        border-color: rgba(59, 130, 246, 0.15);
+        transform: translate(-50%, -50%) scale(1)
+    }
+    50% { 
+        border-color: rgba(139, 92, 246, 0.8);
+        transform: translate(-50%, -50%) scale(1.15)
+    }
+}
+
+.orbital-system.easter-egg-active .planet {
+    animation-duration: 3s !important
+}
+
+.comet {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    top: -50px;
+    left: -50px;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 20px rgba(59, 130, 246, 0.6)
+}
+
+.comet::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.8) 0%, transparent 100%);
+    transform: translateY(-50%)
+}
+
+.orbital-system.easter-egg-active .comet {
+    animation: cometFly 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards
+}
+
+@keyframes cometFly {
+    0% { 
+        opacity: 0;
+        transform: translate(-100px, -100px) scale(0)
+    }
+    10% { opacity: 1 }
+    50% { 
+        opacity: 1;
+        transform: translate(300px, 300px) scale(1)
+    }
+    100% { 
+        opacity: 0;
+        transform: translate(700px, 700px) scale(0.5)
+    }
+}
+
+.orbit-tooltip {
+    position: absolute;
+    background: rgba(26, 26, 26, 0.95);
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
+    z-index: 100;
+    backdrop-filter: blur(10px)
+}
+
+.orbit-tooltip.active {
+    opacity: 1;
+    transform: translateY(0)
+}
+
 .activity-feed {
     padding: var(--spacing-2xl) 0;
     min-height: 100vh;
@@ -441,6 +727,26 @@
     .hero-subtitle::after{
         right:5rem
     }
+    .orbital-system {
+        width: 400px;
+        height: 400px;
+        opacity: 0.4
+    }
+    .orbit-1 { width: 140px; height: 140px }
+    .orbit-2 { width: 240px; height: 240px }
+    .orbit-3 { width: 340px; height: 340px }
+    @keyframes orbitPerihelion {
+        from { transform: rotate(0deg) translateX(70px) rotate(0deg) }
+        to { transform: rotate(360deg) translateX(70px) rotate(-360deg) }
+    }
+    @keyframes orbitAphelion {
+        from { transform: rotate(0deg) translateX(120px) rotate(0deg) }
+        to { transform: rotate(360deg) translateX(120px) rotate(-360deg) }
+    }
+    @keyframes orbitWanderer {
+        from { transform: rotate(0deg) translateX(170px) rotate(0deg) }
+        to { transform: rotate(360deg) translateX(170px) rotate(-360deg) }
+    }
     .activity-card,
     .character-tag,
     .era-card{
@@ -479,8 +785,40 @@
     .hero-subtitle::after{
         right:35px
     }
+    .orbital-system{
+        width:300px;
+        height:300px;
+        opacity:.3
+    }
+    .sun {
+        width:40px;
+        height:40px;
+        margin:-20px 0 0 -20px
+    }
+    .orbit-1{width:100px;height:100px}
+    .orbit-2{width:180px;height:180px}
+    .orbit-3{width:260px;height:260px}
+    .perihelion{width:14px;height:14px;margin:-7px 0 0 -7px}
+    .aphelion{width:12px;height:12px;margin:-6px 0 0 -6px}
+    .wanderer{width:10px;height:10px;margin:-5px 0 0 -5px}
+    @keyframes orbitPerihelion{
+        from {transform:rotate(0deg) translateX(50px) rotate(0deg)}
+        to {transform:rotate(360deg) translateX(50px) rotate(-360deg)}
+    }
+    @keyframes orbitAphelion{
+        from{transform:rotate(0deg) translateX(90px) rotate(0deg)}
+        to{transform:rotate(360deg) translateX(90px) rotate(-360deg)}
+    }
+    @keyframes orbitWanderer{
+        from{transform:rotate(0deg) translateX(130px) rotate(0deg)}
+        to{transform:rotate(360deg) translateX(130px) rotate(-360deg)}
+    }
+    .orbit-tooltip{
+        font-size:.75rem;
+        padding:.4rem .8rem
+    }
     .activity-card:hover{
-        transform: translateY(-3px)
+        transform:translateY(-3px)
     }
     .activity-list{
         grid-template-columns:1fr
@@ -511,11 +849,32 @@
     .activity-card:hover{
         box-shadow:none
     }
+    .orbital-system{
+        display:none
+    }
 }
 
 @media (max-width:327px){
     .hero-subtitle::before,
     .hero-subtitle::after{
         display:none
+    }
+}
+
+@media (prefers-reduced-motion:reduce){
+    .orbital-system,
+    .orbital-system *,
+    .orbit-tooltip{
+        animation:none;
+        transition:none
+    }
+    .orbital-system {
+        opacity:.3
+    }
+    .sun{
+        animation:none
+    }
+    .orbit{
+        animation:none
     }
 }
