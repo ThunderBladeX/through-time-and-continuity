@@ -232,7 +232,7 @@
     background: linear-gradient(135deg, #ef4444, #dc2626);
     color: #ef4444;
     top: 50%;
-    left: 0;
+    left: 50%;
     margin: -10px 0 0 -10px;
     animation: orbitPerihelion 12s linear infinite
 }
@@ -248,7 +248,7 @@
     background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     color: #3b82f6;
     top: 50%;
-    left: 0;
+    left: 50%;
     margin: -8px 0 0 -8px;
     animation: orbitAphelion 20s linear infinite reverse
 }
@@ -264,7 +264,7 @@
     background: linear-gradient(135deg, #8b5cf6, #7c3aed);
     color: #8b5cf6;
     top: 50%;
-    left: 0;
+    left: 50%;
     margin: -7px 0 0 -7px;
     animation: orbitWanderer 30s linear infinite
 }
