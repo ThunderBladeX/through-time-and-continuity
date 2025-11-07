@@ -104,14 +104,14 @@ function setupOrbitalEasterEgg() {
     let resetTimeout;
 
     const planetTooltips = {
-        'sun': 'The Center ⭐',
+        'sun': 'The Center ⭐ (Click to start)',
         'perihelion': 'Perihelion: Closest Point 🔴',
         'aphelion': 'Aphelion: Farthest Point 🔵',
         'wanderer': 'The Wanderer: Always Moving 💜'
     };
     
     function showTooltip(element, text) {
-        if (window.innerWidth <= 480) return;
+        if (window.innerWidth <= 480) return; // Skip on mobile
         
         const rect = element.getBoundingClientRect();
         tooltip.textContent = text;
@@ -134,46 +134,81 @@ function setupOrbitalEasterEgg() {
         
         element.addEventListener('mouseleave', hideTooltip);
     });
- 
+
+    function flashElement(element) {
+        const originalFilter = element.style.filter || '';
+        element.style.filter = 'brightness(2) drop-shadow(0 0 20px currentColor)';
+        element.style.transform = 'scale(1.5)';
+        
+        setTimeout(() => {
+            element.style.filter = originalFilter;
+            element.style.transform = '';
+        }, 300);
+    }
+
     function handlePlanetClick(planetId) {
+        console.log('Clicked:', planetId, 'Current sequence:', clickSequence);
+        
         if (easterEggActivated) return;
         
         clickSequence.push(planetId);
 
         const element = document.getElementById(planetId);
         if (element) {
-            element.style.transform = 'scale(1.5)';
+            flashElement(element);
+        }
+
+        const sequenceStr = clickSequence.join(' → ');
+        console.log('Current sequence:', sequenceStr);
+
+        let isCorrectSoFar = true;
+        for (let i = 0; i < clickSequence.length; i++) {
+            if (clickSequence[i] !== secretSequence[i]) {
+                isCorrectSoFar = false;
+                break;
+            }
+        }
+        
+        if (!isCorrectSoFar) {
+            orbitalSystem.style.animation = 'shake 0.5s ease';
             setTimeout(() => {
-                element.style.transform = '';
-            }, 300);
+                orbitalSystem.style.animation = '';
+            }, 500);
+            showNotification(`Wrong sequence! Try: Sun → Closest → Farthest. You clicked: ${sequenceStr}`, 'error');
+            clickSequence = [];
+            return;
+        }
+
+        if (clickSequence.length < secretSequence.length) {
+            const remaining = secretSequence.length - clickSequence.length;
+            showNotification(`Good! ${remaining} more to go... 🌟`, 'info');
         }
 
         if (clickSequence.length === secretSequence.length) {
             if (JSON.stringify(clickSequence) === JSON.stringify(secretSequence)) {
                 activateEasterEgg();
-            } else {
-                orbitalSystem.style.animation = 'none';
-                setTimeout(() => {
-                    orbitalSystem.style.animation = '';
-                }, 10);
-                showNotification('Not quite right... Try again! 🌟', 'info');
             }
             clickSequence = [];
         }
 
         clearTimeout(resetTimeout);
         resetTimeout = setTimeout(() => {
-            clickSequence = [];
-        }, 5000);
+            if (clickSequence.length > 0) {
+                showNotification('Sequence timeout - try again!', 'info');
+                clickSequence = [];
+            }
+        }, 10000);
     }
     
     function activateEasterEgg() {
         easterEggActivated = true;
         hideTooltip();
+        
+        console.log('🌟 EASTER EGG ACTIVATED! 🌟');
 
         orbitalSystem.classList.add('easter-egg-active');
 
-        showNotification('🌟 You\'ve unlocked the cosmic secret! The orbital dance begins! 🌟', 'success');
+        showNotification('🌟✨ COSMIC ALIGNMENT ACHIEVED! ✨🌟 The orbital dance of Perihelion and Aphelion begins!', 'success');
 
         createSparkles();
 
@@ -181,6 +216,7 @@ function setupOrbitalEasterEgg() {
             orbitalSystem.classList.remove('easter-egg-active');
             easterEggActivated = false;
             clickSequence = [];
+            showNotification('The cosmos returns to normal... for now. 🌙', 'info');
         }, 2000);
     }
     
@@ -211,9 +247,9 @@ function setupOrbitalEasterEgg() {
         }
     }
 
-    if (!document.getElementById('sparkle-animation')) {
+    if (!document.getElementById('orbital-animations')) {
         const style = document.createElement('style');
-        style.id = 'sparkle-animation';
+        style.id = 'orbital-animations';
         style.textContent = `
             @keyframes sparkleFade {
                 0% {
@@ -229,15 +265,34 @@ function setupOrbitalEasterEgg() {
                     transform: scale(0.5) translateY(-40px);
                 }
             }
+            
+            @keyframes shake {
+                0%, 100% { transform: translate(-50%, -50%) translateX(0); }
+                25% { transform: translate(-50%, -50%) translateX(-10px); }
+                75% { transform: translate(-50%, -50%) translateX(10px); }
+            }
         `;
         document.head.appendChild(style);
     }
 
-    sun.addEventListener('click', () => handlePlanetClick('sun'));
-    perihelion.addEventListener('click', () => handlePlanetClick('perihelion'));
-    aphelion.addEventListener('click', () => handlePlanetClick('aphelion'));
+    sun.addEventListener('click', (e) => {
+        e.stopPropagation();
+        handlePlanetClick('sun');
+    });
+    
+    perihelion.addEventListener('click', (e) => {
+        e.stopPropagation();
+        handlePlanetClick('perihelion');
+    });
+    
+    aphelion.addEventListener('click', (e) => {
+        e.stopPropagation();
+        handlePlanetClick('aphelion');
+    });
 
-    wanderer.addEventListener('click', () => {
+    wanderer.addEventListener('click', (e) => {
+        e.stopPropagation();
+        flashElement(wanderer);
         showNotification('The Wanderer goes its own way... 💫', 'info');
         wanderer.style.animationDuration = '10s';
         setTimeout(() => {
@@ -253,7 +308,7 @@ function setupOrbitalEasterEgg() {
         clearTimeout(sunClickTimer);
         
         if (sunClickCount === 3) {
-            showNotification('💡 Hint: Sun → Closest → Farthest', 'info');
+            showNotification('💡 Hint: Sun → Closest (Red) → Farthest (Blue)', 'info');
             sunClickCount = 0;
         }
         
@@ -266,5 +321,5 @@ function setupOrbitalEasterEgg() {
 document.addEventListener('DOMContentLoaded', () => {
     loadRecentActivities();
     setupHeroParallax();
-    setupOrbitalEasterEgg()
+    setupOrbitalEasterEgg();
 });
