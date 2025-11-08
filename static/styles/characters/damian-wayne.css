@@ -33,14 +33,6 @@
     --glass-shine: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%, rgba(139, 28, 28, 0.03) 100%);
 }
 
-[data-character="damian-wayne"] .hero-section {
-    background: 
-        linear-gradient(to bottom, #0d0d0f 0%, #1a1a1d 100%),
-        radial-gradient(ellipse at 30% 20%, rgba(139, 28, 28, 0.05), transparent 60%),
-        radial-gradient(ellipse at 70% 80%, rgba(90, 111, 122, 0.03), transparent 60%);
-    position: relative;
-}
-
 [data-character="damian-wayne"] .hero-section::after {
     content: '';
     position: absolute;
@@ -62,24 +54,6 @@
     mix-blend-mode: screen;
 }
 
-[data-character="damian-wayne"] .hero-image-wrapper::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(
-        ellipse at center,
-        transparent 0%,
-        rgba(13, 13, 15, 0.3) 50%,
-        rgba(13, 13, 15, 0.7) 80%,
-        rgba(13, 13, 15, 0.9) 100%
-    );
-    z-index: 2;
-    pointer-events: none;
-}
-
 [data-character="damian-wayne"] .hero-name {
     background: linear-gradient(
         135deg,
@@ -89,6 +63,7 @@
         #6a1515 50%,
         #4a0e0e 65%,
         #6a1515 80%,
+        #8b1c1c 85%,
         #e8e8ea 100%
     );
     background-size: 300% auto;
@@ -114,7 +89,8 @@
         135deg,
         rgba(139, 28, 28, 0.3) 0%,
         rgba(106, 21, 21, 0.2) 50%,
-        rgba(74, 14, 14, 0.3) 100%
+        rgba(74, 14, 14, 0.3) 90%,
+        rgba(139, 28, 28, 0.3) 100%
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
