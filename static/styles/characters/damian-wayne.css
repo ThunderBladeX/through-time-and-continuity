@@ -403,8 +403,8 @@
 [data-character="damian-wayne"] .timeline-item::after {
     content: '';
     position: absolute;
-    left: -65px;
-    top: 12px;
+    left: -63px;
+    top: 14px;
     width: 19px;
     height: 19px;
     border-radius: 50%;
