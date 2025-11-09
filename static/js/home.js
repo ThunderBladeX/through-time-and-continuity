@@ -217,7 +217,7 @@ function setupOrbitalEasterEgg() {
             easterEggActivated = false;
             clickSequence = [];
             showNotification('The cosmos returns to normal... for now. 🌙', 'info');
-        }, 2000);
+        }, 10000);
     }
     
     function createSparkles() {
