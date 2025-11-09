@@ -373,8 +373,8 @@
 [data-character="damian-wayne"] .timeline-item::after {
     content: '';
     position: absolute;
-    left: -63px;
-    top: 14px;
+    left: -62px;
+    top: 12px;
     width: 19px;
     height: 19px;
     border-radius: 50%;
