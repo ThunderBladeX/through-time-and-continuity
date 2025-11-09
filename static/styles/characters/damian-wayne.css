@@ -81,8 +81,10 @@
     background: linear-gradient(
         135deg,
         rgba(139, 28, 28, 0.3) 0%,
-        rgba(106, 21, 21, 0.2) 50%,
-        rgba(74, 14, 14, 0.3) 100%
+        rgba(106, 21, 21, 0.2) 25%,
+        rgba(74, 14, 14, 0.3) 50%, 
+        rgba(106, 21, 21, 0.2) 75%,
+        rgba(139, 28, 28, 0.3) 100%
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
