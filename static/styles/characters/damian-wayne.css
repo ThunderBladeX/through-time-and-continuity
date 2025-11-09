@@ -40,9 +40,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
-        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.01) 2px, rgba(255, 255, 255, 0.01) 4px),
-        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0, 0, 0, 0.02) 2px, rgba(0, 0, 0, 0.02) 4px);
     pointer-events: none;
     opacity: 0.3;
     z-index: 1;
@@ -56,7 +53,7 @@
         #8b1c1c 35%,
         #6a1515 50%,
         #8b1c1c 65%,
-        #c5d1da 80%,
+        #c5d1da 85%,
         #4a0e0e 100%
     );
     background-size: 200% auto;
@@ -128,25 +125,6 @@
         0 2px 6px rgba(0, 0, 0, 0.6);
     font-weight: 700;
     filter: drop-shadow(0 0 8px rgba(139, 28, 28, 0.2));
-}
-
-[data-character="damian-wayne"] .hero-quote::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 120%;
-    height: 150%;
-    background: radial-gradient(
-        ellipse at center,
-        rgba(139, 28, 28, 0.05) 0%,
-        rgba(139, 28, 28, 0.02) 30%,
-        transparent 70%
-    );
-    z-index: -1;
-    pointer-events: none;
-    filter: blur(30px);
 }
 
 [data-character="damian-wayne"] .scroll-indicator {
@@ -373,8 +351,8 @@
 [data-character="damian-wayne"] .timeline-item::after {
     content: '';
     position: absolute;
-    left: -62px;
-    top: 12px;
+    left: -63px;
+    top: 13px;
     width: 19px;
     height: 19px;
     border-radius: 50%;
