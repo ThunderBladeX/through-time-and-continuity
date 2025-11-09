@@ -111,7 +111,7 @@ function setupOrbitalEasterEgg() {
     };
     
     function showTooltip(element, text) {
-        if (window.innerWidth <= 480) return; // Skip on mobile
+        if (window.innerWidth <= 480) return;
         
         const rect = element.getBoundingClientRect();
         tooltip.textContent = text;
