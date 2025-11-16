@@ -855,7 +855,16 @@
     }
 }
 
+@media (max-width:651px){
+    .hero-title{
+        font-size:clamp(3rem,12vw,5rem)
+    }
+}
+
 @media (max-width:480px){
+    .hero-title{
+        font-size:clamp(2rem,12vw,4rem)
+    }
     .activity-card,
     .era-card{
         background:var(--bg-secondary);
