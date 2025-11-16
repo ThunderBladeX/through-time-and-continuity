@@ -280,7 +280,7 @@
 
 .orbital-system.easter-egg-active {
     opacity: 1;
-    animation: systemExpand 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards
+    animation: systemExpand 3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards
 }
 
 @keyframes systemExpand {
@@ -290,7 +290,7 @@
 }
 
 .orbital-system.easter-egg-active .sun {
-    animation: sunExplode 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards
+    animation: sunExplode 3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards
 }
 
 @keyframes sunExplode {
@@ -313,7 +313,7 @@
 
 .orbital-system.easter-egg-active .orbit {
     border-width: 2px;
-    animation: orbitPulse 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards
+    animation: orbitPulse 3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards
 }
 
 @keyframes orbitPulse {
@@ -358,7 +358,7 @@
 }
 
 .orbital-system.easter-egg-active .comet {
-    animation: cometFly 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards
+    animation: cometFly 3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards
 }
 
 @keyframes cometFly {
