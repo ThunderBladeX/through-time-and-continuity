@@ -777,7 +777,7 @@
 
 @media (max-width:808px){
     .hero-title{
-        font-size:clamp(2.25rem,11.75vw,5rem)
+        font-size:clamp(2.5rem,11.75vw,4.5rem)
     }
 }
 
