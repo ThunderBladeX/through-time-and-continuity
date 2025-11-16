@@ -1518,11 +1518,13 @@ html.lenis, html.lenis body {
 
 @media (max-width:410px){
     .timeline-date{
-        font-size:.8rem
+        font-size:.8rem;
+        margin:0!important
     }
     .era-badge{
-        padding:.3rem 1rem;
-        font-size:.6rem
+        padding:.4rem 1rem;
+        font-size:.6rem;
+        margin:0!important
     }
 }
 
