@@ -1,3 +1,7 @@
+.main-nav {
+    background: rgba(10, 10, 10, 0.7) !important
+}
+
 .hero {
     position: relative;
     height: 100vh;
@@ -6,7 +10,7 @@
     justify-content: center;
     background-image: url('/static/images/hero-bg.jpg');
     background-size: cover;
-    background-position: center;
+    background-position: center 20%;
     background-attachment: fixed;
     overflow: hidden
 }
@@ -714,6 +718,12 @@
     color: var(--text-secondary);
     font-size: 1.1rem;
     margin: 0
+}
+
+@media (max-width:1046px){
+    .hero{
+        background-position:center
+    }
 }
 
 @media (max-width:1024px){
