@@ -866,3 +866,15 @@ p {
         margin-bottom:var(--spacing-lg)
     }
 }
+
+@media (max-width:423px){
+  .site-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width:410px){
+  .site-title {
+    font-size: 1.8rem;
+  }
+}
