@@ -725,6 +725,10 @@
         animation:none;
         background:linear-gradient(135deg,rgba(10,10,10,.7),rgba(59,130,246,.3))
     }
+    .hero-title{
+        filter:none;
+        animation:none
+    }
     .hero-subtitle::before{
         left:5rem
     }
@@ -771,10 +775,9 @@
     }
 }
 
-@media (max-width:888px){
+@media (max-width:808px){
     .hero-title{
-        filter:none;
-        animation:none
+        font-size:clamp(2.25rem,11.75vw,5rem)
     }
 }
 
