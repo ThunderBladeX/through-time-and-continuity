@@ -868,13 +868,19 @@ p {
 }
 
 @media (max-width:423px){
-  .site-title {
-    font-size: 1.3rem;
-  }
+    .site-title {
+        font-size:1.3rem
+    }
+    .nav-links a{
+        font-size:1rem
+    }
 }
 
 @media (max-width:410px){
-  .site-title {
-    font-size: 1.2rem;
-  }
+    .site-title {
+        font-size:1.2rem
+    }
+    .nav-links a{
+        font-size:.9rem
+    }
 }
