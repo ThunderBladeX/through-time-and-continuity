@@ -765,6 +765,12 @@
     }
 }
 
+@media (max-width:963px){
+    .hero-title{
+        font-size:clamp(2.25rem,11.5vw,5rem)
+    }
+}
+
 @media (max-width:768px){
     .hero{
         height:70vh;
