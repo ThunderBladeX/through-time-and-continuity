@@ -861,7 +861,7 @@
 [data-character="damian-wayne"] .bio-sections::after {
     content: '🥀';
     position: absolute;
-    bottom: var(--spacing-md);
+    bottom: var(--spacing-2xl);
     right: var(--spacing-xl);
     font-size: 60px;
     opacity: 0.8;
