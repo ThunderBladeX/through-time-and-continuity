@@ -727,6 +727,9 @@
 }
 
 @media (max-width:1024px){
+    .main-nav{
+        background:var(--bg-primary)
+    }
     .hero-overlay{
         animation:none;
         background:linear-gradient(135deg,rgba(10,10,10,.7),rgba(59,130,246,.3))
