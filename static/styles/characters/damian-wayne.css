@@ -480,24 +480,7 @@
     border-left: 3px solid var(--char-crimson);
     position: relative;
     overflow: hidden;
-    
-    &::before {
-        content: '🌸';
-        position: absolute;
-        top: 50%;
-        right: var(--spacing-md);
-        transform: translateY(-50%);
-        font-size: 60px;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-        pointer-events: none;
-        z-index: 0;
-    }
-    
-    &:hover::before {
-        opacity: 1;
-    }
-    
+
     &::after {
         content: '';
         position: absolute;
@@ -924,17 +907,6 @@
     [data-character="damian-wayne"] .hero-section::after {
         width: 50px;
         height: 50px;
-    }
-
-    [data-character="damian-wayne"] .hero-gradient {
-        background: linear-gradient(
-            to top,
-            var(--char-primary) 0%,
-            rgba(26, 22, 18, 0.95) 15%,
-            rgba(26, 22, 18, 0.7) 40%,
-            rgba(26, 22, 18, 0.3) 70%,
-            transparent 100%
-        );
     }
     
     [data-character="damian-wayne"] .hero-name {
