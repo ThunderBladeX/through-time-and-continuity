@@ -24,42 +24,6 @@
     --gradient-parchment: linear-gradient(135deg, #d4c4a8 0%, #c4b59a 50%, #b5a589 100%)
 }
 
-[data-character="damian-wayne"] .hero-section {
-    height: 100vh;
-    clip-path: polygon(
-        0 0,
-        100% 0,
-        100% 85%,
-        90% 88%,
-        80% 90%,
-        70% 91%,
-        60% 92%,
-        50% 92.5%,
-        40% 92%,
-        30% 91%,
-        20% 90%,
-        10% 88%,
-        0 85%
-    );
-    position: relative
-}
-
-[data-character="damian-wayne"] .hero-image-wrapper {
-    clip-path: polygon(
-        5% 0,
-        95% 0,
-        95% 5%,
-        98% 10%,
-        98% 90%,
-        95% 95%,
-        50% 100%,
-        5% 95%,
-        2% 90%,
-        2% 10%,
-        5% 5%
-    )
-}
-
 [data-character="damian-wayne"] .hero-gradient {
     background: linear-gradient(
         to top,
@@ -94,6 +58,7 @@
     font-weight: 300;
     text-transform: uppercase;
     filter: drop-shadow(0 0 20px rgba(196, 165, 114, 0.3));
+    margin-bottom: 1rem;
     position: relative
 }
 
@@ -196,14 +161,7 @@
     border: 2px solid rgba(139, 115, 85, 0.25);
     border-radius: 0;
     padding: var(--spacing-lg);
-    position: relative;
-    clip-path: polygon(
-        0 0,
-        100% 0,
-        100% calc(100% - 25px),
-        50% 100%,
-        0 calc(100% - 25px)
-    )
+    position: relative
 }
 
 [data-character="damian-wayne"] .nav-wrapper::before {
@@ -427,13 +385,7 @@
     top: 0;
     bottom: 0;
     width: 4px;
-    background: repeating-linear-gradient(
-        to bottom,
-        rgba(139, 115, 85, 0.7) 0px,
-        rgba(139, 115, 85, 0.7) 30px,
-        rgba(139, 115, 85, 0.3) 30px,
-        rgba(139, 115, 85, 0.3) 35px
-    )
+    background: rgba(139, 115, 85, 0.7)
 }
 
 [data-character="damian-wayne"] .timeline-item {
@@ -444,7 +396,7 @@
 [data-character="damian-wayne"] .timeline-item::before {
     content: '';
     position: absolute;
-    left: -70px;
+    left: -72px;
     top: 18px;
     width: 20px;
     height: 20px;
@@ -518,14 +470,7 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-lg);
-    position: relative;
-    clip-path: polygon(
-        0 0,
-        calc(100% - 20px) 0,
-        100% 20px,
-        100% 100%,
-        0 100%
-    )
+    position: relative
 }
 
 [data-character="damian-wayne"] .relationship-card::before {
@@ -538,16 +483,6 @@
     border-top: 2px solid var(--accent);
     border-right: 2px solid var(--accent);
     opacity: 0.5
-}
-
-[data-character="damian-wayne"] .relationship-card::after {
-    content: '◆';
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    font-size: 0.5rem;
-    color: var(--accent);
-    opacity: 0.6
 }
 
 [data-character="damian-wayne"] .relationship-avatar {
@@ -799,7 +734,7 @@
 [data-character="damian-wayne"] .modal-header::after {
     content: '';
     position: absolute;
-    bottom: -8px;
+    bottom: -6px;
     left: 50%;
     transform: translateX(-50%);
     width: 100px;
@@ -1297,29 +1232,7 @@
 }
 
 @media (max-width: 1024px) {
-    [data-character="damian-wayne"] .hero-section {
-        clip-path: polygon(
-            0 0,
-            100% 0,
-            100% 90%,
-            80% 93%,
-            60% 95%,
-            50% 95.5%,
-            40% 95%,
-            20% 93%,
-            0 90%
-        )
-    }
-    
-    [data-character="damian-wayne"] .hero-image-wrapper {
-        clip-path: polygon(
-            5% 0,
-            95% 0,
-            95% 95%,
-            50% 100%,
-            5% 95%
-        )
-    }
+
 }
 
 @media (max-width: 768px) {
@@ -1353,14 +1266,6 @@
     [data-character="damian-wayne"] .nav-item {
         clip-path: none;
         padding: var(--spacing-md) var(--spacing-lg)
-    }
-    
-    [data-character="damian-wayne"] .hero-section {
-        clip-path: none
-    }
-    
-    [data-character="damian-wayne"] .hero-image-wrapper {
-        clip-path: none
     }
     
     [data-character="damian-wayne"] .hero-name {
