@@ -493,16 +493,12 @@
     overflow: hidden;
     
     &::before {
-        content: '';
+        content: '🌸';
         position: absolute;
         top: 50%;
         right: var(--spacing-md);
         transform: translateY(-50%);
-        width: 60px;
-        height: 60px;
-        background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cg opacity="0.15" fill="none" stroke="rgba(139,26,26,1)" stroke-width="1.5"%3E%3Cellipse cx="50" cy="45" rx="25" ry="30"/%3E%3Cpath d="M 35,25 Q 30,15 35,10 Q 40,5 45,10 Q 50,5 55,10 Q 60,5 65,10 Q 70,15 65,25"/%3E%3Cellipse cx="42" cy="50" rx="3" ry="5" transform="rotate(-20 42 50)"/%3E%3Cellipse cx="58" cy="50" rx="3" ry="5" transform="rotate(20 58 50)"/%3E%3Cpath d="M 40,65 Q 50,70 60,65" stroke-linecap="round"/%3E%3Cpath d="M 35,60 Q 30,58 28,55"/%3E%3Cpath d="M 65,60 Q 70,58 72,55"/%3E%3C/g%3E%3C/svg%3E');
-        background-size: contain;
-        background-repeat: no-repeat;
+        font-size: 60px;
         opacity: 0;
         transition: opacity 0.4s ease;
         pointer-events: none;
@@ -863,15 +859,11 @@
 }
 
 [data-character="damian-wayne"] .bio-sections::after {
-    content: '';
+    content: '🥀';
     position: absolute;
     bottom: var(--spacing-xl);
     right: var(--spacing-xl);
-    width: 100px;
-    height: 100px;
-    background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cg opacity="0.12" fill="none" stroke="rgba(139,26,26,0.9)" stroke-width="1.8"%3E%3Ccircle cx="50" cy="40" r="8" fill="rgba(139,26,26,0.15)"/%3E%3Cpath d="M 42,40 Q 35,35 35,28 Q 35,22 40,22 Q 45,22 45,28" stroke-linecap="round"/%3E%3Cpath d="M 58,40 Q 65,35 65,28 Q 65,22 60,22 Q 55,22 55,28" stroke-linecap="round"/%3E%3Cpath d="M 50,32 Q 45,25 38,25 Q 32,25 32,30 Q 32,35 38,35" stroke-linecap="round"/%3E%3Cpath d="M 50,32 Q 55,25 62,25 Q 68,25 68,30 Q 68,35 62,35" stroke-linecap="round"/%3E%3Cpath d="M 50,48 Q 43,50 40,55 Q 38,58 40,60" stroke-linecap="round"/%3E%3Cpath d="M 50,48 Q 57,50 60,55 Q 62,58 60,60" stroke-linecap="round"/%3E%3Cpath d="M 50,48 L 50,75" stroke-width="2.5" stroke="rgba(109,138,109,0.6)"/%3E%3Cpath d="M 50,58 Q 45,60 42,62" stroke="rgba(109,138,109,0.6)"/%3E%3Cpath d="M 50,65 Q 55,67 58,69" stroke="rgba(109,138,109,0.6)"/%3E%3Cpath d="M 42,62 L 38,60 L 40,58" fill="rgba(109,138,109,0.4)" stroke="rgba(109,138,109,0.6)" stroke-width="1"/%3E%3Cpath d="M 58,69 L 62,67 L 60,65" fill="rgba(109,138,109,0.4)" stroke="rgba(109,138,109,0.6)" stroke-width="1"/%3E%3C/g%3E%3C/svg%3E');
-    background-size: contain;
-    background-repeat: no-repeat;
+    font-size: 100px;
     opacity: 0.8;
     pointer-events: none;
 }
