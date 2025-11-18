@@ -18,11 +18,11 @@ html.lenis, html.lenis body {
 }
 
 .lenis.lenis-smooth {
-    scroll-behavior: auto
-}
+    scroll-behavior: auto;
 
-.lenis.lenis-smooth [data-lenis-prevent] {
-    overscroll-behavior: contain
+    [data-lenis-prevent] {
+        overscroll-behavior: contain
+    }
 }
 
 #bg-canvas {
@@ -34,11 +34,11 @@ html.lenis, html.lenis body {
     z-index: -1;
     pointer-events: none;
     opacity: 0.4;
-    transition: opacity 0.6s ease
-}
+    transition: opacity 0.6s ease;
 
-#bg-canvas.loaded {
-    opacity: 0.4
+    &.loaded {
+        opacity: 0.4
+    }
 }
 
 .hero-section {
@@ -65,19 +65,19 @@ html.lenis, html.lenis body {
     left: -5%;
     width: 110%;
     height: 120%;
-    overflow: hidden
-}
+    overflow: hidden;
 
-.hero-image-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, transparent 0%, rgba(10, 10, 10, 0.3) 70%);
-    z-index: 1;
-    pointer-events: none
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, transparent 0%, rgba(10, 10, 10, 0.3) 70%);
+        z-index: 1;
+        pointer-events: none
+    }
 }
 
 .hero-image {
@@ -85,7 +85,7 @@ html.lenis, html.lenis body {
     height: 100%;
     object-fit: cover;
     object-position: center;
-    filter: brightness(0.75) contrast(1.2) saturate(1.1);
+    filter: brightness(0.75) contrast(1.2) saturate(1.1)
 }
 
 .hero-gradient {
@@ -102,7 +102,7 @@ html.lenis, html.lenis body {
         transparent 100%
     );
     pointer-events: none;
-    z-index: 1;
+    z-index: 1
 }
 
 .hero-content {
@@ -112,17 +112,17 @@ html.lenis, html.lenis body {
     padding: var(--spacing-2xl);
     max-width: 1000px;
     animation: heroContentFadeIn 1.5s ease-out forwards;
-    opacity: 0;
+    opacity: 0
 }
 
 @keyframes heroContentFadeIn {
     0% {
         opacity: 0;
-        transform: translateY(40px);
+        transform: translateY(40px)
     }
     100% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0)
     }
 }
 
@@ -145,17 +145,17 @@ html.lenis, html.lenis body {
     will-change: filter, background-position;
     text-shadow: 0 0 80px rgba(var(--accent-rgb), 0.5);
     line-height: 1.1;
-    pointer-events: none;
+    pointer-events: none
 }
 
 @keyframes heroGlow {
-    0% { filter: drop-shadow(0 0 30px rgba(var(--accent-rgb), 0.4)); }
-    100% { filter: drop-shadow(0 0 60px rgba(var(--accent-rgb), 0.8)); }
+    0% { filter: drop-shadow(0 0 30px rgba(var(--accent-rgb), 0.4)) }
+    100% { filter: drop-shadow(0 0 60px rgba(var(--accent-rgb), 0.8)) }
 }
 
 @keyframes gradientFlow {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
+    0% { background-position: 0% center }
+    100% { background-position: 200% center }
 }
 
 .hero-quote {
@@ -170,36 +170,35 @@ html.lenis, html.lenis body {
     position: relative;
     padding: 0 2rem;
     pointer-events: none;
-}
 
-.hero-quote::before,
-.hero-quote::after {
-    content: '"';
-    position: absolute;
-    font-size: 3rem;
-    color: var(--accent);
-    opacity: 0.3;
-    font-family: Georgia, serif;
-}
+    &::before, &::after {
+        content: '"';
+        position: absolute;
+        font-size: 3rem;
+        color: var(--accent);
+        opacity: 0.3;
+        font-family: Georgia, serif
+    }
 
-.hero-quote::before {
-    left: -0.5rem;
-    top: -0.5rem;
-}
+    &::before {
+        left: -0.5rem;
+        top: -0.5rem
+    }
 
-.hero-quote::after {
-    right: -0.5rem;
-    bottom: -1.5rem;
+    &::after {
+        right: -0.5rem;
+        bottom: -1.5rem
+    }
 }
 
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(30px)
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0)
     }
 }
 
@@ -221,15 +220,15 @@ html.lenis, html.lenis body {
     cursor: pointer;
     transition: all 0.3s ease;
     z-index: 3;
-}
 
-.scroll-indicator:hover {
-    color: var(--accent);
-    transform: translateX(-50%) scale(1.1);
+    &:hover {
+        color: var(--accent);
+        transform: translateX(-50%) scale(1.1);
+    }
 }
 
 @keyframes indicatorFade {
-    to { opacity: 1; }
+    to { opacity: 1 }
 }
 
 .scroll-line {
@@ -242,28 +241,28 @@ html.lenis, html.lenis body {
     );
     position: relative;
     overflow: hidden;
-}
 
-.scroll-line::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 30%;
-    background: rgba(var(--accent-rgb), 1);
-    animation: scrollLineMove 1.8s ease-in-out infinite;
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 30%;
+        background: rgba(var(--accent-rgb), 1);
+        animation: scrollLineMove 1.8s ease-in-out infinite
+    }
 }
 
 @keyframes scrollLineMove {
-    0%, 100% { transform: translateY(-100%); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateY(300%); }
+    0%, 100% { transform: translateY(-100%); opacity: 0 }
+    50% { opacity: 1 }
+    100% { transform: translateY(300%) }
 }
 
 @keyframes bounce {
-    0%, 100% { transform: translate(-50%, 0); }
-    50% { transform: translate(-50%, 15px); }
+    0%, 100% { transform: translate(-50%, 0) }
+    50% { transform: translate(-50%, 15px) }
 }
 
 .profile-grid {
