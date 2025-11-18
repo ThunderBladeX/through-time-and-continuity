@@ -58,6 +58,7 @@
 
     function initBubbleGenerator() {
         if (isReducedMotion) return;
+        if (window.innerWidth > 768) return;
 
         const heroSection = document.querySelector('.hero-section');
         if (!heroSection) return;
@@ -124,6 +125,7 @@
 
     function init3DBackground() {
         if (isReducedMotion) return;
+        if (window.innerWidth < 768) return;
 
         if (typeof THREE === 'undefined') {
             console.warn('THREE.js not loaded, skipping 3D background');
