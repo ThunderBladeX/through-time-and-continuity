@@ -44,17 +44,6 @@
     }
 }
 
-[data-character="damian-wayne"] .hero-gradient {
-    background: linear-gradient(
-        to top,
-        var(--char-primary) 0%,
-        rgba(26, 22, 18, 0.95) 15%,
-        rgba(26, 22, 18, 0.7) 40%,
-        rgba(26, 22, 18, 0.3) 70%,
-        transparent 100%
-    );
-}
-
 [data-character="damian-wayne"] .hero-name {
     background: linear-gradient(
         135deg,
@@ -858,16 +847,6 @@
     }
 }
 
-[data-character="damian-wayne"] .bio-sections::after {
-    content: '🥀';
-    position: absolute;
-    bottom: var(--spacing-2xl);
-    right: var(--spacing-xl);
-    font-size: 60px;
-    opacity: 0.8;
-    pointer-events: none;
-}
-
 [data-character="damian-wayne"] .timeline-header::before {
     content: '🗡';
     position: absolute;
@@ -945,6 +924,17 @@
     [data-character="damian-wayne"] .hero-section::after {
         width: 50px;
         height: 50px;
+    }
+
+    [data-character="damian-wayne"] .hero-gradient {
+        background: linear-gradient(
+            to top,
+            var(--char-primary) 0%,
+            rgba(26, 22, 18, 0.95) 15%,
+            rgba(26, 22, 18, 0.7) 40%,
+            rgba(26, 22, 18, 0.3) 70%,
+            transparent 100%
+        );
     }
     
     [data-character="damian-wayne"] .hero-name {
