@@ -862,21 +862,6 @@
     }
 }
 
-[data-character="damian-wayne"] .profile-grid::before {
-    content: '';
-    position: absolute;
-    top: 10%;
-    left: 15%;
-    width: 120px;
-    height: 120px;
-    background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cg opacity="0.08" fill="rgba(139,115,85,1)"%3E%3Cellipse cx="50" cy="45" rx="18" ry="22"/%3E%3Cellipse cx="50" cy="30" rx="12" ry="14"/%3E%3Cpath d="M 38,30 Q 40,26 42,30" fill="rgba(201,169,110,1)"/%3E%3Cpath d="M 58,30 Q 60,26 62,30" fill="rgba(201,169,110,1)"/%3E%3Cpath d="M 45,35 L 48,38 L 52,38 L 55,35" fill="none" stroke="rgba(13,13,13,1)" stroke-width="1"/%3E%3Cpath d="M 32,45 Q 20,40 15,50 Q 12,55 18,58 L 30,50" /%3E%3Cpath d="M 68,45 Q 80,40 85,50 Q 88,55 82,58 L 70,50" /%3E%3Cpath d="M 45,60 Q 50,75 42,85 L 35,80 Q 40,70 45,60" /%3E%3Cpath d="M 55,60 Q 50,75 58,85 L 65,80 Q 60,70 55,60" /%3E%3Cpath d="M 42,65 Q 35,70 28,68" /%3E%3Cpath d="M 58,65 Q 65,70 72,68" /%3E%3C/g%3E%3C/svg%3E');
-    background-size: contain;
-    background-repeat: no-repeat;
-    opacity: 0.8;
-    pointer-events: none;
-    z-index: 0;
-}
-
 [data-character="damian-wayne"] .bio-sections::after {
     content: '';
     position: absolute;
@@ -892,15 +877,11 @@
 }
 
 [data-character="damian-wayne"] .timeline-header::before {
-    content: '';
+    content: '🗡';
     position: absolute;
     top: 0;
     right: 0;
-    width: 60px;
-    height: 60px;
-    background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cg opacity="0.12" fill="none" stroke="rgba(139,115,85,1)" stroke-width="2"%3E%3Cpath d="M 30,70 L 70,30" stroke-width="3"/%3E%3Cpath d="M 25,75 L 35,65 L 30,70 Z" fill="rgba(139,115,85,0.6)"/%3E%3Crect x="42" y="42" width="16" height="6" transform="rotate(-45 50 45)" fill="rgba(201,169,110,0.4)"/%3E%3Ccircle cx="72" cy="28" r="4" fill="rgba(201,169,110,0.5)"/%3E%3C/g%3E%3C/svg%3E');
-    background-size: contain;
-    background-repeat: no-repeat;
+    font-size: 60px;
     opacity: 0.8;
     pointer-events: none;
 }
