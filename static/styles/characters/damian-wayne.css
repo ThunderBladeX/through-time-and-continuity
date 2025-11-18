@@ -863,7 +863,7 @@
     position: absolute;
     bottom: var(--spacing-xl);
     right: var(--spacing-xl);
-    font-size: 100px;
+    font-size: 60px;
     opacity: 0.8;
     pointer-events: none;
 }
