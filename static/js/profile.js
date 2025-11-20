@@ -643,21 +643,21 @@
         if (!container) return;
 
         container.innerHTML = '';
-        
         toggleLoader('gallery-loader', true);
 
         try {
             if (typeof initGallery === 'function') {
                 await initGallery(characterId);
+                toggleLoader('gallery-loader', false);
                 console.log('Gallery initialized');
             } else {
+                toggleLoader('gallery-loader', false);
                 container.innerHTML = '<p class="empty-state">Gallery functionality not available.</p>';
             }
         } catch (error) {
+            toggleLoader('gallery-loader', false);
             console.error("Gallery load error:", error);
             container.innerHTML = '<p class="error-state">Failed to load gallery.</p>';
-        } finally {
-            toggleLoader('gallery-loader', false);
         }
     }
 
