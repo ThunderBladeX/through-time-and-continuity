@@ -442,12 +442,24 @@
         }
     }
 
+    function toggleLoader(elementId, show) {
+        const loader = document.getElementById(elementId);
+        if (loader) {
+            loader.style.display = show ? 'flex' : 'none';
+        }
+    }
+
     async function loadTimeline() {
         const container = document.getElementById('timeline-container');
         if (!container) return;
 
+        container.innerHTML = '';
+        toggleLoader('timeline-loader', true);
+
         try {
             const events = await fetchAPI(`/characters/${characterId}/timeline`);
+
+            toggleLoader('timeline-loader', false);
 
             if (!events || events.length === 0) {
                 container.innerHTML = '<p class="empty-state">No timeline events yet.</p>';
@@ -508,6 +520,7 @@
 
             console.log('Timeline loaded:', events.length, 'events');
         } catch (error) {
+            toggleLoader('timeline-loader', false);
             container.innerHTML = '<p class="error-state">Failed to load timeline.</p>';
             throw error;
         }
@@ -517,8 +530,13 @@
         const container = document.getElementById('relationships-grid');
         if (!container) return;
 
+        container.innerHTML = '';
+        toggleLoader('relationships-loader', true);
+
         try {
             const relationships = await fetchAPI(`/characters/${characterId}/relationships`);
+
+            toggleLoader('relationships-loader', false);
 
             if (!relationships || relationships.length === 0) {
                 container.innerHTML = '<p class="empty-state">No relationships defined yet.</p>';
@@ -544,6 +562,7 @@
 
             console.log('Relationships loaded:', relationships.length);
         } catch (error) {
+            toggleLoader('relationships-loader', false);
             container.innerHTML = '<p class="error-state">Failed to load relationships.</p>';
             throw error;
         }
@@ -553,8 +572,13 @@
         const container = document.getElementById('love-interests-content');
         if (!container) return;
 
+        container.innerHTML = '';
+        toggleLoader('love-loader', true);
+
         try {
             const interests = await fetchAPI(`/characters/${characterId}/love-interests`);
+
+            toggleLoader('love-loader', false);
 
             if (!interests || interests.length === 0) {
                 container.innerHTML = '<p class="empty-state">No love interests defined yet.</p>';
@@ -608,6 +632,7 @@
             container.innerHTML = html;
             console.log('Love interests loaded');
         } catch (error) {
+            toggleLoader('love-loader', false);
             container.innerHTML = '<p class="error-state">Failed to load love interests.</p>';
             throw error;
         }
@@ -617,11 +642,23 @@
         const container = document.getElementById('gallery-grid');
         if (!container) return;
 
-        if (typeof initGallery === 'function') {
-            initGallery(characterId);
-            console.log('Gallery initialized');
-        } else {
-            container.innerHTML = '<p class="empty-state">Gallery functionality not available.</p>';
+        // Clear previous content (except loader if it was inside, but here loader is sibling)
+        container.innerHTML = '';
+        
+        toggleLoader('gallery-loader', true);
+
+        try {
+            if (typeof initGallery === 'function') {
+                await initGallery(characterId);
+                console.log('Gallery initialized');
+            } else {
+                container.innerHTML = '<p class="empty-state">Gallery functionality not available.</p>';
+            }
+        } catch (error) {
+            console.error("Gallery load error:", error);
+            container.innerHTML = '<p class="error-state">Failed to load gallery.</p>';
+        } finally {
+            toggleLoader('gallery-loader', false);
         }
     }
 
@@ -1100,21 +1137,6 @@
             }
         }
     });
-
-    if (typeof getEraName === 'undefined') {
-        window.getEraName = function(eraId) {
-            const eraNames = {
-                'pre-52': 'Classic',
-                'new-52': 'New 52',
-                'rebirth': 'Rebirth',
-                'infinite-frontier': 'Infinite Frontier',
-                'elseworlds': 'Elseworlds',
-                'post-crisis': 'Post-Crisis',
-                'future-state': 'Future State'
-            };
-            return eraNames[eraId] || eraId;
-        };
-    }
 
     if (window.performance && window.performance.mark) {
         window.addEventListener('load', function() {
