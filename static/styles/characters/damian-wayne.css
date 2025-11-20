@@ -191,6 +191,7 @@
     transform: translateX(-50%);
     color: var(--accent);
     font-size: 0.8rem;
+    white-space: nowrap;
     opacity: 0.5
 }
 
