@@ -642,7 +642,6 @@
         const container = document.getElementById('gallery-grid');
         if (!container) return;
 
-        // Clear previous content (except loader if it was inside, but here loader is sibling)
         container.innerHTML = '';
         
         toggleLoader('gallery-loader', true);
