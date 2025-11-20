@@ -184,7 +184,7 @@
 }
 
 [data-character="damian-wayne"] .nav-wrapper::after {
-    content: '⋆˙⊹₊˙⋆⟆𓂃⌭𓂃⟅⋆˙⊹₊˙⋆';
+    content: '⟆₊̣̇𓋹🔥𓋹₊̣̇⟅';
     position: absolute;
     bottom: 5px;
     left: 50%;
@@ -232,11 +232,11 @@
     text-transform: uppercase;
     font-size: 0.8rem;
     clip-path: polygon(8% 0, 92% 0, 100% 50%, 92% 100%, 8% 100%, 0 50%);
-    padding: var(--spacing-md) var(--spacing-xl)
-}
+    padding: var(--spacing-md) var(--spacing-xl);
 
-[data-character="damian-wayne"] .admin-btn::before {
-    background: rgba(212, 196, 168, 0.2)
+    &::before {
+        background: rgba(212, 196, 168, 0.2)
+    }
 }
 
 [data-character="damian-wayne"] .glass-card {
@@ -253,13 +253,18 @@
         2% 100%,
         0 98%,
         0 2%
-    )
-}
+    );
 
-[data-character="damian-wayne"] .glass-card::before {
-    background: 
-        radial-gradient(circle at 15% 20%, rgba(196, 165, 114, 0.04) 0%, transparent 50%),
-        radial-gradient(circle at 85% 80%, rgba(139, 115, 85, 0.03) 0%, transparent 50%)
+    &::before {
+        background: 
+            radial-gradient(circle at 15% 20%, rgba(196, 165, 114, 0.04) 0%, transparent 50%),
+            radial-gradient(circle at 85% 80%, rgba(139, 115, 85, 0.03) 0%, transparent 50%)
+    }
+
+    & > * {
+        position: relative;
+        z-index: 2
+    }
 }
 
 [data-character="damian-wayne"] .glass-card::after {
@@ -283,11 +288,6 @@
     background-repeat: no-repeat;
     opacity: 0.3;
     z-index: 1
-}
-
-[data-character="damian-wayne"] .glass-card > * {
-    position: relative;
-    z-index: 2
 }
 
 [data-character="damian-wayne"] .section-title {
@@ -324,6 +324,10 @@
     width: 150px;
     height: 2px;
     background: linear-gradient(to right, transparent, var(--accent) 20%, var(--accent) 80%, transparent)
+}
+
+[data-character="damian-wayne"] .section-subtitle {
+    text-align: center
 }
 
 [data-character="damian-wayne"] .info-grid {
@@ -398,7 +402,7 @@
 [data-character="damian-wayne"] .timeline-item::before {
     content: '';
     position: absolute;
-    left: -72px;
+    left: -75px;
     top: 18px;
     width: 20px;
     height: 20px;
@@ -878,16 +882,6 @@
     position: relative
 }
 
-[data-character="damian-wayne"] .edit-btn::before {
-    content: '✎';
-    position: absolute;
-    font-size: 16px;
-    color: var(--gothic-gold);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%)
-}
-
 [data-character="damian-wayne"] .edit-btn::after {
     content: '';
     position: absolute;
@@ -939,15 +933,12 @@
     border: 2px solid rgba(139, 115, 85, 0.35);
     color: var(--parchment);
     font-family: 'Georgia', serif;
-    border-radius: 0;
-    clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
-    padding: var(--spacing-md) var(--spacing-lg) calc(var(--spacing-lg) + 8px)
+    border-radius: 0
 }
 
 [data-character="damian-wayne"] .back-btn:hover {
     border-color: var(--accent);
-    color: var(--gothic-gold);
-    transform: translate(3rem, 2.5rem) translateY(-3px)
+    color: var(--gothic-gold)
 }
 
 [data-character="damian-wayne"] .tooltip {
@@ -966,16 +957,6 @@
     font-family: 'Georgia', serif;
     letter-spacing: 0.3px;
     text-align: justify
-}
-
-[data-character="damian-wayne"] .bio-content::first-letter {
-    float: left;
-    font-size: 4rem;
-    line-height: 3rem;
-    padding-right: var(--spacing-md);
-    font-family: 'Georgia', serif;
-    color: var(--accent);
-    margin-top: 0.3rem
 }
 
 [data-character="damian-wayne"] .bio-content h3 {
@@ -1389,11 +1370,6 @@
     
     [data-character="damian-wayne"] .scroll-to-top::after {
         display: none
-    }
-    
-    [data-character="damian-wayne"] .back-btn {
-        clip-path: none;
-        padding: var(--spacing-sm) var(--spacing-lg)
     }
     
     [data-character="damian-wayne"] .tooltip {
