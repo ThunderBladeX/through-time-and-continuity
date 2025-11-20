@@ -442,6 +442,7 @@
         }
     }
 
+    // Helper to toggle loaders
     function toggleLoader(elementId, show) {
         const loader = document.getElementById(elementId);
         if (loader) {
@@ -535,7 +536,7 @@
 
         try {
             const relationships = await fetchAPI(`/characters/${characterId}/relationships`);
-
+            
             toggleLoader('relationships-loader', false);
 
             if (!relationships || relationships.length === 0) {
@@ -648,16 +649,15 @@
         try {
             if (typeof initGallery === 'function') {
                 await initGallery(characterId);
-                toggleLoader('gallery-loader', false);
                 console.log('Gallery initialized');
             } else {
-                toggleLoader('gallery-loader', false);
                 container.innerHTML = '<p class="empty-state">Gallery functionality not available.</p>';
             }
         } catch (error) {
-            toggleLoader('gallery-loader', false);
             console.error("Gallery load error:", error);
             container.innerHTML = '<p class="error-state">Failed to load gallery.</p>';
+        } finally {
+            toggleLoader('gallery-loader', false);
         }
     }
 
@@ -1136,6 +1136,21 @@
             }
         }
     });
+
+    if (typeof getEraName === 'undefined') {
+        window.getEraName = function(eraId) {
+            const eraNames = {
+                'pre-52': 'Classic',
+                'new-52': 'New 52',
+                'rebirth': 'Rebirth',
+                'infinite-frontier': 'Infinite Frontier',
+                'elseworlds': 'Elseworlds',
+                'post-crisis': 'Post-Crisis',
+                'future-state': 'Future State'
+            };
+            return eraNames[eraId] || eraId;
+        };
+    }
 
     if (window.performance && window.performance.mark) {
         window.addEventListener('load', function() {
