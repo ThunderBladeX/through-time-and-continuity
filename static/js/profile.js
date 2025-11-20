@@ -442,7 +442,6 @@
         }
     }
 
-    // Helper to toggle loaders
     function toggleLoader(elementId, show) {
         const loader = document.getElementById(elementId);
         if (loader) {
@@ -536,7 +535,7 @@
 
         try {
             const relationships = await fetchAPI(`/characters/${characterId}/relationships`);
-            
+
             toggleLoader('relationships-loader', false);
 
             if (!relationships || relationships.length === 0) {
