@@ -184,7 +184,7 @@
 }
 
 [data-character="damian-wayne"] .nav-wrapper::after {
-    content: '◆';
+    content: '0\\\\\[=================-';
     position: absolute;
     bottom: 5px;
     left: 50%;
@@ -301,6 +301,17 @@
     position: relative;
     padding-bottom: var(--spacing-lg);
     text-align: center
+}
+
+[data-character="damian-wayne"] .section-title::before {
+    content: '◆';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -8px;
+    color: var(--accent);
+    font-size: 0.7rem;
+    opacity: 0.6
 }
 
 [data-character="damian-wayne"] .section-title::after {
