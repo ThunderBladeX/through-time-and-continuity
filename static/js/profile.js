@@ -445,7 +445,12 @@
     function toggleLoader(elementId, show) {
         const loader = document.getElementById(elementId);
         if (loader) {
-            loader.style.display = show ? 'flex' : 'none';
+            if (show) {
+                loader.style.display = 'flex';
+                loader.offsetHeight;
+            } else {
+                loader.style.display = 'none';
+            }
         }
     }
 
@@ -643,20 +648,34 @@
         if (!container) return;
 
         container.innerHTML = '';
+
         toggleLoader('gallery-loader', true);
 
         try {
-            if (typeof initGallery === 'function') {
-                await initGallery(characterId);
-                console.log('Gallery initialized');
-            } else {
-                container.innerHTML = '<p class="empty-state">Gallery functionality not available.</p>';
+            const images = await fetchAPI(`/characters/${characterId}/gallery`);
+
+            toggleLoader('gallery-loader', false);
+
+            if (!images || images.length === 0) {
+                container.innerHTML = '<p class="empty-state">No images found in gallery.</p>';
+                return;
             }
+
+            if (typeof renderGalleryImages === 'function') {
+                renderGalleryImages(images, container);
+            } else {
+                container.innerHTML = images.map(img => `
+                    <div class="gallery-item">
+                        <img src="${img.url}" alt="${img.caption || 'Gallery Image'}" loading="lazy">
+                        ${img.caption ? `<div class="caption">${img.caption}</div>` : ''}
+                    </div>
+                `).join('');
+            }
+
         } catch (error) {
             console.error("Gallery load error:", error);
-            container.innerHTML = '<p class="error-state">Failed to load gallery.</p>';
-        } finally {
             toggleLoader('gallery-loader', false);
+            container.innerHTML = '<p class="error-state">Failed to load gallery.</p>';
         }
     }
 
