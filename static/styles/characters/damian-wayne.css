@@ -102,6 +102,7 @@
     color: var(--accent);
     opacity: 0.3;
     font-family: 'Georgia', serif;
+    transform: translateX(-1rem);
     line-height: 1
 }
 
@@ -313,17 +314,6 @@
     background: linear-gradient(to right, transparent, var(--accent) 20%, var(--accent) 80%, transparent)
 }
 
-[data-character="damian-wayne"] .section-title::before {
-    content: '◆';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: -8px;
-    color: var(--accent);
-    font-size: 0.7rem;
-    opacity: 0.6
-}
-
 [data-character="damian-wayne"] .info-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -423,7 +413,6 @@
     border: 2px solid rgba(139, 115, 85, 0.25);
     border-left: 4px solid var(--accent);
     border-radius: 0;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 0);
     position: relative
 }
 
@@ -1231,10 +1220,6 @@
     }
 }
 
-@media (max-width: 1024px) {
-
-}
-
 @media (max-width: 768px) {
     [data-character="damian-wayne"] .profile-grid {
         grid-template-columns: 1fr;
@@ -1451,7 +1436,6 @@
     }
     
     [data-character="damian-wayne"] .glass-card,
-    [data-character="damian-wayne"] .timeline-card,
     [data-character="damian-wayne"] .relationship-card,
     [data-character="damian-wayne"] .nav-wrapper {
         clip-path: none;
