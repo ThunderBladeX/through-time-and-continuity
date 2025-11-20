@@ -184,7 +184,7 @@
 }
 
 [data-character="damian-wayne"] .nav-wrapper::after {
-    content: '⟆₊̣̇𓋹🔥𓋹₊̣̇⟅';
+    content: '⊹ ࣪ ﹏𓊝﹏𓂁﹏⊹ ࣪ ˖';
     position: absolute;
     bottom: 5px;
     left: 50%;
@@ -402,7 +402,7 @@
 [data-character="damian-wayne"] .timeline-item::before {
     content: '';
     position: absolute;
-    left: -75px;
+    left: -74px;
     top: 18px;
     width: 20px;
     height: 20px;
