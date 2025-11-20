@@ -174,25 +174,6 @@
     bottom: 35px;
     border: 1px solid rgba(139, 115, 85, 0.15);
     pointer-events: none;
-    clip-path: polygon(
-        0 0,
-        100% 0,
-        100% calc(100% - 20px),
-        50% 100%,
-        0 calc(100% - 20px)
-    )
-}
-
-[data-character="damian-wayne"] .nav-wrapper::after {
-    content: '⊹ ࣪ ﹏𓊝﹏𓂁﹏⊹ ࣪ ˖';
-    position: absolute;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--accent);
-    font-size: 0.8rem;
-    white-space: nowrap;
-    opacity: 0.5
 }
 
 [data-character="damian-wayne"] .nav-item {
@@ -1295,11 +1276,6 @@
     
     [data-character="damian-wayne"] .modal-content::before {
         display: none
-    }
-    
-    [data-character="damian-wayne"] .bio-content::first-letter {
-        font-size: 3rem;
-        line-height: 2.5rem
     }
 }
 
