@@ -20,12 +20,6 @@
       "dest": "app.py"
     }
   ],
-  "rewrites": [
-    {
-      "source": "/.well-known/:path*",
-      "destination": "/.well-known/:path*"
-    }
-  ],
   "env": {
     "FLASK_ENV": "production"
   }
