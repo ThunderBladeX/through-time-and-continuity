@@ -23,8 +23,6 @@
   "env": {
     "FLASK_ENV": "production"
   }
-}
-{
   "rewrites": [
     {
       "source": "/.well-known/:path*",
