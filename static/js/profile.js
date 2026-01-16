@@ -476,7 +476,7 @@
             });
 
             container.innerHTML = events.map(function(event) {
-                const eraDisplay = event.era_display || getEraName(event.era);
+                const eraDisplay = event.era_display || event.era;
                 return `
                     <div class="timeline-item" data-event-id="${event.id}">
                         <div class="timeline-card" data-era="${event.era}">
@@ -596,42 +596,33 @@
                 return acc;
             }, {});
 
-            const categoryTitles = {
-                'canon': 'Canon Darlings',
-                'once_dated': 'Once Dated',
-                'implied': 'Implied Fondness',
-                'unrequited': 'Unrequited Crush',
-                'au_lovers': 'Lovers In Another Life',
-                'au_exes': 'Exes In Another Life'
-            };
-
-            const categoryOrder = ['canon', 'once_dated', 'implied', 'unrequited', 'au_lovers', 'au_exes'];
+            const categoriesFound = Object.keys(grouped);
 
             let html = '';
-            categoryOrder.forEach(function(category) {
-                if (grouped[category]) {
-                    html += `
-                        <div class="love-category glass-card">
-                            <h2 class="section-title">${categoryTitles[category]}</h2>
-                            <div class="love-grid">
-                                ${grouped[category].map(function(interest) {
-                                    return `
-                                        <div class="love-card">
-                                            <img src="${interest.partner.profile_image || '/static/images/default-avatar.jpg'}" 
-                                                 alt="${interest.partner.name}"
-                                                 class="love-avatar"
-                                                 onerror="this.src='/static/images/default-avatar.jpg'">
-                                            <div class="love-info">
-                                                <a href="/profile/${interest.partner.id}" class="love-name">${interest.partner.name}</a>
-                                                ${interest.description ? `<p class="love-description">${interest.description}</p>` : ''}
-                                            </div>
+            categoriesFound.forEach(function(categorySlug) {
+                const meta = categoryMetadata.find(c => c.slug === categorySlug);
+                const displayTitle = meta ? meta.name : categorySlug.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                html += `
+                    <div class="love-category glass-card">
+                        <h2 class="section-title">${categoryTitles[category]}</h2>
+                        <div class="love-grid">
+                            ${grouped[category].map(function(interest) {
+                                return `
+                                    <div class="love-card">
+                                        <img src="${interest.partner.profile_image || '/static/images/default-avatar.jpg'}" 
+                                            alt="${interest.partner.name}"
+                                            class="love-avatar"
+                                            onerror="this.src='/static/images/default-avatar.jpg'">
+                                        <div class="love-info">
+                                            <a href="/profile/${interest.partner.id}" class="love-name">${interest.partner.name}</a>
+                                            ${interest.description ? `<p class="love-description">${interest.description}</p>` : ''}
                                         </div>
-                                    `;
-                                }).join('')}
-                            </div>
+                                    </div>
+                                `;
+                            }).join('')}
                         </div>
-                    `;
-                }
+                    </div>
+                `;
             });
 
             container.innerHTML = html;
@@ -710,7 +701,7 @@
             const modal = document.getElementById('event-modal');
             if (!modal) return;
 
-            const eraDisplay = event.era_display || getEraName(event.era);
+            const eraDisplay = event.era_display || event.era;
 
             modal.querySelector('#modal-era').textContent = eraDisplay;
             modal.querySelector('#modal-era').dataset.era = event.era;
@@ -776,7 +767,7 @@
         }
 
         const eraDescriptions = {
-            'pre-52': 'The original DC timeline before the 2011 reboot',
+            'classic': 'The original DC timeline before the 2011 reboot',
             'new-52': 'DC Comics reboot starting in 2011',
             'rebirth': 'Restoration of legacy and hope starting in 2016',
             'infinite-frontier': 'Omniverse storytelling post-2021',
