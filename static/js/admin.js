@@ -361,6 +361,8 @@ async function editLoveInterest(id) {
     try {
         const interest = await fetchAPI(`/admin/love-interests/${id}`);
         const form = document.getElementById('love-interest-form');
+        form.querySelector('input[name="id"]')?.remove(); 
+        form.insertAdjacentHTML('beforeend', `<input type="hidden" name="id" value="${id}">`);
         populateForm(form, interest);
         document.getElementById('love-interest-form-title').textContent = 'Edit Love Interest';
         openLoveInterestForm();
