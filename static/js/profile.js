@@ -10,9 +10,11 @@
     let currentCharacter = null;
     let currentTab = 'overview';
     let lenis = null;
+    let categoryMetadata = [];
 
     document.addEventListener('DOMContentLoaded', async function() {
         console.log('Profile page initializing...');
+        fetchCategoryMetadata();
 
         initSmoothScroll();
         init3DBackground();
