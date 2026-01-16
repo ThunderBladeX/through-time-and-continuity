@@ -56,6 +56,17 @@
         }
     });
 
+    async function fetchCategoryMetadata() {
+        try {
+            const response = await fetchAPI('/love-interest-categories');
+            if (response.ok) {
+                categoryMetadata = await response.json();
+            }
+        } catch (e) {
+            console.warn('Failed to fetch category metadata', e);
+        }
+    }
+
     function initBubbleGenerator() {
         if (isReducedMotion) return;
         if (window.innerWidth > 768) return;
@@ -597,8 +608,8 @@
             }, {});
 
             const categoriesFound = Object.keys(grouped);
-
             let html = '';
+
             categoriesFound.forEach(function(categorySlug) {
                 const meta = categoryMetadata.find(c => c.slug === categorySlug);
                 const displayTitle = meta ? meta.name : categorySlug.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
