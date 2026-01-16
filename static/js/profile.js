@@ -326,7 +326,7 @@
             { label: 'Full Name', value: currentCharacter.full_name },
             { label: 'Alias', value: currentCharacter.nickname },
             { label: 'Birthday', value: currentCharacter.birthday ? formatDate(currentCharacter.birthday) : null },
-            { label: 'Family', value: familyName }
+            { label: 'Alignment', value: familyName }
         ].filter(function(item) { return item.value; });
 
         identityGrid.innerHTML = identityItems.map(function(item) {
@@ -776,13 +776,13 @@
         }
 
         const eraDescriptions = {
-            'pre-52': 'Classic: The original DC timeline before the 2011 reboot',
-            'new-52': 'New 52: DC Comics reboot starting in 2011',
-            'rebirth': 'Rebirth: Restoration of legacy and hope starting in 2016',
-            'infinite-frontier': 'Infinite Frontier: Omniverse storytelling post-2021',
-            'elseworlds': 'Elseworlds: Non-canon alternate reality stories',
-            'post-crisis': 'Post-Crisis: Following Crisis on Infinite Earths (1985-2011)',
-            'future-state': 'Future State: Dystopian future timeline'
+            'pre-52': 'The original DC timeline before the 2011 reboot',
+            'new-52': 'DC Comics reboot starting in 2011',
+            'rebirth': 'Restoration of legacy and hope starting in 2016',
+            'infinite-frontier': 'Omniverse storytelling post-2021',
+            'elseworlds': 'Non-canon alternate reality stories',
+            'post-crisis': 'Following Crisis on Infinite Earths (1985-2011)',
+            'future-state': 'Dystopian future timeline'
         };
 
         document.addEventListener('mouseover', function(e) {
@@ -1154,21 +1154,6 @@
             }
         }
     });
-
-    if (typeof getEraName === 'undefined') {
-        window.getEraName = function(eraId) {
-            const eraNames = {
-                'pre-52': 'Classic',
-                'new-52': 'New 52',
-                'rebirth': 'Rebirth',
-                'infinite-frontier': 'Infinite Frontier',
-                'elseworlds': 'Elseworlds',
-                'post-crisis': 'Post-Crisis',
-                'future-state': 'Future State'
-            };
-            return eraNames[eraId] || eraId;
-        };
-    }
 
     if (window.performance && window.performance.mark) {
         window.addEventListener('load', function() {
