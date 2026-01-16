@@ -860,45 +860,45 @@ html.lenis, html.lenis body {
     line-height: 1.5;
 }
 
-.relationship-card[data-type="romantic"] {
+.relationship-card[data-type="rom"] {
     border-left: 5px solid #ec4899;
 }
-.relationship-avatar[data-type="romantic"] {
+.relationship-avatar[data-type="rom"] {
     border: 3px solid #ec4899;
 }
 
-.relationship-card[data-type="platonic"] {
+.relationship-card[data-type="pla"] {
     border-left: 5px solid #f59e0b;
 }
-.relationship-avatar[data-type="platonic"] {
+.relationship-avatar[data-type="pla"] {
     border: 3px solid #f59e0b;
 }
 
-.relationship-card[data-type="familial"] {
+.relationship-card[data-type="fam"] {
     border-left: 5px solid #10b981;
 }
-.relationship-avatar[data-type="familial"] {
+.relationship-avatar[data-type="fam"] {
     border: 3px solid #10b981;
 }
 
-.relationship-card[data-type="professional"] {
+.relationship-card[data-type="pro"] {
     border-left: 5px solid #3b82f6;
 }
-.relationship-avatar[data-type="professional"] {
+.relationship-avatar[data-type="pro"] {
     border: 3px solid #3b82f6;
 }
 
-.relationship-card[data-type="complicated"] {
+.relationship-card[data-type="com"] {
     border-left: 5px solid #a444ef;
 }
-.relationship-avatar[data-type="complicated"] {
+.relationship-avatar[data-type="com"] {
     border: 3px solid #a444ef;
 }
 
-.relationship-card[data-type="hate"] {
+.relationship-card[data-type="adv"] {
     border-left: 5px solid #ef4444;
 }
-.relationship-avatar[data-type="hate"] {
+.relationship-avatar[data-type="adv"] {
     border: 3px solid #ef4444;
 }
 
