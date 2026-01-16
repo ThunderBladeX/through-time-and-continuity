@@ -17,30 +17,10 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 jwt = JWTManager(app)
 
-ERA_NAMES = {}
-try:
-    with app.app_context():
-        ERA_NAMES = db.get_all_eras()
-except Exception as e:
-    print(f"Initial ERA_NAMES load from database failed: {e}")
-
-if not ERA_NAMES:
-    print("Warning: Could not load ERA_NAMES from database. Using fallback.")
-    ERA_NAMES = {
-        'pre-52': 'Classic',
-        'new-52': 'New 52',
-        'rebirth': 'Rebirth',
-        'infinite-frontier': 'Infinite Frontier',
-        'elseworlds': 'Elseworlds',
-        'post-crisis': 'Post-Crisis',
-        'future-state': 'Future State'
-    }
-
 def clean_form_data(data):
     """Helper function to convert empty strings for specific fields to None."""
     if 'birthday' in data and data['birthday'] == '':
         data['birthday'] = None
-
     return data
 
 print(f"DB: {db}.")
@@ -66,6 +46,22 @@ def profile(character_id):
 def admin():
     return render_template('admin.html')
 
+@app.route('/api/families')
+def api_families():
+    return jsonify(db.get_all_families())
+
+@app.route('/api/eras')
+def api_eras():
+    return jsonify(db.get_all_eras())
+
+@app.route('/api/relationship-types')
+def api_relationship_types():
+    return jsonify(db.get_all_relationship_types())
+
+@app.route('/api/love-interest-categories')
+def api_love_interest_categories():
+    return jsonify(db.get_all_love_interest_categories())
+
 @app.route('/api/characters')
 def api_characters():
     family = request.args.get('family', 'all')
@@ -81,9 +77,6 @@ def api_character_detail(character_id):
 
 @app.route('/api/characters/<int:character_id>/timeline')
 def api_character_timeline(character_id):
-    events = db.get_character_timeline(character_id)
-    for event in events:
-        event['era_display'] = ERA_NAMES.get(event.get('era', ''), event.get('era', ''))
     return jsonify(events)
 
 @app.route('/api/characters/<int:character_id>/relationships')
@@ -126,7 +119,7 @@ def api_events():
             'title': event['title'],
             'event_date': event['event_date'],
             'era': event['era'],
-            'era_display': ERA_NAMES.get(event['era'], event['era']),
+            'era_display': event.get('era_display', event['era']),
             'summary': event['summary'],
             'character_id': event_chars[0]['character_id'] if event_chars else None,
             'character_name': first_char.get('name', ''),
@@ -140,7 +133,6 @@ def api_event_detail(event_id):
     event = db.get_event_by_id(event_id)
     if not event:
         return jsonify({'error': 'Event not found'}), 404
-    event['era_display'] = ERA_NAMES.get(event.get('era', ''), event.get('era', ''))
     if event.get('full_description'):
         event['full_description'] = md.markdown(event['full_description'])
     return jsonify(event)
