@@ -604,9 +604,9 @@
                 const displayTitle = meta ? meta.name : categorySlug.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                 html += `
                     <div class="love-category glass-card">
-                        <h2 class="section-title">${categoryTitles[category]}</h2>
+                        <h2 class="section-title">${displayTitle}</h2>
                         <div class="love-grid">
-                            ${grouped[category].map(function(interest) {
+                            ${grouped[categorySlug].map(function(interest) {
                                 return `
                                     <div class="love-card">
                                         <img src="${interest.partner.profile_image || '/static/images/default-avatar.jpg'}" 
