@@ -10,10 +10,10 @@ const MetadataManager = {
         try {
 
             const [fam, era, rel, love] = await Promise.all([
-                fetchAPI('/api/families'),
-                fetchAPI('/api/eras'),
-                fetchAPI('/api/relationship-types'),
-                fetchAPI('/api/love-interest-categories')
+                fetchAPI('/families'),
+                fetchAPI('/eras'),
+                fetchAPI('/relationship-types'),
+                fetchAPI('/love-interest-categories')
             ]);
             this.families = fam || [];
             this.eras = era || [];
