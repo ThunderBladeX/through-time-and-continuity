@@ -36,13 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('admin_token')) {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
-        setupDashboard();
-        handleUrlParameters(); 
-        setupCharacterForm();
-        setupEventForm();
-        setupRelationshipForm();
-        setupEditRelationshipForm();
-        setupLoveInterestForm(); 
+        MetadataManager.loadAll().then(() => {
+            setupDashboard();
+            handleUrlParameters();
+            setupCharacterForm();
+            setupEventForm();
+            setupRelationshipForm();
+            setupEditRelationshipForm();
+            setupLoveInterestForm();
+        });
     } else {
         setupLogin();
     }
