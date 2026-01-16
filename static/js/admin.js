@@ -50,6 +50,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+function populateSelect(selectElement, data, placeholder = "Select an option...") {
+    if (!selectElement) return;
+    const currentVal = selectElement.value;
+    
+    const options = data.map(item => 
+        `<option value="${item.slug}">${item.name}</option>`
+    ).join('');
+    
+    selectElement.innerHTML = `<option value="" disabled selected>${placeholder}</option>${options}`;
+    
+    if (currentVal) selectElement.value = currentVal;
+}
+
 function handleUrlParameters() {
     const params = new URLSearchParams(window.location.search);
     const editType = params.get('edit');
