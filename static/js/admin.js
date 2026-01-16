@@ -222,7 +222,7 @@ async function loadCharactersAdmin() {
     list.innerHTML = '<div class="loading-state"><div class="spinner"></div></div>';
 
     try {
-        const characters = await fetchAPI('/api/characters');
+        const characters = await fetchAPI('/characters');
         if (!characters || characters.length === 0) {
             list.innerHTML = '<p class="empty-state">No characters yet</p>';
             return;
