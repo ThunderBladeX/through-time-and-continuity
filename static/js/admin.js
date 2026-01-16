@@ -1,5 +1,36 @@
 let bioSectionCounter = 0;
 
+const MetadataManager = {
+    families: [],
+    eras: [],
+    relationshipTypes: [],
+    loveInterestCategories: [],
+
+    async loadAll() {
+        try {
+            const [fam, era, rel, love] = await Promise.all([
+                fetchAPI('/api/families'),
+                fetchAPI('/api/eras'),
+                fetchAPI('/api/relationship-types'),
+                fetchAPI('/api/love-interest-categories')
+            ]);
+            this.families = fam || [];
+            this.eras = era || [];
+            this.relationshipTypes = rel || [];
+            this.loveInterestCategories = love || [];
+        } catch (e) {
+            console.error("Failed to load metadata lookups:", e);
+        }
+    },
+
+    getName(type, slug) {
+        const list = this[type];
+        if (!list) return slug;
+        const item = list.find(i => i.slug === slug);
+        return item ? item.name : slug;
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
 
     if (localStorage.getItem('admin_token')) {
