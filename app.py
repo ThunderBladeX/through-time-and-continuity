@@ -17,14 +17,43 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 jwt = JWTManager(app)
 
+ERA_NAMES = {}
+
+def load_era_names():
+    """
+    Loads eras from the database to map slugs (e.g., 'new-52') to Names (e.g., 'The New 52').
+    This is run at startup to cache the values for display.
+    """
+    global ERA_NAMES
+    try:
+
+        eras = db.supabase.query('eras', select='slug,name')
+        if eras:
+
+            ERA_NAMES = {era['slug']: era['name'] for era in eras}
+            print(f"Loaded {len(ERA_NAMES)} eras from database.")
+        else:
+            print("Warning: Eras table is empty.")
+    except Exception as e:
+        print(f"Initial ERA_NAMES load from database failed: {e}")
+
+with app.app_context():
+    load_era_names()
+
+if not ERA_NAMES:
+    ERA_NAMES = {
+        'pre-crisis': 'Pre-Crisis',
+        'post-crisis': 'Post-Crisis',
+        'new-52': 'The New 52',
+        'rebirth': 'DC Rebirth',
+        'infinite-frontier': 'Infinite Frontier'
+    }
+
 def clean_form_data(data):
     """Helper function to convert empty strings for specific fields to None."""
     if 'birthday' in data and data['birthday'] == '':
         data['birthday'] = None
     return data
-
-print(f"DB: {db}.")
-print(f"Type: {type(db)}.")
 
 @app.route('/')
 def index():
@@ -46,22 +75,6 @@ def profile(character_id):
 def admin():
     return render_template('admin.html')
 
-@app.route('/api/families')
-def api_families():
-    return jsonify(db.get_all_families())
-
-@app.route('/api/eras')
-def api_eras():
-    return jsonify(db.get_all_eras())
-
-@app.route('/api/relationship-types')
-def api_relationship_types():
-    return jsonify(db.get_all_relationship_types())
-
-@app.route('/api/love-interest-categories')
-def api_love_interest_categories():
-    return jsonify(db.get_all_love_interest_categories())
-
 @app.route('/api/characters')
 def api_characters():
     family = request.args.get('family', 'all')
@@ -77,17 +90,24 @@ def api_character_detail(character_id):
 
 @app.route('/api/characters/<int:character_id>/timeline')
 def api_character_timeline(character_id):
+    events = db.get_character_timeline(character_id)
+
+    for event in events:
+        era_slug = event.get('era')
+        event['era_display'] = ERA_NAMES.get(era_slug, era_slug)
     return jsonify(events)
 
 @app.route('/api/characters/<int:character_id>/relationships')
 def api_character_relationships(character_id):
     relationships = db.get_character_relationships(character_id)
     formatted = []
+
     for rel in relationships:
         related = rel.get('related_character', {})
         formatted.append({
             'id': rel['id'],
-            'type': rel['type'],
+            'type': rel['type'], 
+
             'status': rel['status'],
             'related_character_id': rel['related_character_id'],
             'related_character_name': related.get('name', ''),
@@ -114,12 +134,15 @@ def api_events():
     for event in events:
         event_chars = event.get('event_characters', [])
         first_char = event_chars[0]['characters'] if event_chars else {}
+
+        era_slug = event.get('era')
+
         formatted.append({
             'id': event['id'],
             'title': event['title'],
             'event_date': event['event_date'],
-            'era': event['era'],
-            'era_display': event.get('era_display', event['era']),
+            'era': era_slug,
+            'era_display': ERA_NAMES.get(era_slug, era_slug),
             'summary': event['summary'],
             'character_id': event_chars[0]['character_id'] if event_chars else None,
             'character_name': first_char.get('name', ''),
@@ -133,14 +156,37 @@ def api_event_detail(event_id):
     event = db.get_event_by_id(event_id)
     if not event:
         return jsonify({'error': 'Event not found'}), 404
+
+    era_slug = event.get('era')
+    event['era_display'] = ERA_NAMES.get(era_slug, era_slug)
+
     if event.get('full_description'):
         event['full_description'] = md.markdown(event['full_description'])
     return jsonify(event)
 
 @app.route('/api/families')
 def api_families():
+
     families = db.get_all_families()
     return jsonify(families)
+
+@app.route('/api/eras')
+def api_eras_list():
+
+    eras = db.supabase.query('eras', params={'order': 'display_order'}, select='slug,name')
+    return jsonify(eras)
+
+@app.route('/api/relationship-types')
+def api_relationship_types():
+
+    types = db.supabase.query('relationship_types', params={'order': 'name'}, select='slug,name')
+    return jsonify(types)
+
+@app.route('/api/love-interest-categories')
+def api_love_interest_categories():
+
+    cats = db.supabase.query('love_interest_categories', params={'order': 'name'}, select='slug,name')
+    return jsonify(cats)
 
 @app.route('/api/login', methods=['POST'])
 def api_login():
@@ -157,6 +203,7 @@ def api_login():
     admin_username = os.getenv('ADMIN_USERNAME', 'admin')
     admin_password_hash = os.getenv('ADMIN_PASSWORD')
     if not admin_password_hash:
+
         admin_password_hash = 'pbkdf2:sha256:600000$QOlgUXyHBQdPQTyQ$a6f40e9034b4ff7744f08a2e7f106141c490e8119bab8fb63751a65a5f91eb6d'
         print("WARNING: ADMIN_PASSWORD env var not set. Using insecure fallback.")
     if username == admin_username and check_password_hash(admin_password_hash, password):
@@ -190,6 +237,7 @@ def api_update_pending_edit(edit_id):
 @app.route('/api/admin/relationships', methods=['GET'])
 @jwt_required()
 def api_get_all_relationships():
+
     return jsonify(db.get_all_relationships())
 
 @app.route('/api/admin/relationships', methods=['POST', 'PATCH'])
@@ -211,7 +259,7 @@ def api_manage_relationships():
         data_a_to_b = {
             'character_id': char_id_a,
             'related_character_id': char_id_b,
-            'type': data.get('type'),
+            'type': data.get('type'), 
             'status': data.get('status_a_to_b') or None
         }
         data_b_to_a = {
@@ -336,6 +384,7 @@ def api_create_event():
     data = request.form.to_dict()
     character_ids_str = data.pop('character_ids', '')
     data.pop('character_ids_select', None)
+
     event = db.create_event(data)
     if not event:
         return jsonify({'error': 'Failed to create event'}), 500
@@ -400,6 +449,7 @@ def api_delete_event(event_id):
 @app.route('/api/admin/love-interests', methods=['GET'])
 @jwt_required()
 def api_get_all_love_interests():
+
     return jsonify(db.get_all_love_interests())
 
 @app.route('/api/admin/love-interests/<int:interest_id>', methods=['GET'])
