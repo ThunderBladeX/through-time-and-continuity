@@ -18,6 +18,7 @@ class SupabaseClient:
         self.base_headers = {
             'apikey': key,
             'Authorization': f'Bearer {key}',
+            'Prefer': 'return=representation'
         }
 
     def query(self, table, method='GET', params=None, data=None, select='*'):
