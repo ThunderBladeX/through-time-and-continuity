@@ -237,7 +237,6 @@ def api_update_pending_edit(edit_id):
 @app.route('/api/admin/relationships', methods=['GET'])
 @jwt_required()
 def api_get_all_relationships():
-
     return jsonify(db.get_all_relationships())
 
 @app.route('/api/admin/relationships', methods=['POST', 'PATCH'])
@@ -314,10 +313,14 @@ def api_create_gallery_image():
         return jsonify({'error': 'No selected file'}), 400
 
     character_id = request.form.get('character_id')
+    event_id = request.form.get('event_id')
     alt_text = request.form.get('alt_text', '')
 
     if not character_id:
         return jsonify({'error': 'Character ID is required'}), 400
+
+    if event_id and event_id.strip() == '':
+        event_id = None
 
     try:
         filename = secure_filename(file.filename)
@@ -336,6 +339,9 @@ def api_create_gallery_image():
             'image_url': public_url,
             'alt_text': alt_text
         }
+
+        if event_id:
+            data['event_id'] = event_id
         
         result = db.create_gallery_image(data)
         
