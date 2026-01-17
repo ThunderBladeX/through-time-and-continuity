@@ -303,6 +303,52 @@ def api_manage_relationship_pair(char1_id, char2_id):
 def api_get_all_gallery_images():
     return jsonify(db.get_all_gallery_images())
 
+@app.route('/api/admin/gallery', methods=['POST'])
+@jwt_required()
+def api_create_gallery_image():
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image file provided'}), 400
+    
+    file = request.files['image']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    character_id = request.form.get('character_id')
+    alt_text = request.form.get('alt_text', '')
+
+    if not character_id:
+        return jsonify({'error': 'Character ID is required'}), 400
+
+    try:
+        filename = secure_filename(file.filename)
+        unique_filename = f"{character_id}/{int(datetime.now().timestamp())}_{filename}"
+        content_type = file.mimetype or mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+        bucket_name = 'gallery-images'
+        
+        file_body = file.read()
+        public_url = db.supabase.upload_file(bucket_name, unique_filename, file_body, content_type)
+        
+        if not public_url:
+            return jsonify({'error': 'Failed to upload image to storage'}), 500
+
+        data = {
+            'character_id': character_id,
+            'image_url': public_url,
+            'alt_text': alt_text
+        }
+        
+        result = db.create_gallery_image(data)
+        
+        if result:
+            return jsonify(result), 201
+        else:
+            db.supabase.delete_file(bucket_name, unique_filename)
+            return jsonify({'error': 'Database insert failed'}), 500
+
+    except Exception as e:
+        print(f"Gallery upload error: {e}")
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/api/admin/characters', methods=['POST'])
 @jwt_required()
 def api_create_character():
