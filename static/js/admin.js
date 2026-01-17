@@ -462,7 +462,7 @@ async function loadGalleryAdmin() {
                 </div>
                 <div class="admin-item-actions">
                     <button class="btn-secondary btn-sm disabled" disabled>Edit</button>
-                    <button class="btn-danger btn-sm" disabled>Delete</button>
+                    <button class="btn-danger btn-sm">Delete</button>
                 </div>
             </div>
         `).join('');
