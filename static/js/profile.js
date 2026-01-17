@@ -633,17 +633,15 @@
                 return acc;
             }, {});
 
-            const categoriesFound = Object.keys(grouped);
             let html = '';
 
-            for (const [slug, items] of categoriesFound) {
+            for (const [slug, items] of Object.entries(grouped)) {
                 const niceName = Metadata.getName('categories', slug);
                 html += `
                     <div class="love-category glass-card">
                         <h2 class="section-title">${niceName}</h2>
                         <div class="love-grid">
-                            ${grouped[categorySlug].map(function(interest) {
-                                return `
+                            ${items.map(interest => `
                                     <div class="love-card">
                                         <img src="${interest.partner.profile_image || '/static/images/default-avatar.jpg'}" 
                                             alt="${interest.partner.name}"
@@ -654,8 +652,7 @@
                                             ${interest.description ? `<p class="love-description">${interest.description}</p>` : ''}
                                         </div>
                                     </div>
-                                `;
-                            }).join('')}
+                            `).join('')}
                         </div>
                     </div>
                 `;
