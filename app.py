@@ -42,7 +42,7 @@ with app.app_context():
 
 if not ERA_NAMES:
     ERA_NAMES = {
-        'pre-crisis': 'Pre-Crisis',
+        'classic': 'Classic',
         'post-crisis': 'Post-Crisis',
         'new-52': 'The New 52',
         'rebirth': 'DC Rebirth',
