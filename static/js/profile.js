@@ -60,13 +60,18 @@
 
     async function fetchCategoryMetadata() {
         try {
-            const response = await fetchAPI('/love-interest-categories');
-            if (response.ok) {
-                categoryMetadata = await response.json();
+            const data = await fetchAPI('/love-interest-categories');
+
+            if (Array.isArray(data)) {
+                categoryMetadata = data;
+            } else if (data && Array.isArray(data.data)) {
+                categoryMetadata = data.data;
             }
+            console.log('Category Metadata Loaded:', categoryMetadata);
         } catch (e) {
             console.warn('Failed to fetch category metadata', e);
         }
+        return categoryMetadata;
     }
 
     function initBubbleGenerator() {
