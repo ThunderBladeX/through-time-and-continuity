@@ -558,7 +558,6 @@
 
         try {
             const relationships = await fetchAPI(`/characters/${characterId}/relationships`);
-
             toggleLoader('relationships-loader', false);
 
             if (!relationships || relationships.length === 0) {
@@ -599,8 +598,12 @@
         toggleLoader('love-loader', true);
 
         try {
-            const interests = await fetchAPI(`/characters/${characterId}/love-interests`);
+            if (!categoryMetadata || categoryMetadata.length === 0) {
+                console.log('Metadata missing, fetching now...');
+                await fetchCategoryMetadata();
+            }
 
+            const interests = await fetchAPI(`/characters/${characterId}/love-interests`);
             toggleLoader('love-loader', false);
 
             if (!interests || interests.length === 0) {
@@ -618,8 +621,14 @@
             let html = '';
 
             categoriesFound.forEach(function(categorySlug) {
-                const meta = categoryMetadata.find(c => c.slug === categorySlug);
-                const displayTitle = meta ? meta.name : categorySlug.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                const meta = categoryMetadata.find(c => 
+                    c.slug === categorySlug || 
+                    (c.slug && c.slug.toLowerCase() === categorySlug.toLowerCase())
+                );
+                const displayTitle = meta 
+                    ? (meta.name || meta.label || meta.title || meta.category_name) 
+                    : categorySlug.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
                 html += `
                     <div class="love-category glass-card">
                         <h2 class="section-title">${displayTitle}</h2>
