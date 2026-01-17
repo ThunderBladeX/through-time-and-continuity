@@ -6,15 +6,27 @@
     const urlParams = new URLSearchParams(window.location.search);
     const highlightEventId = urlParams.get('event');
 
+    const Metadata = {
+        eras: [],
+        relationshipTypes: [],
+        categories: [],
+
+        getName: function(listName, slug) {
+            const list = this[listName];
+            if (!list || !slug) return slug;
+            const item = list.find(i => i.slug === slug);
+            return item ? item.name : slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
+        }
+    };
+
     let isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let currentCharacter = null;
     let currentTab = 'overview';
     let lenis = null;
-    let categoryMetadata = [];
 
     document.addEventListener('DOMContentLoaded', async function() {
         console.log('Profile page initializing...');
-        fetchCategoryMetadata();
+        await fetchMetadata();
 
         initSmoothScroll();
         init3DBackground();
@@ -58,14 +70,21 @@
         }
     });
 
-    async function fetchCategoryMetadata() {
+    async function fetchMetadata() {
         try {
-            const response = await fetchAPI('/love-interest-categories');
-            if (response.ok) {
-                categoryMetadata = await response.json();
-            }
+            const [erasRes, relsRes, catsRes] = await Promise.all([
+                fetchAPI('/eras'),
+                fetchAPI('/relationship-types'),
+                fetchAPI('/love-interest-categories')
+            ]);
+
+            if (erasRes.ok) Metadata.eras = await erasRes.json();
+            if (relsRes.ok) Metadata.relationshipTypes = await relsRes.json();
+            if (catsRes.ok) Metadata.categories = await catsRes.json();
+            
+            console.log('Metadata loaded:', Metadata);
         } catch (e) {
-            console.warn('Failed to fetch category metadata', e);
+            console.error('Failed to load metadata lookups', e);
         }
     }
 
@@ -489,12 +508,12 @@
             });
 
             container.innerHTML = events.map(function(event) {
-                const eraDisplay = event.era_display || event.era;
+                const eraName = Metadata.getName('eras', event.era);
                 return `
                     <div class="timeline-item" data-event-id="${event.id}">
                         <div class="timeline-card" data-era="${event.era}">
                             <div class="timeline-header-card">
-                                <span class="era-badge" data-era="${event.era}">${eraDisplay}</span>
+                                <span class="era-badge" data-era="${event.era}">${eraName}</span>
                                 <time class="timeline-date">${formatDate(event.event_date)}</time>
                             </div>
                             <h3 class="timeline-title">${event.title}</h3>
@@ -612,12 +631,11 @@
             const categoriesFound = Object.keys(grouped);
             let html = '';
 
-            categoriesFound.forEach(function(categorySlug) {
-                const meta = categoryMetadata.find(c => c.slug === categorySlug);
-                const displayTitle = meta ? meta.name : categorySlug.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            for (const [slug, items] of categoriesFound) {
+                const niceName = Metadata.getName('categories', slug);
                 html += `
                     <div class="love-category glass-card">
-                        <h2 class="section-title">${displayTitle}</h2>
+                        <h2 class="section-title">${niceName}</h2>
                         <div class="love-grid">
                             ${grouped[categorySlug].map(function(interest) {
                                 return `
@@ -714,7 +732,7 @@
             const modal = document.getElementById('event-modal');
             if (!modal) return;
 
-            const eraDisplay = event.era_display || event.era;
+            const eraDisplay = Metadata.getName('eras', event.era);
 
             modal.querySelector('#modal-era').textContent = eraDisplay;
             modal.querySelector('#modal-era').dataset.era = event.era;
