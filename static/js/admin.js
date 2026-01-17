@@ -453,7 +453,7 @@ async function loadGalleryAdmin() {
             list.innerHTML = '<p class="empty-state">No images yet</p>';
             return;
         }
-        list.innerHTML = images.map(img => `
+        list.innerHTML = images.map(img => { `
             <div class="admin-item">
                 <img src="${img.image_url}" alt="${img.alt_text}" class="admin-item-image">
                 <div class="admin-item-info">
@@ -730,6 +730,15 @@ async function setupUploadForm() {
         } catch (e) {
             console.error('Failed to load characters for upload form');
         }
+    }
+
+    const eventSelect = form.querySelector('select[name="event_id"]');
+    if (eventSelect) {
+        try {
+            const events = await fetchAPI('/events?limit=100'); 
+            eventSelect.innerHTML = `<option value="">None (Character only)</option>` + 
+                events.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
+        } catch (e) { console.error('Error loading events'); }
     }
 
     form.addEventListener('submit', async (e) => {
