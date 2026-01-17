@@ -184,13 +184,12 @@ def api_relationship_types():
 
 @app.route('/api/love-interest-categories')
 def api_love_interest_categories():
-
     cats = db.supabase.query('love_interest_categories', params={'order': 'name'}, select='slug,name')
     return jsonify(cats)
 
 @app.route('/api/login', methods=['POST'])
 def api_login():
-    data = request.get_json()
+    data = request.get_json(force=True, silent=True)
     if isinstance(data, str):
         try:
             data = json.loads(data)
