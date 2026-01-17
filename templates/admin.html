@@ -225,13 +225,8 @@
                     <div class="form-group">
                         <label>Era *</label>
                         <select name="era" required>
-                            <option value="pre-52">Pre-New 52</option>
-                            <option value="new-52">New 52</option>
-                            <option value="rebirth">Rebirth</option>
-                            <option value="infinite-frontier">Infinite Frontier</option>
-                            <option value="elseworlds">Elseworlds</option>
-                            <option value="post-crisis">Post-Crisis</option>
-                            <option value="future-state">Future State</option>
+                            <option value="">None</option>
+                            <!-- Populated via JS -->
                         </select>
                     </div>
                 </div>
@@ -278,6 +273,7 @@
                 <div class="form-group">
                     <label>Character *</label>
                     <select name="character_id" required>
+                        <option value="">Loading characters...</option>
                         <!-- Populated via JS -->
                     </select>
                 </div>
@@ -294,6 +290,11 @@
                     <label>Images *</label>
                     <input type="file" name="images" accept="image/*" multiple required>
                     <div id="image-preview" class="image-preview-grid"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Alt Text / Description</label>
+                    <input type="text" name="alt_text" placeholder="e.g. Action Shot from Issue #4">
                 </div>
 
                 <div class="form-actions">
@@ -328,6 +329,7 @@
                     <label>Overall Relationship Type *</label>
                     <select name="type" required>
                         <option value="">None</option>
+                        <!-- Populated via JS -->
                     </select>
                 </div>
 
@@ -379,6 +381,7 @@
                     <label>Overall Relationship Type *</label>
                     <select name="type" required>
                         <option value="">None</option>
+                        <!-- Populated via JS -->
                     </select>
                 </div>
 
@@ -425,6 +428,7 @@
                     <label>Category *</label>
                     <select name="category" required>
                         <option value="">None</option>
+                        <!-- Populated via JS -->
                     </select>
                 </div>
 
