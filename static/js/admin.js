@@ -735,29 +735,103 @@ async function setupUploadForm() {
     const eventSelect = form.querySelector('select[name="event_id"]');
     if (eventSelect) {
         try {
-            const events = await fetchAPI('/events?limit=100'); 
+            const events = await fetchAPI('/events?limit=100');
             eventSelect.innerHTML = `<option value="">None (Character only)</option>` + 
                 events.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
-        } catch (e) { console.error('Error loading events'); }
+        } catch (e) {
+            console.error('Error loading events');
+        }
+    }
+
+    const imageInput = form.querySelector('input[name="images"]');
+    const previewContainer = document.getElementById('image-preview');
+    
+    if (imageInput && previewContainer) {
+        imageInput.addEventListener('change', (e) => {
+            previewContainer.innerHTML = '';
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '150px';
+                    img.style.margin = '5px';
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
     }
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const formData = new FormData(form);
-        try {
-            await fetchAPI('/admin/gallery', {
-                method: 'POST',
-                body: formData,
-                isFormData: true
-            });
+        const formData = new FormData();
+        const characterId = form.elements['character_id'].value;
+        const eventId = form.elements['event_id'].value;
+        const altText = form.elements['alt_text'].value;
+        const imageFiles = form.elements['images'].files;
+
+        if (!characterId) {
+            showNotification('Please select a character', 'error');
+            return;
+        }
+
+        if (imageFiles.length === 0) {
+            showNotification('Please select at least one image', 'error');
+            return;
+        }
+
+        let successCount = 0;
+        let errorCount = 0;
+
+        for (let i = 0; i < imageFiles.length; i++) {
+            const file = imageFiles[i];
+            const singleFormData = new FormData();
             
-            showNotification('Image uploaded successfully!', 'success');
+            singleFormData.append('image', file);
+            singleFormData.append('character_id', characterId);
+            singleFormData.append('alt_text', altText || `Image ${i + 1}`);
+
+            if (eventId && eventId.trim() !== '') {
+                singleFormData.append('event_id', eventId);
+            }
+
+            try {
+                const response = await fetch('/api/admin/gallery', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('admin_token')}`
+                    },
+                    body: singleFormData
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error(`Failed to upload image ${i + 1}:`, errorData);
+                    errorCount++;
+                } else {
+                    successCount++;
+                }
+            } catch (error) {
+                console.error(`Error uploading image ${i + 1}:`, error);
+                errorCount++;
+            }
+        }
+
+        if (successCount > 0) {
+            showNotification(`${successCount} image(s) uploaded successfully!`, 'success');
+        }
+        if (errorCount > 0) {
+            showNotification(`${errorCount} image(s) failed to upload`, 'error');
+        }
+
+        if (successCount > 0) {
             closeUploadForm();
             form.reset();
+            if (previewContainer) previewContainer.innerHTML = '';
             loadGalleryAdmin();
-        } catch (error) {
-            showNotification(error.message, 'error');
         }
     });
 }
