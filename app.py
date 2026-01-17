@@ -349,6 +349,14 @@ def api_create_gallery_image():
         print(f"Gallery upload error: {e}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/admin/gallery/<int:image_id>', methods=['DELETE'])
+@jwt_required()
+def api_delete_gallery_image(image_id):
+    success = db.delete_gallery_image(image_id)
+    if success:
+        return jsonify({'success': True}), 200
+    return jsonify({'error': 'Failed to delete image'}), 500
+
 @app.route('/api/admin/characters', methods=['POST'])
 @jwt_required()
 def api_create_character():
