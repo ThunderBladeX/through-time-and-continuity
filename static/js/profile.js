@@ -6,27 +6,15 @@
     const urlParams = new URLSearchParams(window.location.search);
     const highlightEventId = urlParams.get('event');
 
-    const Metadata = {
-        eras: [],
-        relationshipTypes: [],
-        categories: [],
-
-        getName: function(listName, slug) {
-            const list = this[listName];
-            if (!list || !slug) return slug;
-            const item = list.find(i => i.slug === slug);
-            return item ? item.name : slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ');
-        }
-    };
-
     let isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let currentCharacter = null;
     let currentTab = 'overview';
     let lenis = null;
+    let categoryMetadata = [];
 
     document.addEventListener('DOMContentLoaded', async function() {
         console.log('Profile page initializing...');
-        await fetchMetadata();
+        fetchCategoryMetadata();
 
         initSmoothScroll();
         init3DBackground();
@@ -70,21 +58,14 @@
         }
     });
 
-    async function fetchMetadata() {
+    async function fetchCategoryMetadata() {
         try {
-            const [erasRes, relsRes, catsRes] = await Promise.all([
-                fetchAPI('/eras'),
-                fetchAPI('/relationship-types'),
-                fetchAPI('/love-interest-categories')
-            ]);
-
-            if (erasRes.ok) Metadata.eras = await erasRes.json();
-            if (relsRes.ok) Metadata.relationshipTypes = await relsRes.json();
-            if (catsRes.ok) Metadata.categories = await catsRes.json();
-            
-            console.log('Metadata loaded:', Metadata);
+            const response = await fetchAPI('/love-interest-categories');
+            if (response.ok) {
+                categoryMetadata = await response.json();
+            }
         } catch (e) {
-            console.error('Failed to load metadata lookups', e);
+            console.warn('Failed to fetch category metadata', e);
         }
     }
 
@@ -238,13 +219,8 @@
         }
 
         try {
-            const response = await fetchAPI(`/characters/${characterId}`);
-            currentCharacter = response.data ? response.data : response;
+            currentCharacter = await fetchAPI(`/characters/${characterId}`);
             console.log('Character loaded:', currentCharacter);
-
-            if (!currentCharacter || (!currentCharacter.name && !currentCharacter.full_name)) {
-                throw new Error('Character data is empty or structured incorrectly');
-            }
 
             const name = currentCharacter.name || currentCharacter.full_name || 'Unknown';
             document.title = `${name} - Periaphe`;
@@ -513,12 +489,12 @@
             });
 
             container.innerHTML = events.map(function(event) {
-                const eraName = Metadata.getName('eras', event.era);
+                const eraDisplay = event.era_display || event.era;
                 return `
                     <div class="timeline-item" data-event-id="${event.id}">
                         <div class="timeline-card" data-era="${event.era}">
                             <div class="timeline-header-card">
-                                <span class="era-badge" data-era="${event.era}">${eraName}</span>
+                                <span class="era-badge" data-era="${event.era}">${eraDisplay}</span>
                                 <time class="timeline-date">${formatDate(event.event_date)}</time>
                             </div>
                             <h3 class="timeline-title">${event.title}</h3>
@@ -633,15 +609,18 @@
                 return acc;
             }, {});
 
+            const categoriesFound = Object.keys(grouped);
             let html = '';
 
-            for (const [slug, items] of Object.entries(grouped)) {
-                const niceName = Metadata.getName('categories', slug);
+            categoriesFound.forEach(function(categorySlug) {
+                const meta = categoryMetadata.find(c => c.slug === categorySlug);
+                const displayTitle = meta ? meta.name : categorySlug.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                 html += `
                     <div class="love-category glass-card">
-                        <h2 class="section-title">${niceName}</h2>
+                        <h2 class="section-title">${displayTitle}</h2>
                         <div class="love-grid">
-                            ${items.map(interest => `
+                            ${grouped[categorySlug].map(function(interest) {
+                                return `
                                     <div class="love-card">
                                         <img src="${interest.partner.profile_image || '/static/images/default-avatar.jpg'}" 
                                             alt="${interest.partner.name}"
@@ -652,7 +631,8 @@
                                             ${interest.description ? `<p class="love-description">${interest.description}</p>` : ''}
                                         </div>
                                     </div>
-                            `).join('')}
+                                `;
+                            }).join('')}
                         </div>
                     </div>
                 `;
@@ -734,7 +714,7 @@
             const modal = document.getElementById('event-modal');
             if (!modal) return;
 
-            const eraDisplay = Metadata.getName('eras', event.era);
+            const eraDisplay = event.era_display || event.era;
 
             modal.querySelector('#modal-era').textContent = eraDisplay;
             modal.querySelector('#modal-era').dataset.era = event.era;
