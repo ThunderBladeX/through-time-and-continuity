@@ -313,6 +313,29 @@ class Database:
         return result
 
     @staticmethod
+    def delete_gallery_image(image_id):
+        """Delete a gallery image from DB and Storage"""
+        params = {'id': f'eq.{image_id}'}
+        result = supabase.query('gallery_images', params=params, select='*')
+        
+        if not result:
+            return False
+            
+        image_record = result[0]
+        image_url = image_record.get('image_url', '')
+
+        supabase.query('gallery_images', method='DELETE', params=params)
+
+        if image_url and 'gallery-images' in image_url:
+            try:
+                path = image_url.split('/gallery-images/')[-1]
+                supabase.delete_file('gallery-images', path)
+            except Exception as e:
+                print(f"Error parsing URL for deletion: {e}")
+
+        return True
+
+    @staticmethod
     def link_event_to_characters(event_id, character_ids):
         """Link an event to multiple characters"""
         if not character_ids:
