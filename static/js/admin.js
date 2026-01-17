@@ -453,7 +453,7 @@ async function loadGalleryAdmin() {
             list.innerHTML = '<p class="empty-state">No images yet</p>';
             return;
         }
-        list.innerHTML = images.map(img => { `
+        list.innerHTML = images.map(img => `
             <div class="admin-item">
                 <img src="${img.image_url}" alt="${img.alt_text}" class="admin-item-image">
                 <div class="admin-item-info">
