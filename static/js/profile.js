@@ -238,8 +238,13 @@
         }
 
         try {
-            currentCharacter = await fetchAPI(`/characters/${characterId}`);
+            const response = await fetchAPI(`/characters/${characterId}`);
+            currentCharacter = response.data ? response.data : response;
             console.log('Character loaded:', currentCharacter);
+
+            if (!currentCharacter || (!currentCharacter.name && !currentCharacter.full_name)) {
+                throw new Error('Character data is empty or structured incorrectly');
+            }
 
             const name = currentCharacter.name || currentCharacter.full_name || 'Unknown';
             document.title = `${name} - Periaphe`;
