@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setupRelationshipForm();
             setupEditRelationshipForm();
             setupLoveInterestForm();
+            setupUploadForm();
         });
     } else {
         setupLogin();
@@ -461,13 +462,25 @@ async function loadGalleryAdmin() {
                 </div>
                 <div class="admin-item-actions">
                     <button class="btn-secondary btn-sm disabled" disabled>Edit</button>
-                    <button class="btn-danger btn-sm disabled" disabled>Delete</button>
+                    <button class="btn-danger btn-sm" disabled>Delete</button>
                 </div>
             </div>
         `).join('');
     } catch (error) {
         console.error('Error loading gallery:', error);
         list.innerHTML = '<p class="error-state">Failed to load gallery</p>';
+    }
+}
+
+async function deleteGalleryImage(id) {
+    if (confirm('Are you sure you want to delete this image? This cannot be undone.')) {
+        try {
+            await fetchAPI(`/admin/gallery/${id}`, { method: 'DELETE' });
+            showNotification('Image deleted successfully', 'success');
+            loadGalleryAdmin();
+        } catch (error) {
+            showNotification('Failed to delete image: ' + error.message, 'error');
+        }
     }
 }
 
@@ -698,6 +711,42 @@ async function setupEventForm() {
             showNotification(`Event ${id ? 'updated' : 'created'} successfully!`, 'success');
             closeEventForm();
             loadTimelineAdmin();
+        } catch (error) {
+            showNotification(error.message, 'error');
+        }
+    });
+}
+
+async function setupUploadForm() {
+    const form = document.getElementById('upload-form');
+    if (!form) return;
+
+    const charSelect = form.querySelector('select[name="character_id"]');
+    if (charSelect) {
+        try {
+            const characters = await fetchAPI('/characters');
+            charSelect.innerHTML = `<option value="" disabled selected>Select Character...</option>` + 
+                characters.map(c => `<option value="${c.id}">${c.full_name}</option>`).join('');
+        } catch (e) {
+            console.error('Failed to load characters for upload form');
+        }
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        try {
+            await fetchAPI('/admin/gallery', {
+                method: 'POST',
+                body: formData,
+                isFormData: true
+            });
+            
+            showNotification('Image uploaded successfully!', 'success');
+            closeUploadForm();
+            form.reset();
+            loadGalleryAdmin();
         } catch (error) {
             showNotification(error.message, 'error');
         }
