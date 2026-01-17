@@ -771,7 +771,6 @@ async function setupUploadForm() {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const formData = new FormData();
         const characterId = form.elements['character_id'].value;
         const eventId = form.elements['event_id'].value;
         const altText = form.elements['alt_text'].value;
@@ -787,20 +786,34 @@ async function setupUploadForm() {
             return;
         }
 
+        console.log('Starting upload with character_id:', characterId);
+
         let successCount = 0;
         let errorCount = 0;
 
         for (let i = 0; i < imageFiles.length; i++) {
             const file = imageFiles[i];
             const singleFormData = new FormData();
-            
+
             singleFormData.append('image', file);
             singleFormData.append('character_id', characterId);
-            singleFormData.append('alt_text', altText || `Image ${i + 1}`);
+
+            if (imageFiles.length > 1) {
+                singleFormData.append('alt_text', altText ? `${altText} (${i + 1})` : `Image ${i + 1}`);
+            } else {
+                singleFormData.append('alt_text', altText || 'Untitled');
+            }
 
             if (eventId && eventId.trim() !== '') {
                 singleFormData.append('event_id', eventId);
             }
+
+            console.log(`Uploading image ${i + 1}:`, {
+                character_id: characterId,
+                event_id: eventId || 'none',
+                alt_text: singleFormData.get('alt_text'),
+                filename: file.name
+            });
 
             try {
                 const response = await fetch('/api/admin/gallery', {
@@ -814,12 +827,16 @@ async function setupUploadForm() {
                 if (!response.ok) {
                     const errorData = await response.json();
                     console.error(`Failed to upload image ${i + 1}:`, errorData);
+                    showNotification(`Image ${i + 1} failed: ${errorData.error || 'Unknown error'}`, 'error');
                     errorCount++;
                 } else {
+                    const result = await response.json();
+                    console.log(`Image ${i + 1} uploaded successfully:`, result);
                     successCount++;
                 }
             } catch (error) {
                 console.error(`Error uploading image ${i + 1}:`, error);
+                showNotification(`Image ${i + 1} failed: ${error.message}`, 'error');
                 errorCount++;
             }
         }
@@ -828,7 +845,7 @@ async function setupUploadForm() {
             showNotification(`${successCount} image(s) uploaded successfully!`, 'success');
         }
         if (errorCount > 0) {
-            showNotification(`${errorCount} image(s) failed to upload`, 'error');
+            showNotification(`${errorCount} image(s) failed to upload. Check console for details.`, 'error');
         }
 
         if (successCount > 0) {
