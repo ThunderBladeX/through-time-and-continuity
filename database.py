@@ -97,6 +97,30 @@ class SupabaseClient:
             return None
         return f"{self.url}/storage/v1/object/public/{bucket_name}/{path}"
 
+    def delete_file(self, bucket_name, path):
+        """Delete a file from Supabase Storage"""
+        if not self.url or not self.key:
+            return False
+
+        path = path.lstrip('/')
+        storage_url = f"{self.url}/storage/v1/object/{bucket_name}/{path}"
+        
+        headers = self.base_headers.copy()
+        
+        try:
+            with httpx.Client() as client:
+                print(f"Deleting file from storage: {storage_url}")
+                response = client.delete(storage_url, headers=headers)
+                
+                if response.status_code == 200:
+                    return True
+                else:
+                    print(f"Storage delete error: {response.status_code} - {response.text}")
+                    return False
+        except Exception as e:
+            print(f"File delete error: {e}")
+            return False
+
 supabase = SupabaseClient(SUPABASE_URL, SUPABASE_KEY)
 
 class Database:
