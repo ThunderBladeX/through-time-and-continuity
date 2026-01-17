@@ -456,7 +456,7 @@ class Database:
         """Get all gallery images, populating character names"""
         images = supabase.query('gallery_images', select='*', params={'order': 'created_at.desc'})
         if not images: return []
-        characters = supabase.query('characters', select='id,name')
+        characters = supabase.query('characters', select='id,name,full_name')
         char_map = {c['id']: c for c in characters}
         for img in images:
             img['character'] = char_map.get(img['character_id'], {})
