@@ -458,11 +458,10 @@ async function loadGalleryAdmin() {
                 <img src="${img.image_url}" alt="${img.alt_text}" class="admin-item-image">
                 <div class="admin-item-info">
                     <h4>${img.alt_text || 'Untitled'}</h4>
-                    <p>Character: ${img.character.full_name || 'Unknown'}</p>
+                    <p>Character: ${img.character?.full_name || 'Unknown'}</p>
                 </div>
                 <div class="admin-item-actions">
-                    <button class="btn-secondary btn-sm disabled" disabled>Edit</button>
-                    <button class="btn-danger btn-sm">Delete</button>
+                    <button onclick="deleteGalleryImage(${img.id})" class="btn-danger btn-sm">Delete</button>
                 </div>
             </div>
         `).join('');
@@ -473,14 +472,19 @@ async function loadGalleryAdmin() {
 }
 
 async function deleteGalleryImage(id) {
-    if (confirm('Are you sure you want to delete this image? This cannot be undone.')) {
-        try {
-            await fetchAPI(`/admin/gallery/${id}`, { method: 'DELETE' });
-            showNotification('Image deleted successfully', 'success');
-            loadGalleryAdmin();
-        } catch (error) {
-            showNotification('Failed to delete image: ' + error.message, 'error');
-        }
+    if (!confirm('Are you sure you want to delete this image? This cannot be undone.')) {
+        return;
+    }
+
+    try {
+        await fetchAPI(`/admin/gallery/${id}`, { 
+            method: 'DELETE'
+        });
+        showNotification('Image deleted successfully', 'success');
+        loadGalleryAdmin();
+    } catch (error) {
+        console.error('Delete error:', error);
+        showNotification('Failed to delete image: ' + error.message, 'error');
     }
 }
 
