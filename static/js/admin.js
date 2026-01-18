@@ -725,12 +725,11 @@ async function setupUploadForm() {
     const form = document.getElementById('upload-form');
     if (!form) return;
 
-    const charSelect = form.querySelector('select[name="character_id"]');
+    const charSelect = form.querySelector('select[name="character_ids_select"]');
     if (charSelect) {
         try {
             const characters = await fetchAPI('/characters');
-            charSelect.innerHTML = `<option value="" disabled selected>Select Character...</option>` + 
-                characters.map(c => `<option value="${c.id}">${c.full_name}</option>`).join('');
+            charSelect.innerHTML = characters.map(c => `<option value="${c.id}">${c.full_name}</option>`).join('');
         } catch (e) {
             console.error('Failed to load characters for upload form');
         }
@@ -771,13 +770,14 @@ async function setupUploadForm() {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const characterId = form.elements['character_id'].value;
+        const charSelect = form.elements['character_ids_select'];
+        const selectedCharacterIds = Array.from(charSelect.selectedOptions).map(opt => opt.value);
         const eventId = form.elements['event_id'].value;
         const altText = form.elements['alt_text'].value;
         const imageFiles = form.elements['images'].files;
 
-        if (!characterId) {
-            showNotification('Please select a character', 'error');
+        if (selectedCharacterIds.length === 0) {
+            showNotification('Please select at least one character', 'error');
             return;
         }
 
@@ -786,7 +786,7 @@ async function setupUploadForm() {
             return;
         }
 
-        console.log('Starting upload with character_id:', characterId);
+        console.log('Starting upload with character_ids:', selectedCharacterIds);
 
         let successCount = 0;
         let errorCount = 0;
@@ -796,7 +796,7 @@ async function setupUploadForm() {
             const singleFormData = new FormData();
 
             singleFormData.append('image', file);
-            singleFormData.append('character_id', characterId);
+            singleFormData.append('character_ids', selectedCharacterIds.join(','));
 
             if (imageFiles.length > 1) {
                 singleFormData.append('alt_text', altText ? `${altText} (${i + 1})` : `Image ${i + 1}`);
@@ -809,7 +809,7 @@ async function setupUploadForm() {
             }
 
             console.log(`Uploading image ${i + 1}:`, {
-                character_id: characterId,
+                character_ids: selectedCharacterIds,
                 event_id: eventId || 'none',
                 alt_text: singleFormData.get('alt_text'),
                 filename: file.name
