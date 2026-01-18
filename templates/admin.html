@@ -271,11 +271,12 @@
             <h2>Upload Images</h2>
             <form id="upload-form" class="admin-form">
                 <div class="form-group">
-                    <label>Character *</label>
-                    <select name="character_id" required>
+                    <label>Characters *</label>
+                    <select id="upload-character-select" name="character_ids_select" multiple required>
                         <option value="">Loading characters...</option>
                         <!-- Populated via JS -->
                     </select>
+                    <small>Hold Ctrl (or Cmd on Mac) to select multiple characters.</small>
                 </div>
 
                 <div class="form-group">
