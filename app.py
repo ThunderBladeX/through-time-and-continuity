@@ -311,19 +311,24 @@ def api_create_gallery_image():
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
 
-    character_id = request.form.get('character_id')
+    character_ids_str = request.form.get('character_ids', '')
     event_id = request.form.get('event_id')
     alt_text = request.form.get('alt_text', '')
 
-    if not character_id:
-        return jsonify({'error': 'Character ID is required'}), 400
+    if not character_ids_str:
+        return jsonify({'error': 'At least one character ID is required'}), 400
+
+    character_ids = [int(id.strip()) for id in character_ids_str.split(',') if id.strip().isdigit()]
+    
+    if not character_ids:
+        return jsonify({'error': 'Valid character ID is required'}), 400
 
     if event_id and event_id.strip() == '':
         event_id = None
 
     try:
         filename = secure_filename(file.filename)
-        unique_filename = f"{character_id}/{int(datetime.now().timestamp())}_{filename}"
+        unique_filename = f"{character_ids[0]}/{int(datetime.now().timestamp())}_{filename}"
         content_type = file.mimetype or mimetypes.guess_type(filename)[0] or 'application/octet-stream'
         bucket_name = 'gallery-images'
         
@@ -334,7 +339,6 @@ def api_create_gallery_image():
             return jsonify({'error': 'Failed to upload image to storage'}), 500
 
         data = {
-            'character_id': character_id,
             'image_url': public_url,
             'alt_text': alt_text
         }
@@ -345,6 +349,7 @@ def api_create_gallery_image():
         result = db.create_gallery_image(data)
         
         if result:
+            db.link_image_to_characters(result['id'], character_ids)
             return jsonify(result), 201
         else:
             db.supabase.delete_file(bucket_name, unique_filename)
