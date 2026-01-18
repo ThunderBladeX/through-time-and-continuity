@@ -542,6 +542,7 @@ async function editEvent(id) {
         Array.from(charSelect.options).forEach(opt => opt.selected = charIds.includes(opt.value));
 
         document.getElementById('event-description')?.dispatchEvent(new Event('input'));
+        loadEventImages(event);
 
         document.getElementById('event-form-title').textContent = 'Edit Event';
         openEventForm();
@@ -560,6 +561,57 @@ async function deleteEvent(id) {
         } catch (error) {
             showNotification('Failed to delete event', 'error');
         }
+    }
+}
+
+function loadEventImages(event) {
+    const existingSection = document.getElementById('existing-images-section');
+    const grid = document.getElementById('existing-images-grid');
+    if (!existingSection || !grid) return;
+
+    const images = event.images || [];
+    if (images.length === 0) {
+        existingSection.style.display = 'none';
+        grid.innerHTML = '';
+        return;
+    }
+    
+    existingSection.style.display = 'block';
+    grid.innerHTML = images.map((imageUrl, index) => `
+        <div class="existing-image-item" data-image-url="${imageUrl}">
+            <img src="${imageUrl}" alt="Event image ${index + 1}" onerror="this.src='/static/images/default-avatar.jpg'">
+            <button type="button" class="delete-image-btn" onclick="deleteEventImage('${imageUrl}', ${event.id})" title="Delete Image">
+                ×
+            </button>
+        </div>
+    `).join('');
+}
+
+async function deleteEventImage(imageUrl, eventId) {
+    if (!confirm('Are you sure you want to delete this image? This cannot be undone.')) {
+        return;
+    }
+    
+    try {
+        await fetchAPI(`/admin/events/${eventId}/images`, {
+            method: 'DELETE',
+            body: { image_url: imageUrl }
+        });
+        showNotification('Image deleted successfully', 'success');
+
+        const imageItem = document.querySelector(`[data-image-url="${imageUrl}"]`);
+        if (imageItem) {
+            imageItem.remove();
+        }
+
+        const grid = document.getElementById('existing-images-grid');
+        if (grid && grid.children.length === 0) {
+            document.getElementById('existing-images-section').style.display = 'none';
+        }
+        
+    } catch (error) {
+        console.error('Delete error:', error);
+        showNotification('Failed to delete image: ' + error.message, 'error');
     }
 }
 
@@ -600,6 +652,11 @@ function closeEventForm() {
     form?.reset();
     form?.querySelector('input[name="id"]')?.remove();
     document.getElementById('event-form-title').textContent = 'Add New Event';
+
+    const existingSection = document.getElementById('existing-images-section');
+    const grid = document.getElementById('existing-images-grid');
+    if (existingSection) existingSection.style.display = 'none';
+    if (grid) grid.innerHTML = '';
 
     document.getElementById('event-description')?.dispatchEvent(new Event('input'));
     closeModal('event-modal');
