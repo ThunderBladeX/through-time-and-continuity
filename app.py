@@ -118,8 +118,7 @@ def api_character_relationships(character_id):
 @app.route('/api/characters/<int:character_id>/gallery')
 def api_character_gallery(character_id):
     images = db.get_character_gallery(character_id)
-    formatted = [{'url': img['image_url'], 'alt': img.get('alt_text', '')} for img in images]
-    return jsonify(formatted)
+    return jsonify(images)
 
 @app.route('/api/characters/<int:character_id>/love-interests')
 def api_character_love_interests(character_id):
