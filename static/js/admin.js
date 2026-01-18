@@ -453,18 +453,23 @@ async function loadGalleryAdmin() {
             list.innerHTML = '<p class="empty-state">No images yet</p>';
             return;
         }
-        list.innerHTML = images.map(img => `
+        list.innerHTML = images.map(img => {
+            const characterNames = img.characters && img.characters.length > 0
+                ? img.characters.map(c => c.full_name || c.name).join(', ')
+                : 'Unknown';
+            
+            return `
             <div class="admin-item">
                 <img src="${img.image_url}" alt="${img.alt_text}" class="admin-item-image">
                 <div class="admin-item-info">
                     <h4>${img.alt_text || 'Untitled'}</h4>
-                    <p>Character: ${img.character?.full_name || 'Unknown'}</p>
+                    <p>Characters: ${characterNames}</p>
                 </div>
                 <div class="admin-item-actions">
                     <button onclick="deleteGalleryImage(${img.id})" class="btn-danger btn-sm">Delete</button>
                 </div>
             </div>
-        `).join('');
+        `}).join('');
     } catch (error) {
         console.error('Error loading gallery:', error);
         list.innerHTML = '<p class="error-state">Failed to load gallery</p>';
