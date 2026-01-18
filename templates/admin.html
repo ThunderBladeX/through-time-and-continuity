@@ -250,8 +250,16 @@
                     <small>Hold Ctrl (or Cmd on Mac) to select multiple characters.</small>
                 </div>
 
+                
+                <div class="form-section" id="existing-images-section" style="display: none;">
+                <h3>Current Images</h3>
+                    <div id="existing-images-grid" class="existing-images-grid">
+                    <!-- Populated by JS when editing -->
+                    </div>
+                </div>
+
                 <div class="form-group">
-                    <label>Event Images</label>
+                    <label>Add Event Images</label>
                     <input type="file" name="event_images" accept="image/*" multiple>
                 </div>
 
@@ -287,15 +295,8 @@
                     </select>
                 </div>
 
-                <div class="form-section" id="existing-images-section" style="display: none;">
-                <h3>Current Images</h3>
-                    <div id="existing-images-grid" class="existing-images-grid">
-                    <!-- Populated by JS when editing -->
-                    </div>
-                </div>
-
                 <div class="form-group">
-                    <label>Add New Images *</label>
+                    <label>Images *</label>
                     <input type="file" name="images" accept="image/*" multiple required>
                     <div id="image-preview" class="image-preview-grid"></div>
                 </div>
