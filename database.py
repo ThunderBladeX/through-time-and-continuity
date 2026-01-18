@@ -193,8 +193,46 @@ class Database:
     @staticmethod
     def get_character_gallery(character_id):
         """Get all gallery images for a character"""
-        params = {'character_id': f'eq.{character_id}', 'order': 'created_at.desc'}
-        return supabase.query('gallery_images', params=params, select='*')
+        gallery_images = []
+
+        params = {'character_id': f'eq.{character_id}'}
+        links = supabase.query('gallery_image_characters', params=params, select='image_id')
+        
+        if links:
+            image_ids = [str(link['image_id']) for link in links]
+            params = {'id': f'in.({",".join(image_ids)})', 'order': 'created_at.desc'}
+            gallery_imgs = supabase.query('gallery_images', params=params, select='*')
+
+            for img in gallery_imgs:
+                gallery_images.append({
+                    'url': img['image_url'],
+                    'alt': img.get('alt_text', ''),
+                    'created_at': img.get('created_at'),
+                    'event_id': img.get('event_id'),
+                    'source': 'gallery'
+                })
+
+        params = {'character_id': f'eq.{character_id}'}
+        event_chars = supabase.query('event_characters', params=params, select='event_id')
+        
+        if event_chars:
+            event_ids = [str(ec['event_id']) for ec in event_chars]
+            params = {'event_id': f'in.({",".join(event_ids)})'}
+            event_imgs = supabase.query('event_images', params=params, select='*,events(title)')
+
+            for img in event_imgs:
+                event_title = img.get('events', {}).get('title', 'Event') if isinstance(img.get('events'), dict) else 'Event'
+                gallery_images.append({
+                    'url': img['image_url'],
+                    'alt': f"From {event_title}",
+                    'created_at': img.get('created_at'),
+                    'event_id': img.get('event_id'),
+                    'source': 'event'
+                })
+
+        gallery_images.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+        
+        return gallery_images
 
     @staticmethod
     def get_recent_events(limit=6):
@@ -366,6 +404,21 @@ class Database:
         return result[0] if result else None
 
     @staticmethod
+    def link_image_to_characters(image_id, character_ids):
+        """Link an image to multiple characters"""
+        if not character_ids:
+            return []
+        links = [{'image_id': image_id, 'character_id': char_id} for char_id in character_ids]
+        result = supabase.query('gallery_image_characters', method='POST', data=links, select='*')
+        return result
+
+    @staticmethod
+    def update_image_character_links(image_id, character_ids):
+        """Deletes all existing character links for an image and creates new ones."""
+        supabase.query('gallery_image_characters', method='DELETE', params={'image_id': f'eq.{image_id}'})
+        return Database.link_image_to_characters(image_id, character_ids)
+
+    @staticmethod
     def delete_gallery_image(image_id):
         """Delete a gallery image from DB and Storage"""
         params = {'id': f'eq.{image_id}'}
@@ -377,6 +430,7 @@ class Database:
         image_record = result[0]
         image_url = image_record.get('image_url', '')
 
+        supabase.query('gallery_image_characters', method='DELETE', params={'image_id': f'eq.{image_id}'})
         supabase.query('gallery_images', method='DELETE', params=params)
 
         if image_url and 'gallery-images' in image_url:
@@ -456,10 +510,16 @@ class Database:
         """Get all gallery images, populating character names"""
         images = supabase.query('gallery_images', select='*', params={'order': 'created_at.desc'})
         if not images: return []
+
         characters = supabase.query('characters', select='id,name,full_name')
         char_map = {c['id']: c for c in characters}
+
         for img in images:
-            img['character'] = char_map.get(img['character_id'], {})
+            params = {'image_id': f'eq.{img["id"]}'}
+            links = supabase.query('gallery_image_characters', params=params, select='character_id')
+
+            img['characters'] = [char_map.get(link['character_id'], {}) for link in links if link['character_id'] in char_map]
+            img['character'] = img['characters'][0] if img['characters'] else {}
         return images
 
     @staticmethod
