@@ -510,6 +510,33 @@ def api_delete_event(event_id):
     db.delete_event(event_id)
     return jsonify({'success': True}), 200
 
+@app.route('/api/admin/events/<int:event_id>/images', methods=['DELETE'])
+@jwt_required()
+def api_delete_event_image(event_id):
+    """Delete a specific image from an event"""
+    data = request.get_json()
+    image_url = data.get('image_url')
+    
+    if not image_url:
+        return jsonify({'error': 'image_url is required'}), 400
+    
+    try:
+        params = {'event_id': f'eq.{event_id}', 'image_url': f'eq.{image_url}'}
+        db.supabase.query('event_images', method='DELETE', params=params)
+
+        if 'event-images' in image_url:
+            try:
+                path = image_url.split('/event-images/')[-1]
+                db.supabase.delete_file('event-images', path)
+                print(f"Deleted image from storage: {path}")
+            except Exception as e:
+                print(f"Error deleting from storage: {e}")
+
+        return jsonify({'success': True}), 200
+    except Exception as e:
+        print(f"Error deleting event image: {e}")
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/api/admin/love-interests', methods=['GET'])
 @jwt_required()
 def api_get_all_love_interests():
