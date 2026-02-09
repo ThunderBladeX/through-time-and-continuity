@@ -67,7 +67,7 @@
         #c4a572 70%,
         #d4c4a8 100%
     );
-    background-size: 200% auto;
+    background-size: 300% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -84,7 +84,7 @@
     top: -20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 80%;
+    width: clamp(70%, 15vw + 60%, 85%);
     height: 1px;
     background: linear-gradient(to right, transparent, var(--accent), transparent)
 }
@@ -95,13 +95,13 @@
     bottom: -20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 80%;
+    width: clamp(70%, 15vw + 60%, 85%);
     height: 1px;
     background: linear-gradient(to right, transparent, var(--accent), transparent)
 }
 
 [data-character="damian-wayne"] .hero-quote {
-    margin-top: 3rem;
+    margin-top: var(--spacing-2xl);
     font-family: 'Georgia', serif;
     color: var(--parchment);
     font-style: italic;
@@ -115,7 +115,7 @@
     position: absolute;
     left: 0;
     top: -10px;
-    font-size: 4rem;
+    font-size: clamp(2.5rem, 5vw, 4rem);
     color: var(--accent);
     opacity: 0.3;
     font-family: 'Georgia', serif;
@@ -128,7 +128,7 @@
     position: absolute;
     right: 0;
     bottom: -30px;
-    font-size: 4rem;
+    font-size: clamp(2.5rem, 5vw, 4rem);
     color: var(--accent);
     opacity: 0.3;
     font-family: 'Georgia', serif;
@@ -137,7 +137,7 @@
 
 [data-character="damian-wayne"] .profile-grid {
     display: grid;
-    grid-template-columns: 320px 1fr;
+    grid-template-columns: minmax(280px, 340px) 1fr;
     gap: var(--spacing-2xl);
     max-width: 1600px;
     margin: 0 auto;
