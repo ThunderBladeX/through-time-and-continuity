@@ -324,6 +324,11 @@ def api_create_gallery_image():
 
     if event_id and event_id.strip() == '':
         event_id = None
+    elif event_id:
+        try:
+            event_id = int(event_id)
+        except ValueError:
+            return jsonify({'error': 'Invalid event_id format'}), 400
 
     try:
         filename = secure_filename(file.filename)
