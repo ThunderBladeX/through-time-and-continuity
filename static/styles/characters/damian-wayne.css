@@ -225,16 +225,6 @@
     border: 2px solid rgba(139, 115, 85, 0.3);
     border-radius: 0;
     position: relative;
-    clip-path: polygon(
-        0 0,
-        98% 0,
-        100% 2%,
-        100% 98%,
-        98% 100%,
-        2% 100%,
-        0 98%,
-        0 2%
-    );
 
     &::before {
         background: 
@@ -322,8 +312,7 @@
     border: 2px solid rgba(139, 115, 85, 0.25);
     border-radius: 0;
     position: relative;
-    padding: var(--spacing-xl);
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%)
+    padding: var(--spacing-xl)
 }
 
 [data-character="damian-wayne"] .info-item::before {
@@ -671,22 +660,7 @@
     background: rgba(21, 21, 21, 0.98);
     border: 3px solid rgba(139, 115, 85, 0.4);
     border-radius: 0;
-    position: relative;
-    clip-path: polygon(
-        0 0,
-        100% 0,
-        100% calc(100% - 40px),
-        90% calc(100% - 30px),
-        80% calc(100% - 25px),
-        70% calc(100% - 22px),
-        60% calc(100% - 20px),
-        50% calc(100% - 19px),
-        40% calc(100% - 20px),
-        30% calc(100% - 22px),
-        20% calc(100% - 25px),
-        10% calc(100% - 30px),
-        0 calc(100% - 40px)
-    )
+    position: relative
 }
 
 [data-character="damian-wayne"] .modal-content::before {
@@ -927,9 +901,7 @@
     border: 2px solid rgba(139, 115, 85, 0.5);
     border-radius: 0;
     font-family: 'Georgia', serif;
-    color: var(--parchment);
-    clip-path: polygon(0 0, 100% 0, 100% 75%, 95% 100%, 90% 75%, 0 75%);
-    padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md)
+    color: var(--parchment)
 }
 
 [data-character="damian-wayne"] .bio-content {
