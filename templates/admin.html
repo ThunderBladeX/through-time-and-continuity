@@ -86,10 +86,107 @@
                 <section id="relationships-section" class="admin-section">
                     <div class="section-header">
                         <h2>Manage Relationships</h2>
-                        <button class="btn-primary" onclick="openRelationshipForm()">+ New Relationship</button>
+                        <div class="header-actions">
+                            <div class="view-toggle">
+                                <button class="view-btn active" data-view="pairs" title="Pair View">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="9" cy="12" r="4"/><circle cx="15" cy="12" r="4"/>
+                                    </svg>
+                                    Pairs
+                                </button>
+                                <button class="view-btn" data-view="characters" title="Character View">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                    By Character
+                                </button>
+                            </div>
+                            <button class="btn-primary" onclick="openRelationshipForm()">+ New Relationship</button>
+                        </div>
                     </div>
-                    <div id="relationships-admin-list">
+
+                    <div class="admin-filters">
+                        <div class="filter-group">
+                            <div class="search-wrapper">
+                                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                                </svg>
+                                <input 
+                                    type="text" 
+                                    id="relationship-search" 
+                                    class="search-input" 
+                                    placeholder="Search characters or relationships..."
+                                    autocomplete="off"
+                                >
+                                <button class="clear-search" id="clear-relationship-search" style="display: none;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 6L6 18M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <select id="relationship-type-filter" class="filter-select">
+                                <option value="">All Relationship Types</option>
+                                <!-- Populated via JS -->
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <select id="relationship-family-filter" class="filter-select">
+                                <option value="">All Families</option>
+                                <!-- Populated via JS -->
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <select id="relationship-sort" class="filter-select">
+                                <option value="alpha">Alphabetical (A-Z)</option>
+                                <option value="alpha-desc">Alphabetical (Z-A)</option>
+                                <option value="type">By Relationship Type</option>
+                                <option value="recent">Recently Added</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-actions">
+                            <button class="btn-secondary btn-sm" id="reset-relationship-filters">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                                    <path d="M3 3v5h5"/>
+                                </svg>
+                                Reset
+                            </button>
+                            <span class="results-count" id="relationship-results-count"></span>
+                        </div>
+                    </div>
+
+                    <div id="relationships-loading" class="loading-state" style="display: none;">
+                        <div class="spinner"></div>
+                    </div>
+
+                    <div id="relationships-pairs-view" class="relationships-view active">
+                        <div id="relationships-admin-list">
                         <!-- Loaded via JS -->
+                        </div>
+                    </div>
+
+                    <div id="relationships-characters-view" class="relationships-view">
+                        <div class="characters-list">
+                            <div id="relationships-characters-list">
+                            <!-- Loaded via JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="relationships-empty-state" class="empty-state-container" style="display: none;">
+                        <svg class="empty-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="9" cy="12" r="4"/><circle cx="15" cy="12" r="4"/>
+                            <path d="M13 12h2"/>
+                        </svg>
+                        <h3>No relationships found</h3>
+                        <p>Try adjusting your filters or search terms</p>
                     </div>
                 </section>
 
