@@ -33,6 +33,395 @@ const MetadataManager = {
     }
 };
 
+
+const RelationshipsAdmin = {
+    allRelationships: [],
+    allCharacters: [],
+    currentView: 'pairs',
+    filters: {
+        search: '',
+        type: '',
+        family: '',
+        sort: 'alpha'
+    },
+
+    async init() {
+        await this.loadData();
+        this.setupEventListeners();
+        this.render();
+    },
+
+    async loadData() {
+        try {
+            document.getElementById('relationships-loading').style.display = 'flex';
+            
+            const [relationships, characters] = await Promise.all([
+                fetchAPI('/admin/relationships'),
+                fetchAPI('/characters')
+            ]);
+            
+            this.allRelationships = relationships || [];
+            this.allCharacters = characters || [];
+            
+            document.getElementById('relationships-loading').style.display = 'none';
+        } catch (error) {
+            console.error('Error loading relationship data:', error);
+            document.getElementById('relationships-loading').style.display = 'none';
+        }
+    },
+
+    setupEventListeners() {
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+                this.currentView = e.currentTarget.dataset.view;
+                this.render();
+            });
+        });
+
+        const searchInput = document.getElementById('relationship-search');
+        const clearSearch = document.getElementById('clear-relationship-search');
+        
+        searchInput.addEventListener('input', (e) => {
+            this.filters.search = e.target.value.toLowerCase();
+            clearSearch.style.display = e.target.value ? 'flex' : 'none';
+            this.debounceRender();
+        });
+
+        clearSearch.addEventListener('click', () => {
+            searchInput.value = '';
+            this.filters.search = '';
+            clearSearch.style.display = 'none';
+            this.render();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+        });
+
+        document.getElementById('relationship-type-filter').addEventListener('change', (e) => {
+            this.filters.type = e.target.value;
+            this.render();
+        });
+
+        document.getElementById('relationship-family-filter').addEventListener('change', (e) => {
+            this.filters.family = e.target.value;
+            this.render();
+        });
+
+        document.getElementById('relationship-sort').addEventListener('change', (e) => {
+            this.filters.sort = e.target.value;
+            this.render();
+        });
+
+        document.getElementById('reset-relationship-filters').addEventListener('click', () => {
+            this.resetFilters();
+        });
+
+        this.populateFilters();
+    },
+
+    populateFilters() {
+        const typeFilter = document.getElementById('relationship-type-filter');
+        const types = [...new Set(this.allRelationships.map(r => r.type))].filter(Boolean);
+        types.forEach(type => {
+            const typeName = MetadataManager.getName('relationshipTypes', type);
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = typeName;
+            typeFilter.appendChild(option);
+        });
+
+        const familyFilter = document.getElementById('relationship-family-filter');
+        MetadataManager.families.forEach(family => {
+            const option = document.createElement('option');
+            option.value = family.slug;
+            option.textContent = family.name;
+            familyFilter.appendChild(option);
+        });
+    },
+
+    resetFilters() {
+        this.filters = {
+            search: '',
+            type: '',
+            family: '',
+            sort: 'alpha'
+        };
+        document.getElementById('relationship-search').value = '';
+        document.getElementById('clear-relationship-search').style.display = 'none';
+        document.getElementById('relationship-type-filter').value = '';
+        document.getElementById('relationship-family-filter').value = '';
+        document.getElementById('relationship-sort').value = 'alpha';
+        this.render();
+    },
+
+    debounceRender() {
+        clearTimeout(this.renderTimeout);
+        this.renderTimeout = setTimeout(() => this.render(), 300);
+    },
+
+    getFilteredRelationships() {
+        let filtered = [...this.allRelationships];
+
+        if (this.filters.search) {
+            filtered = filtered.filter(rel => {
+                const searchTerm = this.filters.search;
+                return (
+                    rel.character?.name?.toLowerCase().includes(searchTerm) ||
+                    rel.related_character?.name?.toLowerCase().includes(searchTerm) ||
+                    rel.type?.toLowerCase().includes(searchTerm) ||
+                    rel.status?.toLowerCase().includes(searchTerm)
+                );
+            });
+        }
+
+        if (this.filters.type) {
+            filtered = filtered.filter(rel => rel.type === this.filters.type);
+        }
+
+        if (this.filters.family) {
+            filtered = filtered.filter(rel => {
+                const char = this.allCharacters.find(c => c.id === rel.character_id);
+                const relChar = this.allCharacters.find(c => c.id === rel.related_character_id);
+                return char?.family === this.filters.family || relChar?.family === this.filters.family;
+            });
+        }
+
+        return filtered;
+    },
+
+    sortRelationships(relationships) {
+        const sorted = [...relationships];
+        
+        switch(this.filters.sort) {
+            case 'alpha':
+                sorted.sort((a, b) => {
+                    const nameA = a.character?.name || '';
+                    const nameB = b.character?.name || '';
+                    return nameA.localeCompare(nameB);
+                });
+                break;
+            case 'alpha-desc':
+                sorted.sort((a, b) => {
+                    const nameA = a.character?.name || '';
+                    const nameB = b.character?.name || '';
+                    return nameB.localeCompare(nameA);
+                });
+                break;
+            case 'type':
+                sorted.sort((a, b) => {
+                    const typeA = a.type || '';
+                    const typeB = b.type || '';
+                    return typeA.localeCompare(typeB);
+                });
+                break;
+            case 'recent':
+                sorted.sort((a, b) => (b.id || 0) - (a.id || 0));
+                break;
+        }
+
+        return sorted;
+    },
+
+    render() {
+        const filtered = this.getFilteredRelationships();
+        const sorted = this.sortRelationships(filtered);
+
+        const count = this.currentView === 'pairs' 
+            ? this.getUniquePairs(sorted).length 
+            : this.getCharactersWithRelationships(sorted).length;
+        
+        document.getElementById('relationship-results-count').textContent = 
+            `${count} result${count !== 1 ? 's' : ''}`;
+
+        document.querySelectorAll('.relationships-view').forEach(view => {
+            view.classList.remove('active');
+        });
+
+        if (count === 0) {
+            document.getElementById('relationships-empty-state').style.display = 'block';
+            document.getElementById('relationships-pairs-view').style.display = 'none';
+            document.getElementById('relationships-characters-view').style.display = 'none';
+        } else {
+            document.getElementById('relationships-empty-state').style.display = 'none';
+            
+            if (this.currentView === 'pairs') {
+                document.getElementById('relationships-pairs-view').classList.add('active');
+                this.renderPairsView(sorted);
+            } else {
+                document.getElementById('relationships-characters-view').classList.add('active');
+                this.renderCharactersView(sorted);
+            }
+        }
+    },
+
+    getUniquePairs(relationships) {
+        const uniquePairs = new Map();
+        relationships.forEach(rel => {
+            const charIds = [rel.character_id, rel.related_character_id].sort();
+            const pairKey = charIds.join('-');
+            if (!uniquePairs.has(pairKey)) {
+                uniquePairs.set(pairKey, rel);
+            }
+        });
+        return Array.from(uniquePairs.values());
+    },
+
+    renderPairsView(relationships) {
+        const list = document.getElementById('relationships-admin-list');
+        const uniquePairs = this.getUniquePairs(relationships);
+
+        if (uniquePairs.length === 0) {
+            list.innerHTML = '<p class="empty-state">No relationship pairs found</p>';
+            return;
+        }
+
+        list.innerHTML = uniquePairs.map(rel => {
+            const typeName = MetadataManager.getName('relationshipTypes', rel.type);
+            return `
+                <div class="admin-item">
+                    <div class="admin-item-info">
+                        <h4>${rel.character.name} & ${rel.related_character.name}</h4>
+                        <p>Type: <strong>${typeName}</strong>${rel.status ? ` • Status: ${rel.status}` : ''}</p>
+                    </div>
+                    <div class="admin-item-actions">
+                        <button onclick="editRelationship(${rel.character_id}, ${rel.related_character_id})" 
+                                class="btn-secondary btn-sm" 
+                                title="Edit relationship">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Edit
+                        </button>
+                        <button onclick="deleteRelationship(${rel.character_id}, ${rel.related_character_id})" 
+                                class="btn-danger btn-sm"
+                                title="Delete relationship">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    },
+
+    getCharactersWithRelationships(relationships) {
+        const characterMap = new Map();
+        
+        relationships.forEach(rel => {
+            if (!characterMap.has(rel.character_id)) {
+                characterMap.set(rel.character_id, {
+                    character: rel.character,
+                    relationships: []
+                });
+            }
+            characterMap.get(rel.character_id).relationships.push(rel);
+        });
+
+        return Array.from(characterMap.values()).sort((a, b) => 
+            (a.character?.name || '').localeCompare(b.character?.name || '')
+        );
+    },
+
+    renderCharactersView(relationships) {
+        const list = document.getElementById('relationships-characters-list');
+        const characters = this.getCharactersWithRelationships(relationships);
+
+        if (characters.length === 0) {
+            list.innerHTML = '<p class="empty-state">No characters with relationships found</p>';
+            return;
+        }
+
+        list.innerHTML = characters.map(({ character, relationships: charRels }) => {
+            const charId = character.id;
+            const charName = character.name || 'Unknown';
+            const charImage = character.profile_image || '/static/images/default-avatar.jpg';
+            const relCount = charRels.length;
+
+            return `
+                <div class="character-relationship-card" data-character-id="${charId}">
+                    <div class="character-card-header" onclick="RelationshipsAdmin.toggleCharacterCard(${charId})">
+                        <div class="character-card-info">
+                            <img src="${charImage}" alt="${charName}" class="character-avatar" 
+                                 onerror="this.src='/static/images/default-avatar.jpg'">
+                            <div class="character-meta">
+                                <div class="character-name">${charName}</div>
+                                <div class="character-relationship-count">
+                                    ${relCount} relationship${relCount !== 1 ? 's' : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="character-card-actions">
+                            <span class="relationship-count-badge">${relCount}</span>
+                            <svg class="expand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="m6 9 6 6 6-6"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="character-relationships-list">
+                        ${charRels.map(rel => this.renderRelationshipItem(rel)).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    },
+
+    renderRelationshipItem(rel) {
+        const typeName = MetadataManager.getName('relationshipTypes', rel.type);
+        const relatedChar = rel.related_character;
+        const relatedImage = relatedChar?.profile_image || '/static/images/default-avatar.jpg';
+        const relatedName = relatedChar?.name || 'Unknown';
+
+        return `
+            <div class="relationship-item">
+                <div class="relationship-item-info">
+                    <img src="${relatedImage}" alt="${relatedName}" class="relationship-item-avatar"
+                         onerror="this.src='/static/images/default-avatar.jpg'">
+                    <div class="relationship-item-details">
+                        <div class="relationship-item-name">${relatedName}</div>
+                        <div class="relationship-item-type">${typeName}</div>
+                    </div>
+                </div>
+                ${rel.status ? `<div class="relationship-item-status">${rel.status}</div>` : ''}
+                <div class="relationship-item-actions">
+                    <button onclick="editRelationship(${rel.character_id}, ${rel.related_character_id})" 
+                            class="btn-secondary btn-sm"
+                            title="Edit">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                    </button>
+                    <button onclick="deleteRelationship(${rel.character_id}, ${rel.related_character_id})" 
+                            class="btn-danger btn-sm"
+                            title="Delete">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 6h18"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        `;
+    },
+
+    toggleCharacterCard(characterId) {
+        const card = document.querySelector(`.character-relationship-card[data-character-id="${characterId}"]`);
+        if (card) {
+            card.classList.toggle('expanded');
+        }
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('admin_token')) {
         document.getElementById('login-screen').style.display = 'none';
@@ -283,46 +672,7 @@ async function loadTimelineAdmin() {
 }
 
 async function loadRelationshipsAdmin() {
-    const list = document.getElementById('relationships-admin-list');
-    if (!list) return;
-    list.innerHTML = '<div class="loading-state"><div class="spinner"></div></div>';
-
-    try {
-        const relationships = await fetchAPI('/admin/relationships');
-        if (!relationships || relationships.length === 0) {
-            list.innerHTML = '<p class="empty-state">No relationships yet</p>';
-            return;
-        }
-
-        const uniquePairs = new Map();
-        relationships.forEach(rel => {
-            const charIds = [rel.character_id, rel.related_character_id].sort();
-            const pairKey = charIds.join('-');
-            if (!uniquePairs.has(pairKey)) {
-                uniquePairs.set(pairKey, rel);
-            }
-        });
-
-        list.innerHTML = Array.from(uniquePairs.values()).map(rel => {
-
-            const typeName = MetadataManager.getName('relationshipTypes', rel.type);
-
-            return `
-            <div class="admin-item">
-                <div class="admin-item-info">
-                    <h4>${rel.character.name} & ${rel.related_character.name}</h4>
-                    <p>Type: <strong>${typeName}</strong> • Status: ${rel.status || 'N/A'}</p>
-                </div>
-                <div class="admin-item-actions">
-                    <button onclick="editRelationship(${rel.character_id}, ${rel.related_character_id})" class="btn-secondary btn-sm">Edit</button>
-                    <button onclick="deleteRelationship(${rel.character_id}, ${rel.related_character_id})" class="btn-danger btn-sm">Delete</button>
-                </div>
-            </div>
-        `}).join('');
-    } catch (error) {
-        console.error('Error loading relationships:', error);
-        list.innerHTML = '<p class="error-state">Failed to load relationships</p>';
-    }
+    await RelationshipsAdmin.init();
 }
 
 async function loadLoveInterestsAdmin() {
