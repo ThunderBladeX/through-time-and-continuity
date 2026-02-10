@@ -21,24 +21,7 @@
     --gradient-primary: linear-gradient(135deg, #8b7355, #c4a572);
     --gradient-overlay: linear-gradient(135deg, rgba(13, 13, 13, 0.85), rgba(139, 115, 85, 0.2));
     --gradient-glass: linear-gradient(135deg, rgba(212, 196, 168, 0.03), rgba(196, 165, 114, 0.01));
-    --gradient-parchment: linear-gradient(135deg, #d4c4a8 0%, #c4b59a 50%, #b5a589 100%);
-
-    --spacing-xs: clamp(0.25rem, 0.5vw, 0.5rem);
-    --spacing-sm: clamp(0.5rem, 1vw, 0.75rem);
-    --spacing-md: clamp(0.75rem, 1.5vw, 1rem);
-    --spacing-lg: clamp(1rem, 2vw, 1.5rem);
-    --spacing-xl: clamp(1.5rem, 3vw, 2rem);
-    --spacing-2xl: clamp(2rem, 4vw, 3rem);
-    --spacing-3xl: clamp(3rem, 6vw, 5rem);
-
-    --font-xs: clamp(0.75rem, 1.5vw, 0.875rem);
-    --font-sm: clamp(0.875rem, 1.8vw, 1rem);
-    --font-base: clamp(1rem, 2vw, 1.125rem);
-    --font-lg: clamp(1.125rem, 2.2vw, 1.25rem);
-    --font-xl: clamp(1.25rem, 2.5vw, 1.5rem);
-    --font-2xl: clamp(1.5rem, 3vw, 2rem);
-    --font-3xl: clamp(2rem, 4vw, 2.5rem);
-    --font-4xl: clamp(2.5rem, 5vw, 3.5rem);
+    --gradient-parchment: linear-gradient(135deg, #d4c4a8 0%, #c4b59a 50%, #b5a589 100%)
 }
 
 [data-character="damian-wayne"] .hero-gradient {
@@ -58,7 +41,7 @@
 
 [data-character="damian-wayne"] .hero-name {
     font-family: 'Georgia', serif;
-    font-size: clamp(2.5rem, 8vw + 1rem, 7.5rem);
+    font-size: clamp(3rem, 8vw, 7.5rem);
     background: linear-gradient(
         135deg,
         #d4c4a8 0%,
@@ -71,7 +54,9 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    letter-spacing: clamp(0.08em, 0.5vw, 0.15em);
+    letter-spacing: 0.12em;
+    line-height: 1.15;
+    padding: 0 1rem;
     font-weight: 300;
     text-transform: uppercase;
     filter: drop-shadow(0 0 20px rgba(196, 165, 114, 0.3));
@@ -81,10 +66,11 @@
 [data-character="damian-wayne"] .hero-name::before {
     content: '';
     position: absolute;
-    top: -20px;
+    top: -25px;
     left: 50%;
     transform: translateX(-50%);
-    width: clamp(70%, 15vw + 60%, 85%);
+    width: 80%;
+    max-width: 600px;
     height: 1px;
     background: linear-gradient(to right, transparent, var(--accent), transparent)
 }
@@ -92,16 +78,19 @@
 [data-character="damian-wayne"] .hero-name::after {
     content: '';
     position: absolute;
-    bottom: -20px;
+    bottom: -25px;
     left: 50%;
     transform: translateX(-50%);
-    width: clamp(70%, 15vw + 60%, 85%);
+    width: 80%;
+    max-width: 600px;
     height: 1px;
     background: linear-gradient(to right, transparent, var(--accent), transparent)
 }
 
 [data-character="damian-wayne"] .hero-quote {
-    margin-top: var(--spacing-2xl);
+    margin-top: 3.5rem;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    line-height: 1.7;
     font-family: 'Georgia', serif;
     color: var(--parchment);
     font-style: italic;
@@ -113,11 +102,11 @@
 [data-character="damian-wayne"] .hero-quote::before {
     content: '❝';
     position: absolute;
-    left: 0;
-    top: -10px;
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    left: 0.5rem;
+    top: -15px;
+    font-size: clamp(3rem, 6vw, 4rem);
     color: var(--accent);
-    opacity: 0.3;
+    opacity: 0.35;
     font-family: 'Georgia', serif;
     transform: translateX(-1rem);
     line-height: 1
@@ -126,22 +115,22 @@
 [data-character="damian-wayne"] .hero-quote::after {
     content: '❞';
     position: absolute;
-    right: 0;
-    bottom: -30px;
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    right: 0.5rem;
+    bottom: -35px;
+    font-size: clamp(3rem, 6vw, 4rem);
     color: var(--accent);
-    opacity: 0.3;
+    opacity: 0.35;
     font-family: 'Georgia', serif;
     line-height: 1
 }
 
 [data-character="damian-wayne"] .profile-grid {
     display: grid;
-    grid-template-columns: minmax(280px, 340px) 1fr;
-    gap: var(--spacing-2xl);
+    grid-template-columns: 320px 1fr;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
     max-width: 1600px;
     margin: 0 auto;
-    padding: var(--spacing-2xl);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
     position: relative;
     z-index: 1
 }
@@ -169,7 +158,7 @@
     height: fit-content;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-lg);
+    gap: clamp(1rem, 2vw, 1.5rem);
     animation: slideInLeft 0.8s ease-out forwards;
     opacity: 0
 }
@@ -178,7 +167,7 @@
     background: rgba(21, 21, 21, 0.85);
     border: 2px solid rgba(139, 115, 85, 0.25);
     border-radius: 0;
-    padding: var(--spacing-lg);
+    padding: clamp(1rem, 2vw, 1.5rem);
     position: relative
 }
 
@@ -188,7 +177,7 @@
     top: 10px;
     left: 10px;
     right: 10px;
-    bottom: 35px;
+    bottom: 40px;
     border: 1px solid rgba(139, 115, 85, 0.15);
     pointer-events: none;
 }
@@ -198,7 +187,9 @@
     letter-spacing: 0.8px;
     border-radius: 0;
     position: relative;
-    padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) calc(var(--spacing-lg) + 8px);
+    padding: clamp(0.75rem, 1.5vw, 1rem) clamp(0.75rem, 1.5vw, 1rem) clamp(0.75rem, 1.5vw, 1rem) calc(clamp(1rem, 2vw, 1.5rem) + 8px);
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+    min-height: 44px;
     clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%)
 }
 
@@ -218,7 +209,8 @@
 }
 
 [data-character="damian-wayne"] .nav-icon {
-    filter: grayscale(0.4) sepia(0.3)
+    filter: grayscale(0.4) sepia(0.3);
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
 }
 
 [data-character="damian-wayne"] .admin-btn {
@@ -228,9 +220,10 @@
     font-family: 'Georgia', serif;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    font-size: 0.8rem;
+    font-size: clamp(0.75rem, 1.2vw, 0.85rem);
     clip-path: polygon(8% 0, 92% 0, 100% 50%, 92% 100%, 8% 100%, 0 50%);
-    padding: var(--spacing-md) var(--spacing-xl);
+    padding: clamp(0.75rem, 1.5vw, 1rem) clamp(1.25rem, 2.5vw, 1.75rem);
+    min-height: 44px;
 
     &::before {
         background: rgba(212, 196, 168, 0.2)
@@ -274,21 +267,23 @@
         linear-gradient(to bottom, transparent 99%, var(--accent) 100%) bottom right;
     background-size: 30px 2px, 2px 30px;
     background-repeat: no-repeat;
-    opacity: 0.3;
+    opacity: 0.35;
     z-index: 1
 }
 
 [data-character="damian-wayne"] .section-title {
     font-family: 'Georgia', serif;
     font-weight: 300;
-    letter-spacing: 3px;
+    letter-spacing: clamp(2px, 0.5vw, 3px);
     text-transform: uppercase;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    line-height: 1.3;
     background: linear-gradient(135deg, #d4c4a8 0%, #c4a572 50%, #8b7355 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     position: relative;
-    padding-bottom: var(--spacing-lg);
+    padding-bottom: clamp(1rem, 2vw, 1.5rem);
     text-align: center
 }
 
@@ -299,7 +294,7 @@
     transform: translateX(-50%);
     bottom: -8px;
     color: var(--accent);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     opacity: 0.6
 }
 
@@ -309,12 +304,15 @@
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 150px;
+    width: clamp(100px, 30vw, 150px);
     height: 2px;
     background: linear-gradient(to right, transparent, var(--accent) 20%, var(--accent) 80%, transparent)
 }
 
 [data-character="damian-wayne"] .section-subtitle {
+    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+    line-height: 1.6;
+    color: var(--text-secondary);
     text-align: center
 }
 
@@ -412,6 +410,7 @@
 }
 
 [data-character="damian-wayne"] .timeline-card {
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
     background: rgba(21, 21, 21, 0.85);
     border: 2px solid rgba(139, 115, 85, 0.25);
     border-left: 4px solid var(--accent);
@@ -455,13 +454,14 @@
 }
 
 [data-character="damian-wayne"] .relationship-card {
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
     background: rgba(21, 21, 21, 0.85);
     border: 2px solid rgba(139, 115, 85, 0.3);
     border-radius: 0;
     padding: var(--spacing-xl);
     display: flex;
     align-items: center;
-    gap: var(--spacing-lg);
+    gap: clamp(1rem, 2vw, 1.5rem);
     position: relative
 }
 
@@ -478,8 +478,8 @@
 }
 
 [data-character="damian-wayne"] .relationship-avatar {
-    width: 90px;
-    height: 90px;
+    width: clamp(70px, 12vw, 90px);
+    height: clamp(70px, 12vw, 90px);
     border-radius: 0;
     border: 3px solid rgba(139, 115, 85, 0.5);
     filter: grayscale(0.25) sepia(0.2);
@@ -531,11 +531,12 @@
 
 [data-character="damian-wayne"] .love-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
     gap: var(--spacing-xl)
 }
 
 [data-character="damian-wayne"] .love-card {
+    padding: clamp(1.5rem, 3vw, 2rem);
     background: rgba(21, 21, 21, 0.85);
     border: 2px solid rgba(139, 115, 85, 0.3);
     border-radius: 50% 50% 0 0;
@@ -554,7 +555,8 @@
     top: 12px;
     right: 50%;
     transform: translateX(50%);
-    font-size: 1.5rem;
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    line-height: 1.4;
     color: var(--accent);
     opacity: 0.1
 }
@@ -578,6 +580,8 @@
 }
 
 [data-character="damian-wayne"] .love-name {
+    font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+    line-height: 1.3;
     font-family: 'Georgia', serif;
     color: var(--parchment);
     font-weight: 600;
@@ -599,6 +603,9 @@
 }
 
 [data-character="damian-wayne"] .love-description {
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    line-height: 1.8;
+    margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
     font-family: 'Georgia', serif;
     font-style: italic;
     color: var(--text-secondary);
@@ -674,6 +681,7 @@
 }
 
 [data-character="damian-wayne"] .modal-content {
+    padding: clamp(1.5rem, 3vw, 2.5rem);
     background: rgba(21, 21, 21, 0.98);
     border: 3px solid rgba(139, 115, 85, 0.4);
     border-radius: 0;
@@ -720,6 +728,8 @@
 }
 
 [data-character="damian-wayne"] .modal-header h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.3;
     font-family: 'Georgia', serif;
     color: var(--parchment);
     letter-spacing: 2px;
@@ -769,6 +779,8 @@
 }
 
 [data-character="damian-wayne"] .modal-description {
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    line-height: 1.8;
     font-family: 'Georgia', serif;
     color: var(--text-secondary);
     line-height: 2;
@@ -823,7 +835,7 @@
     font-family: 'Georgia', serif;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    font-size: 0.85rem;
+    font-size: clamp(0.75rem, 1.2vw, 0.85rem);
     clip-path: polygon(5% 0, 95% 0, 100% 50%, 95% 100%, 5% 100%, 0 50%)
 }
 
@@ -914,6 +926,9 @@
 }
 
 [data-character="damian-wayne"] .tooltip {
+    font-size: clamp(0.85rem, 1.3vw, 0.95rem);
+    padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.75rem, 1.5vw, 1rem);
+    line-height: 1.5;
     background: rgba(21, 21, 21, 0.98);
     border: 2px solid rgba(139, 115, 85, 0.5);
     border-radius: 0;
@@ -945,7 +960,7 @@
     position: absolute;
     left: -25px;
     color: var(--accent);
-    font-size: 0.8rem;
+    font-size: clamp(0.75rem, 1.2vw, 0.85rem);
     opacity: 0.5
 }
 
@@ -998,7 +1013,8 @@
 [data-character="damian-wayne"] .spinner {
     border-color: rgba(139, 115, 85, 0.2);
     border-top-color: var(--accent);
-    border-width: 3px
+    border-width: 3px;
+    height: clamp(40px, 8vw, 50px);
 }
 
 [data-character="damian-wayne"] .skeleton,
@@ -1068,7 +1084,7 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-family: 'Georgia', serif;
-    letter-spacing: 3px;
+    letter-spacing: clamp(2px, 0.5vw, 3px);
     text-transform: uppercase;
     font-weight: 300
 }
@@ -1093,9 +1109,9 @@
 
 [data-character="damian-wayne"] .scroll-indicator {
     color: var(--gothic-gold);
-    letter-spacing: 3px;
+    letter-spacing: clamp(2px, 0.5vw, 3px);
     font-family: 'Georgia', serif;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-variant: small-caps
 }
 
@@ -1106,7 +1122,8 @@
         rgba(139, 115, 85, 0.4),
         transparent
     );
-    width: 3px
+    width: 3px;
+    height: clamp(40px, 8vw, 50px);
 }
 
 [data-character="damian-wayne"] .scroll-line::after {
@@ -1114,6 +1131,8 @@
 }
 
 [data-character="damian-wayne"] .inline-edit-input {
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+    padding: clamp(0.75rem, 1.5vw, 1rem);
     background: rgba(31, 31, 31, 0.9);
     border: 2px solid var(--accent);
     color: var(--parchment);
@@ -1122,6 +1141,9 @@
 }
 
 [data-character="damian-wayne"] .quick-edit-btn {
+    font-size: clamp(0.85rem, 1.3vw, 0.95rem);
+    padding: clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 2vw, 1.5rem);
+    min-height: 44px;
     background: rgba(139, 115, 85, 0.2);
     border: 2px solid var(--accent);
     color: var(--gothic-gold);
@@ -1137,6 +1159,7 @@
 }
 
 [data-character="damian-wayne"] .char-counter {
+    font-size: clamp(0.8rem, 1.2vw, 0.9rem);
     font-family: 'Georgia', serif;
     font-variant: small-caps;
     color: var(--gothic-gold);
@@ -1144,6 +1167,8 @@
 }
 
 [data-character="damian-wayne"] .form-feedback.error {
+    padding: clamp(0.75rem, 1.5vw, 1rem);
+    font-size: clamp(0.9rem, 1.4vw, 1rem);
     background: rgba(139, 26, 26, 0.2);
     border: 2px solid rgba(139, 26, 26, 0.4);
     color: #d4a5a5;
@@ -1152,6 +1177,8 @@
 }
 
 [data-character="damian-wayne"] .form-feedback.success {
+    padding: clamp(0.75rem, 1.5vw, 1rem);
+    font-size: clamp(0.9rem, 1.4vw, 1rem);
     background: rgba(107, 142, 107, 0.2);
     border: 2px solid rgba(107, 142, 107, 0.4);
     color: #b8d4b8;
@@ -1161,7 +1188,8 @@
 
 @media (max-width: 1400px) {
     [data-character="damian-wayne"] .profile-grid {
-        grid-template-columns: 300px 1fr
+        grid-template-columns: 300px 1fr;
+        gap: clamp(1.25rem, 3vw, 2rem);
     }
     
     [data-character="damian-wayne"] .profile-grid::before {
@@ -1186,7 +1214,7 @@
 @media (max-width: 768px) {
     [data-character="damian-wayne"] .profile-grid {
         grid-template-columns: 1fr;
-        padding: var(--spacing-xl)
+        padding: clamp(1.25rem, 3vw, 1.75rem);
     }
     
     [data-character="damian-wayne"] .profile-grid::before {
@@ -1217,7 +1245,7 @@
     }
     
     [data-character="damian-wayne"] .hero-name {
-        font-size: clamp(2.5rem, 10vw, 4.5rem)
+        font-size: clamp(2.25rem, 9vw, 4.5rem)
     }
     
     [data-character="damian-wayne"] .hero-quote {
@@ -1300,7 +1328,7 @@
     }
     
     [data-character="damian-wayne"] .timeline-track {
-        padding-left: 60px
+        padding-left: 55px;
     }
     
     [data-character="damian-wayne"] .timeline-item::before {
