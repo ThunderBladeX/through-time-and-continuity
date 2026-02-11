@@ -166,17 +166,21 @@ const RelationshipsAdmin = {
     },
 
     getFilteredRelationships() {
+        if (!this.allRelationships) return [];
         let filtered = [...this.allRelationships];
 
         if (this.filters.search) {
+            const term = this.filters.search.toLowerCase();
             filtered = filtered.filter(rel => {
-                const searchTerm = this.filters.search;
-                const check = (val) => (val || '').toString().toLowerCase().includes(searchTerm);
+                const charName = rel.character?.name || '';
+                const relCharName = rel.related_character?.name || '';
+                const type = rel.type || '';
+                const status = rel.status || '';
                 return (
-                    check(rel.character?.name) ||
-                    check(rel.related_character?.name) ||
-                    check(rel.type) ||
-                    check(rel.status)
+                    charName.toLowerCase().includes(term) ||
+                    relCharName.toLowerCase().includes(term) ||
+                    type.toLowerCase().includes(term) ||
+                    status.toLowerCase().includes(term)
                 );
             });
         }
@@ -187,6 +191,8 @@ const RelationshipsAdmin = {
 
         if (this.filters.family) {
             filtered = filtered.filter(rel => {
+                if (!this.allCharacters) return false;
+
                 const char = this.allCharacters.find(c => c.id == rel.character_id);
                 const relChar = this.allCharacters.find(c => c.id == rel.related_character_id);
 
@@ -194,6 +200,7 @@ const RelationshipsAdmin = {
                     if (!c || !c.family) return '';
                     return (typeof c.family === 'object') ? c.family.slug : c.family;
                 };
+
                 const charFamily = getFamilySlug(char);
                 const relCharFamily = getFamilySlug(relChar);
 
