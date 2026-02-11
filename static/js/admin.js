@@ -171,11 +171,12 @@ const RelationshipsAdmin = {
         if (this.filters.search) {
             filtered = filtered.filter(rel => {
                 const searchTerm = this.filters.search;
+                const check = (val) => (val || '').toString().toLowerCase().includes(searchTerm);
                 return (
-                    rel.character?.name?.toLowerCase().includes(searchTerm) ||
-                    rel.related_character?.name?.toLowerCase().includes(searchTerm) ||
-                    rel.type?.toLowerCase().includes(searchTerm) ||
-                    rel.status?.toLowerCase().includes(searchTerm)
+                    check(rel.character?.name) ||
+                    check(rel.related_character?.name) ||
+                    check(rel.type) ||
+                    check(rel.status)
                 );
             });
         }
@@ -186,11 +187,17 @@ const RelationshipsAdmin = {
 
         if (this.filters.family) {
             filtered = filtered.filter(rel => {
-                const char = this.allCharacters.find(c => c.id === rel.character_id);
-                const relChar = this.allCharacters.find(c => c.id === rel.related_character_id);
-                const charFamilySlug = char?.family?.slug || char?.family;
-                const relCharFamilySlug = relChar?.family?.slug || relChar?.family;
-                return charFamilySlug === this.filters.family || relCharFamilySlug === this.filters.family;
+                const char = this.allCharacters.find(c => c.id == rel.character_id);
+                const relChar = this.allCharacters.find(c => c.id == rel.related_character_id);
+
+                const getFamilySlug = (c) => {
+                    if (!c || !c.family) return '';
+                    return (typeof c.family === 'object') ? c.family.slug : c.family;
+                };
+                const charFamily = getFamilySlug(char);
+                const relCharFamily = getFamilySlug(relChar);
+
+                return charFamily === this.filters.family || relCharFamily === this.filters.family;
             });
         }
 
