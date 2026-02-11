@@ -188,7 +188,9 @@ const RelationshipsAdmin = {
             filtered = filtered.filter(rel => {
                 const char = this.allCharacters.find(c => c.id === rel.character_id);
                 const relChar = this.allCharacters.find(c => c.id === rel.related_character_id);
-                return char?.family === this.filters.family || relChar?.family === this.filters.family;
+                const charFamilySlug = char?.family?.slug || char?.family;
+                const relCharFamilySlug = relChar?.family?.slug || relChar?.family;
+                return charFamilySlug === this.filters.family || relCharFamilySlug === this.filters.family;
             });
         }
 
